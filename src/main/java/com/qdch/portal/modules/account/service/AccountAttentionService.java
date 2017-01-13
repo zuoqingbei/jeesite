@@ -20,6 +20,7 @@ import com.qdch.portal.modules.account.dao.AccountAttentionDao;
  * @version 2018-03-12
  */
 @Service
+@Transactional(readOnly = true)
 public class AccountAttentionService extends CrudService<AccountAttentionDao, AccountAttention> {
 	
 	@Autowired
@@ -30,7 +31,7 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 	 * @version 2018-03-13
 	 * @param accountAttention 用户关注实体
 	 */
-	
+	@Transactional(readOnly = false)
 	public void saveAttention(AccountAttention accountAttention){
 		accountAttentionDao.saveAttention(accountAttention);
 	}
