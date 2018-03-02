@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.qdch.portal.common.config.Global;
+
 /**
  * 连接postgre
  * @author wangfeng
@@ -16,10 +18,10 @@ import java.util.Properties;
  */
 public class PostgreUtils {
 	
-	private static  String driver = "org.postgresql.Driver";  
-    private static  String url = "jdbc:postgresql://172.16.6.61:5432/qdchedw";
-    private static  String username = "insight";  
-    private static  String password = "insight@2017";  
+	private static  String driver = null;  
+    private static  String url = null;
+    private static  String username = null;  
+    private static  String password = null;  
     
     private CallableStatement callableStatement = null;//创建CallableStatement对象
     
@@ -27,25 +29,14 @@ public class PostgreUtils {
     private PreparedStatement pst = null;  
     private ResultSet rst = null;  
     
-//    private static final String PROPERTIES_NAME = "classpath:portal.properties";
-//    
-//    private void post() throws FileNotFoundException {
-//    	FileInputStream in = null;
-//
-//    	Properties properties = new Properties();
-//		in = new FileInputStream(PROPERTIES_NAME);
-//		try {
-//			properties.load(in);
-//			String url = properties.getProperty("postgre.url");
-//			System.out.println(url);
-//
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    	
-//
-//	}
+    
+    public   PostgreUtils()  {
+    	driver = Global.getConfig("postgre.driver");
+    	url = Global.getConfig("postgre.url");
+    	username = Global.getConfig("postgre.username");
+    	password = Global.getConfig("postgre.password");
+
+	}
     
     
     /**   
@@ -315,12 +306,7 @@ public class PostgreUtils {
 	public static void main(String args[])  {
 		//conn();
 		PostgreUtils postgreUtils  = new PostgreUtils();
-//		try {
-//			postgreUtils.post();
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+	
 		System.out.println(postgreUtils.executeQuerySingle("select * from test1", null));
 		
 	}
