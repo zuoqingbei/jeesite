@@ -84,6 +84,7 @@ JeeSite 提供了常用工具进行封装，包括日志工具、缓存工具、
 * 树结构控件：jQuery zTree
 * 日期控件： My97DatePicker
 
+
 4、平台
 
 * 服务器中间件：在Java EE 5规范（Servlet 2.5、JSP 2.1）下开发，支持应用服务器中间件
