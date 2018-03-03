@@ -48,6 +48,39 @@
 		<property name="failureUrl" value="${adminPath}/login"/>
 	</bean>
 	
+	
+	<!-- Portal Shiro权限过滤过滤器定义 -->
+	<!-- <bean name="portalShiroFilterChainDefinitions" class="java.lang.String">
+		<constructor-arg>
+			<value>
+				${portalPath}/cas = pcas
+				${portalPath}/login = authc
+				${portalPath}/logout = logout
+			</value>
+		</constructor-arg>
+	</bean>
+	Portal安全认证过滤器
+	<bean id="portalShiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="${portalPath}/login" />
+		<property name="successUrl" value="${portalPath}" />
+		<property name="filters">
+            <map>
+                <entry key="pcas" value-ref="portalCasFilter"/>
+                <entry key="authc" value-ref="portalFormAuthenticationFilter"/>
+            </map>
+        </property>
+		<property name="filterChainDefinitions">
+			<ref bean="portalShiroFilterChainDefinitions"/>
+		</property>
+	</bean>
+	
+	CAS认证过滤器  
+	<bean id="portalCasFilter" class="org.apache.shiro.cas.CasFilter">  
+		<property name="failureUrl" value="${portalPath}/login"/>
+	</bean> -->
+	
+	
 	<!-- 定义Shiro安全管理配置 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="systemAuthorizingRealm" />

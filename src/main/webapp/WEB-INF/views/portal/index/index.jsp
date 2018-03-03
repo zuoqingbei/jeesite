@@ -9,6 +9,7 @@
          我是<div style="color:red;font-size:20em;">电脑端</div>测试首页1--${portalPath }--${portalPage }
         <!-- END CONTAINER -->
         
+        <a href="${portalPath }/logout">登出</a>
         <!-- BEGIN FOOTER -->
         <!-- js必须引用在body前面 -->
 	   <script>
