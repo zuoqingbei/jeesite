@@ -110,6 +110,19 @@ public class Global {
 	public static String getFrontPath() {
 		return getConfig("frontPath");
 	}
+	
+	/**
+	 * 获取清算所门户前端根路径
+	 */
+	public static String getPortalPath() {
+		return getConfig("portalPath");
+	}
+	/**
+	 * 获取清算所门户前端根路径
+	 */
+	public static String getPortalPage() {
+		return getConfig("portalPage");
+	}
 
 	/**
 	 * 获取URL后缀

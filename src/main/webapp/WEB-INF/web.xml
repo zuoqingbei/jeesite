@@ -52,6 +52,10 @@
     <filter-name>sitemeshFilter</filter-name>
     <url-pattern>/f/*</url-pattern>
   </filter-mapping>
+  <filter-mapping>
+		<filter-name>sitemeshFilter</filter-name>
+		<url-pattern>/portal/*</url-pattern>
+	</filter-mapping>
   <servlet>
     <servlet-name>springServlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

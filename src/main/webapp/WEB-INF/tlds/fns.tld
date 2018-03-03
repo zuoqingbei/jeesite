@@ -18,6 +18,7 @@
     <function-signature>java.lang.String getAdminPath()</function-signature>
     <example>${fns:getAdminPath()}</example>
   </function>
+  
   <function>
     <description>获取网站路径</description>
     <name>getFrontPath</name>
@@ -25,6 +26,7 @@
     <function-signature>java.lang.String getFrontPath()</function-signature>
     <example>${fns:getFrontPath()}</example>
   </function>
+  
   <function>
     <description>获取网站URL后缀</description>
     <name>getUrlSuffix</name>
@@ -243,5 +245,25 @@
     <function-signature>java.lang.String toJsonString(java.lang.Object)</function-signature>
     <example>${fns:toJson(object)}</example>  
   </function>
+  
+    <!-- 清算所相关 START -->
+
+
+	<function>
+		<description>获取清算所门户前端路径</description>
+		<name>getPortalPath</name>
+		<function-class>com.qdch.portal.common.config.Global</function-class>
+		<function-signature>java.lang.String getPortalPath()</function-signature>
+		<example>${fns:getPortalPath()}</example>
+	</function>
+	<function>
+		<description>获取清算所门户页面存放文件夹名称</description>
+		<name>getPortalPage</name>
+		<function-class>com.qdch.portal.common.config.Global</function-class>
+		<function-signature>java.lang.String getPortalPage()</function-signature>
+		<example>${fns:getPortalPage()}</example>
+	</function>
+	
+  <!-- 清算所相关 END -->
   
 </taglib>

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <decorators defaultdir="/WEB-INF/views">
-	
+	<!-- 
+	 * defaultdir: 包含装饰器页面的目录 
+    * page : 页面文件名 
+    * name : 别名 
+    * role : 角色，用于安全 
+    * webapp : 可以另外指定此文件存放目录 
+    * Patterns : 匹配的路径，可以用*,那些被访问的页面需要被装饰。 
+	 -->
 	<!-- 默认装饰页面, 在需要装饰的页面增加<meta name="decorator" content="default"/> -->
 	<decorator name="blank" page="layouts/blank.jsp" />
 	<decorator name="default" page="layouts/default.jsp" />
@@ -9,4 +16,17 @@
 	<decorator name="cms_default_basic" page="modules/cms/front/themes/basic/layouts/default.jsp" />
 	<decorator name="cms_default_weixin" page="modules/cms/front/themes/weixin/layouts/default.jsp" />
 	
+	<!-- 清算所监管平台PC主题 START-->
+	<decorator name="portal" page="portal/include/portal.jsp" />
+	<!-- 公用  被装饰页面引用-->
+	<decorator name="header" page="portal/include/header.jsp" />
+	<decorator name="footer" page="portal/include/footer.jsp" />
+	<!-- 清算所监管平台PC主题 END -->
+	
+	<!-- 清算所监管平台手机端主题 START-->
+	<decorator name="mportal" page="mobile/portal/include/portal.jsp" />
+	<!-- 公用  被装饰页面引用-->
+	<decorator name="mheader" page="mobile/portal/include/header.jsp" />
+	<decorator name="mfooter" page="mobile/portal/include/footer.jsp" />
+	<!-- 清算所监管平台手机端主题 END -->
 </decorators>

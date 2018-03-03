@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -27,15 +28,18 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.beanvalidator.BeanValidators;
+import com.qdch.portal.common.config.Constant;
+import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.mapper.JsonMapper;
 import com.qdch.portal.common.utils.DateUtils;
+import com.qdch.portal.common.utils.HttpRequestDeviceUtils;
 
 /**
  * 控制器支持类
  * @author ThinkGem
  * @version 2013-3-23
  */
-public abstract class BaseController {
+public abstract class BaseController  implements Constant{
 
 	/**
 	 * 日志对象
@@ -65,6 +69,16 @@ public abstract class BaseController {
 	 */
 	@Autowired
 	protected Validator validator;
+	/**
+	 * 门户前端基础路径
+	 */
+	@Value("${portalPath}")
+	protected String portalPath;
+	/**
+	 * 门户前端页面文件夹名称
+	 */
+	@Value("${portalPage}")
+	protected String portalPage;
 
 	/**
 	 * 服务端参数有效性验证
@@ -211,6 +225,54 @@ public abstract class BaseController {
 //				return value != null ? DateUtils.formatDateTime((Date)value) : "";
 //			}
 		});
+	}
+	/**
+	 * 
+	 * @time   2018年3月3日 上午11:21:22
+	 * @author zuoqb
+	 * @todo   重写返回页面方法
+	 * @param  @param request
+	 * @param  @param view
+	 * @param  @return
+	 * @return_type   String
+	 */
+	public String render(HttpServletRequest request,String view) {
+		boolean mobile = HttpRequestDeviceUtils.isMobileDevice(request);//判断是否手机站点
+		//处理手机占位符
+		view=dealMobileView(mobile, view);
+		Boolean isDev =Global.getConfig("demoMode").equals("true");
+		if(isDev){
+			System.out.println("-------------Render-----------------------");
+			System.out.println("view_path:"+view);
+			System.out.println("------------------------------------------");
+		}
+		return view;
+	}
+
+	/**
+	 * 如果需要根据手机自带把web页面切换到手机页面
+	 * 则可以再view中使用占位符。如：render("/account/pay"+MOBILE_VIEW_PLACEHOLDER+"pay.html");	
+	 * 如果是手机就好默认吧占位符替换成"/m/"
+	 * @see 注意: 手机文件夹要 命名为  m
+	 * @param mobile
+	 * @param view
+	 * @return
+	 * @author zuoqb
+	 * @date   2018年3月3日11:19:40
+	 */
+	private String dealMobileView(boolean mobile,String view){
+		if(view.indexOf(MOBILE_VIEW_PLACEHOLDER)!=-1){
+			//标示需要判断手机访问 or PC访问
+			if(mobile){
+				view=MOBILE_VIEW_FOLDER+portalPage+view.replace(MOBILE_VIEW_PLACEHOLDER, "/");
+			}else{
+				view=portalPage+view.replace(MOBILE_VIEW_PLACEHOLDER, "/");
+			}
+		}else{
+			//只有电脑PC页面
+			view=portalPage+"/"+view;
+		}
+		return  view;
 	}
 	
 }
