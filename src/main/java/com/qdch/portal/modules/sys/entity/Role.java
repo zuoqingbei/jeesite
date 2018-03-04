@@ -267,4 +267,55 @@ public class Role extends DataEntity<Role> {
 //		}
 //		return StringUtils.join(menuNameList, ",");
 //	}
+	/**
+	 * 
+	 * @className Role.java
+	 * @time   2018年3月3日 下午9:08:24
+	 * @author zuoqb
+	 * @todo   可登陆平台类型枚举
+	 */
+	public enum RoleTypeEnum {
+		/**
+		 * @fieldName: NOMAL_ROLE	普通用户-可以查看门户PC+APP
+		 * @fieldType: RoleTypeEnum
+		 * @Description: TODO
+		 */
+		NOMAL_ROLE				(0,"普通用户个人中心","/"+Global.getPortalPath()+"/"), 
+		/**
+		 * @fieldName: SUPER_ADMIN_ROLE 超级管理后台-可以管理后台
+		 * @fieldType: RoleTypeEnum
+		 * @Description: TODO
+		 */
+		SUPER_ADMIN_ROLE		(1,"管理后台","/"+Global.getAdminPath()+"/"),
+		/**
+		 * @fieldName: SEC_CMDA_ADMIN_ROLE	系统对接用户-系统用户可以查询大宗信息
+		 * @fieldType: RoleTypeEnum
+		 * @Description: TODO
+		 */
+		SEC_CMDA_ADMIN_ROLE		(2,"系统对接用户","/"+Global.getJointPath()+"/"), 
+        ;
+        private Integer value;	//角色类型值
+        private String name;	//角色类型名称
+        private String path;	//角色能登录的后台路径
+        
+        private RoleTypeEnum(Integer value,String name,String path){
+        	this.value=value;
+        	this.name=name;
+        	this.path=path;
+        }
+        
+        public Integer getValue(){
+        	return this.value;
+        }
+        
+        public String getName(){
+        	return this.name;
+        }
+        
+        public String getPath(){
+        	return this.path;
+        }
+        
+        
+	}
 }

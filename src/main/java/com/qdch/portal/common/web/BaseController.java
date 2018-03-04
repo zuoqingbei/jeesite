@@ -70,10 +70,15 @@ public abstract class BaseController  implements Constant{
 	@Autowired
 	protected Validator validator;
 	/**
-	 * 门户前端基础路径
+	 * 门户前端访问基础路径
 	 */
 	@Value("${portalPath}")
 	protected String portalPath;
+	/**
+	 * 门户前端对接用户访问基础路径
+	 */
+	@Value("${jointPath}")
+	protected String jointPath;
 	/**
 	 * 门户前端页面文件夹名称
 	 */

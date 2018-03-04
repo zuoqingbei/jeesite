@@ -10,4 +10,7 @@ public interface Constant {
 	public final static String MOBILE_VIEW_PLACEHOLDER="${pla}";//placeholder占位符
 	public final static String MOBILE_VIEW_FOLDER="/mobile/";
 	public final static String PC_VIEW_FOLDER="/pc/";
+	//controller返回码
+	public final static String STATUS="status";
+	public final static String MSG="msg";
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * 清算所监管平台PC登陆
  */
 package com.qdch.portal.modules.user.web;
 
@@ -72,7 +72,7 @@ public class PortalLoginController extends BaseController{
 		if (Global.TRUE.equals(Global.getConfig("notAllowRefreshIndex"))){
 			CookieUtils.setCookie(response, "LOGINED", "false");
 		}
-		
+		model.addAttribute(FormAuthenticationFilter.DEFAULT_TO_PARAM, WebUtils.getCleanParam(request, FormAuthenticationFilter.DEFAULT_TO_PARAM));
 		// 如果已经登录，则跳转到首页
 		if(principal != null && !principal.isMobileLogin()){
 			return "redirect:" + portalPath;
@@ -94,10 +94,13 @@ public class PortalLoginController extends BaseController{
 	@RequestMapping(value = "${portalPath}/login", method = RequestMethod.POST)
 	public String dealLogin(HttpServletRequest request, HttpServletResponse response, Model model) {
 		Principal principal = UserUtils.getPrincipal();
-		
+		String to = WebUtils.getCleanParam(request, FormAuthenticationFilter.DEFAULT_TO_PARAM);
+		if(StringUtils.isBlank(to)){
+			to=portalPath;
+		}
 		// 如果已经登录，则跳转到管理首页
 		if(principal != null){
-			return "redirect:" + portalPath;
+			return "redirect:" + to;
 		}
 		String username = WebUtils.getCleanParam(request, FormAuthenticationFilter.DEFAULT_USERNAME_PARAM);
 		boolean rememberMe = WebUtils.isTrue(request, FormAuthenticationFilter.DEFAULT_REMEMBER_ME_PARAM);
@@ -131,6 +134,7 @@ public class PortalLoginController extends BaseController{
 		model.addAttribute(FormAuthenticationFilter.DEFAULT_MOBILE_PARAM, mobile);
 		model.addAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME, exception);
 		model.addAttribute(FormAuthenticationFilter.DEFAULT_MESSAGE_PARAM, msg);
+		model.addAttribute(FormAuthenticationFilter.DEFAULT_TO_PARAM, to);
 		
 		// 验证失败清空验证码
 		request.getSession().setAttribute(ValidateCodeServlet.VALIDATE_CODE, IdGen.uuid());
@@ -146,7 +150,7 @@ public class PortalLoginController extends BaseController{
 			if (mobile){
 		        return renderString(response, model);
 			}
-			return "redirect:" + portalPath;
+			return "redirect:" + to;
 		}
 	}
 

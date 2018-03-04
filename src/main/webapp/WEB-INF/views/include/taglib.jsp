@@ -11,4 +11,5 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}${fns:getAdminPath()}"/>
 <c:set var="ctxStatic" value="${pageContext.request.contextPath}/static"/>
 <c:set var="portalPath" value="${pageContext.request.contextPath}${fns:getPortalPath()}"/>
+<c:set var="jointPath" value="${pageContext.request.contextPath}${fns:getJointPath()}"/>
 <c:set var="portalPage" value="${pageContext.request.contextPath}${fns:getPortalPage()}"/>

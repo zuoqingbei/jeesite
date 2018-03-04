@@ -257,6 +257,13 @@
 		<example>${fns:getPortalPath()}</example>
 	</function>
 	<function>
+		<description>获取清算所对接用户前端访问路径</description>
+		<name>getJointPath</name>
+		<function-class>com.qdch.portal.common.config.Global</function-class>
+		<function-signature>java.lang.String getJointPath()</function-signature>
+		<example>${fns:getJointPath()}</example>
+	</function>
+	<function>
 		<description>获取清算所门户页面存放文件夹名称</description>
 		<name>getPortalPage</name>
 		<function-class>com.qdch.portal.common.config.Global</function-class>

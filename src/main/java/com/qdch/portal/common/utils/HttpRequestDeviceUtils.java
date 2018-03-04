@@ -4,6 +4,8 @@
 
 package com.qdch.portal.common.utils;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -193,6 +195,26 @@ public class HttpRequestDeviceUtils {
 		}
 		return false;
 	}
-	
-    
+	/**
+	 * 
+	 * @time   2018年3月3日 下午8:51:42
+	 * @author zuoqb
+	 * @todo   获取请求参数
+	 * @param  @param request
+	 * @param  @return
+	 * @return_type   String
+	 */
+	@SuppressWarnings("rawtypes")
+	public static String getParameterStr(HttpServletRequest request) {
+		StringBuffer param=new StringBuffer();
+		Enumeration enu=request.getParameterNames();  
+		while(enu.hasMoreElements()){  
+			String paraName=(String)enu.nextElement();  
+			param.append(paraName+"="+request.getParameter(paraName)+"&");  
+		}
+		if(StringUtils.isNotBlank(param.toString())){
+			return param.toString().substring(0,param.toString().length()-1);
+		}
+		return param.toString().length()==0?null:param.toString();
+	}
 }

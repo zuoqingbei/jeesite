@@ -1,13 +1,15 @@
 package com.qdch.portal.common.utils;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import com.qdch.portal.common.config.Global;
 
@@ -18,25 +20,45 @@ import com.qdch.portal.common.config.Global;
  */
 public class PostgreUtils {
 	
-	private static  String driver = null;  
-    private static  String url = null;
-    private static  String username = null;  
-    private static  String password = null;  
+	private static final String driver = Global.getConfig("postgre.driver");  
+    private static final String url = Global.getConfig("postgre.url");
+    private static final String username = Global.getConfig("postgre.username");  
+    private static final String password = Global.getConfig("postgre.password");  
     
     private CallableStatement callableStatement = null;//创建CallableStatement对象
     
     private Connection conn = null;  
     private PreparedStatement pst = null;  
     private ResultSet rst = null;  
+    private PostgreUtils() {}
+
+	/**
+	 * 当前对象实例
+	 */
+	private static PostgreUtils postgreUtils = null;
+
+	/**
+	 * 静态工厂方法 获取当前对象实例 多线程安全单例模式(使用双重同步锁)
+	 */
+
+	public static synchronized PostgreUtils getInstance() {
+
+		if (postgreUtils == null) {
+			synchronized (PostgreUtils.class) {
+				if (postgreUtils == null)
+					postgreUtils = new PostgreUtils();
+			}
+		}
+		return postgreUtils;
+	}
     
-    
-    public   PostgreUtils()  {
+   /* public   PostgreUtils()  {
     	driver = Global.getConfig("postgre.driver");
     	url = Global.getConfig("postgre.url");
     	username = Global.getConfig("postgre.username");
     	password = Global.getConfig("postgre.password");
 
-	}
+	}*/
     
     
     /**   
@@ -305,7 +327,7 @@ public class PostgreUtils {
 	
 	public static void main(String args[])  {
 		//conn();
-		PostgreUtils postgreUtils  = new PostgreUtils();
+		PostgreUtils postgreUtils  = PostgreUtils.getInstance();
 	
 		System.out.println(postgreUtils.executeQuerySingle("select * from test1", null));
 		

@@ -58,7 +58,7 @@ public class Global {
 	/**
 	 * 属性文件加载对象
 	 */
-	private static PropertiesLoader loader = new PropertiesLoader("portal.properties");
+	public static PropertiesLoader loader = new PropertiesLoader("portal.properties");
 
 	/**
 	 * 显示/隐藏
@@ -112,10 +112,16 @@ public class Global {
 	}
 	
 	/**
-	 * 获取清算所门户前端根路径
+	 * 获取清算所门户前端访问路径
 	 */
 	public static String getPortalPath() {
 		return getConfig("portalPath");
+	}
+	/**
+	 * 获取清算所对接用户访问路径
+	 */
+	public static String getJointPath() {
+		return getConfig("jointPath");
 	}
 	/**
 	 * 获取清算所门户前端根路径

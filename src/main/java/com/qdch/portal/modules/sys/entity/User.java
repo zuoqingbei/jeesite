@@ -20,6 +20,8 @@ import com.qdch.portal.common.supcan.annotation.treelist.cols.SupCol;
 import com.qdch.portal.common.utils.Collections3;
 import com.qdch.portal.common.utils.excel.annotation.ExcelField;
 import com.qdch.portal.common.utils.excel.fieldtype.RoleListType;
+import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 用户Entity
@@ -53,6 +55,10 @@ public class User extends DataEntity<User> {
 	private Role role;	// 根据角色查询用户条件
 	
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
+	/**
+	 * 角色能登录哪些后台枚举
+	 */
+	private List<RoleTypeEnum> roleTypes=Lists.newArrayList();
 
 	public User() {
 		super();
@@ -321,4 +327,19 @@ public class User extends DataEntity<User> {
 	public String toString() {
 		return id;
 	}
+	/**
+	 * 
+	 * @todo   这块需要在维护
+	 * @time   2018年3月4日 上午9:42:45
+	 * @author zuoqb
+	 * @return_type   List<RoleTypeEnum>
+	 */
+	public List<RoleTypeEnum> getRoleTypes() {
+		return roleTypes;
+	}
+
+	public void setRoleTypes(List<RoleTypeEnum> roleTypes) {
+		this.roleTypes = roleTypes;
+	}
+	
 }

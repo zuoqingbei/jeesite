@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
+import com.qdch.portal.modules.sys.security.SecurityAuthorityAnnotation;
 
 /**
  * 
@@ -29,12 +31,13 @@ public class PortalIndexController extends BaseController {
 	 * @param  @return
 	 * @return_type   String
 	 */
-
-	@RequestMapping(value = "${portalPath}", method = RequestMethod.GET)
+	@SecurityAuthorityAnnotation(needLogin=true)
+	@RequestMapping(value = {"${portalPath}","${portalPath}/index"}, method = RequestMethod.GET)
 	public String index(Model model,HttpServletRequest request, HttpServletResponse response){
 		//return portalPage+"${pla}/index/index";
 		return render(request, "${pla}index/index");//添加${pla}表示需要自动识别PC or Mobile
 	}
+	@SecurityAuthorityAnnotation(needRoles={RoleTypeEnum.NOMAL_ROLE})
 	@RequestMapping(value = {"${portalPath}/index2",""}, method = RequestMethod.GET)
 	public String index2(Model model,HttpServletRequest request, HttpServletResponse response){
 		//return portalPage+"${pla}/index/index";

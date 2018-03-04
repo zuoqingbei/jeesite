@@ -27,6 +27,7 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 	public static final String DEFAULT_CAPTCHA_PARAM = "validateCode";
 	public static final String DEFAULT_MOBILE_PARAM = "mobileLogin";
 	public static final String DEFAULT_MESSAGE_PARAM = "message";
+	public static final String DEFAULT_TO_PARAM = "to";
 
 	private String captchaParam = DEFAULT_CAPTCHA_PARAM;
 	private String mobileLoginParam = DEFAULT_MOBILE_PARAM;

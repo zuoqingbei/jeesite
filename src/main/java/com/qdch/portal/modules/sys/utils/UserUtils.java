@@ -11,6 +11,7 @@ import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
+import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.service.BaseService;
 import com.qdch.portal.common.utils.CacheUtils;
 import com.qdch.portal.common.utils.SpringContextHolder;
@@ -294,5 +295,19 @@ public class UserUtils {
 //		}
 //		return new HashMap<String, Object>();
 //	}
+	/**
+	 * @todo   判断是否是超级管理员
+	 * @time   2018年3月3日 下午9:33:17
+	 * @author zuoqb
+	 * @return_type   boolean
+	 */
+	public static boolean isSuperAccount(){
+		String superAccount=Global.loader.getProperty("super.account");
+		User user=getUser();
+		if(user!=null&&user.getLoginName().equals(superAccount)){
+			return true;
+		}
+		return false;
+	}
 	
 }
