@@ -71,14 +71,8 @@ public class SecurityInterceptor extends BaseService implements HandlerIntercept
 		}
   
 		//获取方法上的注解
-		SecurityAuthorityAnnotation anno = null;//handlerMethod.getMethod().getAnnotation(SecurityAuthorityAnnotation.class);
-		Method[] methods = handlerMethod.getBean().getClass().getDeclaredMethods();
-		for(Method method : methods){  
-            if(method.getName().equals(handlerMethod.getMethod().getName())){  
-            	anno = method.getAnnotation(SecurityAuthorityAnnotation.class);  
-                break;  
-            }  
-        }  
+		SecurityAuthorityAnnotation anno =handlerMethod.getMethod().getAnnotation(SecurityAuthorityAnnotation.class);
+	
 		//没找到就再获取类上的注解
 		if(anno==null){
 			anno=handlerMethod.getBean().getClass().getAnnotation(SecurityAuthorityAnnotation.class);
