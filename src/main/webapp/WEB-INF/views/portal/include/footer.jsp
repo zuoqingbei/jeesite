@@ -3,6 +3,6 @@
 <head>
 </head>
 <body>
-<div style="text-align:center;color:#fff;margin-top:20px;line-height:60px;background-color:#ccc;">公共底</div>
+<div style="text-align:center;color:#fff;margin-top:20px;line-height:60px;background-color:#ccc;">公共底 	分享：<a>qq</a> <a>微博</a> <a>微信</a></div>
 </body>
 </html>
