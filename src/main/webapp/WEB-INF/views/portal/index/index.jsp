@@ -28,6 +28,7 @@ color:red
 		   $(function(){
 			  console.log(portalPath+"---"+portalPage);
 			  console.log(window.document.location.href)
+			    console.log(document.title)
 			});
 		   $("#shareqq").on('click',function(){
 			   var url=' http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=';
@@ -43,10 +44,11 @@ color:red
 		   });
 	  
 		   function openWindow(url){
-			   url = url+'http://localhost:8080/portal'+'&title='+document.title;
-			   window.open(url,'_blank','width=600,height=400,top=100px,left=0px')
+			   url = url+window.document.location.href+'&title='+document.title;
+			   window.open(url,'_blank')
 		   }
-		   $("#sendMessage").on('click',sendMesage);
+		   //发送验证码
+		   $("#sendMessage").on('click',sendMessage);
 		   function sendMessage(){
 			   $.ajax({
 		             type: "post",

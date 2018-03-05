@@ -42,59 +42,58 @@ import org.apache.commons.httpclient.methods.PostMethod;
  */
 public class MessageUtils {
 	public static void main(String[] args) {
-		new MessageUtils().getRandom();
+		new MessageUtils().editMessage("17611570335");
 		
 	}
 	
-//	/**
-//	 * 避免重复发送逻辑
-//	 * @param tel
-//	 * @return
-//	 */
-//	public String  sendMessage(String tel){
-////		String returnmsg = "";
-////		CacheUtils.put("MessageCache", System.currentTimeMillis() );
-////		Object obj = CacheUtils.get("MessageCache");
-////		if(obj != null){
-////			long current = System.currentTimeMillis();
-////			if(current-Integer.parseInt(obj.toString())<60000){
-////				returnmsg =   "发送过于频繁";
-////			}else{
-////				CacheUtils.put("MessageCache", System.currentTimeMillis() );
-////				editMessage(tel);
-////			}
-////				
-////		}else{
-////			CacheUtils.put("MessageCache", System.currentTimeMillis() );
-////			editMessage(tel);
-////		}
-////		return returnmsg;
-//		if(null == JedisUtils.get("MessageCache")){ //如果为空 说明没发过 或已过期 可以发送
-//			
+	/**
+	 * 避免重复发送逻辑
+	 * @param tel
+	 * @return
+	 */
+	public String  sendMessage(String tel){
+		String returnmsg = "";
+//		CacheUtils.put("MessageCache", System.currentTimeMillis() );
+//		Object obj = CacheUtils.get("MessageCache");
+//		if(obj != null){
+//			long current = System.currentTimeMillis();
+//			if(current-Integer.parseInt(obj.toString())<60000){
+//				returnmsg =   "发送过于频繁";
+//			}else{
+//				CacheUtils.put("MessageCache", System.currentTimeMillis() );
+//				editMessage(tel);
+//			}
+//				
 //		}else{
-//			
+//			CacheUtils.put("MessageCache", System.currentTimeMillis() );
+//			editMessage(tel);
 //		}
-//		
-//		
-//		return "";
-//	}
+//		return returnmsg;
+		if(null != JedisUtils.get("MessageCache")){ 
+			returnmsg = "发送过于频繁";
+			return returnmsg;
+		}
+		returnmsg = editMessage(tel); //returnmsg 为1 说明发送成功
+		return returnmsg;
+	}
 	/**
 	 * 发送短信逻辑
 	 * @param tel
 	 */
 	
-	public void editMessage(String tel){
+	public String  editMessage(String tel){
 		HttpClient client = new HttpClient();
-		PostMethod post = new PostMethod("http://gbk.api.smschinese.cn"); 
+		PostMethod post = new PostMethod("http://utf8.api.smschinese.cn"); 
 		post.addRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");//在头文件中设置转码
 		String uid = Global.getConfig("messageuid")==null?"portalmsg":Global.getConfig("messageuid").toString();
 		String key = Global.getConfig("messagekey")==null?"e9e591c35bbaa5f9a29b":Global.getConfig("messagekey").toString();
 		String random = getRandom();
+	
 		NameValuePair[] data ={ new NameValuePair("Uid", uid),new NameValuePair("Key", key),
 				new NameValuePair("smsMob",tel),
-				new NameValuePair("smsText","验证码："+random+Global.getConfig("messageSuffix"))};  //加后缀是为了防止被屏蔽
+				new NameValuePair("smsText","验证码："+random+"【青岛清算】")};  //加后缀是为了防止被屏蔽
 		post.setRequestBody(data);
-
+	
 		try {
 			client.executeMethod(post);
 		} catch (HttpException e) {
@@ -126,6 +125,7 @@ public class MessageUtils {
 			JedisUtils.setObject("MessageCache", random, 60); //过期时间为60秒
 		}
 		post.releaseConnection();
+		return result;
 	}
 	/**
 	 * 生成四位随机数字
@@ -142,8 +142,26 @@ public class MessageUtils {
 	     }  
 	     String afterShuffle = sb.toString();  
 	     String result = afterShuffle.substring(5, 9);  
-	    System.out .print(result) ;
-	    return result;
+	     System.out .print(result) ;
+	     return result;
 
+	}
+	/**
+	 * 校验验证码是否正确
+	 */
+	public String  checkIndentifyCode(String code ){
+		String returnmsg = "";
+		String sysCode =  JedisUtils.get("MessageCache");
+		if(sysCode == null){
+			returnmsg = "请先点击发送验证码";
+			return returnmsg;
+		}
+		if(code.equals(sysCode)){
+			returnmsg = "true";
+		}else{
+			returnmsg = "false";
+		}
+		return returnmsg;
+		
 	}
 }
