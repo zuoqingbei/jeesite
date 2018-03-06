@@ -42,7 +42,8 @@ import org.apache.commons.httpclient.methods.PostMethod;
  */
 public class MessageUtils {
 	public static void main(String[] args) {
-		new MessageUtils().editMessage("17611570335");
+//		new MessageUtils().editMessage("17611570335");
+		new MessageUtils().sendMessage("17611570335");
 		
 	}
 	
@@ -69,11 +70,14 @@ public class MessageUtils {
 //			editMessage(tel);
 //		}
 //		return returnmsg;
-		if(null != JedisUtils.get("MessageCache")){ 
-			returnmsg = "发送过于频繁";
-			return returnmsg;
-		}
-		returnmsg = editMessage(tel); //returnmsg 为1 说明发送成功
+//		if(JedisUtils.exists("MessageCache")==true){
+//			if(null != JedisUtils.get("MessageCache")){ 
+//				returnmsg = "发送过于频繁";
+//				return returnmsg;
+//			}
+//		}
+		JedisUtils.setObject("MessageCache", "8888", 60); //过期时间为60秒
+		//returnmsg = editMessage(tel); //returnmsg 为1 说明发送成功
 		return returnmsg;
 	}
 	/**
@@ -121,7 +125,7 @@ public class MessageUtils {
 			e.printStackTrace();
 		} 
 		System.out.println(result); //打印返回消息状态
-		if(result.equals(1)){
+		if(result.equals("1")){
 			JedisUtils.setObject("MessageCache", random, 60); //过期时间为60秒
 		}
 		post.releaseConnection();

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.qdch.portal.common.utils.JedisUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
 import com.qdch.portal.modules.sys.security.SecurityAuthorityAnnotation;
