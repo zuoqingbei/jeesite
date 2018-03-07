@@ -63,7 +63,7 @@ color:red
 	        appkey: '16c0f74b339ca', // appkey
 
 	        params: {
-	            url: window.document.location.href, // 分享链接
+	            url: 'http://www.baidu.com', // 分享链接
 	            title: "分享", // 分享标题
 	            description: '试试', // 分享内容
 	            pic: '', // 分享图片，使用逗号,隔开
@@ -77,8 +77,6 @@ color:red
 	         * @param {Object} params 实际分享的参数 { url: 链接, title: 标题, description: 内容, pic: 图片连接 }
 	         */
 	        callback: function( plat, params ) {
-	        	//alert("成功")
-	        	console.log(11111)
 	        	console.log(params)
 	        }
 	    } );
