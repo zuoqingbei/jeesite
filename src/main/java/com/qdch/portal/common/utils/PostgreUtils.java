@@ -30,7 +30,10 @@ public class PostgreUtils {
     private Connection conn = null;  
     private PreparedStatement pst = null;  
     private ResultSet rst = null;  
-    private PostgreUtils() {}
+    private PostgreUtils() {
+    
+    	
+    }
 
 	/**
 	 * 当前对象实例

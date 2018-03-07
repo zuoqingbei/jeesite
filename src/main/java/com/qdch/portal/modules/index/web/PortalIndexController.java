@@ -1,17 +1,24 @@
 package com.qdch.portal.modules.index.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
+import com.qdch.portal.common.utils.JdbcUtils;
 import com.qdch.portal.common.utils.JedisUtils;
+import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
 import com.qdch.portal.modules.sys.security.SecurityAuthorityAnnotation;
+import com.qdch.slave.dao.SlaveDao;
 
 /**
  * 
@@ -22,6 +29,9 @@ import com.qdch.portal.modules.sys.security.SecurityAuthorityAnnotation;
  */
 @Controller
 public class PortalIndexController extends BaseController {
+	
+	@Autowired
+	public  SlaveDao SlaveDao;
 	/**
 	 * @time   2018年3月2日 下午8:34:10
 	 * @author zuoqb
@@ -36,6 +46,19 @@ public class PortalIndexController extends BaseController {
 	@RequestMapping(value = {"${portalPath}","${portalPath}/index"}, method = RequestMethod.GET)
 	public String index(Model model,HttpServletRequest request, HttpServletResponse response){
 		//return portalPage+"${pla}/index/index";
+		
+//		try {
+//		    DynamicDataSource.setSlaveDataSource();
+//		    //数据操作
+//		   JdbcUtils postgreUtils  = JdbcUtils.getInstance("mysql");
+//		   List<Object> list = postgreUtils.excuteQuery("select id from user limit 1,1", null);
+//		   System.out.println("--------------"+list.get(0));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}finally{
+//			DynamicDataSource.setDataSource();
+//		}
+		System.out.println("------"+SlaveDao.getCount());;
 		return render(request, "${pla}index/index");//添加${pla}表示需要自动识别PC or Mobile
 	}
 	@SecurityAuthorityAnnotation(needRoles={RoleTypeEnum.NOMAL_ROLE})
