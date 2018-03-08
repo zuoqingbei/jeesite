@@ -18,7 +18,6 @@ import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
 import com.qdch.portal.modules.sys.security.SecurityAuthorityAnnotation;
-import com.qdch.slave.dao.SlaveDao;
 
 /**
  * 
@@ -30,8 +29,6 @@ import com.qdch.slave.dao.SlaveDao;
 @Controller
 public class PortalIndexController extends BaseController {
 	
-	@Autowired
-	public  SlaveDao SlaveDao;
 	/**
 	 * @time   2018年3月2日 下午8:34:10
 	 * @author zuoqb
@@ -58,7 +55,6 @@ public class PortalIndexController extends BaseController {
 //		}finally{
 //			DynamicDataSource.setDataSource();
 //		}
-		System.out.println("------"+SlaveDao.getCount());;
 		return render(request, "${pla}index/index");//添加${pla}表示需要自动识别PC or Mobile
 	}
 	@SecurityAuthorityAnnotation(needRoles={RoleTypeEnum.NOMAL_ROLE})
