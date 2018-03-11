@@ -168,7 +168,7 @@
         <property name="targetDataSources">  
             <map>  
                 <entry key="dataSource" value-ref="dataSource"/>  
-                <entry key="slaveDataSource" value-ref="slaveDataSource"/>  
+               <!--  <entry key="slaveDataSource" value-ref="slaveDataSource"/>   -->
             </map>  
         </property>  
     </bean>  

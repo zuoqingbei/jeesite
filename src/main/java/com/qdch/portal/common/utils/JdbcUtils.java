@@ -48,7 +48,7 @@ public class JdbcUtils {
 
 	
 	public static synchronized JdbcUtils getInstance(String type) {
-		if(type.equals("postgre")){
+		/*if(type.equals("postgre")){
 			driver=Global.getConfig("postgre.driver");  
 	    	url=Global.getConfig("postgre.url");  
 	    	username=Global.getConfig("postgre.username");  
@@ -59,7 +59,7 @@ public class JdbcUtils {
 	    	username=Global.getConfig("slave.jdbc.username");  
 	    	password=Global.getConfig("slave.jdbc.password");  
 			
-		}
+		}*/
 
 		if (postgreUtils == null) {
 			synchronized (JdbcUtils.class) {
