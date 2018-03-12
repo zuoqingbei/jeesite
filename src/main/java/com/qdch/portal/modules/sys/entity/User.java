@@ -53,7 +53,17 @@ public class User extends DataEntity<User> {
 	private Date oldLoginDate;	// 上次登陆日期
 	
 	private Role role;	// 根据角色查询用户条件
+	private int type;
 	
+	
+	private int getType() {
+		return type;
+	}
+
+	private void setType(int type) {
+		this.type = type;
+	}
+
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 	/**
 	 * 角色能登录哪些后台枚举
