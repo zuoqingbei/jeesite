@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.account.dao.AccountAttentionDao">
+    
+	<sql id="accountAttentionColumns">
+		a.id AS "id",
+		a.from_user AS "fromUser",
+		a.to_user AS "toUser",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		s1.login_name As "fromUserName",
+		s2.login_name As "toUserName"
+	</sql>
+	
+	<sql id="accountAttentionJoins">
+	</sql>
+    
+	<select id="get" resultType="AccountAttention">
+		SELECT 
+			<include refid="accountAttentionColumns"/>
+		FROM account_attention a
+		left join sys_user s
+		<include refid="accountAttentionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	
+	<select id="findList" resultType="AccountAttention">
+		SELECT 
+			<include refid="accountAttentionColumns"/>
+		FROM account_attention a
+		left join sys_user s1
+		on s1.id=a.from_user
+		left join sys_user s2
+		on s2.id=a.to_user
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="fromUserName != null and fromUserName != ''">
+				and s1.login_name like concat(concat('%',#{fromUserName}),'%')
+				 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="AccountAttention">
+		SELECT 
+			<include refid="accountAttentionColumns"/>
+		FROM account_attention a
+		<include refid="accountAttentionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO account_attention(
+			id,
+			from_user,
+			to_user,
+			create_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{fromUser},
+			#{toUser},
+			#{createDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE account_attention SET 	
+			from_user = #{fromUser},
+			to_user = #{toUser}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE account_attention SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
