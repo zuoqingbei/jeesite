@@ -34,6 +34,134 @@ public class JedisUtils {
 	public static final String KEY_PREFIX = Global.getConfig("redis.keyPrefix");
 	
 	/**
+	 * @user 连纪明
+	 * @date 2018年3月12日
+	 * TODO 返回存储在 key 的列表里指定范围内的元素
+     * @param key 
+     * @parm start 开始位置
+     * @param end 结束位置 -1表示最后一个
+     * @return 
+	 */
+    public static List<String> lrange(String key, long start, long end) {
+        Jedis jedis = getResource();
+        List<String> result = jedis.lrange(key, start, end);
+        returnResource(jedis);
+        return result;
+    }
+    /**
+     * @user 连纪明
+     * @date 2018年3月12日
+     * TODO  截取(trim)一个已存在的 list，这样 list 就会只包含指定范围的指定元素
+     * @param key 
+     * @parm start 开始位置
+     * @param end 结束位置 -1表示最后一个
+     * @return 
+     */
+
+    public static String ltrim(String key, long start, long end) {
+        Jedis jedis = getResource();
+        String result = jedis.ltrim(key, start, end);
+        returnResource(jedis);
+        return result;
+    }
+
+       /**
+        * @user 连纪明
+        * @date 2018年3月12日
+        * TODO 返回给定集合的交集。
+        * @param keys
+        * @return
+        */
+       public static Set<String> sinter(String... keys) {
+           Jedis jedis = getResource();
+           Set<String> result = jedis.sinter(keys);
+           returnResource(jedis);
+           return result;
+       }
+       /**
+        * @user 连纪明
+        * @date 2018年3月12日
+        * TODO 类似于 SINTER 命令，但它将结果保存到 destination 集合，而不是简单地返回结果集
+        * @param dstkey
+        * @param keys
+        * @return
+        */
+       public static Long sinterstore(String dstkey, String... keys) {
+           Jedis jedis = getResource();
+           Long result = jedis.sinterstore(dstkey, keys);
+           returnResource(jedis);
+           return result;
+       }
+       /**
+        * @user 连纪明
+        * @date 2018年3月12日
+        * TODO 返回所有给定集合的并集
+        * @param keys
+        * @return
+        */
+        public static Set<String> sunion(String... keys) {
+            Jedis jedis = getResource();
+            Set<String> result = jedis.sunion(keys);
+            returnResource(jedis);
+            return result;
+        }
+        public static Long sunionstore(String dstkey, String... keys) {
+            Jedis jedis = getResource();
+            Long result = jedis.sunionstore(dstkey, keys);
+            returnResource(jedis);
+            return result;
+        }
+        /**
+         * @user 连纪明
+         * @date 2018年3月12日
+         * TODO 返回所有给定集合之间的差集。
+         * @param keys
+         * @return
+         */
+        public static Set<String> sdiff(String... keys) {
+            Jedis jedis = getResource();
+            Set<String> result = jedis.sdiff(keys);
+            returnResource(jedis);
+            return result;
+        }
+
+        public static Long sdiffstore(String dstkey, String... keys) {
+            Jedis jedis = getResource();
+            Long result = jedis.sdiffstore(dstkey, keys);
+            returnResource(jedis);
+            return result;
+        }
+        /**
+         * @user 连纪明
+         * @date 2018年3月12日
+         * TODO  返回有序集 key 中，指定区间内的成员。其中成员的位置按 score 值递增(从小到大)来排序。
+         * @param key
+         * @param start
+         * @param end
+         * @return
+         */
+         public static Set<String> zrange(String key, int start, int end) {
+             Jedis jedis = getResource();
+             Set<String> result = jedis.zrange(key, start, end);
+             returnResource(jedis);
+             return result;
+         }
+         /**
+          * @user 连纪明
+          * @date 2018年3月12日
+          * TODO 其中成员的位置按 score 值递减(从大到小)来排列。
+          * @param key
+          * @param start
+          * @param end
+          * @return
+          */
+         public static Set<String> zrevrange(String key, int start, int end) {
+             Jedis jedis = getResource();
+             Set<String> result = jedis.zrevrange(key, start, end);
+             returnResource(jedis);
+             return result;
+         }
+	/**
 	 * 获取缓存
 	 * @param key 键
 	 * @return 值
