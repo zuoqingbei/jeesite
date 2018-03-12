@@ -5,6 +5,7 @@ package com.qdch.portal.common.web;
 
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -173,6 +174,7 @@ public abstract class BaseController  implements Constant{
 	 */
 	protected String renderString(HttpServletResponse response, String string, String type) {
 		try {
+			//子这里 可以做手机或者PC控制 进行加密处理
 			response.reset();
 	        response.setContentType(type);
 	        response.setCharacterEncoding("utf-8");
@@ -181,6 +183,25 @@ public abstract class BaseController  implements Constant{
 		} catch (IOException e) {
 			return null;
 		}
+	}
+	/**
+	 * @todo   返回成功数据不带tag
+	 * @time   2018年3月12日 下午6:27:36
+	 * @author zuoqb
+	 * @return_type   String
+	 */
+	protected String resultSuccessData(HttpServletResponse response,String msg,Object data) {
+		return this.resultData(response,200, msg,"", data);
+	}
+	/**
+	 * @todo   返回数据
+	 * @time   2018年3月12日 下午6:27:48
+	 * @author zuoqb
+	 * @return_type   String
+	 */
+	protected String resultData(HttpServletResponse response,Integer status,String msg,String tag,Object data) {
+		ResultData rdata=new ResultData(status, msg,tag,data);
+		return this.renderString(response,rdata);
 	}
 
 	/**
@@ -280,4 +301,73 @@ public abstract class BaseController  implements Constant{
 		return  view;
 	}
 	
+	
+	
 }
+ class ResultData  implements Serializable{
+	
+	/**
+	 * Stone.Cai
+	 * 2016年04月26日18:22:26
+	 * 添加
+	 * 状态
+	 */
+	private Integer statusCode;
+	/**
+	 * Stone.Cai
+	 * 2016年04月26日18:23:56
+	 * 添加
+	 * 返回消息（例如提示用户的消息）
+	 */
+	private String resMessage;
+	/**
+	 * Stone.Cai
+	 * 2016年04月26日18:24:44
+	 * 添加
+	 * 额外是数据，例如标识东西等待
+	 */
+	private String tag;
+	/**
+	 * Stone.Cai
+	 * 2016年04月26日18:25:28
+	 * 添加
+	 * 用户返回的数据
+	 */
+	private Object resData;
+	public Integer getStatusCode() {
+		return statusCode;
+	}
+	public void setStatusCode(Integer statusCode) {
+		this.statusCode = statusCode;
+	}
+	public String getResMessage() {
+		return resMessage;
+	}
+	public void setResMessage(String resMessage) {
+		this.resMessage = resMessage;
+	}
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+	public Object getResData() {
+		return resData;
+	}
+	public void setResData(Object resData) {
+		this.resData = resData;
+	}
+	public ResultData(Integer statusCode, String resMessage, String tag, Object resData) {
+		this.statusCode = statusCode;
+		this.resMessage = resMessage;
+		this.tag = tag;
+		this.resData = resData;
+	}
+	public ResultData(Integer statusCode, String resMessage, String tag) {
+		this(statusCode, resMessage, tag, "");
+	}
+	public ResultData(Integer statusCode, String resMessage) {
+		this(statusCode, resMessage,"");
+	}
+ }
