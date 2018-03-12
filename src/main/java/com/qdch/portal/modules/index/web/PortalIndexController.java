@@ -1,5 +1,6 @@
 package com.qdch.portal.modules.index.web;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
+import com.qdch.portal.common.mapper.JsonMapper;
 import com.qdch.portal.common.utils.JdbcUtils;
 import com.qdch.portal.common.utils.JedisUtils;
 import com.qdch.portal.common.utils.PostgreUtils;
@@ -63,4 +66,11 @@ public class PortalIndexController extends BaseController {
 		//return portalPage+"${pla}/index/index";
 		return render(request, "index/index");//不添加${pla}表示只有PC端 无需自动切换页面
 	}
+	@RequestMapping(value = {"${portalPath}/toJson",""}, method = RequestMethod.GET)
+	@ResponseBody
+	public void toJson(HttpServletResponse response){
+		HashMap< String, Object> r=new HashMap<String, Object>();
+		r.put("status", "value");
+		this.resultSuccessData(response, "获取数据成功", r);
+	};
 }
