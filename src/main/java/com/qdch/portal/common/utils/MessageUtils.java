@@ -35,17 +35,22 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 
+import redis.clients.jedis.Jedis;
+
 /**
  * 发送短信工具类
  * @author wangfeng
  * @version 10点42分
  */
 public class MessageUtils {
+	
+	public static Jedis jedis = JedisUtils.getResource();
 	public static void main(String[] args) {
 //		new MessageUtils().editMessage("17611570335");
 		new MessageUtils().sendMessage("17611570335");
 		
 	}
+	
 	
 	/**
 	 * 避免重复发送逻辑
@@ -76,8 +81,10 @@ public class MessageUtils {
 //				return returnmsg;
 //			}
 //		}
-		JedisUtils.setObject("MessageCache", "8888", 60); //过期时间为60秒
-		//returnmsg = editMessage(tel); //returnmsg 为1 说明发送成功
+		String MessageCache = jedis.get("MessageCache");
+		if(MessageCache != null){
+			returnmsg = "发送过于频繁";
+		}
 		return returnmsg;
 	}
 	/**
@@ -126,7 +133,8 @@ public class MessageUtils {
 		} 
 		System.out.println(result); //打印返回消息状态
 		if(result.equals("1")){
-			JedisUtils.setObject("MessageCache", random, 60); //过期时间为60秒
+			//JedisUtils.setObject("MessageCache", random, 60); 
+			jedis.set("MessageCache", random, "NX", "EX", 60);  //过期时间为60秒
 		}
 		post.releaseConnection();
 		return result;
@@ -155,7 +163,7 @@ public class MessageUtils {
 	 */
 	public String  checkIndentifyCode(String code ){
 		String returnmsg = "";
-		String sysCode =  JedisUtils.get("MessageCache");
+		String sysCode =  jedis.get("MessageCache");
 		if(sysCode == null){
 			returnmsg = "请先点击发送验证码";
 			return returnmsg;

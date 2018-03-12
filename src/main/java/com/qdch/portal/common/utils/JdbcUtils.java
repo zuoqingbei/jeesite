@@ -18,38 +18,53 @@ import com.qdch.portal.common.config.Global;
  * @author wangfeng
  *
  */
-public class PostgreUtils {
+public class JdbcUtils {
 	
-	private static final String driver = Global.getConfig("postgre.driver");  
-    private static final String url = Global.getConfig("postgre.url");
-    private static final String username = Global.getConfig("postgre.username");  
-    private static final String password = Global.getConfig("postgre.password");  
+//	private static final String driver = Global.getConfig("postgre.driver");  
+//    private static final String url = Global.getConfig("postgre.url");
+//    private static final String username = Global.getConfig("postgre.username");  
+//    private static final String password = Global.getConfig("postgre.password");  
+	private  static String driver,url,username,password;
     
     private CallableStatement callableStatement = null;//创建CallableStatement对象
     
     private Connection conn = null;  
     private PreparedStatement pst = null;  
     private ResultSet rst = null;  
-    private PostgreUtils() {
-    
+    private JdbcUtils() {
+    	
     	
     }
 
 	/**
 	 * 当前对象实例
 	 */
-	private static PostgreUtils postgreUtils = null;
+	private static JdbcUtils postgreUtils = null;
 
 	/**
 	 * 静态工厂方法 获取当前对象实例 多线程安全单例模式(使用双重同步锁)
+	 * type取值为postgere /mysql
 	 */
 
-	public static synchronized PostgreUtils getInstance() {
+	
+	public static synchronized JdbcUtils getInstance(String type) {
+		/*if(type.equals("postgre")){
+			driver=Global.getConfig("postgre.driver");  
+	    	url=Global.getConfig("postgre.url");  
+	    	username=Global.getConfig("postgre.username");  
+	    	password=Global.getConfig("postgre.password");  
+		}else if(type.equals("mysql")){
+			driver=Global.getConfig("slave.jdbc.driver");  
+	    	url=Global.getConfig("slave.jdbc.url");  
+	    	username=Global.getConfig("slave.jdbc.username");  
+	    	password=Global.getConfig("slave.jdbc.password");  
+			
+		}*/
 
 		if (postgreUtils == null) {
-			synchronized (PostgreUtils.class) {
+			synchronized (JdbcUtils.class) {
 				if (postgreUtils == null)
-					postgreUtils = new PostgreUtils();
+					postgreUtils = new JdbcUtils();
 			}
 		}
 		return postgreUtils;
@@ -330,7 +345,7 @@ public class PostgreUtils {
 	
 	public static void main(String args[])  {
 		//conn();
-		PostgreUtils postgreUtils  = PostgreUtils.getInstance();
+		JdbcUtils postgreUtils  = JdbcUtils.getInstance("postgre");
 	
 		System.out.println(postgreUtils.executeQuerySingle("select * from test1", null));
 		
