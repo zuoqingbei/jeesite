@@ -42,7 +42,7 @@
 				<th>关注方登录名</th>
 				<th>被关注方登录名</th>
 				<th>关注时间</th>
-				<th>删除标记 0-未删除 1-已删除</th>
+				<th>删除标记 </th>
 				<shiro:hasPermission name="account:accountAttention:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
