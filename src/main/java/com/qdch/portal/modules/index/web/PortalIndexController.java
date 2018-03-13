@@ -66,6 +66,7 @@ public class PortalIndexController extends BaseController {
 		//return portalPage+"${pla}/index/index";
 		return render(request, "index/index");//不添加${pla}表示只有PC端 无需自动切换页面
 	}
+	
 	@RequestMapping(value = {"${portalPath}/toJson",""}, method = RequestMethod.GET)
 	@ResponseBody
 	public void toJson(HttpServletResponse response){

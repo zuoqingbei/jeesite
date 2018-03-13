@@ -16,9 +16,11 @@ public class AccountAttention extends DataEntity<AccountAttention> {
 	
 	private static final long serialVersionUID = 1L;
 	private String fromUser;		// 用户id 关注方
-	private String toUser;			// 被关注方
+	private String toUser;			// 用户id 被关注方
+	
 	private String fromUserName;	//关注方登录名
 	private String toUserName;		//被关注方登录名
+	
 	public String getFromUserName() {
 		return fromUserName;
 	}
