@@ -70,7 +70,7 @@ public class LogInterceptor extends BaseService implements HandlerInterceptor {
 			throws Exception {
 
 		// 保存日志
-		LogUtils.saveLog(request, handler, ex, null);
+		/*LogUtils.saveLog(request, handler, ex, null);
 
 		// 打印JVM信息。
 		if (logger.isDebugEnabled()) {
@@ -84,7 +84,7 @@ public class LogInterceptor extends BaseService implements HandlerInterceptor {
 							- Runtime.getRuntime().totalMemory() + Runtime.getRuntime().freeMemory()) / 1024 / 1024);
 			//删除线程变量中的数据，防止内存泄漏
 			startTimeThreadLocal.remove();
-		}
+		}*/
 
 	}
 
