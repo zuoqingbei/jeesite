@@ -3,6 +3,8 @@
  */
 package com.qdch.portal.modules.account.web;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.common.utils.IdGen;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.account.entity.AccountAttention;
 import com.qdch.portal.modules.account.service.AccountAttentionService;
@@ -34,6 +37,31 @@ public class AccountAttentionController extends BaseController {
 
 	@Autowired
 	private AccountAttentionService accountAttentionService;
+	
+	/**用户添加关注
+	 * @author lianjiming
+	 * @version 2018-03-13
+	 * @param accountAttention 用户关注实体
+	 */
+	@RequestMapping(value = {"addAttention", ""})
+	@ResponseBody
+	public void addAttention(HttpServletRequest request,HttpServletResponse response,AccountAttention accountAttention){
+		try {
+			String fromUser = request.getParameter("fromUser");
+			String toUser = request.getParameter("toUser");
+			accountAttention.setId(IdGen.uuid());
+			accountAttention.setFromUser(fromUser);
+			accountAttention.setToUser(toUser);
+			accountAttention.setCreateDate(new Date());
+			accountAttentionService.saveAttention(accountAttention);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		
+		this.resultSuccessData(response, "获取数据成功", null);
+	}
 	
 	@ModelAttribute
 	public AccountAttention get(@RequestParam(required=false) String id) {

@@ -5,6 +5,7 @@ package com.qdch.portal.modules.account.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +20,20 @@ import com.qdch.portal.modules.account.dao.AccountAttentionDao;
  * @version 2018-03-12
  */
 @Service
-@Transactional(readOnly = true)
 public class AccountAttentionService extends CrudService<AccountAttentionDao, AccountAttention> {
+	
+	@Autowired
+	private AccountAttentionDao accountAttentionDao;
+	
+	/**用户添加关注
+	 * @author lianjiming
+	 * @version 2018-03-13
+	 * @param accountAttention 用户关注实体
+	 */
+	
+	public void saveAttention(AccountAttention accountAttention){
+		accountAttentionDao.saveAttention(accountAttention);
+	}
 
 	public AccountAttention get(String id) {
 		return super.get(id);
@@ -42,6 +55,14 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 	@Transactional(readOnly = false)
 	public void delete(AccountAttention accountAttention) {
 		super.delete(accountAttention);
+	}
+
+	public AccountAttentionDao getAccountAttentionDao() {
+		return accountAttentionDao;
+	}
+	
+	public void setAccountAttentionDao(AccountAttentionDao accountAttentionDao) {
+		this.accountAttentionDao = accountAttentionDao;
 	}
 	
 }

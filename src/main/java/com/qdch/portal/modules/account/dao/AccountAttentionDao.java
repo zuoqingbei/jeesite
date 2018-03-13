@@ -15,4 +15,20 @@ import com.qdch.portal.modules.account.entity.AccountAttention;
 @MyBatisDao
 public interface AccountAttentionDao extends CrudDao<AccountAttention> {
 	
+	
+	/**用户添加关注
+	 * @author lianjiming
+	 * @version 2018-03-13
+	 * @param accountAttention 用户关注实体
+	 */
+	public void saveAttention(AccountAttention accountAttention);
+	
+	/**用户取消关注
+	 * @author lianjiming
+	 * @version 2018-03-13
+	 * @param accountAttention 用户关注实体
+	 */
+	public void deleteAttention(AccountAttention accountAttention);
+	
+	
 }
