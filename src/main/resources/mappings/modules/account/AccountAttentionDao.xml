@@ -77,7 +77,12 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="fromUserName != null and fromUserName != ''">
 				and s1.login_name like concat(concat('%',#{fromUserName}),'%')
-				 
+			</if>
+			<if test="fromUser != null and fromUser != ''">
+				and a.from_user=#{fromUser}
+			</if>
+			<if test="toUser != null and toUser != ''">
+				and a.to_user=#{toUser}
 			</if>
 		</where>
 		<choose>

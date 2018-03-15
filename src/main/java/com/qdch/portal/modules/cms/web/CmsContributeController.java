@@ -34,7 +34,7 @@ import com.qdch.portal.modules.cms.service.CmsContributeService;
  * @version 2018-03-13
  */
 @Controller
-@RequestMapping(value = "${adminPath}/cms/cmsContribute")
+//@RequestMapping(value = "${adminPath}/cms/cmsContribute")
 public class CmsContributeController extends BaseController {
 
 	@Autowired
@@ -60,7 +60,7 @@ public class CmsContributeController extends BaseController {
 	}
 	
 	@RequiresPermissions("cms:cmsContribute:view")
-	@RequestMapping(value = {"list", ""})
+	@RequestMapping(value = {"${adminPath}/cms/cmsContribute/list", ""})
 	public String list(CmsContribute cmsContribute, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CmsContribute> page = cmsContributeService.findPage(new Page<CmsContribute>(request, response), cmsContribute); 
 		model.addAttribute("page", page);
@@ -68,14 +68,14 @@ public class CmsContributeController extends BaseController {
 	}
 
 	@RequiresPermissions("cms:cmsContribute:view")
-	@RequestMapping(value = "form")
+	@RequestMapping(value = "${adminPath}/cms/cmsContribute/form")
 	public String form(CmsContribute cmsContribute, Model model) {
 		model.addAttribute("cmsContribute", cmsContribute);
 		return "modules/cms/cmsContributeForm";
 	}
 
 	@RequiresPermissions("cms:cmsContribute:edit")
-	@RequestMapping(value = "save")
+	@RequestMapping(value = "${adminPath}/cms/cmsContribute/save")
 	public String save(CmsContribute cmsContribute, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, cmsContribute)){
 			return form(cmsContribute, model);
@@ -86,11 +86,11 @@ public class CmsContributeController extends BaseController {
 	}
 	
 	@RequiresPermissions("cms:cmsContribute:edit")
-	@RequestMapping(value = "delete")
+	@RequestMapping(value = "${adminPath}/cms/cmsContribute/delete")
 	public String delete(CmsContribute cmsContribute, RedirectAttributes redirectAttributes) {
 		cmsContributeService.delete(cmsContribute);
 		addMessage(redirectAttributes, "删除用户投稿成功");
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsContribute/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/cmsContribute/list?repage";
 	}
 	
 	
@@ -102,7 +102,7 @@ public class CmsContributeController extends BaseController {
 	 */
 
 //	@RequiresPermissions("cms:cmsContribute:edit")
-	@RequestMapping(value = "changeState")
+	@RequestMapping(value = "${adminPath}/cms/cmsContribute/changeState")
 	public void  changeState(CmsContribute cmsContribute, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			cmsContributeService.changeState(cmsContribute);
@@ -112,11 +112,19 @@ public class CmsContributeController extends BaseController {
 				CmsNewsData cmsNewsData = new CmsNewsData();
 				cmsNews.setLink(cmsContribute.getId());
 				cmsNews.setDataType("1");//用户投稿
+				cmsNews.setUser(cmsContribute.getUser());
+				cmsNews.setImage(cmsContribute.getImage());
+				cmsNews.setKeywords(cmsContribute.getKeywords());
+				cmsNews.setTags(cmsContribute.getTags());
+				cmsNews.setDescription(cmsContribute.getDescription());
+				cmsNews.setCreateDate(cmsContribute.getCreateDate());
+				cmsNews.setUpdateBy(cmsContribute.getUpdateBy());
+				cmsNews.setUpdateDate(cmsContribute.getUpdateDate());
+				cmsNews.setCreateBy(cmsContribute.getCreateBy());
+				cmsNews.setRemarks(cmsContribute.getRemarks());
 				cmsNews.setCategory1("");
 				cmsNews.setTitle(cmsContribute.getTitle());
 				cmsNewsService.save(cmsNews);
-
-
 			}
 
 //		HashMap< String, Object> r=new HashMap<String, Object>();
@@ -127,5 +135,23 @@ public class CmsContributeController extends BaseController {
 			e.printStackTrace();
 		}
 	}
+
+    /**
+     * 获得用户投稿
+     * @param cmsContribute
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "${portalPath}/cms/cmsContribute/getUserContribute")
+    public void  getUserContribute(CmsContribute cmsContribute, HttpServletRequest request,  HttpServletResponse response) {
+        try {
+            CmsContribute cmsContribute1 = cmsContributeService.getUserContribute(cmsContribute);
+
+            this.resultSuccessData(request,response, "获取数据成功", cmsContribute1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

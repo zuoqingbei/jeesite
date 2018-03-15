@@ -30,7 +30,7 @@ import com.qdch.portal.modules.cms.service.CmsNewsService;
  * @version 2018-03-13
  */
 @Controller
-@RequestMapping(value = "${adminPath}/cms/cmsNewsData")
+//@RequestMapping(value = "${adminPath}/cms/cmsNewsData")
 public class CmsNewsDataController extends BaseController {
 
 	@Autowired
@@ -67,7 +67,7 @@ public class CmsNewsDataController extends BaseController {
 	}
 	
 	@RequiresPermissions("cms:cmsNewsData:view")
-	@RequestMapping(value = {"list", ""})
+	@RequestMapping(value = {"${adminPath}/cms/cmsNewsData/list", ""})
 	public String list(CmsNewsData cmsNewsData, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			Page<CmsNewsData> page = cmsNewsDataService.findPage(new Page<CmsNewsData>(request, response), cmsNewsData); 
@@ -80,7 +80,7 @@ public class CmsNewsDataController extends BaseController {
 	}
 
 	@RequiresPermissions("cms:cmsNewsData:view")
-	@RequestMapping(value = "form")
+	@RequestMapping(value = "${adminPath}/cms/cmsNewsData/form")
 	public String form(CmsNewsData cmsNewsData, Model model,HttpServletRequest request) {
 		cmsNewsData.setTitleid(request.getParameter("titleid"));
 		model.addAttribute("cmsNewsData", cmsNewsData);
@@ -88,7 +88,7 @@ public class CmsNewsDataController extends BaseController {
 	}
 
 	@RequiresPermissions("cms:cmsNewsData:edit")
-	@RequestMapping(value = "save")
+	@RequestMapping(value = "${adminPath}/cms/cmsNewsData/save")
 	public String save(CmsNewsData cmsNewsData, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request) {
 		try {
 			if (!beanValidator(model, cmsNewsData)){
@@ -104,7 +104,7 @@ public class CmsNewsDataController extends BaseController {
 	}
 	
 	@RequiresPermissions("cms:cmsNewsData:edit")
-	@RequestMapping(value = "delete")
+	@RequestMapping(value = "${adminPath}/cms/cmsNewsData/delete")
 	public String delete(CmsNewsData cmsNewsData, RedirectAttributes redirectAttributes) {
 		cmsNewsDataService.delete(cmsNewsData);
 		addMessage(redirectAttributes, "删除资讯详表成功");

@@ -67,7 +67,8 @@
 		<div class="control-group">
 			<label class="control-label">文章图片：</label>
 			<div class="controls">
-				<form:input path="image" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:hidden id="image" path="image" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="image" type="files" uploadPath="/cms/cmsBanner" selectMultiple="true"/>
 			</div>
 		</div>
 		<div class="control-group">
