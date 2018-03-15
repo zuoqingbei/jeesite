@@ -5,6 +5,7 @@ package com.qdch.portal.modules.cms.service;
 
 import java.util.List;
 
+import com.qdch.portal.modules.cms.entity.CmsNews;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,8 +55,10 @@ public class CmsContributeService extends CrudService<CmsContributeDao, CmsContr
 	}
 
 	@Transactional(readOnly = false)
-	public CmsContribute getUserContribute(CmsContribute cmsContribute) {
-		return dao.getUserContribute(cmsContribute);
+	public Page<CmsContribute> getUserContribute(Page<CmsContribute> page,CmsContribute cmsContribute) {
+		cmsContribute.setPage(page);
+		page.setList(dao.getUserContribute(cmsContribute));
+		return page;
 	}
 	
 }

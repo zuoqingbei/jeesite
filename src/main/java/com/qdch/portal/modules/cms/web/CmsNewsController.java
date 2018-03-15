@@ -6,12 +6,14 @@ package com.qdch.portal.modules.cms.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.common.utils.JedisUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -21,6 +23,7 @@ import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
+import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +82,7 @@ public class CmsNewsController extends BaseController {
 			e.printStackTrace();
 		}
 		addMessage(redirectAttributes, "保存资讯成功");
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsNews/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/cmsNews/list?repage";
 	}
 	
 	@RequiresPermissions("cms:cmsNews:edit")
@@ -96,9 +99,9 @@ public class CmsNewsController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent",method = RequestMethod.GET)
 	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-		CmsNews cmsNews1 = cmsNewsService.get(cmsNews);
+		CmsNews cmsNews1 = cmsNewsService.getContent(cmsNews);
 		HashMap< String, Object> r=new HashMap<String, Object>();
 		r.put("page", cmsNews1);
 		this.resultSuccessData(response, "获取数据成功", r);
@@ -111,14 +114,55 @@ public class CmsNewsController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend")
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend",method = RequestMethod.GET)
 	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-		List<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
+
+
+		Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
 		HashMap< String, Object> r=new HashMap<String, Object>();
 		r.put("page", cmsNewsList);
 		this.resultSuccessData(response, "获取数据成功", r);
 
 	}
+
+	/**
+	 * 前台获得资讯分页列表
+	 * @param cmsNews
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist",method = RequestMethod.GET)
+	public void portallist(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews);
+		HashMap< String, Object> r=new HashMap<String, Object>();
+		r.put("page", page);
+		this.resultSuccessData(response, "获取数据成功", r);
+	}
+
+
+	/**
+	 * 资讯排行
+	 * @param cmsNews
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRank",method = RequestMethod.GET)
+	public void getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
+			HashMap< String, Object> r=new HashMap<String, Object>();
+			r.put("page", page);
+			this.resultSuccessData(response, "获取数据成功", r);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+	}
+
 
 
 }
