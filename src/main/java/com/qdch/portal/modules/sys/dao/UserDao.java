@@ -4,6 +4,7 @@
 package com.qdch.portal.modules.sys.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
@@ -71,5 +72,10 @@ public interface UserDao extends CrudDao<User> {
 	 * @return
 	 */
 	public int updateUserInfo(User user);
+	
+	/**
+	 * 查询共同关注用户
+	 */
+	public List<User> findCommonAttention(String[] keys);
 
 }
