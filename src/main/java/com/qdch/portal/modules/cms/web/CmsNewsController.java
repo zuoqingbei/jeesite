@@ -150,7 +150,7 @@ public class CmsNewsController extends BaseController {
 	public void getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
-			this.resultSuccessData(request,response, "获取数据成功", page);
+			this.resultSuccessData(request,response, "获取数据成功",  page);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
