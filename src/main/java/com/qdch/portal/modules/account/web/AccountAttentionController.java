@@ -5,6 +5,7 @@ package com.qdch.portal.modules.account.web;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -169,7 +170,7 @@ public class AccountAttentionController extends BaseController {
 			accountAttention.setFromUser(fromUser);
 			accountAttention.setToUser(toUser);
 			Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
-			this.resultSuccessData(request,response, "我的关注", page);
+			this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
