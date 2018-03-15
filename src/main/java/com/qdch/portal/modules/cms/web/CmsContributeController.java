@@ -103,7 +103,7 @@ public class CmsContributeController extends BaseController {
 
 //	@RequiresPermissions("cms:cmsContribute:edit")
 	@RequestMapping(value = "changeState")
-	public void  changeState(CmsContribute cmsContribute, HttpServletResponse response) {
+	public void  changeState(CmsContribute cmsContribute, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			cmsContributeService.changeState(cmsContribute);
 			//如果是审核通过，则加到news表和news_data表中
@@ -121,7 +121,7 @@ public class CmsContributeController extends BaseController {
 
 //		HashMap< String, Object> r=new HashMap<String, Object>();
 //		r.put("status", "value");
-			 this.resultSuccessData(response, "修改成功", null);
+			 this.resultSuccessData(request,response, "修改成功", null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

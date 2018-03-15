@@ -60,13 +60,13 @@ public class CmsContributeFrontController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getUserContribute")
-	public void  getUserContribute(CmsContribute cmsContribute, HttpServletResponse response) {
+	public void  getUserContribute(HttpServletRequest request,CmsContribute cmsContribute, HttpServletResponse response) {
 		try {
 			CmsContribute cmsContribute1 = cmsContributeService.getUserContribute(cmsContribute);
 
 			HashMap< String, Object> r=new HashMap<String, Object>();
 			r.put("user", cmsContribute1);
-			this.resultSuccessData(response, "获取数据成功", r);
+			this.resultSuccessData(request,response, "获取数据成功", r);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

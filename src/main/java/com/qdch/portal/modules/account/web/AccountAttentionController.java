@@ -92,9 +92,9 @@ public class AccountAttentionController extends BaseController {
 				list = UserUtils.findCommonAttention(array);
 				
 				accountAttentionService.saveAttention(accountAttention);//存入数据库
-				this.resultSuccessData(response, "关注成功", list);
+				this.resultSuccessData(request,response, "关注成功", list);
 			}else{//已经关注
-				this.resultSuccessData(response, "已经关注", null);
+				this.resultSuccessData(request,response, "已经关注", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,9 +117,9 @@ public class AccountAttentionController extends BaseController {
 			List<AccountAttention> list = accountAttentionService.findAccountAttention(accountAttention);
 			if(list!=null||list.size()==0){//已经关注
 				accountAttentionService.delete(accountAttention);
-				this.resultSuccessData(response, "取消关注成功", null);
+				this.resultSuccessData(request,response, "取消关注成功", null);
 			}else{//未关注
-				this.resultSuccessData(response, "未关注", null);
+				this.resultSuccessData(request,response, "未关注", null);
 			}
 			
 		} catch (Exception e) {

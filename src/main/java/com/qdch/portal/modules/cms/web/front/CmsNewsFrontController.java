@@ -57,9 +57,7 @@ public class CmsNewsFrontController extends BaseController {
 	@RequestMapping(value = "getNewsContent")
 	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
 		CmsNews cmsNews1 = cmsNewsService.get(cmsNews);
-		HashMap< String, Object> r=new HashMap<String, Object>();
-		r.put("page", cmsNews1);
-		this.resultSuccessData(response, "获取数据成功", r);
+		this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
 
 	}
 
@@ -72,9 +70,7 @@ public class CmsNewsFrontController extends BaseController {
 	@RequestMapping(value = "getRecommend")
 	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
 		List<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
-		HashMap< String, Object> r=new HashMap<String, Object>();
-		r.put("page", cmsNewsList);
-		this.resultSuccessData(response, "获取数据成功", r);
+		this.resultSuccessData(request,response, "获取数据成功", cmsNewsList);
 
 	}
 

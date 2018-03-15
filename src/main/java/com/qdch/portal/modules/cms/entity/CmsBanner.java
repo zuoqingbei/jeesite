@@ -8,6 +8,7 @@ import java.util.Date;
 import org.hibernate.validator.constraints.Length;
 
 import com.qdch.portal.common.persistence.DataEntity;
+import com.qdch.portal.common.utils.Json;
 
 /**
  * 轮播图管理Entity
@@ -19,6 +20,7 @@ public class CmsBanner extends DataEntity<CmsBanner> {
 	private static final long serialVersionUID = 1L;
 	private String title;		// 文字标题/描述
 	private String content;
+	@Json
 	private String image;		// 图片
 	private String linkUrl;		// 打开地址
 	private String target;		// 打开方式 _blank-在新窗口中打开 _self-当前页面
@@ -26,7 +28,16 @@ public class CmsBanner extends DataEntity<CmsBanner> {
 	private String orderNo;		// 排序
 	private Date beginCreateDate;		// 开始 公告发布日期
 	private Date endCreateDate;		// 结束 公告发布日期
+	private String userName;
 	
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public CmsBanner() {
 		super();
 	}

@@ -69,9 +69,9 @@ public class PortalIndexController extends BaseController {
 	
 	@RequestMapping(value = {"${portalPath}/toJson",""}, method = RequestMethod.GET)
 	@ResponseBody
-	public void toJson(HttpServletResponse response){
+	public void toJson(HttpServletRequest request,HttpServletResponse response){
 		HashMap< String, Object> r=new HashMap<String, Object>();
 		r.put("status", "value");
-		this.resultSuccessData(response, "获取数据成功", r);
+		this.resultSuccessData(request,response, "获取数据成功", r);
 	};
 }
