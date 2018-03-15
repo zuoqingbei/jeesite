@@ -44,7 +44,8 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>文字描述</th>
+				<th>标题</th>
+				<th>介绍</th>
 				<th>图片</th>
 				<th>地址</th>
 				<th>打开方式</th>
@@ -62,6 +63,9 @@
 				<td><a href="${ctx}/cms/cmsBanner/form?id=${cmsBanner.id}">
 					${cmsBanner.title}
 				</a></td>
+				<td>
+					${cmsBanner.content}
+				</td>
 				<td>
 					${cmsBanner.image}
 				</td>

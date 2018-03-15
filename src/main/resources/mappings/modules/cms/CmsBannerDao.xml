@@ -4,6 +4,7 @@
     
 	<sql id="cmsBannerColumns">
 		a.id AS "id",
+		a.content AS "content",
 		a.title AS "title",
 		a.image AS "image",
 		a.link_url AS "linkUrl",
@@ -35,10 +36,16 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="title != null and title != ''">
-				AND a.title LIKE 
+				AND (a.title LIKE 
 					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+					or 
+					a.content LIKE 
+					<if test="dbName == 'oracle'">'%'||#{content}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{content}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{content},'%')</if>
+					)
 			</if>
 			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
 				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
@@ -74,6 +81,7 @@
 		INSERT INTO cms_banner(
 			id,
 			title,
+			content,
 			image,
 			link_url,
 			target,
@@ -86,6 +94,7 @@
 		) VALUES (
 			#{id},
 			#{title},
+			#{content},
 			#{image},
 			#{linkUrl},
 			#{target},
@@ -101,6 +110,7 @@
 	<update id="update">
 		UPDATE cms_banner SET 	
 			title = #{title},
+			content = #{content},
 			image = #{image},
 			link_url = #{linkUrl},
 			target = #{target},
