@@ -41,7 +41,7 @@
 		FROM cms_contribute a
 		<include refid="cmsContributeJoins"/>
 		<where>
-			a.del_flag = '0' adn a.status !='0'
+			a.del_flag = '0' and a.status !='0'
 			<if test="id != null and id != ''">
 				AND a.id = #{id}
 			</if>
