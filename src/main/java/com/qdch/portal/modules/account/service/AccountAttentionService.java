@@ -44,8 +44,8 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 	 */
 	@Transactional(readOnly = false)
 	public List<AccountAttention> findAccountAttention(AccountAttention accountAttention){
-		List<AccountAttention> accountAttention2 = accountAttentionDao.findAccountAttention(accountAttention);
-		return accountAttention2;
+		List<AccountAttention> list = accountAttentionDao.findAccountAttention(accountAttention);
+		return list;
 	}
 	
 	@Transactional(readOnly = false)
@@ -53,7 +53,9 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 		super.delete(accountAttention);
 	}
 	
-	
+	public Page<AccountAttention> findPage(Page<AccountAttention> page, AccountAttention accountAttention) {
+		return super.findPage(page, accountAttention);
+	}
 	
 	//-------------------------------------------------------------
 	
@@ -65,9 +67,7 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 		return super.findList(accountAttention);
 	}
 	
-	public Page<AccountAttention> findPage(Page<AccountAttention> page, AccountAttention accountAttention) {
-		return super.findPage(page, accountAttention);
-	}
+
 	
 	@Transactional(readOnly = false)
 	public void save(AccountAttention accountAttention) {

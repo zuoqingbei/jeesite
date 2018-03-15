@@ -84,23 +84,29 @@ public class AccountAttentionController extends BaseController {
 				String keyToUser = "addAttentionCache_"+accountAttention.getToUser();//被关注者的key
 				String[] keys=new String[]{keyFromUser,keyToUser};
 				Set<String> sinter = JedisUtils.sinter(keys);
+				List<User> list = new ArrayList<User>();
 				
-				String[] array = JedisUtils.Set2Array(sinter);//集合转换数组
-				
-				//user 查询共同的关注
-				List<User> list=new ArrayList<User>();
-				list = UserUtils.findCommonAttention(array);
-				
+				if(sinter!=null&&sinter.size()>0){//有共同关注
+					//user 查询共同的关注
+					String[] array = JedisUtils.Set2Array(sinter);//集合转换数组
+					list=UserUtils.findCommonAttention(array);
+				}
 				accountAttentionService.saveAttention(accountAttention);//存入数据库
-				this.resultSuccessData(response, "关注成功", list);
+				this.resultSuccessData(request,response, "关注成功", list);
 			}else{//已经关注
-				this.resultSuccessData(response, "已经关注", null);
+				this.resultSuccessData(request,response, "已经关注", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	//@RequiresPermissions("account:accountAttention:edit")
+	/**用户取消关注
+	 * @author lianjiming
+	 * @version 2018-03-15
+	 * @param accountAttention 用户关注实体
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping(value = "delete")
 	@ResponseBody
 	public void delete(AccountAttention accountAttention, HttpServletRequest request,HttpServletResponse response) {
@@ -115,20 +121,61 @@ public class AccountAttentionController extends BaseController {
 			accountAttention.setCreateDate(new Date());
 			//查询是否关注
 			List<AccountAttention> list = accountAttentionService.findAccountAttention(accountAttention);
-			if(list!=null||list.size()==0){//已经关注
+			
+			if(list!=null&&list.size()!=0){//已经关注
+				
+				//读取缓存
+				String keyFromUser = "addAttentionCache_"+accountAttention.getFromUser();//关注者的key
+				Set<String> set = JedisUtils.getSet(keyFromUser);
+				//删除缓存
+				JedisUtils.del(keyFromUser);
+				
+				//设置已关注记录的id
+				String id = null;
+				for(int i = 0;i <list.size();i++){
+					id = list.get(i).getId();
+				}
+				accountAttention.setId(id);
+				//从数据库中删除记录 （修改delFlag 值 0：正常；1：删除；2：审核）
 				accountAttentionService.delete(accountAttention);
-				this.resultSuccessData(response, "取消关注成功", null);
+				this.resultSuccessData(request,response, "取消关注成功", null);
 			}else{//未关注
-				this.resultSuccessData(response, "未关注", null);
+				this.resultSuccessData(request,response, "未关注", null);
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	/**我的关注/我的粉丝
+	 * @author lianjiming
+	 * @version 2018-03-15
+	 * @param accountAttention 用户关注实体
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = {"listMyAttention", ""})
+	@ResponseBody
+	public void listMyAttention(AccountAttention accountAttention, HttpServletRequest request, HttpServletResponse response) {
 		
+		try {
+			//获取请求参数 
+			Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+			Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
+			//查询我的关注
+			String fromUser = request.getParameter("fromUser");
+			//我的粉丝
+			String toUser = request.getParameter("toUser");
+			accountAttention.setFromUser(fromUser);
+			accountAttention.setToUser(toUser);
+			Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
+			this.resultSuccessData(request,response, "我的关注", page);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 	@ModelAttribute
 	public AccountAttention get(@RequestParam(required=false) String id) {
 		AccountAttention entity = null;

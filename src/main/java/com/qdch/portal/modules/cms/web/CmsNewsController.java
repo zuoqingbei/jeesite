@@ -101,10 +101,10 @@ public class CmsNewsController extends BaseController {
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent",method = RequestMethod.GET)
 	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-		CmsNews cmsNews1 = cmsNewsService.getContent(cmsNews);
-		HashMap< String, Object> r=new HashMap<String, Object>();
-		r.put("page", cmsNews1);
-		this.resultSuccessData(response, "获取数据成功", r);
+
+		CmsNews cmsNews1 = cmsNewsService.get(cmsNews);
+		this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
+
 
 	}
 
@@ -117,11 +117,9 @@ public class CmsNewsController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend",method = RequestMethod.GET)
 	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
 
+        Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
+		this.resultSuccessData(request,response, "获取数据成功", cmsNewsList);
 
-		Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
-		HashMap< String, Object> r=new HashMap<String, Object>();
-		r.put("page", cmsNewsList);
-		this.resultSuccessData(response, "获取数据成功", r);
 
 	}
 
@@ -136,9 +134,7 @@ public class CmsNewsController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist",method = RequestMethod.GET)
 	public void portallist(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews);
-		HashMap< String, Object> r=new HashMap<String, Object>();
-		r.put("page", page);
-		this.resultSuccessData(response, "获取数据成功", r);
+		this.resultSuccessData(request,response, "获取数据成功", page);
 	}
 
 
@@ -154,9 +150,7 @@ public class CmsNewsController extends BaseController {
 	public void getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
-			HashMap< String, Object> r=new HashMap<String, Object>();
-			r.put("page", page);
-			this.resultSuccessData(response, "获取数据成功", r);
+			this.resultSuccessData(request,response, "获取数据成功", page);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

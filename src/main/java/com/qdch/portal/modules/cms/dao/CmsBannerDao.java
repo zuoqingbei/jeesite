@@ -3,6 +3,10 @@
  */
 package com.qdch.portal.modules.cms.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
 import com.qdch.portal.modules.cms.entity.CmsBanner;
@@ -14,5 +18,5 @@ import com.qdch.portal.modules.cms.entity.CmsBanner;
  */
 @MyBatisDao
 public interface CmsBannerDao extends CrudDao<CmsBanner> {
-	
+	public List<CmsBanner> findBannerList(@Param("offset") int offset, @Param("limit") int limit);
 }

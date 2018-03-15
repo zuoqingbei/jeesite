@@ -5,9 +5,10 @@ package com.qdch.portal.common.web;
 
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,8 @@ import com.qdch.portal.common.config.Constant;
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.mapper.JsonMapper;
 import com.qdch.portal.common.utils.DateUtils;
+import com.qdch.portal.common.utils.FormateJsonToString;
+import com.qdch.portal.common.utils.FormateJsonToStringByAnnotation;
 import com.qdch.portal.common.utils.HttpRequestDeviceUtils;
 
 /**
@@ -190,8 +193,11 @@ public abstract class BaseController  implements Constant{
 	 * @author zuoqb
 	 * @return_type   String
 	 */
-	protected String resultSuccessData(HttpServletResponse response,String msg,Object data) {
-		return this.resultData(response,200, msg,"", data);
+	protected String resultSuccessData(HttpServletRequest request,HttpServletResponse response,String msg,Object data) {
+		return this.resultData(request,response,"success", msg,"", data);
+	}
+	protected String resultFaliureData(HttpServletRequest request,HttpServletResponse response,String msg,Object data) {
+		return this.resultData(request,response,"faliure", msg,"", data);
 	}
 	/**
 	 * @todo   返回数据
@@ -199,9 +205,18 @@ public abstract class BaseController  implements Constant{
 	 * @author zuoqb
 	 * @return_type   String
 	 */
-	protected String resultData(HttpServletResponse response,Integer status,String msg,String tag,Object data) {
-		ResultData rdata=new ResultData(status, msg,tag,data);
-		return this.renderString(response,rdata);
+	protected String resultData(HttpServletRequest request,HttpServletResponse response,Object status,String msg,String tag,Object data) {
+		if(data instanceof Map){
+			return renderString(response,  JsonMapper.toJsonString(data), "application/json");
+		}else{
+			if(HttpRequestDeviceUtils.isMobileDevice(request)){
+				return renderString(response,  new FormateJsonToStringByAnnotation().jsonFromObject(status, msg,data), "application/json");
+			}else{
+				return renderString(response,  new FormateJsonToString().jsonFromObject(status, msg,data), "application/json");
+			}
+		}
+		
+		//return this.renderString(response,rdata);
 	}
 
 	/**
@@ -304,70 +319,4 @@ public abstract class BaseController  implements Constant{
 	
 	
 }
- class ResultData  implements Serializable{
-	
-	/**
-	 * Stone.Cai
-	 * 2016年04月26日18:22:26
-	 * 添加
-	 * 状态
-	 */
-	private Integer statusCode;
-	/**
-	 * Stone.Cai
-	 * 2016年04月26日18:23:56
-	 * 添加
-	 * 返回消息（例如提示用户的消息）
-	 */
-	private String resMessage;
-	/**
-	 * Stone.Cai
-	 * 2016年04月26日18:24:44
-	 * 添加
-	 * 额外是数据，例如标识东西等待
-	 */
-	private String tag;
-	/**
-	 * Stone.Cai
-	 * 2016年04月26日18:25:28
-	 * 添加
-	 * 用户返回的数据
-	 */
-	private Object resData;
-	public Integer getStatusCode() {
-		return statusCode;
-	}
-	public void setStatusCode(Integer statusCode) {
-		this.statusCode = statusCode;
-	}
-	public String getResMessage() {
-		return resMessage;
-	}
-	public void setResMessage(String resMessage) {
-		this.resMessage = resMessage;
-	}
-	public String getTag() {
-		return tag;
-	}
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-	public Object getResData() {
-		return resData;
-	}
-	public void setResData(Object resData) {
-		this.resData = resData;
-	}
-	public ResultData(Integer statusCode, String resMessage, String tag, Object resData) {
-		this.statusCode = statusCode;
-		this.resMessage = resMessage;
-		this.tag = tag;
-		this.resData = resData;
-	}
-	public ResultData(Integer statusCode, String resMessage, String tag) {
-		this(statusCode, resMessage, tag, "");
-	}
-	public ResultData(Integer statusCode, String resMessage) {
-		this(statusCode, resMessage,"");
-	}
- }
+ 

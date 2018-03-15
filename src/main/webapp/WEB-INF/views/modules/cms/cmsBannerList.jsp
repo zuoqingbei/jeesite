@@ -21,7 +21,7 @@
 		<li class="active"><a href="${ctx}/cms/cmsBanner/">轮播图管理列表</a></li>
 		<shiro:hasPermission name="cms:cmsBanner:edit"><li><a href="${ctx}/cms/cmsBanner/form">轮播图管理添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="cmsBanner" action="${ctx}/cms/cmsBanner/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="cmsBanner" action="${ctx}/cms/cmsBanner/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -66,17 +66,23 @@
 				<td>
 					${cmsBanner.content}
 				</td>
-				<td>
-					${cmsBanner.image}
+				<td style="width:80px;height:80px;">
+					<img src="${cmsBanner.image}"></img>
 				</td>
 				<td>
-					${cmsBanner.linkUrl}
+					<a href="${cmsBanner.linkUrl}" target="_blank">${cmsBanner.linkUrl}</a>
 				</td>
 				<td>
 					${cmsBanner.target}
 				</td>
 				<td>
-					${cmsBanner.isTop}
+				  <c:choose>
+				    <c:when test="${cmsBanner.isTop==1 }">
+				            推荐
+				    </c:when>
+				    <c:otherwise>不推荐</c:otherwise>
+				  </c:choose>
+					
 				</td>
 				<td>
 					${cmsBanner.orderNo}
@@ -85,7 +91,7 @@
 					<fmt:formatDate value="${cmsBanner.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${cmsBanner.createBy.id}
+					${cmsBanner.userName}
 				</td>
 				<td>
 					${cmsBanner.remarks}

@@ -14,10 +14,12 @@
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		u.login_name AS "userName"
 	</sql>
 	
 	<sql id="cmsBannerJoins">
+	  left join sys_user u on u.id=a.create_by
 	</sql>
     
 	<select id="get" resultType="CmsBanner">
@@ -128,4 +130,16 @@
 		WHERE id = #{id}
 	</update>
 	
+	
+	<select id="findBannerList" resultType="CmsBanner">
+		SELECT 
+			<include refid="cmsBannerColumns"/>
+		FROM cms_banner a
+		<include refid="cmsBannerJoins"/>
+		<where>
+			a.del_flag =0
+		</where>
+		ORDER BY a.is_top desc,a.order_no 
+		limit  #{offset},#{limit}
+	</select>
 </mapper>

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -104,7 +105,7 @@ public class CmsContributeController extends BaseController {
 
 //	@RequiresPermissions("cms:cmsContribute:edit")
 	@RequestMapping(value = "${adminPath}/cms/cmsContribute/changeState")
-	public void  changeState(CmsContribute cmsContribute, HttpServletResponse response) {
+	public void  changeState(CmsContribute cmsContribute, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			cmsContributeService.changeState(cmsContribute);
 			//如果是审核通过，则加到news表和news_data表中
@@ -139,7 +140,7 @@ public class CmsContributeController extends BaseController {
 
 //		HashMap< String, Object> r=new HashMap<String, Object>();
 //		r.put("status", "value");
-			 this.resultSuccessData(response, "修改成功", null);
+			 this.resultSuccessData(request,response, "修改成功", null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -152,14 +153,12 @@ public class CmsContributeController extends BaseController {
      * @param
      * @return
      */
-    @RequestMapping(value = "${portalPath}/cms/cmsContribute/getUserContribute")
-    public void  getUserContribute(CmsContribute cmsContribute,HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "${portalPath}/cms/cmsContribute/getUserContribute",method = RequestMethod.GET)
+
+    public void  getUserContribute(CmsContribute cmsContribute, HttpServletRequest request,  HttpServletResponse response) {
         try {
             Page<CmsContribute> cmsContribute1 = cmsContributeService.getUserContribute(new Page<CmsContribute>(request, response),cmsContribute);
-
-            HashMap< String, Object> r=new HashMap<String, Object>();
-            r.put("page", cmsContribute1);
-            this.resultSuccessData(response, "获取数据成功", r);
+            this.resultSuccessData(request,response, "获取数据成功", cmsContribute1);
         } catch (Exception e) {
             e.printStackTrace();
         }
