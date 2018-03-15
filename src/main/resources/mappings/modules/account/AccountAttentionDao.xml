@@ -12,10 +12,31 @@
 		s2.login_name As "toUserName"
 	</sql>
 	
+	<sql id="accountAttentionColumns2">
+		a.id AS "id",
+		a.from_user AS "fromUser",
+		a.to_user AS "toUser",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
 	<sql id="accountAttentionJoins">
 	</sql>
 	
-	<!-- 2018.3.13 -->
+	<!-- ljm -->
+	<select id="findAccountAttention" resultType="AccountAttention">
+		SELECT <include refid="accountAttentionColumns2"/>
+		FROM account_attention a
+		where a.from_user=#{fromUser} and a.to_user=#{toUser} and a.del_flag='0'
+	</select>
+		
+	<update id="delete">
+		UPDATE account_attention SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
 	<insert id="saveAttention">
 		INSERT INTO account_attention(
 			id,
@@ -31,7 +52,7 @@
 			#{delFlag}
 		)
     </insert>
-    <!-- 2018.3.13 -->
+
     
 	<select id="get" resultType="AccountAttention">
 		SELECT 
@@ -108,10 +129,6 @@
 		WHERE id = #{id}
 	</update>
 	
-	<update id="delete">
-		UPDATE account_attention SET 
-			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
-	</update>
+
 	
 </mapper>
