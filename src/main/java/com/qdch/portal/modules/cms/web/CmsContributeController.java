@@ -4,6 +4,7 @@
 package com.qdch.portal.modules.cms.web;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -82,7 +84,7 @@ public class CmsContributeController extends BaseController {
 		}
 		cmsContributeService.save(cmsContribute);
 		addMessage(redirectAttributes, "保存用户投稿成功");
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsContribute/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/cmsContribute/list?repage";
 	}
 	
 	@RequiresPermissions("cms:cmsContribute:edit")
@@ -125,6 +127,15 @@ public class CmsContributeController extends BaseController {
 				cmsNews.setCategory1("");
 				cmsNews.setTitle(cmsContribute.getTitle());
 				cmsNewsService.save(cmsNews);
+
+				//保存cmsData表
+
+                String newsid = cmsNewsService.getByLinkId(cmsNews);
+                CmsNewsData cmsNewsData1 = new CmsNewsData();
+                cmsNewsData1.setNewsId(newsid);
+                cmsNewsData1.setContent(cmsContribute.getContent());
+                cmsNewsData1.setContentHtml(cmsContribute.getContentHtml());
+                cmsNewsDataService.save(cmsNewsData1);
 			}
 
 //		HashMap< String, Object> r=new HashMap<String, Object>();
@@ -142,11 +153,11 @@ public class CmsContributeController extends BaseController {
      * @param
      * @return
      */
-    @RequestMapping(value = "${portalPath}/cms/cmsContribute/getUserContribute")
+    @RequestMapping(value = "${portalPath}/cms/cmsContribute/getUserContribute",method = RequestMethod.GET)
+
     public void  getUserContribute(CmsContribute cmsContribute, HttpServletRequest request,  HttpServletResponse response) {
         try {
-            CmsContribute cmsContribute1 = cmsContributeService.getUserContribute(cmsContribute);
-
+            Page<CmsContribute> cmsContribute1 = cmsContributeService.getUserContribute(new Page<CmsContribute>(request, response),cmsContribute);
             this.resultSuccessData(request,response, "获取数据成功", cmsContribute1);
         } catch (Exception e) {
             e.printStackTrace();

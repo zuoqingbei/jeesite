@@ -45,9 +45,30 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 	}
 
 	@Transactional(readOnly = false)
-	public List<CmsNews> getRecommend(Page<CmsNews> page,CmsNews cmsNews) {
+	public Page<CmsNews> getRecommend(Page<CmsNews> page,CmsNews cmsNews) {
 		cmsNews.setPage(page);
-		return dao.getRecommend(cmsNews);
+		page.setList(dao.getRecommend(cmsNews));
+		return page;
 	}
-	
+
+
+	@Transactional(readOnly = false)
+	public String getByLinkId(CmsNews cmsNews) {
+		return dao.getByLinkId(cmsNews);
+	}
+
+	@Transactional(readOnly = false)
+	public CmsNews getContent(CmsNews cmsNews) {
+		return dao.getContent(cmsNews);
+	}
+
+
+	@Transactional(readOnly = false)
+	public Page<CmsNews> getRank(Page<CmsNews> page,CmsNews cmsNews) {
+		cmsNews.setPage(page);
+		page.setList(dao.getRank(cmsNews));
+		return page;
+	}
+
+
 }

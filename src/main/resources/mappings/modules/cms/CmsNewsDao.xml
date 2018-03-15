@@ -54,10 +54,10 @@
 
 	<select id="getContent" resultType="CmsNews">
 		SELECT
-		<include refid="cmsNewsColumns"/>
+		a.*
 		,b.content,b.content_html
 		FROM cms_news a left join (select * from  cms_news_data where del_flag='0') b on a.id=b.news_id
-		<include refid="cmsNewsJoins"/>
+		<!--<include refid="cmsNewsJoins"/>-->
 		WHERE a.id = #{id} and a.del_flag='0'
 	</select>
 	
@@ -275,6 +275,8 @@
 		FROM
 			cms_news a
 		LEFT JOIN (select * from cms_news_data where del_flag='0') b ON a.id = b.news_id
+
+
 		WHERE
 			a.del_flag = '0'
 
@@ -332,6 +334,54 @@
 				ORDER BY a.update_date DESC
 			</otherwise>
 		</choose>
+	</select>
+
+	<select id="getByLinkId" resultType="CmsNews">
+		select id FROM cms_news a where a.del_flag='0' and a.link=${link}
+	</select>
+
+
+<!--资讯排行-->
+	<select id="getRank" resultType="CmsNews">
+		SELECT
+		a.*
+		FROM cms_news a
+
+		WHERE  a.del_flag='0'
+		order by 1
+		<if test="hits != null and hits != ''">
+			,hits desc
+		</if>
+		<if test="transmit != null and transmit != ''">
+			,transmit desc
+		</if>
+		<if test="discess != null and discess != ''">
+			,discess desc
+		</if>
+		<if test="praise != null and praise != ''">
+			,praise desc
+		</if>
+		<if test="tread != null and tread != ''">
+			,tread desc
+		</if>
+		<if test="collection != null and collection != ''">
+			,collection desc
+		</if>
+		<if test="report != null and report != ''">
+			,report desc
+		</if>
+		<if test="evaluate != null and evaluate != ''">
+			,evaluate desc
+		</if>
+		<if test="tip != null and tip != ''">
+			,tip desc
+		</if>
+		<if test="view != null and view != ''">
+			,view desc
+		</if>
+		, a.update_date DESC
+
+
 	</select>
 	
 </mapper>

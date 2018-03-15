@@ -100,7 +100,7 @@ public class CmsNewsDataController extends BaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsNewsData/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/cmsNewsData/list?repage";
 	}
 	
 	@RequiresPermissions("cms:cmsNewsData:edit")
@@ -108,7 +108,7 @@ public class CmsNewsDataController extends BaseController {
 	public String delete(CmsNewsData cmsNewsData, RedirectAttributes redirectAttributes) {
 		cmsNewsDataService.delete(cmsNewsData);
 		addMessage(redirectAttributes, "删除资讯详表成功");
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsNewsData/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/cmsNewsData/list?repage";
 	}
 
 }
