@@ -3,6 +3,7 @@
  */
 package com.qdch.portal.modules.sys.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
@@ -51,6 +52,19 @@ public class UserUtils {
 	public static final String CACHE_AREA_LIST = "areaList";
 	public static final String CACHE_OFFICE_LIST = "officeList";
 	public static final String CACHE_OFFICE_ALL_LIST = "officeAllList";
+	
+	/**
+	 * 查询共同关注
+	 * @user lianjiming
+	 * @param keys
+	 * @date 2018年3月14日
+	 * @return
+	 */
+	public static List<User> findCommonAttention(String[] keys){
+		List<User> list = new ArrayList<User>();
+		list = userDao.findCommonAttention(keys);
+		return list;
+	}
 	
 	/**
 	 * 根据ID获取用户

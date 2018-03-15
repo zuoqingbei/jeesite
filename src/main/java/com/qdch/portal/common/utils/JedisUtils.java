@@ -473,7 +473,8 @@ public class JedisUtils {
 			if (jedis.exists(key)) {
 				jedis.del(key);
 			}
-			result = jedis.sadd(key, (String[])value.toArray());
+			
+			result = jedis.sadd(key, Set2Array(value));
 			if (cacheSeconds != 0) {
 				jedis.expire(key, cacheSeconds);
 			}
@@ -485,6 +486,11 @@ public class JedisUtils {
 		}
 		return result;
 	}
+	//set集合转数组
+	public static String[] Set2Array(Set<String> oSet) {   
+	        String[] oArray = oSet.toArray(new String[] {});
+	        return oArray;   
+	}   
 	
 	/**
 	 * 设置Set缓存

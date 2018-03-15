@@ -35,7 +35,28 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 	public void saveAttention(AccountAttention accountAttention){
 		accountAttentionDao.saveAttention(accountAttention);
 	}
-
+	
+	/**查询是否关注
+	 * @author lianjiming
+	 * @version 2018-03-14
+	 * @param accountAttention 	用户关注实体
+	 * @return
+	 */
+	@Transactional(readOnly = false)
+	public List<AccountAttention> findAccountAttention(AccountAttention accountAttention){
+		List<AccountAttention> accountAttention2 = accountAttentionDao.findAccountAttention(accountAttention);
+		return accountAttention2;
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(AccountAttention accountAttention) {
+		super.delete(accountAttention);
+	}
+	
+	
+	
+	//-------------------------------------------------------------
+	
 	public AccountAttention get(String id) {
 		return super.get(id);
 	}
@@ -53,11 +74,6 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 		super.save(accountAttention);
 	}
 	
-	@Transactional(readOnly = false)
-	public void delete(AccountAttention accountAttention) {
-		super.delete(accountAttention);
-	}
-
 	public AccountAttentionDao getAccountAttentionDao() {
 		return accountAttentionDao;
 	}

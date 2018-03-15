@@ -3,6 +3,10 @@
  */
 package com.qdch.portal.modules.account.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
 import com.qdch.portal.modules.account.entity.AccountAttention;
@@ -23,12 +27,14 @@ public interface AccountAttentionDao extends CrudDao<AccountAttention> {
 	 */
 	public void saveAttention(AccountAttention accountAttention);
 	
-	/**用户取消关注
-	 * @author lianjiming
-	 * @version 2018-03-13
-	 * @param accountAttention 用户关注实体
-	 */
-	public void deleteAttention(AccountAttention accountAttention);
 	
+	
+	/**查询是否关注
+	 * @author lianjiming
+	 * @version 2018-03-14
+	 * @param accountAttention 	用户关注实体
+	 * @return
+	 */
+	public List<AccountAttention> findAccountAttention(AccountAttention accountAttention);
 	
 }
