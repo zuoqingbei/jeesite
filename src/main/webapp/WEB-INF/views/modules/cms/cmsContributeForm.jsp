@@ -82,7 +82,10 @@
 		<div class="control-group">
 			<label class="control-label">图片：</label>
 			<div class="controls">
-				<form:input disabled="true"   path="image" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:hidden id="image" path="image" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="image" type="files" uploadPath="/cms/cmsBanner" selectMultiple="true"/>
+			</div>
+				<%--<form:input disabled="true"   path="image" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
 			</div>
 		</div>
 		<div class="control-group">
@@ -139,6 +142,7 @@
 		             dataType: "json",
 		             success: function(data){
 		            	 alert(data.resMessage);
+                         location.replace(document.referrer); //返回上一个页面，并刷新
 		                      }
 		   		 });
 			
@@ -151,6 +155,7 @@
 		             dataType: "json",
 		             success: function(data){
 		            	alert(data.resMessage);
+                         location.replace(document.referrer);
 		                      }
 		   		 });
 			

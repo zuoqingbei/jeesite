@@ -52,5 +52,10 @@ public class CmsContributeService extends CrudService<CmsContributeDao, CmsContr
 	public void changeState(CmsContribute cmsContribute) {
 		dao.changeState(cmsContribute);
 	}
+
+	@Transactional(readOnly = false)
+	public CmsContribute getUserContribute(CmsContribute cmsContribute) {
+		return dao.getUserContribute(cmsContribute);
+	}
 	
 }

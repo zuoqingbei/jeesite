@@ -43,5 +43,11 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 	public void delete(CmsNews cmsNews) {
 		super.delete(cmsNews);
 	}
+
+	@Transactional(readOnly = false)
+	public List<CmsNews> getRecommend(Page<CmsNews> page,CmsNews cmsNews) {
+		cmsNews.setPage(page);
+		return dao.getRecommend(cmsNews);
+	}
 	
 }

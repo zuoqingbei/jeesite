@@ -49,7 +49,16 @@
 			<include refid="cmsNewsColumns"/>
 		FROM cms_news a
 		<include refid="cmsNewsJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.id = #{id} and a.del_flag='0'
+	</select>
+
+	<select id="getContent" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		,b.content,b.content_html
+		FROM cms_news a left join (select * from  cms_news_data where del_flag='0') b on a.id=b.news_id
+		<include refid="cmsNewsJoins"/>
+		WHERE a.id = #{id} and a.del_flag='0'
 	</select>
 	
 	<select id="findList" resultType="CmsNews">
@@ -58,7 +67,7 @@
 		FROM cms_news a
 		<include refid="cmsNewsJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			a.del_flag = '0'
 			<if test="dataType != null and dataType != ''">
 				AND a.data_type = #{dataType}
 			</if>
@@ -109,8 +118,27 @@
 		FROM cms_news a
 		<include refid="cmsNewsJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			a.del_flag = '0'
 		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllListContent" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		,b.content,b.content_html
+		FROM cms_news a LEFT JOIN (SELECT * FROM cms_news_data  where del_flag='0') b on a.id=b.news_id
+		<include refid="cmsNewsJoins"/>
+		<where>
+			a.del_flag = '0'
+		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
@@ -237,5 +265,73 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+	<!--强推-->
+
+	<select id="getRecommend" resultType="CmsNews">
+		SELECT
+			a.*, b.content,
+			b.content_html
+		FROM
+			cms_news a
+		LEFT JOIN (select * from cms_news_data where del_flag='0') b ON a.id = b.news_id
+		WHERE
+			a.del_flag = '0'
+
+		AND a.recommend = '1'
+	</select>
+
+	<!--查询资讯列表和内容-->
+	<select id="findListContent" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		,b.content,b.content_html
+		FROM cms_news a LEFT JOIN (select * from cms_news_data where del_flag ='0') b on a.id=b.news_id
+		<include refid="cmsNewsJoins"/>
+		<where>
+			a.del_flag = '0'
+			<if test="dataType != null and dataType != ''">
+				AND a.data_type = #{dataType}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+				<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND a.keywords = #{keywords}
+			</if>
+			<if test="recommend != null and recommend != ''">
+				AND a.recommend = #{recommend}
+			</if>
+			<if test="allowComment != null and allowComment != ''">
+				AND a.allow_comment = #{allowComment}
+			</if>
+			<if test="commentAudit != null and commentAudit != ''">
+				AND a.comment_audit = #{commentAudit}
+			</if>
+			<if test="allowReport != null and allowReport != ''">
+				AND a.allow_report = #{allowReport}
+			</if>
+			<if test="undercarriage != null and undercarriage != ''">
+				AND a.undercarriage = #{undercarriage}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 	
 </mapper>

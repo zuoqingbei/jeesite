@@ -22,6 +22,9 @@ import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * 资讯Controller
  * @author wangfeng
@@ -29,7 +32,7 @@ import com.qdch.portal.modules.cms.service.CmsNewsService;
  */
 @Controller
 //
-@RequestMapping(value = "${adminPath}/cms/cmsNews")
+//@RequestMapping(value = "${adminPath}/cms/cmsNews")
 public class CmsNewsController extends BaseController {
 
 	@Autowired
@@ -48,23 +51,23 @@ public class CmsNewsController extends BaseController {
 		return entity;
 	}
 	
-//	@RequiresPermissions("cms:cmsNews:view")
-	@RequestMapping(value = {"list", ""})
+	@RequiresPermissions("cms:cmsNews:view")
+	@RequestMapping(value = {"${adminPath}/cms/cmsNews/list", ""})
 	public String list(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews); 
 		model.addAttribute("page", page);
 		return "modules/cms/cmsNewsList";
 	}
 
-//	@RequiresPermissions("cms:cmsNews:view")
-	@RequestMapping(value = "form")
+	@RequiresPermissions("cms:cmsNews:view")
+	@RequestMapping(value = "${adminPath}/cms/cmsNews/form")
 	public String form(CmsNews cmsNews, Model model) {
 		model.addAttribute("cmsNews", cmsNews);
 		return "modules/cms/cmsNewsForm";
 	}
 
-//	@RequiresPermissions("cms:cmsNews:edit")
-	@RequestMapping(value = "save")
+	@RequiresPermissions("cms:cmsNews:edit")
+	@RequestMapping(value = "${adminPath}/cms/cmsNews/save")
 	public String save(CmsNews cmsNews, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, cmsNews)){
 			return form(cmsNews, model);
@@ -79,12 +82,43 @@ public class CmsNewsController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/cms/cmsNews/?repage";
 	}
 	
-//	@RequiresPermissions("cms:cmsNews:edit")
-	@RequestMapping(value = "delete")
+	@RequiresPermissions("cms:cmsNews:edit")
+	@RequestMapping(value = "${adminPath}/cms/cmsNews/delete")
 	public String delete(CmsNews cmsNews, RedirectAttributes redirectAttributes) {
 		cmsNewsService.delete(cmsNews);
 		addMessage(redirectAttributes, "删除资讯成功");
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsNews/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/cmsNews/list?repage";
 	}
+
+	/**
+	 * 得到某条资讯详情
+	 * @param cmsNews
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
+	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
+		CmsNews cmsNews1 = cmsNewsService.get(cmsNews);
+		HashMap< String, Object> r=new HashMap<String, Object>();
+		r.put("page", cmsNews1);
+		this.resultSuccessData(response, "获取数据成功", r);
+
+	}
+
+	/**
+	 * 强推资讯
+	 * @param cmsNews
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend")
+	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
+		List<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
+		HashMap< String, Object> r=new HashMap<String, Object>();
+		r.put("page", cmsNewsList);
+		this.resultSuccessData(response, "获取数据成功", r);
+
+	}
+
 
 }

@@ -6,7 +6,6 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -174,14 +173,39 @@
 				<%-- <td>
 					${cmsContribute.remarks}
 				</td> --%>
+
+					<c:choose>
+						<c:when test="${cmsContribute.status eq '2'}">
+							<shiro:hasPermission name="cms:cmsContribute:edit"><td>
+<%--
+								<a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">审核</a>
+--%>
+								<a href="${ctx}/cms/cmsContribute/delete?id=${cmsContribute.id}" onclick="return confirmx('确认要删除该用户投稿吗？', this.href)">删除</a>
+							</td></shiro:hasPermission>
+						</c:when>
+						<c:otherwise>
+							<shiro:hasPermission name="cms:cmsContribute:edit"><td>
+								<a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">审核</a>
+								<a href="${ctx}/cms/cmsContribute/delete?id=${cmsContribute.id}" onclick="return confirmx('确认要删除该用户投稿吗？', this.href)">删除</a>
+							</td></shiro:hasPermission>
+						</c:otherwise>
+					</c:choose>
+					<%--<c:if test="${cmsContribute.status ne '2'}>
+					<shiro:hasPermission name="cms:cmsContribute:edit"><td>
+    				<a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">审核</a>
+					<a href="${ctx}/cms/cmsContribute/delete?id=${cmsContribute.id}" onclick="return confirmx('确认要删除该用户投稿吗？', this.href)">删除</a>
+					</td></shiro:hasPermission>
+					</c:if>
 				<shiro:hasPermission name="cms:cmsContribute:edit"><td>
     				<a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">审核</a>
 					<a href="${ctx}/cms/cmsContribute/delete?id=${cmsContribute.id}" onclick="return confirmx('确认要删除该用户投稿吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+				</td></shiro:hasPermission>--%>
 			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
 	<div class="pagination">${page}</div>
+<script>
+</script>
 </body>
 </html>

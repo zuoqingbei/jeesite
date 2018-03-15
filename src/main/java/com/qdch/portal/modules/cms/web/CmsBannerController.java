@@ -28,7 +28,6 @@ import com.qdch.portal.modules.cms.service.CmsBannerService;
  * @version 2018-03-13
  */
 @Controller
-@RequestMapping(value = "${adminPath}/cms/cmsBanner")
 public class CmsBannerController extends BaseController {
 
 	@Autowired
@@ -47,7 +46,7 @@ public class CmsBannerController extends BaseController {
 	}
 	
 	@RequiresPermissions("cms:cmsBanner:view")
-	@RequestMapping(value = {"list", ""})
+	@RequestMapping(value = {"${adminPath}/cms/cmsBanner/list", ""})
 	public String list(CmsBanner cmsBanner, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CmsBanner> page = cmsBannerService.findPage(new Page<CmsBanner>(request, response), cmsBanner); 
 		model.addAttribute("page", page);
@@ -55,29 +54,34 @@ public class CmsBannerController extends BaseController {
 	}
 
 	@RequiresPermissions("cms:cmsBanner:view")
-	@RequestMapping(value = "form")
+	@RequestMapping(value = "${adminPath}/cms/cmsBanner/form")
 	public String form(CmsBanner cmsBanner, Model model) {
 		model.addAttribute("cmsBanner", cmsBanner);
 		return "modules/cms/cmsBannerForm";
 	}
 
 	@RequiresPermissions("cms:cmsBanner:edit")
-	@RequestMapping(value = "save")
+	@RequestMapping(value = "${adminPath}/cms/cmsBanner/save")
 	public String save(CmsBanner cmsBanner, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, cmsBanner)){
 			return form(cmsBanner, model);
 		}
-		cmsBannerService.save(cmsBanner);
+		try {
+			cmsBannerService.save(cmsBanner);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 		addMessage(redirectAttributes, "保存轮播图管理成功");
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsBanner/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/cmsBanner/list?repage";
 	}
 	
 	@RequiresPermissions("cms:cmsBanner:edit")
-	@RequestMapping(value = "delete")
+	@RequestMapping(value = "${adminPath}/cms/cmsBanner/delete")
 	public String delete(CmsBanner cmsBanner, RedirectAttributes redirectAttributes) {
 		cmsBannerService.delete(cmsBanner);
 		addMessage(redirectAttributes, "删除轮播图管理成功");
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsBanner/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/cmsBanner/list?repage";
 	}
 
 }

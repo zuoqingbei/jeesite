@@ -93,7 +93,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>源链接</th>
+				<%--<th>源链接</th>--%>
 				<th>数据来源类型</th>
 				<!-- <th>创建者 </th> -->
 				<th>标题</th>
@@ -132,11 +132,13 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsNews">
 			<tr>
-				<td><a href="${cmsNews.link}">
+				<%--<td><a href="${cmsNews.link}">
 					${cmsNews.link}
-				</a></td>
+				</a></td>--%>
 				<td>
-					${fns:getDictLabel(cmsNews.dataType, '0,1,2', '')}
+					<c:if test="${cmsNews.dataType eq '0' }">采集</c:if>
+					<c:if test="${cmsNews.dataType eq '1' }">用户投稿</c:if>
+					<c:if test="${cmsNews.dataType eq '2' }">管理人员发布</c:if>
 				</td>
 				<%-- <td>
 					${cmsNews.user.name}

@@ -44,7 +44,26 @@ public class CmsNews extends DataEntity<CmsNews> {
 	private String category1;		// 一级分类
 	private String category2;		// 二级分类
 	private String category3;		// 三级分类
-	
+
+	private String content;		// 文章内容 不包含HTML
+	private String contentHtml;		// 文章内容 包含HTML
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getContentHtml() {
+		return contentHtml;
+	}
+
+	public void setContentHtml(String contentHtml) {
+		this.contentHtml = contentHtml;
+	}
+
 	public CmsNews() {
 		super();
 	}

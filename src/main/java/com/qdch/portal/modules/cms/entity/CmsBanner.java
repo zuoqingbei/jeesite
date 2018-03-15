@@ -3,8 +3,9 @@
  */
 package com.qdch.portal.modules.cms.entity;
 
-import org.hibernate.validator.constraints.Length;
 import java.util.Date;
+
+import org.hibernate.validator.constraints.Length;
 
 import com.qdch.portal.common.persistence.DataEntity;
 
@@ -17,6 +18,7 @@ public class CmsBanner extends DataEntity<CmsBanner> {
 	
 	private static final long serialVersionUID = 1L;
 	private String title;		// 文字标题/描述
+	private String content;
 	private String image;		// 图片
 	private String linkUrl;		// 打开地址
 	private String target;		// 打开方式 _blank-在新窗口中打开 _self-当前页面
@@ -100,6 +102,13 @@ public class CmsBanner extends DataEntity<CmsBanner> {
 
 	public void setEndCreateDate(Date endCreateDate) {
 		this.endCreateDate = endCreateDate;
+	}
+
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
 	}
 		
 }

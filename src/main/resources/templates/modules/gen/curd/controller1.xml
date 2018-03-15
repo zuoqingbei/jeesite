@@ -34,6 +34,7 @@ import ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModule
  * @version ${functionVersion}
  */
 @Controller
+@RequestMapping(value = "${r"${adminPath}"}/${urlPrefix}")
 public class ${ClassName}Controller extends BaseController {
 
 	@Autowired
@@ -52,7 +53,7 @@ public class ${ClassName}Controller extends BaseController {
 	}
 	
 	@RequiresPermissions("${permissionPrefix}:view")
-	@RequestMapping(value = {"${r"${adminPath}"}/${urlPrefix}/list"})
+	@RequestMapping(value = {"list", ""})
 	public String list(${ClassName} ${className}, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<${ClassName}> page = ${className}Service.findPage(new Page<${ClassName}>(request, response), ${className}); 
 		model.addAttribute("page", page);
@@ -60,29 +61,29 @@ public class ${ClassName}Controller extends BaseController {
 	}
 
 	@RequiresPermissions("${permissionPrefix}:view")
-	@RequestMapping(value = "${r"${adminPath}"}/${urlPrefix}/form")
+	@RequestMapping(value = "form")
 	public String form(${ClassName} ${className}, Model model) {
 		model.addAttribute("${className}", ${className});
 		return "${lastPackageName}/${viewPrefix}Form";
 	}
 
 	@RequiresPermissions("${permissionPrefix}:edit")
-	@RequestMapping(value = "${r"${adminPath}"}/${urlPrefix}/save")
+	@RequestMapping(value = "save")
 	public String save(${ClassName} ${className}, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, ${className})){
 			return form(${className}, model);
 		}
 		${className}Service.save(${className});
 		addMessage(redirectAttributes, "保存${functionNameSimple}成功");
-		return "redirect:"+Global.getAdminPath()+"/${viewPrefix}/list?repage";
+		return "redirect:"+Global.getAdminPath()+"/${viewPrefix}/?repage";
 	}
 	
 	@RequiresPermissions("${permissionPrefix}:edit")
-	@RequestMapping(value = "${r"${adminPath}"}/${urlPrefix}/delete")
+	@RequestMapping(value = "delete")
 	public String delete(${ClassName} ${className}, RedirectAttributes redirectAttributes) {
 		${className}Service.delete(${className});
 		addMessage(redirectAttributes, "删除${functionNameSimple}成功");
-		return "redirect:"+Global.getAdminPath()+"/${viewPrefix}/list?repage";
+		return "redirect:"+Global.getAdminPath()+"/${viewPrefix}/?repage";
 	}
 
 }]]>

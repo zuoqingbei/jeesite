@@ -34,9 +34,15 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">文字描述：</label>
+			<label class="control-label">标题：</label>
 			<div class="controls">
 				<form:input path="title" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">介绍：</label>
+			<div class="controls">
+				<form:textarea path="content" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -69,9 +75,10 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">排序：</label>
+			<label class="control-label">排序:</label>
 			<div class="controls">
-				<form:input path="orderNo" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:input path="orderNo" htmlEscape="false" maxlength="11" class="required digits"/>
+				<span class="help-inline">轮播图的排列次序</span>
 			</div>
 		</div>
 		<div class="control-group">
