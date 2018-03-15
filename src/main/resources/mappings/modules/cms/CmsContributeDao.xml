@@ -41,7 +41,7 @@
 		FROM cms_contribute a
 		<include refid="cmsContributeJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			a.del_flag = '0' adn a.status !='0'
 			<if test="id != null and id != ''">
 				AND a.id = #{id}
 			</if>
@@ -193,5 +193,32 @@
 			status = #{status}
 		WHERE id = #{id}
 	</update>
+
+
+	<!--用户投稿  如果status为空，则筛选除了草稿状态的投稿，否则根据状态来筛选投稿表-->
+	<select id="getUserContribute" resultType="CmsContribute">
+		SELECT
+		<include refid="cmsContributeColumns"/>
+		FROM cms_contribute a
+		<include refid="cmsContributeJoins"/>
+		WHERE a.user_id = #{user.id} and a.del_flag='0'
+		<choose>
+			<when test="status != null and status != ''">
+				and a.status !='0'
+			</when>
+			<otherwise>
+				and a.status =#{status}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 	
 </mapper>

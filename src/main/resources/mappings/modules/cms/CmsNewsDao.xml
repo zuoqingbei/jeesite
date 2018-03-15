@@ -47,18 +47,20 @@
 	<select id="get" resultType="CmsNews">
 		SELECT 
 			<include refid="cmsNewsColumns"/>
-		FROM cms_news a
+		,b.content,b.content_html
+		FROM cms_news a left join cms_news_data b on a.id=b.news_id
 		<include refid="cmsNewsJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.id = #{id} and a.del_flag='0' AND b.del_flag='0'
 	</select>
 	
 	<select id="findList" resultType="CmsNews">
 		SELECT 
 			<include refid="cmsNewsColumns"/>
-		FROM cms_news a
+		,b.content,b.content_html
+		FROM cms_news a LEFT JOIN cms_news_data b on a.id=b.news_id
 		<include refid="cmsNewsJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			a.del_flag = '0'
 			<if test="dataType != null and dataType != ''">
 				AND a.data_type = #{dataType}
 			</if>
@@ -106,10 +108,11 @@
 	<select id="findAllList" resultType="CmsNews">
 		SELECT 
 			<include refid="cmsNewsColumns"/>
-		FROM cms_news a
+		,b.content,b.content_html
+		FROM cms_news a LEFT JOIN cms_news_data b on a.id=b.news_id
 		<include refid="cmsNewsJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			a.del_flag = '0'
 		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -237,5 +240,12 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+	<!--强推-->
+
+	<select id="getRecommend" resultType="CmsNews">
+		select a.*,b.content,b.content_html from cms_news a LEFT JOIN cms_news_data b on a.id=b.news_id where  a.del_flag='0' and b.del_flag='0'
+ 		and a.recommend='1'
+	</select>
 	
 </mapper>

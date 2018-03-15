@@ -8,6 +8,10 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.modules.cms.entity.CmsNews;
+import com.qdch.portal.modules.cms.entity.CmsNewsData;
+import com.qdch.portal.modules.cms.service.CmsNewsDataService;
+import com.qdch.portal.modules.cms.service.CmsNewsService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +39,12 @@ public class CmsContributeController extends BaseController {
 
 	@Autowired
 	private CmsContributeService cmsContributeService;
+
+	@Autowired
+	private CmsNewsService cmsNewsService;
+
+	@Autowired
+	private CmsNewsDataService cmsNewsDataService;
 	
 	@ModelAttribute
 	
@@ -87,7 +97,7 @@ public class CmsContributeController extends BaseController {
 	/**
 	 * 改变投稿状态
 	 * @param cmsContribute
-	 * @param redirectAttributes
+	 * @param
 	 * @return
 	 */
 
@@ -96,6 +106,19 @@ public class CmsContributeController extends BaseController {
 	public void  changeState(CmsContribute cmsContribute, HttpServletResponse response) {
 		try {
 			cmsContributeService.changeState(cmsContribute);
+			//如果是审核通过，则加到news表和news_data表中
+			if(cmsContribute.getStatus().equals("2")){
+				CmsNews cmsNews = new CmsNews();
+				CmsNewsData cmsNewsData = new CmsNewsData();
+				cmsNews.setLink(cmsContribute.getId());
+				cmsNews.setDataType("1");//用户投稿
+				cmsNews.setCategory1("");
+				cmsNews.setTitle(cmsContribute.getTitle());
+				cmsNewsService.save(cmsNews);
+
+
+			}
+
 //		HashMap< String, Object> r=new HashMap<String, Object>();
 //		r.put("status", "value");
 			 this.resultSuccessData(response, "修改成功", null);

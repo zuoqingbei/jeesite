@@ -139,6 +139,7 @@
 		             dataType: "json",
 		             success: function(data){
 		            	 alert(data.resMessage);
+                         location.replace(document.referrer); //返回上一个页面，并刷新
 		                      }
 		   		 });
 			
@@ -151,6 +152,7 @@
 		             dataType: "json",
 		             success: function(data){
 		            	alert(data.resMessage);
+                         location.replace(document.referrer);
 		                      }
 		   		 });
 			

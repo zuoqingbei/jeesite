@@ -16,5 +16,7 @@ import com.qdch.portal.modules.cms.entity.CmsContribute;
 public interface CmsContributeDao extends CrudDao<CmsContribute> {
 	
 	public void changeState(CmsContribute cmsContribute);
+
+	public CmsContribute getUserContribute(CmsContribute cmsContribute);
 	
 }

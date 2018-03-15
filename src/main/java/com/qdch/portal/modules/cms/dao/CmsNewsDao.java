@@ -7,6 +7,8 @@ import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
 import com.qdch.portal.modules.cms.entity.CmsNews;
 
+import java.util.List;
+
 /**
  * 资讯DAO接口
  * @author wangfeng
@@ -14,5 +16,12 @@ import com.qdch.portal.modules.cms.entity.CmsNews;
  */
 @MyBatisDao
 public interface CmsNewsDao extends CrudDao<CmsNews> {
+
+    /**
+     * 获得强推资讯
+     * @param cmsNews
+     * @return
+     */
+    public List<CmsNews>  getRecommend(CmsNews cmsNews);
 	
 }
