@@ -23,7 +23,7 @@
 		<%-- <li><a href="${ctx}/account/accountAttention/form">用户关注添加</a></li> --%>
 		<%-- </shiro:hasPermission> --%>
 	</ul>
-	<form:form id="searchForm" modelAttribute="accountAttention" action="${ctx}/account/accountAttention/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="accountAttention" action="${ctx}/account/accountAttention/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">

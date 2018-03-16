@@ -47,12 +47,12 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 		List<AccountAttention> list = accountAttentionDao.findAccountAttention(accountAttention);
 		return list;
 	}
-	
+	//取消关注
 	@Transactional(readOnly = false)
 	public void delete(AccountAttention accountAttention) {
 		super.delete(accountAttention);
 	}
-	
+	//分页，列表查询
 	public Page<AccountAttention> findPage(Page<AccountAttention> page, AccountAttention accountAttention) {
 		return super.findPage(page, accountAttention);
 	}
