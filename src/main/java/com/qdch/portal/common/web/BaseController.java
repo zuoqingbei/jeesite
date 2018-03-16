@@ -17,7 +17,6 @@ import javax.validation.ValidationException;
 import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,10 +35,8 @@ import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.mapper.JsonMapper;
 import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.utils.DateUtils;
-import com.qdch.portal.common.utils.FormateJsonToString;
 import com.qdch.portal.common.utils.FormateJsonToStringByAnnotation;
 import com.qdch.portal.common.utils.HttpRequestDeviceUtils;
-import com.qdch.portal.modules.account.entity.AccountAttention;
 
 /**
  * 控制器支持类
@@ -224,11 +221,13 @@ public abstract class BaseController  implements Constant{
 			if(HttpRequestDeviceUtils.isMobileDevice(request)){
 				return renderString(response,  new FormateJsonToStringByAnnotation().jsonFromObject(status, msg,data), "application/json");
 			}else{
-				return renderString(response,  new FormateJsonToString().jsonFromObject(status, msg,data), "application/json");
+				HashMap< String, Object> map=new HashMap<String, Object>();
+				map.put("status", status);
+				map.put("msg", msg);
+				map.put("data", data);
+				return renderString(response,   JsonMapper.toJsonString(map), "application/json");
 			}
 		}
-		
-		//return this.renderString(response,rdata);
 	}
 
 	/**
