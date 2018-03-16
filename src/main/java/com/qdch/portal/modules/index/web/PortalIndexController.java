@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import com.qdch.portal.common.mapper.JsonMapper;
+import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.utils.JdbcUtils;
 import com.qdch.portal.common.utils.JedisUtils;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.modules.account.entity.AccountAttention;
 import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
 import com.qdch.portal.modules.sys.security.SecurityAuthorityAnnotation;
 
@@ -72,6 +74,8 @@ public class PortalIndexController extends BaseController {
 	public void toJson(HttpServletRequest request,HttpServletResponse response){
 		HashMap< String, Object> r=new HashMap<String, Object>();
 		r.put("status", "value");
+		/*Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
+		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));*/
 		this.resultSuccessData(request,response, "获取数据成功", r);
 	};
 }

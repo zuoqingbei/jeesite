@@ -17,6 +17,7 @@ import javax.validation.ValidationException;
 import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.shiro.authc.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +34,12 @@ import com.qdch.portal.common.beanvalidator.BeanValidators;
 import com.qdch.portal.common.config.Constant;
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.mapper.JsonMapper;
+import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.utils.DateUtils;
 import com.qdch.portal.common.utils.FormateJsonToString;
 import com.qdch.portal.common.utils.FormateJsonToStringByAnnotation;
 import com.qdch.portal.common.utils.HttpRequestDeviceUtils;
+import com.qdch.portal.modules.account.entity.AccountAttention;
 
 /**
  * 控制器支持类
@@ -186,6 +189,15 @@ public abstract class BaseController  implements Constant{
 		} catch (IOException e) {
 			return null;
 		}
+	}
+	protected HashMap< String, Object> mapJson(Page page,Object status,Object msg) {
+		HashMap< String, Object> map=new HashMap<String, Object>();
+		map.put("status",status);
+		map.put("msg", msg);
+		map.put("count",page.getCount());
+		map.put("totalPage",page.getTotalPage());
+		map.put("data", page.getList());
+		return map;
 	}
 	/**
 	 * @todo   返回成功数据不带tag

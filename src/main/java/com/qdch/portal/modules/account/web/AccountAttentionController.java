@@ -5,7 +5,7 @@ package com.qdch.portal.modules.account.web;
 
 import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -157,6 +157,7 @@ public class AccountAttentionController extends BaseController {
 		
 		try {
 			//获取请求参数 
+			//<<<<<<< HEAD
 			String strPageNo = request.getParameter("pageNo");	
 			String strPageSize = request.getParameter("pageSize");	
 			if((strPageNo!=null||strPageNo.length()>0)||(strPageSize!=null||strPageSize.length()>0)){
@@ -171,6 +172,18 @@ public class AccountAttentionController extends BaseController {
 				Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
 				this.resultSuccessData(request,response, "我的关注", page);
 			}
+
+			Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+			Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
+			//查询我的关注
+			String fromUser = request.getParameter("fromUser");
+			//我的粉丝
+			String toUser = request.getParameter("toUser");
+			accountAttention.setFromUser(fromUser);
+			accountAttention.setToUser(toUser);
+			Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
+			this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
+			//>>>>>>> branch 'deploy' of https://github.com/zuoqingbei/qdchportal.git
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
