@@ -53,7 +53,8 @@ public class AccountAttentionController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = {"${portalPath}/account/accountAttention/addAttention"})
+	//@RequestMapping(method=RequestMethod.POST,value = {"${portalPath}/account/accountAttention/addAttention"})
+	@RequestMapping(method=RequestMethod.GET,value = {"${portalPath}/account/accountAttention/addAttention"})
 	@ResponseBody
 	public void addAttention(HttpServletRequest request,HttpServletResponse response,AccountAttention accountAttention){
 		try {
@@ -65,10 +66,8 @@ public class AccountAttentionController extends BaseController {
 			accountAttention.setFromUser(fromUser);
 			accountAttention.setToUser(toUser);
 			accountAttention.setCreateDate(new Date());
-			
 			//查询是否关注
 			List<AccountAttention> findAccountAttention = accountAttentionService.findAccountAttention(accountAttention);
-			
 			if(findAccountAttention==null||findAccountAttention.size()==0){//没有关注
 				//读取 redis缓存
 				Set<String> set = JedisUtils.getSet("addAttentionCache_"+accountAttention.getFromUser());
@@ -78,25 +77,54 @@ public class AccountAttentionController extends BaseController {
 				set.add(accountAttention.getToUser());
 				//写入redis缓存
 				JedisUtils.setSet("addAttentionCache_"+accountAttention.getFromUser(), set, 0);
-				
-				//共同关注
-				//在redis中 查询关注者和被关注者的交集
-				String keyFromUser = "addAttentionCache_"+accountAttention.getFromUser();//关注者的key
-				String keyToUser = "addAttentionCache_"+accountAttention.getToUser();//被关注者的key
-				String[] keys=new String[]{keyFromUser,keyToUser};
-				Set<String> sinter = JedisUtils.sinter(keys);
-				List<User> list = new ArrayList<User>();
-				
-				if(sinter!=null&&sinter.size()>0){//有共同关注
-					//user 查询共同的关注
-					String[] array = JedisUtils.Set2Array(sinter);//集合转换数组
-					list=UserUtils.findCommonAttention(array);
-				}
-				accountAttentionService.saveAttention(accountAttention);//存入数据库
-				this.resultSuccessData(request,response, "关注成功", list);
+				this.resultSuccessData(request,response, "关注成功", null);
 			}else{//已经关注
 				this.resultSuccessData(request,response, "已经关注", null);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**获取共同关注/好友推荐
+	 * @author lianjiming
+	 * @version 2018-03-13
+	 * @param accountAttention 用户关注实体
+	 * @param request type 
+	 * @param response
+	 * @param type type="recommend"为共同关注 ,type="recommend"为好友推荐
+	 */
+	@RequestMapping(method=RequestMethod.GET,value = {"${portalPath}/account/accountAttention/commonAttention"})
+	@ResponseBody
+	public void commonAttention(HttpServletRequest request,HttpServletResponse response){
+		try {
+			//获取请求参数
+			String fromUser = request.getParameter("fromUser");
+			String toUser = request.getParameter("toUser");
+			String type = request.getParameter("type");
+			
+			//在redis中 查询关注者和被关注者的交集
+			String keyFromUser = "addAttentionCache_"+fromUser;//关注者的key
+			String keyToUser = "addAttentionCache_"+toUser;//被关注者的key
+			String[] keys=new String[]{keyFromUser,keyToUser};
+			Set<String> sinter =null;
+			List<User> list = new ArrayList<User>();
+			//共同关注
+			if("common".equals(type)){
+				sinter=JedisUtils.sinter(keys);//交集
+				if(sinter!=null&&sinter.size()>0){
+					//user 查询共同的关注
+					list=UserUtils.findCommonAttention(JedisUtils.Set2Array(sinter));
+				}
+			//好友推荐
+			}else if("recommend".equals(type)){
+				sinter=JedisUtils.sdiff(keys);//差集
+				if(sinter!=null&&sinter.size()>0){
+					//user 查询共同的关注
+					list=UserUtils.findCommonAttention(JedisUtils.Set2Array(sinter));
+				}
+			}
+			this.resultSuccessData(request,response, "获取共同关注", list);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -108,7 +136,8 @@ public class AccountAttentionController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/account/accountAttention/delete")
+	//@RequestMapping(method=RequestMethod.POST,value = "${portalPath}/account/accountAttention/delete")
+	@RequestMapping(method=RequestMethod.GET,value = "${portalPath}/account/accountAttention/delete")
 	@ResponseBody
 	public void delete(AccountAttention accountAttention, HttpServletRequest request,HttpServletResponse response) {
 		try {
@@ -157,7 +186,6 @@ public class AccountAttentionController extends BaseController {
 		
 		try {
 			//获取请求参数 
-			//<<<<<<< HEAD
 			String strPageNo = request.getParameter("pageNo");	
 			String strPageSize = request.getParameter("pageSize");	
 			if((strPageNo!=null||strPageNo.length()>0)||(strPageSize!=null||strPageSize.length()>0)){
@@ -167,30 +195,20 @@ public class AccountAttentionController extends BaseController {
 				String fromUser = request.getParameter("fromUser");
 				//我的粉丝
 				String toUser = request.getParameter("toUser");
+				//封装对象
 				accountAttention.setFromUser(fromUser);
 				accountAttention.setToUser(toUser);
+				//分页查询
 				Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
-				this.resultSuccessData(request,response, "我的关注", page);
+				this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
 			}
-
-			Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-			Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
-			//查询我的关注
-			String fromUser = request.getParameter("fromUser");
-			//我的粉丝
-			String toUser = request.getParameter("toUser");
-			accountAttention.setFromUser(fromUser);
-			accountAttention.setToUser(toUser);
-			Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
-			this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
-			//>>>>>>> branch 'deploy' of https://github.com/zuoqingbei/qdchportal.git
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	//列表查询
-	@RequestMapping(value = {"${adminPath}/account/accountAttention/list"})
+	@RequestMapping(method=RequestMethod.GET,value = {"${adminPath}/account/accountAttention/list"})
 	public String list(AccountAttention accountAttention, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(request, response), accountAttention); 
 		model.addAttribute("page", page);
