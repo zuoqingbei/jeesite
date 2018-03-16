@@ -22,7 +22,9 @@ import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.account.entity.AccountAttention;
 import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
+import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.security.SecurityAuthorityAnnotation;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 
@@ -72,10 +74,11 @@ public class PortalIndexController extends BaseController {
 	@RequestMapping(value = {"${portalPath}/toJson",""}, method = RequestMethod.GET)
 	@ResponseBody
 	public void toJson(HttpServletRequest request,HttpServletResponse response){
-		HashMap< String, Object> r=new HashMap<String, Object>();
-		r.put("status", "value");
+		/*HashMap< String, Object> r=new HashMap<String, Object>();
+		r.put("status", "value");*/
 		/*Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
 		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));*/
-		this.resultSuccessData(request,response, "获取数据成功", r);
+		User u=UserUtils.get("1");
+		this.resultSuccessData(request,response, "获取数据成功", u);
 	};
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 import com.qdch.portal.common.persistence.TreeEntity;
+import com.qdch.portal.common.utils.Json;
 
 /**
  * 机构Entity
@@ -32,6 +33,7 @@ public class Office extends TreeEntity<Office> {
 	private String master; 	// 负责人
 	private String phone; 	// 电话
 	private String fax; 	// 传真
+	@Json
 	private String email; 	// 邮箱
 	private String useable;//是否可用
 	private User primaryPerson;//主负责人
