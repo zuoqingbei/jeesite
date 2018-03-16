@@ -7,6 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.common.utils.JedisUtils;
+import com.qdch.portal.modules.cms.dao.CmsNewsDataDao;
+import com.qdch.portal.modules.cms.entity.CmsNewsData;
+import com.qdch.portal.modules.cms.service.CmsNewsDataService;
+import com.qdch.portal.modules.cms.utils.RegUtils;
+import com.qdch.portal.modules.sys.entity.Dict;
+import com.qdch.portal.modules.sys.service.DictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +46,15 @@ public class CmsNewsController extends BaseController {
 
 	@Autowired
 	private CmsNewsService cmsNewsService;
+	@Autowired
+	private DictService dictService;
+
+	@Autowired
+	private CmsNewsDataService cmsNewsDataService;
+
+
+	@Autowired
+	private CmsNewsDataDao cmsNewsDataDao;
 	
 	@ModelAttribute
 	
@@ -53,6 +68,19 @@ public class CmsNewsController extends BaseController {
 		}
 		return entity;
 	}
+//
+//	@ModelAttribute
+//
+//	public Dict getDict(@RequestParam(required=false) String id) {
+//		Dict entity = null;
+//		if (StringUtils.isNotBlank(id)){
+//			entity = dictService.get(id);
+//		}
+//		if (entity == null){
+//			entity = new Dict();
+//		}
+//		return entity;
+//	}
 	
 	@RequiresPermissions("cms:cmsNews:view")
 	@RequestMapping(value = {"${adminPath}/cms/cmsNews/list", ""})
@@ -65,6 +93,10 @@ public class CmsNewsController extends BaseController {
 	@RequiresPermissions("cms:cmsNews:view")
 	@RequestMapping(value = "${adminPath}/cms/cmsNews/form")
 	public String form(CmsNews cmsNews, Model model) {
+		Dict dict = new Dict();
+		dict.setType("tags_type");
+		cmsNews.setTypeDict(dictService.findByType(dict));
+		cmsNews  = cmsNewsService.getContent(cmsNews);
 		model.addAttribute("cmsNews", cmsNews);
 		return "modules/cms/cmsNewsForm";
 	}
@@ -77,6 +109,14 @@ public class CmsNewsController extends BaseController {
 		}
 		try {
 			cmsNewsService.save(cmsNews);
+			CmsNewsData cmsNewsData = cmsNewsDataDao.getByNewId(cmsNews.getId());
+			if(cmsNewsData == null){
+				cmsNewsData = new CmsNewsData();
+				cmsNewsData.setNewsId(cmsNews.getId());
+			}
+			cmsNewsData.setContentHtml(cmsNews.getContentHtml());
+			cmsNewsData.setContent(RegUtils.delHTMLTag(cmsNews.getContentHtml()));
+			cmsNewsDataService.save(cmsNewsData);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -176,9 +216,9 @@ public class CmsNewsController extends BaseController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "保存数据成功", null);
+			this.resultSuccessData(request,response, "保存数据失败", null);
 		}
-		this.resultSuccessData(request,response, "保存数据失败", null);
+		this.resultSuccessData(request,response, "保存数据成功", null);
 
 	}
 

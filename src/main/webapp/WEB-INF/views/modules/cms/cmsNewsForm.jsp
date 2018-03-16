@@ -78,9 +78,19 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">标签，多个 用&ldquo;，&rdquo;分开并且开头结尾也是逗号,比如 ,1,2,3,：</label>
+			<label class="control-label">标签：</label>
 			<div class="controls">
-				<form:input path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:select hidden="true" path="tags" class="input-xlarge " value="2">
+					<form:option value="" label=""/>
+					<%--<c:forEach var="tages_type" items="${ typeDict }">--%>
+						<%--<form:option value="${tages_type.value}" label="${tages_type.label}"/>--%>
+					<%--</c:forEach>--%>
+					<form:option value="" label=""/>
+					<form:option value="0" label="采集"/>
+					<form:option value="1" label="用户投稿"/>
+					<form:option value="2" label="管理人员发布"/>
+				</form:select>
+				<%--<form:input path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
 			</div>
 		</div>
 		<div class="control-group">
@@ -230,6 +240,14 @@
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
+
+		<div class="control-group">
+			<label class="control-label">正文:</label>
+			<div class="controls">
+				<form:textarea    id="contentHtml" htmlEscape="false" path="contentHtml" rows="4" maxlength="200" class="input-xxlarge"/>
+				<sys:ckeditor replace="contentHtml" uploadPath="/cms/news" />
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
@@ -241,5 +259,8 @@
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
+<script>
+
+</script>
 </body>
 </html>

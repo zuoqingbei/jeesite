@@ -78,6 +78,17 @@ color:red
 	         */
 	        callback: function( plat, params ) {
 	        	console.log(params)
+
+                $.ajax({
+                    type: "post",
+                    url: "${portalPaht}/cms/cmsShare/saveShare",
+                    data: {platform:plat},
+                    dataType: "json",
+                    success: function(data){
+                        alert(data.resMessage);
+
+                    }
+                });
 	        }
 	    } );
 	   

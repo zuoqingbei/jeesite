@@ -79,4 +79,23 @@ public class CmsShareController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/cms/cmsShare/list?repage";
 	}
 
+	/**
+	 * 保存分享内容
+	 * @param cmsShare
+	 * @param model
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsShare/saveShare")
+	public void saveShare(CmsShare cmsShare,Model model, HttpServletRequest request,HttpServletResponse response){
+		try {
+			cmsShareService.save(cmsShare);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "保存数据失败", null);
+		}
+		this.resultSuccessData(request,response, "保存数据成功", null);
+
+	}
+
 }
