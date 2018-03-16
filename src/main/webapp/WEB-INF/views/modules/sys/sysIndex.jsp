@@ -222,7 +222,7 @@
 				</div>
 			</div>
 		    <div id="footer" class="row-fluid">
-	            Copyright &copy; 2018-${fns:getConfig('copyrightYear')} ${fns:getConfig('productName')} - Powered By <a href="http://144.123.36.214:10080/WebReport/QDCH/login.html" target="_blank">Qdch Portal</a> ${fns:getConfig('version')}
+	            Copyright &copy; 2012-${fns:getConfig('copyrightYear')} ${fns:getConfig('productName')} - Powered By <a href="http://144.123.36.214:10080/WebReport/QDCH/login.html" target="_blank">Qdch Portal</a> ${fns:getConfig('version')}
 			</div>
 		</div>
 	</div>

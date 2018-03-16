@@ -165,4 +165,29 @@ public class CmsContributeController extends BaseController {
 
     }
 
+	/**
+	 * 前台-保存
+	 * @param cmsNews
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+
+	@RequestMapping(value = "${portalPath}/cms/cmsContribute/saveData",method = RequestMethod.POST)
+	public void  saveData(CmsContribute cmsContribute, Model model, HttpServletRequest request,HttpServletResponse response) {
+//		if (!beanValidator(model, cmsNews)){
+//			return form(cmsNews, model);
+//		}
+		try {
+			cmsContributeService.save(cmsContribute);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "保存数据成功", null);
+		}
+		this.resultSuccessData(request,response, "保存数据失败", null);
+
+	}
+
 }

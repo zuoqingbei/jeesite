@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsCommentDao">
+    
+	<sql id="cmsCommentColumns">
+		a.id AS "id",
+		a.category_id AS "categoryId",
+		a.content_id AS "contentId",
+		a.title AS "title",
+		a.content AS "content",
+		a.name AS "name",
+		a.ip AS "ip",
+		a.create_date AS "createDate",
+		a.audit_user_id AS "auditUserId",
+		a.audit_date AS "auditDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cmsCommentJoins">
+	</sql>
+    
+	<select id="get" resultType="CmsComment">
+		SELECT 
+			<include refid="cmsCommentColumns"/>
+		FROM cms_comment a
+		<include refid="cmsCommentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsComment">
+		SELECT 
+			<include refid="cmsCommentColumns"/>
+		FROM cms_comment a
+		<include refid="cmsCommentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsComment">
+		SELECT 
+			<include refid="cmsCommentColumns"/>
+		FROM cms_comment a
+		<include refid="cmsCommentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_comment(
+			id,
+			category_id,
+			content_id,
+			title,
+			content,
+			name,
+			ip,
+			create_date,
+			audit_user_id,
+			audit_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{categoryId},
+			#{contentId},
+			#{title},
+			#{content},
+			#{name},
+			#{ip},
+			#{createDate},
+			#{auditUserId},
+			#{auditDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_comment SET 	
+			category_id = #{categoryId},
+			content_id = #{contentId},
+			title = #{title},
+			content = #{content},
+			name = #{name},
+			ip = #{ip},
+			audit_user_id = #{auditUserId},
+			audit_date = #{auditDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_comment SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
