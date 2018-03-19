@@ -13,13 +13,6 @@
 	<sql id="accountSubscribeHistoryJoins">
 	</sql>
 	
-	<!-- 
-		select a.user_id,a.lab_id,s.login_name
-		from account_subscribe_history a
-		left join sys_user s
-		on a.user_id = s.id;	
-	 -->
-	
 	<!-- 列表查询 -->
 	<select id="findList" resultType="AccountSubscribeHistory">
 		SELECT 

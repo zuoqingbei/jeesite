@@ -42,6 +42,8 @@ public class AccountSubscribeHistory extends DataEntity<AccountSubscribeHistory>
 		return labId;
 	}
 
+
+
 	public void setLabId(String labId) {
 		this.labId = labId;
 	}
