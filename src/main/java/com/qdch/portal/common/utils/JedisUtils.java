@@ -33,6 +33,19 @@ public class JedisUtils {
 
 	public static final String KEY_PREFIX = Global.getConfig("redis.keyPrefix");
 	
+	
+	 /**
+     * 移除集合 key 中的一个 member 元素，不存在的 member 元素会被忽略。
+     * @param key
+     * @param member
+     * @return
+     */
+    public static Long srem(String key, String member) {
+        Jedis jedis = getResource();
+        Long result = jedis.srem(key, member);
+        returnResource(jedis);
+        return result;
+    }
 	/**
 	 * @user 连纪明
 	 * @date 2018年3月12日

@@ -47,6 +47,7 @@ public class User extends DataEntity<User> {
 	private String loginIp;	// 最后登陆IP
 	private Date loginDate;	// 最后登陆日期
 	private String loginFlag;	// 是否允许登陆
+	@Json
 	private String photo;	// 头像
 
 	private String oldLoginName;// 原登录名
@@ -54,7 +55,6 @@ public class User extends DataEntity<User> {
 	
 	private String oldLoginIp;	// 上次登陆IP
 	private Date oldLoginDate;	// 上次登陆日期
-	@Json
 	private Role role;	// 根据角色查询用户条件
 	private int type;
 	

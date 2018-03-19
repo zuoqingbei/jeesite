@@ -31,6 +31,7 @@ public class Office extends TreeEntity<Office> {
 	private String address; // 联系地址
 	private String zipCode; // 邮政编码
 	private String master; 	// 负责人
+	@Json
 	private String phone; 	// 电话
 	private String fax; 	// 传真
 	@Json

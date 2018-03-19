@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.subscribe.dao.AccountSubscribeHistoryDao">
+    
+	<sql id="accountSubscribeHistoryColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.lab_id AS "labId",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="accountSubscribeHistoryJoins">
+	</sql>
+	
+	<!-- 
+		select a.user_id,a.lab_id,s.login_name
+		from account_subscribe_history a
+		left join sys_user s
+		on a.user_id = s.id;	
+	 -->
+	
+	<!-- 列表查询 -->
+	<select id="findList" resultType="AccountSubscribeHistory">
+		SELECT 
+			<include refid="accountSubscribeHistoryColumns"/>
+		FROM account_subscribe_history a
+			<!-- <include refid="accountSubscribeHistoryJoins"/> -->
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="userId != null and userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+    
+	<select id="get" resultType="AccountSubscribeHistory">
+		SELECT 
+			<include refid="accountSubscribeHistoryColumns"/>
+		FROM account_subscribe_history a
+		<include refid="accountSubscribeHistoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+
+	
+	<select id="findAllList" resultType="AccountSubscribeHistory">
+		SELECT 
+			<include refid="accountSubscribeHistoryColumns"/>
+		FROM account_subscribe_history a
+		<include refid="accountSubscribeHistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO account_subscribe_history(
+			id,
+			user_id,
+			lab_id,
+			create_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{labId},
+			#{createDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE account_subscribe_history SET 	
+			user_id = #{user.id},
+			lab_id = #{labId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE account_subscribe_history SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
