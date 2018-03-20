@@ -6,6 +6,7 @@ package com.qdch.portal.modules.cms.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -89,10 +90,11 @@ public class CmsShareController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsShare/saveShare")
 	public void saveShare(CmsShare cmsShare,Model model, HttpServletRequest request,HttpServletResponse response){
 		try {
+			cmsShare.setUser(UserUtils.getUser());
 			cmsShareService.save(cmsShare);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "保存数据失败", null);
+			 this.resultSuccessData(request,response, "保存数据失败", null);
 		}
 		this.resultSuccessData(request,response, "保存数据成功", null);
 

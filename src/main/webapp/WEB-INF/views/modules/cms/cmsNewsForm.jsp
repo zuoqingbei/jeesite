@@ -80,17 +80,13 @@
 		<div class="control-group">
 			<label class="control-label">标签：</label>
 			<div class="controls">
-				<form:select hidden="true" path="tags" class="input-xlarge " value="2">
+				<%--<form:select hidden="true" path="tags" class="input-xlarge " value="2">
 					<form:option value="" label=""/>
-					<%--<c:forEach var="tages_type" items="${ typeDict }">--%>
-						<%--<form:option value="${tages_type.value}" label="${tages_type.label}"/>--%>
-					<%--</c:forEach>--%>
-					<form:option value="" label=""/>
-					<form:option value="0" label="采集"/>
-					<form:option value="1" label="用户投稿"/>
-					<form:option value="2" label="管理人员发布"/>
-				</form:select>
-				<%--<form:input path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
+					<c:forEach var="a" items="${ cmsNews.typeDict }">
+						<form:option value="${a.value}" label="${a.label}"/>
+					</c:forEach>
+				</form:select>--%>
+				<form:checkboxes items="${fns:getDictList('tags_type')}" path="tags" itemLabel="label" itemValue="value" htmlEscape="false"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -260,7 +256,8 @@
 		</div>
 	</form:form>
 <script>
-
+ console.log('----------'+'${cmsNews.typeDict}')
+	console.log('${table}')
 </script>
 </body>
 </html>

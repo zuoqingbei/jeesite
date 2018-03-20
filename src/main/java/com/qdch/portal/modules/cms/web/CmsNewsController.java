@@ -90,14 +90,15 @@ public class CmsNewsController extends BaseController {
 		return "modules/cms/cmsNewsList";
 	}
 
-	@RequiresPermissions("cms:cmsNews:view")
+//	@RequiresPermissions("cms:cmsNews:view")
 	@RequestMapping(value = "${adminPath}/cms/cmsNews/form")
 	public String form(CmsNews cmsNews, Model model) {
 		Dict dict = new Dict();
 		dict.setType("tags_type");
-		cmsNews.setTypeDict(dictService.findByType(dict));
 		cmsNews  = cmsNewsService.getContent(cmsNews);
+		cmsNews.setTypeDict(dictService.findByType(dict));
 		model.addAttribute("cmsNews", cmsNews);
+		model.addAttribute("table","CmsNews");
 		return "modules/cms/cmsNewsForm";
 	}
 
@@ -139,7 +140,7 @@ public class CmsNewsController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent",method = RequestMethod.GET)
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
 	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
 
 		CmsNews cmsNews1 = cmsNewsService.get(cmsNews);
@@ -154,11 +155,12 @@ public class CmsNewsController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend",method = RequestMethod.GET)
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend")
 	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
 
         Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
-		this.resultSuccessData(request,response, "获取数据成功", cmsNewsList);
+//		mapJson(page,"success","获取数据成功")
+		this.resultSuccessData(request,response, "",mapJson(cmsNewsList,"success","获取数据成功"));
 
 
 	}
@@ -171,10 +173,10 @@ public class CmsNewsController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist",method = RequestMethod.GET)
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist")
 	public void portallist(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews);
-		this.resultSuccessData(request,response, "获取数据成功", page);
+		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
 	}
 
 
@@ -186,11 +188,11 @@ public class CmsNewsController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRank",method = RequestMethod.GET)
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRank")
 	public void getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
-			this.resultSuccessData(request,response, "获取数据成功",  page);
+			this.resultSuccessData(request,response, "获取数据成功",  mapJson(page,"success","获取数据成功"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -206,7 +208,7 @@ public class CmsNewsController extends BaseController {
 	 * @return
 	 */
 
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/saveData",method = RequestMethod.POST)
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/saveData")
 	public void  saveData(CmsNews cmsNews, Model model, HttpServletRequest request,HttpServletResponse response) {
 //		if (!beanValidator(model, cmsNews)){
 //			return form(cmsNews, model);

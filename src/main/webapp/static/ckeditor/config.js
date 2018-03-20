@@ -4,7 +4,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
 CKEDITOR.editorConfig = function( config ) {
-    config.startupMode = 'source';
+
 	config.language = 'zh-cn'; config.uiColor = '#f7f5f4';
 	config.width = '99.7%'; 
 	if (config.height == ''){

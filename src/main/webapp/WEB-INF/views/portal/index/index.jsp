@@ -81,11 +81,13 @@ color:red
 
                 $.ajax({
                     type: "post",
-                    url: "${portalPaht}/cms/cmsShare/saveShare",
-                    data: {platform:plat},
+                    url: "${portalPath}/cms/cmsShare/saveShare",
+                    data: {platform:plat,sourceId:window.document.location.href,
+                        sourceTable:'cmsnews',
+                    title:params.title,url:params.url},
                     dataType: "json",
                     success: function(data){
-                        alert(data.resMessage);
+                        console.log('--'+data);
 
                     }
                 });
@@ -94,8 +96,8 @@ color:red
 	   
 		   $(function(){
 			  console.log(portalPath+"---"+portalPage);
-			  console.log(window.document.location.href)
-			    console.log(document.title)
+			  console.log(window.document.location.href);
+               console.log(document.title)
 			});
 		   <!--
 		   -->

@@ -95,7 +95,7 @@
 
 
 	<select id="findByType" resultType="Dict">
-		select value,label from sys_dict where type=#{type} and del_flag='0' order by sort
+		select * from sys_dict where type=#{type} and del_flag='0' order by sort
 	</select>
 	
 </mapper>
