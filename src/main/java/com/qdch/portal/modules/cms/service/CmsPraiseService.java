@@ -43,5 +43,10 @@ public class CmsPraiseService extends CrudService<CmsPraiseDao, CmsPraise> {
 	public void delete(CmsPraise cmsPraise) {
 		super.delete(cmsPraise);
 	}
+
+	@Transactional(readOnly = false)
+	public boolean getDynamicSelf(CmsPraise cmsPraise) {
+		return  dao.getDynamicSelf(cmsPraise)>0?true:false;
+	}
 	
 }

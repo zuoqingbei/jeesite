@@ -36,6 +36,9 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>赞踩内容源id</th>
+				<th>内容来源表</th>
+				<th>用户</th>
 				<th>分享标题</th>
 				<th>分享地址</th>
 				<th>分享时间</th>
@@ -45,9 +48,14 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsShare">
 			<tr>
-				<td><a href="${ctx}/cms/cmsShare/form?id=${cmsShare.id}">
-					${cmsShare.title}
-				</a></td>
+				<td>${cmsShare.sourceId}</td>
+				<td>
+						${cmsShare.sourceTable}
+				</td>
+				<td>
+						${cmsShare.user.name}
+				</td>
+				<td>${cmsShare.title}</td>
 				<td>
 					${cmsShare.url}
 				</td>
