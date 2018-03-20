@@ -18,6 +18,7 @@ import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.DataEntity;
 import com.qdch.portal.common.supcan.annotation.treelist.cols.SupCol;
 import com.qdch.portal.common.utils.Collections3;
+import com.qdch.portal.common.utils.Json;
 import com.qdch.portal.common.utils.excel.annotation.ExcelField;
 import com.qdch.portal.common.utils.excel.fieldtype.RoleListType;
 import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
@@ -31,11 +32,13 @@ import com.qdch.portal.modules.sys.utils.UserUtils;
 public class User extends DataEntity<User> {
 
 	private static final long serialVersionUID = 1L;
+	@Json
 	private Office company;	// 归属公司
 	private Office office;	// 归属部门
 	private String loginName;// 登录名
 	private String password;// 密码
 	private String no;		// 工号
+	@Json
 	private String name;	// 姓名
 	private String email;	// 邮箱
 	private String phone;	// 电话
@@ -44,6 +47,7 @@ public class User extends DataEntity<User> {
 	private String loginIp;	// 最后登陆IP
 	private Date loginDate;	// 最后登陆日期
 	private String loginFlag;	// 是否允许登陆
+	@Json
 	private String photo;	// 头像
 
 	private String oldLoginName;// 原登录名
@@ -51,7 +55,6 @@ public class User extends DataEntity<User> {
 	
 	private String oldLoginIp;	// 上次登陆IP
 	private Date oldLoginDate;	// 上次登陆日期
-	
 	private Role role;	// 根据角色查询用户条件
 	private int type;
 	
