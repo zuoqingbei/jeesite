@@ -44,7 +44,7 @@ import redis.clients.jedis.Jedis;
  */
 public class MessageUtils {
 	
-	public static Jedis jedis = JedisUtils.getResource();
+//	public static Jedis jedis = JedisUtils.getResource();
 	public static void main(String[] args) {
 //		new MessageUtils().editMessage("17611570335");
 		new MessageUtils().sendMessage("17611570335");
@@ -81,10 +81,11 @@ public class MessageUtils {
 //				return returnmsg;
 //			}
 //		}
-		String MessageCache = jedis.get("MessageCache");
-		if(MessageCache != null){
-			returnmsg = "发送过于频繁";
-		}
+//		String MessageCache = jedis.get("MessageCache");
+//		if(MessageCache != null){
+//			returnmsg = "发送过于频繁";
+//		}
+		editMessage(tel);
 		return returnmsg;
 	}
 	/**
@@ -134,7 +135,7 @@ public class MessageUtils {
 		System.out.println(result); //打印返回消息状态
 		if(result.equals("1")){
 			//JedisUtils.setObject("MessageCache", random, 60); 
-			jedis.set("MessageCache", random, "NX", "EX", 60);  //过期时间为60秒
+			//jedis.set("MessageCache", random, "NX", "EX", 60);  //过期时间为60秒
 		}
 		post.releaseConnection();
 		return result;
@@ -163,16 +164,16 @@ public class MessageUtils {
 	 */
 	public String  checkIndentifyCode(String code ){
 		String returnmsg = "";
-		String sysCode =  jedis.get("MessageCache");
-		if(sysCode == null){
-			returnmsg = "请先点击发送验证码";
-			return returnmsg;
-		}
-		if(code.equals(sysCode)){
-			returnmsg = "true";
-		}else{
-			returnmsg = "false";
-		}
+//		String sysCode =  jedis.get("MessageCache");
+//		if(sysCode == null){
+//			returnmsg = "请先点击发送验证码";
+//			return returnmsg;
+//		}
+//		if(code.equals(sysCode)){
+//			returnmsg = "true";
+//		}else{
+//			returnmsg = "false";
+//		}
 		return returnmsg;
 		
 	}
