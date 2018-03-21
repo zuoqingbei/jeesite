@@ -95,6 +95,7 @@ public class AccountMobileCodeController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultSuccessData(request,response, "保存数据失败", null);
+			return ;
 		}
 		this.resultSuccessData(request,response, "保存数据成功", null);
 
