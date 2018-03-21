@@ -17,8 +17,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsContribute/">用户投稿列表</a></li>
-		<shiro:hasPermission name="cms:cmsContribute:edit"><li><a href="${ctx}/cms/cmsContribute/form">用户投稿添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/cms/cmsContribute/list">用户投稿列表</a></li>
+		<%--<shiro:hasPermission name="cms:cmsContribute:edit"><li><a href="${ctx}/cms/cmsContribute/form">用户投稿添加</a></li></shiro:hasPermission>--%>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsContribute" action="${ctx}/cms/cmsContribute/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>

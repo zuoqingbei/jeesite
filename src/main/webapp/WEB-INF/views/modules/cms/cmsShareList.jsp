@@ -18,8 +18,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsShare/">用户分享记录列表</a></li>
-		<shiro:hasPermission name="cms:cmsShare:edit"><li><a href="${ctx}/cms/cmsShare/form">用户分享记录添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/cms/cmsShare/list">用户分享记录列表</a></li>
+		<%--<shiro:hasPermission name="cms:cmsShare:edit"><li><a href="${ctx}/cms/cmsShare/form">用户分享记录添加</a></li></shiro:hasPermission>--%>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsShare" action="${ctx}/cms/cmsShare/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>

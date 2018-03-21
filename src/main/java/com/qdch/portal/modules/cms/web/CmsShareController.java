@@ -6,6 +6,7 @@ package com.qdch.portal.modules.cms.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.modules.cms.dao.CmsShareDao;
 import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class CmsShareController extends BaseController {
 
 	@Autowired
 	private CmsShareService cmsShareService;
+
+	@Autowired
+	private CmsShareDao cmsShareDao;
 	
 	@ModelAttribute
 	public CmsShare get(@RequestParam(required=false) String id) {
@@ -95,9 +99,44 @@ public class CmsShareController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			 this.resultSuccessData(request,response, "保存数据失败", null);
+			 return;
 		}
 		this.resultSuccessData(request,response, "保存数据成功", null);
 
+	}
+
+	/**
+	 * 得到某条资讯的收藏量
+	 */
+
+	@RequestMapping(value = "${portalPath}/cms/cmsShare/getCount")
+	public void  getCount(CmsShare cmsShare,HttpServletRequest request,HttpServletResponse response){
+		int count = 0;
+		try {
+			count = cmsShareDao.getShareCount(cmsShare);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败", count);
+			return;
+		}
+		this.resultSuccessData(request,response, "操作成功", count);
+	}
+
+	/**
+	  * 用户是否操作过
+	 */
+
+	@RequestMapping(value = "${portalPath}/cms/cmsShare/isOperate")
+	public void  isOperate(CmsShare cmsShare,HttpServletRequest request,HttpServletResponse response){
+		boolean flag = false;
+		try {
+			flag = cmsShareService.getDynamicSelf(cmsShare);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败", flag);
+			return;
+		}
+		this.resultSuccessData(request,response, "操作成功", flag);
 	}
 
 }

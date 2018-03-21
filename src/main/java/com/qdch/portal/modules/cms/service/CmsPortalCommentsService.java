@@ -5,6 +5,8 @@ package com.qdch.portal.modules.cms.service;
 
 import java.util.List;
 
+import com.qdch.portal.modules.cms.entity.CmsCollection;
+import com.qdch.portal.modules.cms.entity.CmsNews;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +45,16 @@ public class CmsPortalCommentsService extends CrudService<CmsPortalCommentsDao, 
 	public void delete(CmsPortalComments cmsPortalComments) {
 		super.delete(cmsPortalComments);
 	}
-	
+
+	@Transactional(readOnly = false)
+	public boolean getDynamicSelf(CmsPortalComments cmsPortalComments) {
+		return  dao.getDynamicSelf(cmsPortalComments)>0?true:false;
+	}
+
+	@Transactional(readOnly = false)
+	public Page<CmsPortalComments> getCommentsBySource(Page<CmsPortalComments> page, CmsPortalComments cmsPortalComments) {
+		cmsPortalComments.setPage(page);
+		page.setList(dao.getCommentsBySource(cmsPortalComments));
+		return page;
+	}
 }

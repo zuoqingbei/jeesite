@@ -128,5 +128,41 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+
+	<select id="getPortalCommentsCount" resultType="CmsPortalComments">
+		SELECT
+		count(*)
+		FROM
+		cms_collection a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+
+	</select>
+
+	<select id="getDynamicSelf" resultType="CmsPortalComments">
+		SELECT
+		count(*)
+		FROM
+		cms_collection a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+
+		and a.user_id=#{user.id}
+	</select>
+
+	<select id="getCommentsBySource" resultType="CmsPortalComments">
+		SELECT
+			*
+		FROM
+			cms_portal_comments a
+		WHERE
+			a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+	</select>
 	
 </mapper>

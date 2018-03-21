@@ -18,23 +18,23 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsPortalComments/">门户评论列表</a></li>
-		<shiro:hasPermission name="cms:cmsPortalComments:edit"><li><a href="${ctx}/cms/cmsPortalComments/form">门户评论添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/cms/cmsPortalComments/list">门户评论列表</a></li>
+		<%--<shiro:hasPermission name="cms:cmsPortalComments:edit"><li><a href="${ctx}/cms/cmsPortalComments/form">门户评论添加</a></li></shiro:hasPermission>--%>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsPortalComments" action="${ctx}/cms/cmsPortalComments/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>内容来源表 比如 资讯 政策解读 攻略为portal_news：</label>
+			<li><label>内容来源表：</label>
 				<form:input path="sourceTable" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>评论姓名：</label>
-				<sys:treeselect id="user" name="user.id" value="${cmsPortalComments.user.id}" labelName="user.name" labelValue="${cmsPortalComments.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
-			</li>
-			<li><label>评论IP：</label>
-				<form:input path="ip" htmlEscape="false" maxlength="100" class="input-medium"/>
-			</li>
+			<%--<li><label>评论姓名：</label>--%>
+				<%--<sys:treeselect id="user" name="user.id" value="${cmsPortalComments.user.id}" labelName="user.name" labelValue="${cmsPortalComments.user.name}"--%>
+					<%--title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>--%>
+			<%--</li>--%>
+			<%--<li><label>评论IP：</label>--%>
+				<%--<form:input path="ip" htmlEscape="false" maxlength="100" class="input-medium"/>--%>
+			<%--</li>--%>
 			<li><label>评论时间：</label>
 				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${cmsPortalComments.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
@@ -53,7 +53,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>内容来源表 比如 资讯 政策解读 攻略为portal_news</th>
+				<th>内容来源表</th>
 				<th>评论内容</th>
 				<th>评论姓名</th>
 				<th>评论IP</th>
@@ -88,7 +88,7 @@
 					<fmt:formatDate value="${cmsPortalComments.auditDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="cms:cmsPortalComments:edit"><td>
-    				<a href="${ctx}/cms/cmsPortalComments/form?id=${cmsPortalComments.id}">修改</a>
+    				<a href="${ctx}/cms/cmsPortalComments/form?id=${cmsPortalComments.id}">审核</a>
 					<a href="${ctx}/cms/cmsPortalComments/delete?id=${cmsPortalComments.id}" onclick="return confirmx('确认要删除该门户评论吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
