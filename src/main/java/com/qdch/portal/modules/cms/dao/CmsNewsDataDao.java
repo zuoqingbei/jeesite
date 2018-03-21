@@ -14,5 +14,14 @@ import com.qdch.portal.modules.cms.entity.CmsNewsData;
  */
 @MyBatisDao
 public interface CmsNewsDataDao extends CrudDao<CmsNewsData> {
+
+    /**
+     * 查询是否有某条news的内容
+     * @param newsId
+     * @return
+     */
+    public CmsNewsData getByNewId(String  newsId);
+
+
 	
 }

@@ -107,5 +107,30 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+
+	<select id="getShareCount" resultType="CmsShare">
+		SELECT
+		count(*)
+		FROM
+		cms_share a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+
+	</select>
+
+	<select id="getDynamicSelf" resultType="CmsShare">
+		SELECT
+		count(*)
+		FROM
+		cms_share a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+		and a.user_id=#{user.id}
+	</select>
 	
 </mapper>

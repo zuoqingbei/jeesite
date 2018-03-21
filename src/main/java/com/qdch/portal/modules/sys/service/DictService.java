@@ -43,4 +43,9 @@ public class DictService extends CrudService<DictDao, Dict> {
 		CacheUtils.remove(DictUtils.CACHE_DICT_MAP);
 	}
 
+	@Transactional(readOnly = false)
+	public List<Dict> findByType(Dict dict) {
+		return dao.findByType(dict);
+	}
+
 }

@@ -6,6 +6,8 @@ package com.qdch.portal.modules.cms.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.modules.cms.dao.CmsPraiseDao;
+import com.qdch.portal.modules.cms.entity.CmsShare;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +34,9 @@ public class CmsPraiseController extends BaseController {
 
 	@Autowired
 	private CmsPraiseService cmsPraiseService;
-	
+
+	@Autowired
+	private CmsPraiseDao cmsPraiseDao;
 	@ModelAttribute
 	public CmsPraise get(@RequestParam(required=false) String id) {
 		CmsPraise entity = null;
@@ -77,6 +81,56 @@ public class CmsPraiseController extends BaseController {
 		cmsPraiseService.delete(cmsPraise);
 		addMessage(redirectAttributes, "删除用户赞 踩记录成功");
 		return "redirect:"+Global.getAdminPath()+"/cms/cmsPraise/list?repage";
+	}
+
+
+	/**
+	 * 得到某条资讯的踩的数量
+	 */
+
+	@RequestMapping(value = "${portalPath}/cms/cmsPraise/getTradeCount")
+	public void  getTradeCount(CmsPraise cmsPraise, HttpServletRequest request, HttpServletResponse response){
+		try {
+			cmsPraiseDao.getTradeCount(cmsPraise);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败", null);
+			return;
+		}
+		this.resultSuccessData(request,response, "操作成功", null);
+	}
+
+	/**
+	 * 得到某条资讯的赞的数量
+	 */
+
+	@RequestMapping(value = "${portalPath}/cms/cmsPraise/getPraiseCount")
+	public void  getPraiseCount(CmsPraise cmsPraise, HttpServletRequest request, HttpServletResponse response){
+		try {
+			cmsPraiseDao.getPraiseCount(cmsPraise);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败", null);
+			return;
+		}
+		this.resultSuccessData(request,response, "操作成功", null);
+	}
+
+	/**
+	 * 用户是否操作过
+	 */
+
+	@RequestMapping(value = "${portalPath}/cms/cmsPraise/isOperate")
+	public void  isOperate(CmsPraise cmsPraise,HttpServletRequest request,HttpServletResponse response){
+		boolean flag = false;
+		try {
+			flag = cmsPraiseService.getDynamicSelf(cmsPraise);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败", flag);
+			return;
+		}
+		this.resultSuccessData(request,response, "操作成功", flag);
 	}
 
 }

@@ -25,6 +25,14 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>内容来源表：</label>
+				<form:input path="sourceTable" htmlEscape="false" maxlength="64" class="input-medium"/>
+			</li>
+			<li><label>收藏时间：</label>
+				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					   value="<fmt:formatDate value="${cmsPraise.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					   onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
@@ -34,8 +42,8 @@
 		<thead>
 			<tr>
 				<th>收藏内容源id</th>
-				<th>内容来源表 比如 资讯 政策解读 攻略为portal_news</th>
-				<th>用户id</th>
+				<th>内容来源表</th>
+				<th>用户</th>
 				<th>收藏时间</th>
 				<shiro:hasPermission name="cms:cmsCollection:edit"><th>操作</th></shiro:hasPermission>
 			</tr>

@@ -25,18 +25,23 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>赞踩内容源id：</label>
-				<form:input path="sourceId" htmlEscape="false" maxlength="64" class="input-medium"/>
-			</li>
-			<li><label>内容来源表 比如 资讯 政策解读 攻略为portal_news：</label>
+			<%--<li><label>赞踩内容源id：</label>--%>
+				<%--<form:input path="sourceId" htmlEscape="false" maxlength="64" class="input-medium"/>--%>
+			<%--</li>--%>
+			<li><label>内容来源表：</label>
 				<form:input path="sourceTable" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>用户id：</label>
-				<sys:treeselect id="user" name="user.id" value="${cmsPraise.user.id}" labelName="user.name" labelValue="${cmsPraise.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
-			</li>
-			<li><label>操作类型 0-踩 1-赞：</label>
-				<form:input path="operateType" htmlEscape="false" maxlength="1" class="input-medium"/>
+			<%--<li><label>用户id：</label>--%>
+				<%--<sys:treeselect id="user" name="user.id" value="${cmsPraise.user.id}" labelName="user.name" labelValue="${cmsPraise.user.name}"--%>
+					<%--title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>--%>
+			<%--</li>--%>
+			<li><label>操作类型：</label>
+				<form:select hidden="true" path="operateType" class="input-xlarge " >
+					<form:option value="" label=""/>
+					<form:option value="0" label="踩"/>
+					<form:option value="1" label="赞"/>
+					<%--<form:option value="2" label="管理人员发布"/>--%>
+				</form:select>
 			</li>
 			<li><label>收藏时间：</label>
 				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
@@ -52,9 +57,9 @@
 		<thead>
 			<tr>
 				<th>赞踩内容源id</th>
-				<th>内容来源表 比如 资讯 政策解读 攻略为portal_news</th>
-				<th>用户id</th>
-				<th>操作类型 0-踩 1-赞</th>
+				<th>内容来源表</th>
+				<th>用户</th>
+				<th>操作类型</th>
 				<th>收藏时间</th>
 				<shiro:hasPermission name="cms:cmsPraise:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -72,7 +77,9 @@
 					${cmsPraise.user.name}
 				</td>
 				<td>
-					${cmsPraise.operateType}
+					<c:if test="${cmsPraise.operateType eq '0'}">踩</c:if>
+					<c:if test="${cmsPraise.operateType eq '1'}">赞</c:if>
+
 				</td>
 				<td>
 					<fmt:formatDate value="${cmsPraise.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

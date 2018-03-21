@@ -33,31 +33,37 @@
 	<form:form id="inputForm" modelAttribute="cmsPraise" action="${ctx}/cms/cmsPraise/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">赞踩内容源id：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="sourceId" htmlEscape="false" maxlength="64" class="input-xlarge required"/>--%>
+				<%--<span class="help-inline"><font color="red">*</font> </span>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="control-group">
-			<label class="control-label">赞踩内容源id：</label>
-			<div class="controls">
-				<form:input path="sourceId" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
-				<span class="help-inline"><font color="red">*</font> </span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">内容来源表 比如 资讯 政策解读 攻略为portal_news：</label>
+			<label class="control-label">内容来源表：</label>
 			<div class="controls">
 				<form:input path="sourceTable" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">用户id：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<sys:treeselect id="user" name="user.id" value="${cmsPraise.user.id}" labelName="user.name" labelValue="${cmsPraise.user.name}"--%>
+					<%--title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="control-group">
-			<label class="control-label">用户id：</label>
+			<label class="control-label">操作类型：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="user.id" value="${cmsPraise.user.id}" labelName="user.name" labelValue="${cmsPraise.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">操作类型 0-踩 1-赞：</label>
-			<div class="controls">
-				<form:input path="operateType" htmlEscape="false" maxlength="1" class="input-xlarge "/>
+				<%--<form:input path="operateType" htmlEscape="false" maxlength="1" class="input-xlarge "/>--%>
+				<form:select hidden="true" path="operateType" class="input-xlarge " >
+					<form:option value="" label=""/>
+					<form:option value="0" label="踩"/>
+					<form:option value="1" label="赞"/>
+					<%--<form:option value="2" label="管理人员发布"/>--%>
+				</form:select>
 			</div>
 		</div>
 		<div class="form-actions">

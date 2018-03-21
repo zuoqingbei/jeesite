@@ -101,5 +101,9 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+	<select id="getByNewId" resultType="CmsNewsData">
+		select * from cms_news_data a where a.del_flag='0' and a.news_id=#{newsId} limit 1
+	</select>
 	
 </mapper>

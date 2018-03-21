@@ -1,51 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qdch.portal.modules.cms.dao.CmsPraiseDao">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao">
     
-	<sql id="cmsPraiseColumns">
+	<sql id="cmsPortalCommentsColumns">
 		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
 		a.source_id AS "sourceId",
 		a.source_table AS "sourceTable",
+		a.content AS "content",
 		a.user_id AS "user.id",
-		a.operate_type AS "operateType",
+		a.ip AS "ip",
 		a.create_date AS "createDate",
+		a.audit_user_id AS "auditUserId",
+		a.audit_date AS "auditDate",
 		a.del_flag AS "delFlag",
-		u4.name AS "user.name"
+		u7.name AS "user.name"
 	</sql>
 	
-	<sql id="cmsPraiseJoins">
-		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	<sql id="cmsPortalCommentsJoins">
+		LEFT JOIN sys_user u7 ON u7.id = a.user_id
 	</sql>
     
-	<select id="get" resultType="CmsPraise">
+	<select id="get" resultType="CmsPortalComments">
 		SELECT 
-			<include refid="cmsPraiseColumns"/>
-		FROM cms_praise a
-		<include refid="cmsPraiseJoins"/>
+			<include refid="cmsPortalCommentsColumns"/>
+		FROM cms_portal_comments a
+		<include refid="cmsPortalCommentsJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="CmsPraise">
+	<select id="findList" resultType="CmsPortalComments">
 		SELECT 
-			<include refid="cmsPraiseColumns"/>
-		FROM cms_praise a
-		<include refid="cmsPraiseJoins"/>
+			<include refid="cmsPortalCommentsColumns"/>
+		FROM cms_portal_comments a
+		<include refid="cmsPortalCommentsJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="sourceId != null and sourceId != ''">
-				AND a.source_id = #{sourceId}
-			</if>
 			<if test="sourceTable != null and sourceTable != ''">
 				AND a.source_table = #{sourceTable}
 			</if>
 			<if test="user != null and user.id != null and user.id != ''">
 				AND a.user_id = #{user.id}
 			</if>
-			<if test="operateType != null and operateType != ''">
-				AND a.operate_type = #{operateType}
+			<if test="ip != null and ip != ''">
+				AND a.ip = #{ip}
 			</if>
 			<if test="createDate != null and createDate != ''">
 				AND a.create_date = #{createDate}
+			</if>
+			<if test="auditDate != null and auditDate != ''">
+				AND a.audit_date = #{auditDate}
 			</if>
 		</where>
 		<choose>
@@ -57,11 +62,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="CmsPraise">
+	<select id="findAllList" resultType="CmsPortalComments">
 		SELECT 
-			<include refid="cmsPraiseColumns"/>
-		FROM cms_praise a
-		<include refid="cmsPraiseJoins"/>
+			<include refid="cmsPortalCommentsColumns"/>
+		FROM cms_portal_comments a
+		<include refid="cmsPortalCommentsJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		
@@ -75,80 +80,89 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO cms_praise(
+		INSERT INTO cms_portal_comments(
 			id,
+			parent_id,
+			parent_ids,
 			source_id,
 			source_table,
+			content,
 			user_id,
-			operate_type,
+			ip,
 			create_date,
+			audit_user_id,
+			audit_date,
 			del_flag
 		) VALUES (
 			#{id},
+			#{parent.id},
+			#{parentIds},
 			#{sourceId},
 			#{sourceTable},
+			#{content},
 			#{user.id},
-			#{operateType},
+			#{ip},
 			#{createDate},
+			#{auditUserId},
+			#{auditDate},
 			#{delFlag}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE cms_praise SET 	
+		UPDATE cms_portal_comments SET 	
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
 			source_id = #{sourceId},
 			source_table = #{sourceTable},
+			content = #{content},
 			user_id = #{user.id},
-			operate_type = #{operateType},
-			create_date = #{createDate}
+			ip = #{ip},
+			audit_user_id = #{auditUserId},
+			audit_date = #{auditDate}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
-		UPDATE cms_praise SET 
+		UPDATE cms_portal_comments SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 
 
-	<select id="getTradeCount" resultType="CmsPraise">
+	<select id="getPortalCommentsCount" resultType="CmsPortalComments">
 		SELECT
 		count(*)
 		FROM
-		cms_praise a
+		cms_collection a
 		WHERE
 		a.source_table = #{sourceTable}
 		AND a.source_id = #{sourceId}
 		AND a.del_flag = '0'
-		AND operate_type = '0'
+
 	</select>
 
-	<select id="getPraiseCount" resultType="CmsPraise">
+	<select id="getDynamicSelf" resultType="CmsPortalComments">
 		SELECT
 		count(*)
 		FROM
-		cms_praise a
+		cms_collection a
 		WHERE
 		a.source_table = #{sourceTable}
 		AND a.source_id = #{sourceId}
 		AND a.del_flag = '0'
-		AND operate_type = '0'
-	</select>
 
-	<select id="getDynamicSelf" resultType="CmsPraise">
-		SELECT
-		count(*)
-		FROM
-		cms_praise a
-		WHERE
-		a.source_table = #{sourceTable}
-		AND a.source_id = #{sourceId}
-		AND a.del_flag = '0'
-		AND operate_type = '0'
 		and a.user_id=#{user.id}
 	</select>
 
-
-
-
+	<select id="getCommentsBySource" resultType="CmsPortalComments">
+		SELECT
+			*
+		FROM
+			cms_portal_comments a
+		WHERE
+			a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+	</select>
+	
 </mapper>

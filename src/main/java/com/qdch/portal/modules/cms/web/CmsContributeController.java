@@ -174,7 +174,7 @@ public class CmsContributeController extends BaseController {
 	 * @return
 	 */
 
-	@RequestMapping(value = "${portalPath}/cms/cmsContribute/saveData",method = RequestMethod.POST)
+	@RequestMapping(value = "${portalPath}/cms/cmsContribute/saveData")
 	public void  saveData(CmsContribute cmsContribute, Model model, HttpServletRequest request,HttpServletResponse response) {
 //		if (!beanValidator(model, cmsNews)){
 //			return form(cmsNews, model);

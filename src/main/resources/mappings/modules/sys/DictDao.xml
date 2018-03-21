@@ -91,5 +91,11 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+
+
+	<select id="findByType" resultType="Dict">
+		select * from sys_dict where type=#{type} and del_flag='0' order by sort
+	</select>
 	
 </mapper>
