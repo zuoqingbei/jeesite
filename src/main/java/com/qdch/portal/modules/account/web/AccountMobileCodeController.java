@@ -6,6 +6,7 @@ package com.qdch.portal.modules.account.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.common.utils.MessageUtils;
 import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,20 @@ public class AccountMobileCodeController extends BaseController {
 		this.resultSuccessData(request,response, "保存数据成功", null);
 
 	}
+
+	@RequestMapping(value = "${portalPath}/account/accountMobileCode/sendCheckCode")
+	public void sendCheckCode(HttpServletRequest request,HttpServletResponse response){
+		try{
+			new MessageUtils().sendMessage(request.getParameter("tel"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败", null);
+			return ;
+		}
+			this.resultSuccessData(request,response, "操作成功", null);
+
+
+		}
 
 
 }
