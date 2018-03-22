@@ -40,4 +40,12 @@ public interface CmsPortalCommentsDao extends CrudDao<CmsPortalComments> {
      * @return
      */
     public List<CmsPortalComments> getCommentsBySource(CmsPortalComments cmsPortalComments);
+
+    /**
+     * 获得文章的 评论和赞、踩的个数
+     * @param cmsPortalComments
+     * @return
+     */
+
+    public  List<CmsPortalComments> getCommentsAndPraise(CmsPortalComments cmsPortalComments);
 }

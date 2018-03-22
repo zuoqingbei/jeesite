@@ -128,10 +128,42 @@ public class CmsPortalCommentsController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsPortalComments/saveData")
 	public void saveData(CmsPortalComments cmsPortalComments,HttpServletRequest request,HttpServletResponse response){
 		try {
+//			CmsPortalComments parent = cmsPortalComments.getParent();
+
+//			if(parent == null){
+////				parent = new CmsPortalComments();
+////				parent.setId("-1");
+//////				parent.setParentIds(",-1,");
+////				cmsPortalComments.setParent(parent);
+////				cmsPortalComments.setParentIds(",-1,");
+//			}else{
+////				String parentids = parent.getParentIds();
+////				if(parentids != null&&parentids.substring(0,1).equals(",")){
+////					parentids =  parentids+parent.getId()+",";
+////				}else if(!parentids.substring(0,1).equals(",")){
+////					parentids =  ","+parentids+",";
+////				}
+////				cmsPortalComments.setParentIds(parentids);
+////				String parentid = pa
+//			}
+
+			String parentID = cmsPortalComments.getParentId();
+			CmsPortalComments parent = null;
+			if(parentID == null){
+				parent = new CmsPortalComments();
+				parent.setId("-1");
+				cmsPortalComments.setParent(parent);
+				cmsPortalComments.setParentIds(",-1,");
+			}else{
+				parent = get(parentID);
+				cmsPortalComments.setParent(parent);
+				cmsPortalComments.setParentIds(parent.getParentIds()+parent.getId()+",");
+			}
 			cmsPortalCommentsService.save(cmsPortalComments);
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultSuccessData(request,response, "操作失败", null);
+			return;
 		}
 		this.resultSuccessData(request,response, "操作成功", null);
 	}
@@ -149,8 +181,29 @@ public class CmsPortalCommentsController extends BaseController {
 		try {
 			 page = cmsPortalCommentsService.getCommentsBySource(
                     new Page<CmsPortalComments>(request,response),cmsPortalComments);
-			this.resultSuccessData(request,response, "操作成功",
-                    mapJson(page,"success","获取数据成功"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败",
+					mapJson(null,"fail","操作失败"));
+			return;
+		}
+		this.resultSuccessData(request,response, "操作成功",
+				mapJson(page,"success","获取数据成功"));
+	}
+
+	/**
+	 * 获得某个文章的 评论和赞数
+	 * @param cmsPortalComments
+	 * @param request
+	 * @param response
+	 */
+
+	@RequestMapping(value = "${portalPath}/cms/cmsPortalComments/getCommentsAndPraise")
+	public void getCommentsAndPraise(CmsPortalComments cmsPortalComments,HttpServletRequest request,HttpServletResponse response){
+		Page<CmsPortalComments> page = null;
+		try {
+			page = cmsPortalCommentsService.getCommentsAndPraise(
+					new Page<CmsPortalComments>(request,response),cmsPortalComments);
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultSuccessData(request,response, "操作失败",

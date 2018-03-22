@@ -57,4 +57,11 @@ public class CmsPortalCommentsService extends CrudService<CmsPortalCommentsDao, 
 		page.setList(dao.getCommentsBySource(cmsPortalComments));
 		return page;
 	}
+
+	@Transactional(readOnly = false)
+	public Page<CmsPortalComments> getCommentsAndPraise(Page<CmsPortalComments> page, CmsPortalComments cmsPortalComments) {
+		cmsPortalComments.setPage(page);
+		page.setList(dao.getCommentsAndPraise(cmsPortalComments));
+		return page;
+	}
 }
