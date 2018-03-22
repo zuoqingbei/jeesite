@@ -27,8 +27,8 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>用户id：</label>
-				<form:input path="userId" htmlEscape="false" maxlength="100" class="input-medium"/>
+			<li><label>用户登录名：</label>
+				<form:input path="lgoinName" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -41,7 +41,7 @@
 				<th>用户登录名</th>
 				<th>关注标签</th>
 				<th>关注时间</th>
-				<shiro:hasPermission name="subscribe:accountSubscribeHistory:edit"><th>操作</th></shiro:hasPermission>
+				<%-- <shiro:hasPermission name="subscribe:accountSubscribeHistory:edit"><th>操作</th></shiro:hasPermission> --%>
 			</tr>
 		</thead>
 		<tbody>
@@ -49,19 +49,19 @@
 			<tr>
 				
 				<td>
-					${accountSubscribeHistory.userID}
+					${accountSubscribeHistory.lgoinName}
 				</td>
 				<td>
-					${accountSubscribeHistory.labId}
+					${accountSubscribeHistory.label}
 				</td>
 				<td>
 					<fmt:formatDate value="${accountSubscribeHistory.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
-				<shiro:hasPermission name="subscribe:accountSubscribeHistory:edit"><td>
+				<%-- <shiro:hasPermission name="subscribe:accountSubscribeHistory:edit"><td>
     				<a href="${ctx}/subscribe/accountSubscribeHistory/form?id=${accountSubscribeHistory.id}">修改</a>
 					<a href="${ctx}/subscribe/accountSubscribeHistory/delete?id=${accountSubscribeHistory.id}" onclick="return confirmx('确认要删除该用户订阅历史吗？', this.href)">删除</a>
 					</td>
-				</shiro:hasPermission>
+				</shiro:hasPermission> --%>
 			</tr>
 		</c:forEach>
 		</tbody>

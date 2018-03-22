@@ -17,6 +17,10 @@ import com.qdch.portal.modules.sys.entity.User;
  */
 @MyBatisDao
 public interface UserDao extends CrudDao<User> {
+	/**
+	 * 查询共同关注用户
+	 */
+	public List<User> findCommonAttention(String[] keys);
 	
 	/**
 	 * 根据登录名称查询用户
@@ -73,9 +77,6 @@ public interface UserDao extends CrudDao<User> {
 	 */
 	public int updateUserInfo(User user);
 	
-	/**
-	 * 查询共同关注用户
-	 */
-	public List<User> findCommonAttention(String[] keys);
+
 
 }
