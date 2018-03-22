@@ -13,4 +13,5 @@ public interface Constant {
 	//controller返回码
 	public final static String STATUS="status";
 	public final static String MSG="msg";
+	public final static String DEFAULT_PWD="123456";
 }

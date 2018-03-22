@@ -6,12 +6,17 @@ package com.qdch.portal.modules.sys.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
+import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
+import com.qdch.portal.common.config.Constant;
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.service.BaseService;
 import com.qdch.portal.common.utils.CacheUtils;
@@ -26,6 +31,7 @@ import com.qdch.portal.modules.sys.entity.Menu;
 import com.qdch.portal.modules.sys.entity.Office;
 import com.qdch.portal.modules.sys.entity.Role;
 import com.qdch.portal.modules.sys.entity.User;
+import com.qdch.portal.modules.sys.security.FormAuthenticationFilter;
 import com.qdch.portal.modules.sys.security.SystemAuthorizingRealm.Principal;
 
 /**
@@ -322,6 +328,27 @@ public class UserUtils {
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * @todo   用户登录
+	 * @time   2018年3月21日 下午4:27:42
+	 * @author zuoqb
+	 * @return_type   boolean
+	 */
+	public static boolean login(HttpServletRequest request, HttpServletResponse response,User user){
+		request.setAttribute(FormAuthenticationFilter.DEFAULT_USERNAME_PARAM, user.getLoginName());
+		request.setAttribute(FormAuthenticationFilter.DEFAULT_PASSWORD_PARAM,Constant.DEFAULT_PWD);
+		boolean isSuccess=false;
+		FormAuthenticationFilter p=new FormAuthenticationFilter();
+		AuthenticationToken token= p.createToken(request, response);
+		Subject subject = SecurityUtils.getSubject();  
+		try {  
+	        subject.login(token);  
+	        isSuccess=subject.isAuthenticated();
+	    } catch (Exception e) {  
+	       e.printStackTrace();  
+	    } 
+		return isSuccess;
 	}
 	
 }
