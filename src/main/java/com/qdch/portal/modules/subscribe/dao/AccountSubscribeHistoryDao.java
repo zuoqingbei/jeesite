@@ -5,6 +5,7 @@ package com.qdch.portal.modules.subscribe.dao;
 
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
+import com.qdch.portal.modules.account.entity.AccountAttention;
 import com.qdch.portal.modules.subscribe.entity.AccountSubscribeHistory;
 
 /**
@@ -14,5 +15,13 @@ import com.qdch.portal.modules.subscribe.entity.AccountSubscribeHistory;
  */
 @MyBatisDao
 public interface AccountSubscribeHistoryDao extends CrudDao<AccountSubscribeHistory> {
+	/**用户添加订阅
+	 * @author lianjiming
+	 * @version 2018-03-20
+	 * @param accountSubscribeHistory 用户订阅实体
+	 */
+	public void save(AccountSubscribeHistory accountSubscribeHistory);
+	
+	
 	
 }

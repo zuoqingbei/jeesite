@@ -64,12 +64,11 @@ public class AccountAttentionController extends BaseController {
 			accountAttention.setCreateDate(new Date());
 			//查询是否关注
 			List<AccountAttention> findAccountAttention = accountAttentionService.findAccountAttention(accountAttention);
-			
+			//自己不能关注自己
 			if(fromUser.equals(toUser)){
 				this.resultSuccessData(request,response, "不能关注", null);
 				return;
 			}
-			
 			if((findAccountAttention==null||findAccountAttention.size()==0)){//没有关注
 				//读取 redis缓存
 				Set<String> set = JedisUtils.getSet("addAttentionCache_"+accountAttention.getFromUser());
@@ -163,7 +162,6 @@ public class AccountAttentionController extends BaseController {
 				set.remove(accountAttention.getToUser());
 				//把set再次写入缓存
 				JedisUtils.setSet("addAttentionCache_"+accountAttention.getFromUser(), set, 0);
-				
 				//设置已关注记录的id
 				String id = null;
 				for(int i = 0;i <list.size();i++){
