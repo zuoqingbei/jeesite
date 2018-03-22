@@ -18,7 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsComment/">评论表列表</a></li>
+		<li class="active"><a href="${ctx}/cms/cmsComment/list">评论表列表</a></li>
 		<shiro:hasPermission name="cms:cmsComment:edit"><li><a href="${ctx}/cms/cmsComment/form">评论表添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsComment" action="${ctx}/cms/cmsComment/list" method="post" class="breadcrumb form-search">

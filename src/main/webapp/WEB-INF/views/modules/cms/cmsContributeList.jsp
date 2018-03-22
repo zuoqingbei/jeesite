@@ -144,7 +144,7 @@
 					${cmsContribute.content}
 				</td> --%>
 				<td>
-					${cmsContribute.image}
+					<img src="${cmsContribute.image}" style="width:80px;height:80px;"/>
 				</td>
 				<%-- <td>
 					${cmsContribute.keywords}

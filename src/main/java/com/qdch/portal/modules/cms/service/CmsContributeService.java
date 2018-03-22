@@ -6,6 +6,8 @@ package com.qdch.portal.modules.cms.service;
 import java.util.List;
 
 import com.qdch.portal.modules.cms.entity.CmsNews;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,9 @@ public class CmsContributeService extends CrudService<CmsContributeDao, CmsContr
 	
 	@Transactional(readOnly = false)
 	public void save(CmsContribute cmsContribute) {
+		if(StringUtils.isNotBlank(cmsContribute.getImage())&&cmsContribute.getImage().startsWith("|")){
+			cmsContribute.setImage(cmsContribute.getImage().substring(1));
+		}
 		super.save(cmsContribute);
 	}
 	

@@ -18,7 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsPraise/">用户赞 踩记录列表</a></li>
+		<li class="active"><a href="${ctx}/cms/cmsPraise/list">用户赞 踩记录列表</a></li>
 		<shiro:hasPermission name="cms:cmsPraise:edit"><li><a href="${ctx}/cms/cmsPraise/form">用户赞 踩记录添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsPraise" action="${ctx}/cms/cmsPraise/list" method="post" class="breadcrumb form-search">

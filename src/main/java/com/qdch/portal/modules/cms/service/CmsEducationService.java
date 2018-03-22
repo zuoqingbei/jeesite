@@ -5,6 +5,7 @@ package com.qdch.portal.modules.cms.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,9 @@ public class CmsEducationService extends CrudService<CmsEducationDao, CmsEducati
 	
 	@Transactional(readOnly = false)
 	public void save(CmsEducation cmsEducation) {
+		if(StringUtils.isNotBlank(cmsEducation.getImage())&&cmsEducation.getImage().startsWith("|")){
+			cmsEducation.setImage(cmsEducation.getImage().substring(1));
+		}
 		super.save(cmsEducation);
 	}
 	

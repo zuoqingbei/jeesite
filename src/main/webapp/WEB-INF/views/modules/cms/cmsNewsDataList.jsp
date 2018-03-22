@@ -18,7 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsNewsData/">资讯详表列表</a></li>
+		<li class="active"><a href="${ctx}/cms/cmsNewsData/list">资讯详表列表</a></li>
 		<shiro:hasPermission name="cms:cmsNewsData:edit"><li><a href="${ctx}/cms/cmsNewsData/form">资讯详表添加</a></li></shiro:hasPermission>
 	</ul>
 	<%-- <form:form id="searchForm" modelAttribute="cmsNewsData" action="${ctx}/cms/cmsNewsData/" method="post" class="breadcrumb form-search">

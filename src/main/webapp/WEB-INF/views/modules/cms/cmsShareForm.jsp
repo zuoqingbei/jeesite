@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsShare/">用户分享记录列表</a></li>
+		<li><a href="${ctx}/cms/cmsShare/list">用户分享记录列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsShare/form?id=${cmsShare.id}">用户分享记录<shiro:hasPermission name="cms:cmsShare:edit">${not empty cmsShare.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsShare:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsShare" action="${ctx}/cms/cmsShare/save" method="post" class="form-horizontal">

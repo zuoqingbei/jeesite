@@ -29,7 +29,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsContribute/">用户投稿列表</a></li>
+		<li><a href="${ctx}/cms/cmsContribute/list">用户投稿列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">用户投稿<shiro:hasPermission name="cms:cmsContribute:edit">${not empty cmsContribute.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsContribute:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsContribute" action="${ctx}/cms/cmsContribute/save" method="post" class="form-horizontal">

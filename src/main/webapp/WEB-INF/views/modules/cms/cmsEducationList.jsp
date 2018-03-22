@@ -18,8 +18,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsEducation/">投资教育列表</a></li>
-		<shiro:hasPermission name="cms:cmsEducation:edit"><li><a href="${ctx}/cms/cmsEducation/form">投资教育添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/cms/cmsEducation/list">投资教育列表</a></li>
+		<li><a href="${ctx}/cms/cmsEducation/form">投资教育添加</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsEducation" action="${ctx}/cms/cmsEducation/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -79,7 +79,7 @@
 					${cmsEducation.title}
 				</a></td>
 				<td>
-					${cmsEducation.image}
+					<img  src="${cmsEducation.image}" style="width:80px;height:80px;">
 				</td>
 				<td>
 					${cmsEducation.contentHtml}
