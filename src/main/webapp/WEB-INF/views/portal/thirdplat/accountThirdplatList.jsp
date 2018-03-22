@@ -80,10 +80,10 @@
 					${accountThirdplat.nickName}
 				</td>
 				<td>
-					${accountThirdplat.user.id}
+					${accountThirdplat.mobile}
 				</td>
 				<td>
-					${accountThirdplat.mobile}
+					${accountThirdplat.user.id}
 				</td>
 				<td>
 					${accountThirdplat.ptype}

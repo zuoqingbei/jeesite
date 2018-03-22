@@ -14,7 +14,8 @@
 		a.create_date AS "createDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		u2.name AS "user.name"
+		u2.name AS "user.name",
+		u2.mobile AS "user.mobile"
 	</sql>
 	
 	<sql id="cmsComplaintJoins">

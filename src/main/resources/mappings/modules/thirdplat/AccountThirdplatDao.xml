@@ -5,6 +5,7 @@
 	<sql id="accountThirdplatColumns">
 		a.id AS "id",
 		a.user_id AS "user.id",
+		a.user_id AS "userId",
 		a.ptype AS "ptype",
 		a.platkey AS "platkey",
 		a.nick_name AS "nickName",
