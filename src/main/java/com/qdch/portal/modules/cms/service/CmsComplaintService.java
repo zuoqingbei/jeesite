@@ -5,6 +5,7 @@ package com.qdch.portal.modules.cms.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,9 @@ public class CmsComplaintService extends CrudService<CmsComplaintDao, CmsComplai
 	
 	@Transactional(readOnly = false)
 	public void save(CmsComplaint cmsComplaint) {
+		if(StringUtils.isNotBlank(cmsComplaint.getImage())){
+			cmsComplaint.setImage(cmsComplaint.getImage().replaceAll("\\|", ","));
+		}
 		super.save(cmsComplaint);
 	}
 	

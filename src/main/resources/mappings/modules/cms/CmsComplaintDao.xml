@@ -10,6 +10,7 @@
 		a.source AS "source",
 		a.company_name AS "companyName",
 		a.company_address AS "companyAddress",
+		a.find_date AS "findDate",
 		a.content AS "content",
 		a.create_date AS "createDate",
 		a.remarks AS "remarks",
@@ -82,6 +83,7 @@
 			source,
 			company_name,
 			company_address,
+			find_date,
 			content,
 			create_date,
 			remarks,
@@ -94,6 +96,7 @@
 			#{source},
 			#{companyName},
 			#{companyAddress},
+			#{findDate},
 			#{content},
 			#{createDate},
 			#{remarks},
@@ -109,6 +112,7 @@
 			source = #{source},
 			company_name = #{companyName},
 			company_address = #{companyAddress},
+			find_date=#{findDate},
 			content = #{content},
 			remarks = #{remarks}
 		WHERE id = #{id}

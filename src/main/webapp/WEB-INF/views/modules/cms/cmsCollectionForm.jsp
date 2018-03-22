@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsCollection/">用户收藏记录列表</a></li>
+		<li><a href="${ctx}/cms/cmsCollection/list">用户收藏记录列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsCollection/form?id=${cmsCollection.id}">用户收藏记录<shiro:hasPermission name="cms:cmsCollection:edit">${not empty cmsCollection.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsCollection:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsCollection" action="${ctx}/cms/cmsCollection/save" method="post" class="form-horizontal">

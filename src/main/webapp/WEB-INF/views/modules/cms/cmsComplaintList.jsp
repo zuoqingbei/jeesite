@@ -18,7 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsComplaint/">举报列表</a></li>
+		<li class="active"><a href="${ctx}/cms/cmsComplaint/list">举报列表</a></li>
 		<shiro:hasPermission name="cms:cmsComplaint:edit"><li><a href="${ctx}/cms/cmsComplaint/form">举报添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsComplaint" action="${ctx}/cms/cmsComplaint/" method="post" class="breadcrumb form-search">
@@ -65,7 +65,12 @@
 					${cmsComplaint.user.mobile}
 				</td>
 				<td>
-					${cmsComplaint.image}
+					<%-- <c:forEach items="${cmsComplaint.images}" var="img">
+					${img}
+					</c:forEach> --%>
+					    <c:forTokens var="name" items="${cmsComplaint.image}" delims=",">
+				               <img src="${name}" style="width:80px;height:80px;"/>      
+				        </c:forTokens> 
 				</td>
 				<td>
 					${cmsComplaint.source}
@@ -77,10 +82,10 @@
 					${cmsComplaint.companyAddress}
 				</td>
 				<td>
-					${cmsComplaint.content}
+					<fmt:formatDate value="${cmsComplaint.findDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					<fmt:formatDate value="${cmsComplaint.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					${cmsComplaint.content}
 				</td>
 				<td>
 					${cmsComplaint.remarks}

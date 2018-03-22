@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsNews/">资讯列表</a></li>
+		<li><a href="${ctx}/cms/cmsNews/list">资讯列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsNews/form?id=${cmsNews.id}">资讯<shiro:hasPermission name="cms:cmsNews:edit">${not empty cmsNews.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsNews:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsNews" action="${ctx}/cms/cmsNews/save" method="post" class="form-horizontal">

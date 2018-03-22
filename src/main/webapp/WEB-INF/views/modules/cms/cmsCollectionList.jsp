@@ -18,7 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsCollection/">用户收藏记录列表</a></li>
+		<li class="active"><a href="${ctx}/cms/cmsCollection/list">用户收藏记录列表</a></li>
 		<shiro:hasPermission name="cms:cmsCollection:edit"><li><a href="${ctx}/cms/cmsCollection/form">用户收藏记录添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsCollection" action="${ctx}/cms/cmsCollection/list" method="post" class="breadcrumb form-search">

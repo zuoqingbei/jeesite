@@ -73,8 +73,13 @@
 		</div>
 		<div class="control-group">
 			<label class="control-label">发现时间：</label>
+			<%-- <div class="controls">
+				<form:input path="findDate" htmlEscape="false" maxlength="500" class="input-xlarge "/>
+			</div> --%>
 			<div class="controls">
-				<form:input path="companyAddress" htmlEscape="false" maxlength="500" class="input-xlarge "/>
+			<input name="findDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="<fmt:formatDate value="${cmsComplaint.findDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
