@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsActivityFlowDao">
+    
+	<sql id="cmsActivityFlowColumns">
+		a.id AS "id",
+		a.activity_id AS "activityId",
+		a.title AS "title",
+		a.images AS "images",
+		a.flow_start_time AS "flowStartTime",
+		a.flow_end_time AS "flowEndTime",
+		a.order_num AS "orderNum",
+		a.address AS "address",
+		a.descs AS "descs",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cmsActivityFlowJoins">
+	</sql>
+    
+	<select id="get" resultType="CmsActivityFlow">
+		SELECT 
+			<include refid="cmsActivityFlowColumns"/>
+		FROM cms_activity_flow a
+		<include refid="cmsActivityFlowJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsActivityFlow">
+		SELECT 
+			<include refid="cmsActivityFlowColumns"/>
+		FROM cms_activity_flow a
+		<include refid="cmsActivityFlowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="flowStartTime != null and flowStartTime != ''">
+				AND a.flow_start_time = #{flowStartTime}
+			</if>
+			<if test="flowEndTime != null and flowEndTime != ''">
+				AND a.flow_end_time = #{flowEndTime}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsActivityFlow">
+		SELECT 
+			<include refid="cmsActivityFlowColumns"/>
+		FROM cms_activity_flow a
+		<include refid="cmsActivityFlowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_activity_flow(
+			id,
+			activity_id,
+			title,
+			images,
+			flow_start_time,
+			flow_end_time,
+			order_num,
+			address,
+			descs,
+			create_by,
+			create_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{activityId},
+			#{title},
+			#{images},
+			#{flowStartTime},
+			#{flowEndTime},
+			#{orderNum},
+			#{address},
+			#{descs},
+			#{createBy.id},
+			#{createDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_activity_flow SET 	
+			activity_id = #{activityId},
+			title = #{title},
+			images = #{images},
+			flow_start_time = #{flowStartTime},
+			flow_end_time = #{flowEndTime},
+			order_num = #{orderNum},
+			address = #{address},
+			descs = #{descs},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_activity_flow SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="getByActivity" resultType="CmsActivityFlow">
+		SELECT
+		<include refid="cmsActivityFlowColumns"/>
+		FROM cms_activity_flow a
+		<include refid="cmsActivityFlowJoins"/>
+		WHERE a.activity_id=#{activityId} and del_flag='0'
+	</select>
+	
+</mapper>

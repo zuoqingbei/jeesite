@@ -164,5 +164,45 @@
 			a.source_table = #{sourceTable}
 		AND a.source_id = #{sourceId}
 	</select>
+
+	<select id="getCommentsAndPraise" resultType="CmsPortalComments">
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					*
+				FROM
+					cms_portal_comments
+				WHERE
+					source_table = 'cms_news'
+				AND source_id = '1'
+			) m
+		LEFT JOIN (
+			SELECT
+				source_id,
+				COUNT(source_id) tradeCount
+			FROM
+				cms_praise
+			WHERE
+				source_table = 'cms_portal_comments'
+			AND operate_type = '0'
+			GROUP BY
+				source_id
+		) a ON m.id = a.source_id
+		LEFT JOIN (
+			SELECT
+				source_id,
+				COUNT(source_id) praiseCount
+			FROM
+				cms_praise
+			WHERE
+				source_table = 'cms_portal_comments'
+			AND operate_type = '1'
+			GROUP BY
+				source_id
+		) b ON m.id = b.source_id
+
+	</select>
 	
 </mapper>

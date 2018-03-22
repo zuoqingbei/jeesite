@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsActivityOrganizationDao">
+    
+	<sql id="cmsActivityOrganizationColumns">
+		a.id AS "id",
+		a.activity_id AS "activityId",
+		a.type AS "type",
+		a.logo AS "logo",
+		a.web_url AS "webUrl",
+		a.name AS "name",
+		a.address AS "address",
+		a.descs AS "descs",
+		a.contact AS "contact",
+		a.contact_mobile AS "contactMobile",
+		a.order_num AS "orderNum",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cmsActivityOrganizationJoins">
+	</sql>
+    
+	<select id="get" resultType="CmsActivityOrganization">
+		SELECT 
+			<include refid="cmsActivityOrganizationColumns"/>
+		FROM cms_activity_organization a
+		<include refid="cmsActivityOrganizationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsActivityOrganization">
+		SELECT 
+			<include refid="cmsActivityOrganizationColumns"/>
+		FROM cms_activity_organization a
+		<include refid="cmsActivityOrganizationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="contact != null and contact != ''">
+				AND a.contact = #{contact}
+			</if>
+			<if test="contactMobile != null and contactMobile != ''">
+				AND a.contact_mobile = #{contactMobile}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsActivityOrganization">
+		SELECT 
+			<include refid="cmsActivityOrganizationColumns"/>
+		FROM cms_activity_organization a
+		<include refid="cmsActivityOrganizationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_activity_organization(
+			id,
+			activity_id,
+			type,
+			logo,
+			web_url,
+			name,
+			address,
+			descs,
+			contact,
+			contact_mobile,
+			order_num,
+			create_by,
+			create_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{activityId},
+			#{type},
+			#{logo},
+			#{webUrl},
+			#{name},
+			#{address},
+			#{descs},
+			#{contact},
+			#{contactMobile},
+			#{orderNum},
+			#{createBy.id},
+			#{createDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_activity_organization SET 	
+			activity_id = #{activityId},
+			type = #{type},
+			logo = #{logo},
+			web_url = #{webUrl},
+			name = #{name},
+			address = #{address},
+			descs = #{descs},
+			contact = #{contact},
+			contact_mobile = #{contactMobile},
+			order_num = #{orderNum},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_activity_organization SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="getByActivity" resultType="CmsActivityOrganization">
+		SELECT
+		<include refid="cmsActivityOrganizationColumns"/>
+		FROM cms_activity_organization a
+		<include refid="cmsActivityOrganizationJoins"/>
+		WHERE a.activity_id=#{activityId} and del_flag='0'
+	</select>
+	
+</mapper>

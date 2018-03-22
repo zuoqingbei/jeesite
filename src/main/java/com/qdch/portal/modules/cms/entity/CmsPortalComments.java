@@ -28,7 +28,38 @@ public class CmsPortalComments extends DataEntity<CmsPortalComments> {
 	private String ip;		// 评论IP
 	private String auditUserId;		// 审核人
 	private Date auditDate;		// 审核时间
-	
+
+	private String tradeCount; //踩的数量
+
+	private String praiseCount; //赞的数量
+
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	private String parentId;
+
+
+	public String getTradeCount() {
+		return tradeCount;
+	}
+
+	public void setTradeCount(String tradeCount) {
+		this.tradeCount = tradeCount;
+	}
+
+	public String getPraiseCount() {
+		return praiseCount;
+	}
+
+	public void setPraiseCount(String praiseCount) {
+		this.praiseCount = praiseCount;
+	}
+
 	public CmsPortalComments() {
 		super();
 	}
