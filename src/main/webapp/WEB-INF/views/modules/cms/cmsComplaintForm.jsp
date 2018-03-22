@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsComplaint/">举报列表</a></li>
+		<li><a href="${ctx}/cms/cmsComplaint/list">举报列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsComplaint/form?id=${cmsComplaint.id}">举报<shiro:hasPermission name="cms:cmsComplaint:edit">${not empty cmsComplaint.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsComplaint:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsComplaint" action="${ctx}/cms/cmsComplaint/save" method="post" class="form-horizontal">
@@ -49,7 +49,8 @@
 		<div class="control-group">
 			<label class="control-label">图片：</label>
 			<div class="controls">
-				<form:input path="image" htmlEscape="false" maxlength="1000" class="input-xlarge "/>
+				<form:hidden id="image" path="image" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="image" type="files" uploadPath="/cms/complaint" selectMultiple="true"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -66,6 +67,12 @@
 		</div>
 		<div class="control-group">
 			<label class="control-label">发现地址：</label>
+			<div class="controls">
+				<form:input path="companyAddress" htmlEscape="false" maxlength="500" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">发现时间：</label>
 			<div class="controls">
 				<form:input path="companyAddress" htmlEscape="false" maxlength="500" class="input-xlarge "/>
 			</div>
