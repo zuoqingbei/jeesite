@@ -14,5 +14,27 @@ import com.qdch.portal.modules.cms.entity.CmsPraise;
  */
 @MyBatisDao
 public interface CmsPraiseDao extends CrudDao<CmsPraise> {
-	
+
+    /**
+     * 获得踩的数量
+     * @param cmsPraise
+     * @return
+     */
+    public int getTradeCount(CmsPraise cmsPraise);
+    /**
+     * 获得赞的数量
+     * @param cmsPraise
+     * @return
+     */
+    public int getPraiseCount(CmsPraise cmsPraise);
+
+    /**
+     * 我是否有踩或赞过
+     * @param cmsPraise
+     * @return
+     */
+    public int getDynamicSelf(CmsPraise cmsPraise);
+
+
+
 }

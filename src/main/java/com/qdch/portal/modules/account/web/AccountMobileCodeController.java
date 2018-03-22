@@ -6,12 +6,15 @@ package com.qdch.portal.modules.account.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.common.utils.MessageUtils;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -78,5 +81,40 @@ public class AccountMobileCodeController extends BaseController {
 		addMessage(redirectAttributes, "删除短信验证码成功");
 		return "redirect:"+Global.getAdminPath()+"/account/accountMobileCode/list?repage";
 	}
+
+	/**
+	 * 保存手机验证码
+	 * @param accountMobileCode
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/account/accountMobileCode/saveCheckCode")
+	public void saveCheckCode(AccountMobileCode accountMobileCode,HttpServletRequest request,HttpServletResponse response){
+		try {
+//			accountMobileCode.setUser(UserUtils.getUser());
+			accountMobileCodeService.save(accountMobileCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "保存数据失败", null);
+			return ;
+		}
+		this.resultSuccessData(request,response, "保存数据成功", null);
+
+	}
+
+	@RequestMapping(value = "${portalPath}/account/accountMobileCode/sendCheckCode")
+	public void sendCheckCode(HttpServletRequest request,HttpServletResponse response){
+		try{
+			new MessageUtils().sendMessage(request.getParameter("tel"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败", null);
+			return ;
+		}
+			this.resultSuccessData(request,response, "操作成功", null);
+
+
+		}
+
 
 }

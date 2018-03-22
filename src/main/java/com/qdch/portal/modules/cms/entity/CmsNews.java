@@ -3,10 +3,13 @@
  */
 package com.qdch.portal.modules.cms.entity;
 
+import com.qdch.portal.modules.sys.entity.Dict;
 import org.hibernate.validator.constraints.Length;
 import com.qdch.portal.modules.sys.entity.User;
 
 import com.qdch.portal.common.persistence.DataEntity;
+
+import java.util.List;
 
 /**
  * 资讯Entity
@@ -47,6 +50,16 @@ public class CmsNews extends DataEntity<CmsNews> {
 
 	private String content;		// 文章内容 不包含HTML
 	private String contentHtml;		// 文章内容 包含HTML
+
+	private List<Dict> typeDict;
+
+	public List<Dict> getTypeDict() {
+		return typeDict;
+	}
+
+	public void setTypeDict(List<Dict> typeDict) {
+		this.typeDict = typeDict;
+	}
 
 	public String getContent() {
 		return content;

@@ -78,9 +78,15 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">标签，多个 用&ldquo;，&rdquo;分开并且开头结尾也是逗号,比如 ,1,2,3,：</label>
+			<label class="control-label">标签：</label>
 			<div class="controls">
-				<form:input path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<%--<form:select hidden="true" path="tags" class="input-xlarge " value="2">
+					<form:option value="" label=""/>
+					<c:forEach var="a" items="${ cmsNews.typeDict }">
+						<form:option value="${a.value}" label="${a.label}"/>
+					</c:forEach>
+				</form:select>--%>
+				<form:checkboxes items="${fns:getDictList('tags_type')}" path="tags" itemLabel="label" itemValue="value" htmlEscape="false"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -230,6 +236,14 @@
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
+
+		<div class="control-group">
+			<label class="control-label">正文:</label>
+			<div class="controls">
+				<form:textarea    id="contentHtml" htmlEscape="false" path="contentHtml" rows="4" maxlength="200" class="input-xxlarge"/>
+				<sys:ckeditor replace="contentHtml" uploadPath="/cms/news" />
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
@@ -241,5 +255,9 @@
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
+<script>
+ console.log('----------'+'${cmsNews.typeDict}')
+	console.log('${table}')
+</script>
 </body>
 </html>

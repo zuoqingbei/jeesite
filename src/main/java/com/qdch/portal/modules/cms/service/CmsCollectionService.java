@@ -5,6 +5,7 @@ package com.qdch.portal.modules.cms.service;
 
 import java.util.List;
 
+import com.qdch.portal.modules.cms.entity.CmsPraise;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,12 @@ public class CmsCollectionService extends CrudService<CmsCollectionDao, CmsColle
 	@Transactional(readOnly = false)
 	public void delete(CmsCollection cmsCollection) {
 		super.delete(cmsCollection);
+	}
+
+
+	@Transactional(readOnly = false)
+	public boolean getDynamicSelf(CmsCollection cmsCollection) {
+		return  dao.getDynamicSelf(cmsCollection)>0?true:false;
 	}
 	
 }

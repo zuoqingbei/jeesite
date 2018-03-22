@@ -18,8 +18,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsShare/">用户分享记录列表</a></li>
-		<shiro:hasPermission name="cms:cmsShare:edit"><li><a href="${ctx}/cms/cmsShare/form">用户分享记录添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/cms/cmsShare/list">用户分享记录列表</a></li>
+		<%--<shiro:hasPermission name="cms:cmsShare:edit"><li><a href="${ctx}/cms/cmsShare/form">用户分享记录添加</a></li></shiro:hasPermission>--%>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsShare" action="${ctx}/cms/cmsShare/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -36,6 +36,9 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>赞踩内容源id</th>
+				<th>内容来源表</th>
+				<th>用户</th>
 				<th>分享标题</th>
 				<th>分享地址</th>
 				<th>分享时间</th>
@@ -45,9 +48,14 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsShare">
 			<tr>
-				<td><a href="${ctx}/cms/cmsShare/form?id=${cmsShare.id}">
-					${cmsShare.title}
-				</a></td>
+				<td>${cmsShare.sourceId}</td>
+				<td>
+						${cmsShare.sourceTable}
+				</td>
+				<td>
+						${cmsShare.user.name}
+				</td>
+				<td>${cmsShare.title}</td>
 				<td>
 					${cmsShare.url}
 				</td>

@@ -5,6 +5,7 @@ package com.qdch.portal.modules.cms.dao;
 
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
+import com.qdch.portal.modules.cms.entity.CmsCollection;
 import com.qdch.portal.modules.cms.entity.CmsShare;
 
 /**
@@ -14,5 +15,20 @@ import com.qdch.portal.modules.cms.entity.CmsShare;
  */
 @MyBatisDao
 public interface CmsShareDao extends CrudDao<CmsShare> {
+
+    /**
+     * 获得分享的数量
+     * @param cmsShare
+     * @return
+     */
+    public int getShareCount(CmsShare cmsShare);
+
+
+    /**
+     * 我是否有分享
+     * @param cmsShare
+     * @return
+     */
+    public int getDynamicSelf(CmsShare cmsShare);
 	
 }

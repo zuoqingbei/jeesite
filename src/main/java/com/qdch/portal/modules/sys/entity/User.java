@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
+import com.qdch.portal.common.config.Constant;
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.DataEntity;
 import com.qdch.portal.common.supcan.annotation.treelist.cols.SupCol;
@@ -23,7 +24,8 @@ import com.qdch.portal.common.utils.excel.annotation.ExcelField;
 import com.qdch.portal.common.utils.excel.fieldtype.RoleListType;
 import com.qdch.portal.modules.subscribe.entity.AccountSubscribeHistory;
 import com.qdch.portal.modules.sys.entity.Role.RoleTypeEnum;
-import com.qdch.portal.modules.sys.utils.UserUtils;
+import com.qdch.portal.modules.sys.service.SystemService;
+import com.qdch.portal.thirdplat.entity.AccountThirdplat;
 
 /**
  * 用户Entity
@@ -90,7 +92,26 @@ public class User extends DataEntity<User> {
 		super();
 		this.loginFlag = Global.YES;
 	}
-	
+	public User(String name,AccountThirdplat accountThirdplat) {
+		super();
+		this.loginFlag = Global.YES;
+		this.name=name;
+		this.loginName=accountThirdplat.getNickName();
+		this.password=SystemService.entryptPassword(Constant.DEFAULT_PWD);
+		this.photo=accountThirdplat.getImage();
+		this.company=new Office("1");
+		this.office=new Office("1");
+		this.userType="0";
+		this.createBy=new User("1");
+		this.delFlag=DEL_FLAG_NORMAL;
+		this.updateDate = new Date();
+		this.createDate = this.updateDate;
+		this.updateBy=this.createBy;
+		List<Role> roleList = Lists.newArrayList();
+		Role r=new Role("6");
+		roleList.add(r);
+		this.roleList=roleList;
+	}
 	public User(String id){
 		super(id);
 	}

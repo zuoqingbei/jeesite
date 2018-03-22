@@ -223,4 +223,10 @@ public class LoginController extends BaseController{
 		}
 		return loginFailNum >= 3;
 	}
+	@RequestMapping(value = "${adminPath}/logout")
+	public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
+		UserUtils.getSubject().logout();
+		//UserUtils.removeCache("");
+		return "redirect:" + adminPath+"/login";
+	}
 }

@@ -109,5 +109,46 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
+
+
+	<select id="getTradeCount" resultType="CmsPraise">
+		SELECT
+		count(*)
+		FROM
+		cms_praise a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+		AND operate_type = '0'
+	</select>
+
+	<select id="getPraiseCount" resultType="CmsPraise">
+		SELECT
+		count(*)
+		FROM
+		cms_praise a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+		AND operate_type = '0'
+	</select>
+
+	<select id="getDynamicSelf" resultType="CmsPraise">
+		SELECT
+		count(*)
+		FROM
+		cms_praise a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+		AND operate_type = '0'
+		and a.user_id=#{user.id}
+	</select>
+
+
+
+
 </mapper>

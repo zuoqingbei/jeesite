@@ -89,5 +89,31 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+
+	<select id="getCollectionCount" resultType="CmsCollection">
+		SELECT
+		count(*)
+		FROM
+		cms_collection a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+
+	</select>
+
+	<select id="getDynamicSelf" resultType="CmsCollection">
+		SELECT
+		count(*)
+		FROM
+		cms_collection a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+
+		and a.user_id=#{user.id}
+	</select>
 	
 </mapper>

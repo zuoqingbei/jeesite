@@ -18,17 +18,17 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsComplaint/">投诉列表</a></li>
-		<a href="${ctx}/cms/cmsComplaint/form">投诉添加</a></li>
+		<li class="active"><a href="${ctx}/cms/cmsComplaint/">举报列表</a></li>
+		<shiro:hasPermission name="cms:cmsComplaint:edit"><li><a href="${ctx}/cms/cmsComplaint/form">举报添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsComplaint" action="${ctx}/cms/cmsComplaint/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>投诉主题：</label>
+			<li><label>标题/内容：</label>
 				<form:input path="title" htmlEscape="false" maxlength="500" class="input-medium"/>
 			</li>
-			<li><label>被投诉方名称：</label>
+			<li><label>举报对象：</label>
 				<form:input path="companyName" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -39,14 +39,16 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>投诉主题</th>
-				<th>图片 多张 用逗号分开</th>
-				<th>投诉来源 公众号 PC APP</th>
-				<th>被投诉方名称</th>
-				<th>被投诉方地址</th>
-				<th>投诉内容描述</th>
-				<th>投诉日期</th>
-				<th>备注信息</th>
+				<th>标题</th>
+				<th>举报人</th>
+			    <th>联系方式</th>
+				<th>图片</th>
+				<th>数据来源</th>
+				<th>举报对象</th>
+				<th>发现地点</th>
+				<th>发现时间</th>
+				<th>内容</th>
+				<th>备注</th>
 				<shiro:hasPermission name="cms:cmsComplaint:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -56,6 +58,12 @@
 				<td><a href="${ctx}/cms/cmsComplaint/form?id=${cmsComplaint.id}">
 					${cmsComplaint.title}
 				</a></td>
+				<td>
+					${cmsComplaint.user.name}
+				</td>
+				<td>
+					${cmsComplaint.user.mobile}
+				</td>
 				<td>
 					${cmsComplaint.image}
 				</td>
