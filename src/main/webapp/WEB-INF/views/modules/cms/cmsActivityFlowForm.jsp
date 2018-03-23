@@ -27,8 +27,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsActivityFlow/">活动日程列表</a></li>
-		<li class="active"><a href="${ctx}/cms/cmsActivityFlow/form?id=${cmsActivityFlow.id}">活动日程<shiro:hasPermission name="cms:cmsActivityFlow:edit">${not empty cmsActivityFlow.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsActivityFlow:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/cms/cmsActivityFlow/list">活动日程列表</a></li>
+		<%--<li class="active"><a href="${ctx}/cms/cmsActivityFlow/form?id=${cmsActivityFlow.id}">活动日程<shiro:hasPermission name="cms:cmsActivityFlow:edit">${not empty cmsActivityFlow.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsActivityFlow:edit">查看</shiro:lacksPermission></a></li>--%>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsActivityFlow" action="${ctx}/cms/cmsActivityFlow/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>

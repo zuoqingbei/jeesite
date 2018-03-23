@@ -18,8 +18,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsActivityFlow/">活动日程列表</a></li>
-		<shiro:hasPermission name="cms:cmsActivityFlow:edit"><li><a href="${ctx}/cms/cmsActivityFlow/form">活动日程添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/cms/cmsActivityFlow/list">活动日程列表</a></li>
+		<%--<shiro:hasPermission name="cms:cmsActivityFlow:edit"><li><a href="${ctx}/cms/cmsActivityFlow/form">活动日程添加</a></li></shiro:hasPermission>--%>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsActivityFlow" action="${ctx}/cms/cmsActivityFlow/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -28,21 +28,21 @@
 			<li><label>标题：</label>
 				<form:input path="title" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
-			<li><label>当前流程开始时间：</label>
-				<input name="flowStartTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${cmsActivityFlow.flowStartTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</li>
-			<li><label>流程结束时间：</label>
-				<input name="flowEndTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${cmsActivityFlow.flowEndTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</li>
-			<li><label>收藏时间：</label>
-				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${cmsActivityFlow.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</li>
+			<%--<li><label>当前流程开始时间：</label>--%>
+				<%--<input name="flowStartTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"--%>
+					<%--value="<fmt:formatDate value="${cmsActivityFlow.flowStartTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"--%>
+					<%--onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>--%>
+			<%--</li>--%>
+			<%--<li><label>流程结束时间：</label>--%>
+				<%--<input name="flowEndTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"--%>
+					<%--value="<fmt:formatDate value="${cmsActivityFlow.flowEndTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"--%>
+					<%--onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>--%>
+			<%--</li>--%>
+			<%--<li><label>收藏时间：</label>--%>
+				<%--<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"--%>
+					<%--value="<fmt:formatDate value="${cmsActivityFlow.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"--%>
+					<%--onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>--%>
+			<%--</li>--%>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
@@ -58,7 +58,7 @@
 				<th>当前流程内容介绍 支持HTML</th>
 				<th>创建人</th>
 				<th>收藏时间</th>
-				<th>remarks</th>
+				<%--<th>remarks</th>--%>
 				<shiro:hasPermission name="cms:cmsActivityFlow:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -69,7 +69,8 @@
 					${cmsActivityFlow.title}
 				</a></td>
 				<td>
-					${cmsActivityFlow.images}
+					<img src="${cmsActivityFlow.images}" style="width:80px;height:80px;"/>
+
 				</td>
 				<td>
 					<fmt:formatDate value="${cmsActivityFlow.flowEndTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -86,11 +87,11 @@
 				<td>
 					<fmt:formatDate value="${cmsActivityFlow.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
-				<td>
-					${cmsActivityFlow.remarks}
-				</td>
+				<%--<td>--%>
+					<%--${cmsActivityFlow.remarks}--%>
+				<%--</td>--%>
 				<shiro:hasPermission name="cms:cmsActivityFlow:edit"><td>
-    				<a href="${ctx}/cms/cmsActivityFlow/form?id=${cmsActivityFlow.id}">修改</a>
+    				<%--<a href="${ctx}/cms/cmsActivityFlow/form?id=${cmsActivityFlow.id}">修改</a>--%>
 					<a href="${ctx}/cms/cmsActivityFlow/delete?id=${cmsActivityFlow.id}" onclick="return confirmx('确认要删除该活动日程吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>

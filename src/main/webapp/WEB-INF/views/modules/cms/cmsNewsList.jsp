@@ -148,7 +148,8 @@
 					
 				</td>
 				<td>
-					${cmsNews.image}
+					<img src="${cmsNews.image}" style="width:80px;height:80px;"/>
+
 				</td>
 			<%-- 	<td>
 					${cmsNews.keywords}
