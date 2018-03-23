@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao;
-import com.qdch.portal.modules.cms.entity.CmsShare;
+import com.qdch.portal.modules.cms.entity.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +21,12 @@ import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
-import com.qdch.portal.modules.cms.entity.CmsPortalComments;
 import com.qdch.portal.modules.cms.service.CmsPortalCommentsService;
+
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 /**
  * 门户评论Controller
@@ -71,6 +75,7 @@ public class CmsPortalCommentsController extends BaseController {
 		if (!beanValidator(model, cmsPortalComments)){
 			return form(cmsPortalComments, model);
 		}
+		cmsPortalComments.setIp(getServerIp());
 		cmsPortalCommentsService.save(cmsPortalComments);
 		addMessage(redirectAttributes, "保存门户评论成功");
 		return "redirect:"+Global.getAdminPath()+"/cms/cmsPortalComments/list?repage";
@@ -212,6 +217,53 @@ public class CmsPortalCommentsController extends BaseController {
 		}
 		this.resultSuccessData(request,response, "操作成功",
 				mapJson(page,"success","获取数据成功"));
+	}
+
+
+	/**
+	 * 获取服务器IP地址
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static String  getServerIp(){
+		String SERVER_IP = null;
+		try {
+			Enumeration netInterfaces = NetworkInterface.getNetworkInterfaces();
+			InetAddress ip = null;
+			while (netInterfaces.hasMoreElements()) {
+				NetworkInterface ni = (NetworkInterface) netInterfaces.nextElement();
+				ip = (InetAddress) ni.getInetAddresses().nextElement();
+				SERVER_IP = ip.getHostAddress();
+				if (!ip.isSiteLocalAddress() && !ip.isLoopbackAddress()
+						&& ip.getHostAddress().indexOf(":") == -1) {
+					SERVER_IP = ip.getHostAddress();
+					break;
+				} else {
+					ip = null;
+				}
+			}
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return SERVER_IP;
+
+}
+
+	@RequestMapping(value = "${adminPath}/cms/cmsPortalComments/changeState")
+	public void  changeState(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
+		try {
+
+			cmsPortalCommentsDao.changeState(cmsPortalComments);
+			this.resultSuccessData(request,response, "修改成功", true);
+			return;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "修改失败", false);
+			return;
+		}
 	}
 
 }

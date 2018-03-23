@@ -344,10 +344,14 @@
 <!--资讯排行-->
 	<select id="getRank" resultType="CmsNews">
 		SELECT
-		a.*
+		<include refid="cmsNewsColumns"/>
 		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
 
 		WHERE  a.del_flag='0'
+		<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
+		</if>
 		order by 1
 		<if test="hits != null and hits != ''">
 			,hits desc
@@ -383,5 +387,49 @@
 
 
 	</select>
-	
+
+
+
+	<!--<select id="getRank" resultType="CmsNews">-->
+		<!--SELECT-->
+		<!--a.*-->
+		<!--FROM cms_news a-->
+
+		<!--WHERE  a.del_flag='0'-->
+		<!--order by 1-->
+		<!--<if test="hits != null and hits != ''">-->
+			<!--,hits desc-->
+		<!--</if>-->
+		<!--<if test="transmit != null and transmit != ''">-->
+			<!--,transmit desc-->
+		<!--</if>-->
+		<!--<if test="discess != null and discess != ''">-->
+			<!--,discess desc-->
+		<!--</if>-->
+		<!--<if test="praise != null and praise != ''">-->
+			<!--,praise desc-->
+		<!--</if>-->
+		<!--<if test="tread != null and tread != ''">-->
+			<!--,tread desc-->
+		<!--</if>-->
+		<!--<if test="collection != null and collection != ''">-->
+			<!--,collection desc-->
+		<!--</if>-->
+		<!--<if test="report != null and report != ''">-->
+			<!--,report desc-->
+		<!--</if>-->
+		<!--<if test="evaluate != null and evaluate != ''">-->
+			<!--,evaluate desc-->
+		<!--</if>-->
+		<!--<if test="tip != null and tip != ''">-->
+			<!--,tip desc-->
+		<!--</if>-->
+		<!--<if test="view != null and view != ''">-->
+			<!--,view desc-->
+		<!--</if>-->
+		<!--, a.update_date DESC-->
+
+
+	<!--</select>-->
+	<!---->
 </mapper>

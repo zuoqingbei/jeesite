@@ -13,6 +13,7 @@ import com.qdch.portal.modules.cms.service.CmsNewsDataService;
 import com.qdch.portal.modules.cms.utils.RegUtils;
 import com.qdch.portal.modules.sys.entity.Dict;
 import com.qdch.portal.modules.sys.service.DictService;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -93,12 +94,20 @@ public class CmsNewsController extends BaseController {
 //	@RequiresPermissions("cms:cmsNews:view")
 	@RequestMapping(value = "${adminPath}/cms/cmsNews/form")
 	public String form(CmsNews cmsNews, Model model) {
-		Dict dict = new Dict();
-		dict.setType("tags_type");
-		cmsNews  = cmsNewsService.getContent(cmsNews);
-		cmsNews.setTypeDict(dictService.findByType(dict));
-		model.addAttribute("cmsNews", cmsNews);
-		model.addAttribute("table","CmsNews");
+		try {
+			Dict dict = new Dict();
+			dict.setType("tags_type");
+			cmsNews  = cmsNewsService.getContent(cmsNews);
+			if(cmsNews == null){
+				cmsNews = new CmsNews();
+			}
+			List<Dict> dicts = dictService.findByType(dict);
+			cmsNews.setTypeDict(dicts);
+			model.addAttribute("cmsNews", cmsNews);
+//			model.addAttribute("table","CmsNews");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "modules/cms/cmsNewsForm";
 	}
 
@@ -109,6 +118,8 @@ public class CmsNewsController extends BaseController {
 			return form(cmsNews, model);
 		}
 		try {
+			cmsNews.setDataType("2");
+			cmsNews.setUser(UserUtils.getUser());
 			cmsNewsService.save(cmsNews);
 			CmsNewsData cmsNewsData = cmsNewsDataDao.getByNewId(cmsNews.getId());
 			if(cmsNewsData == null){
@@ -191,12 +202,24 @@ public class CmsNewsController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRank")
 	public void getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
+			String tags = cmsNews.getTags();
+			if(tags !=null  && !tags.equals("")){
+				if(tags.startsWith(",")){
+					tags = tags.substring(1);
+				}
+				if(tags.endsWith(",")){
+					tags = tags.substring(0,tags.length()-1);
+				}
+				cmsNews.setTags(tags);
+			}
 			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
 			this.resultSuccessData(request,response, "获取数据成功",
 					mapJson(page,"success","获取数据成功"));
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
+			this.resultSuccessData(request,response, "获取数据失败",
+					"false");
+			return;
 		}
 	}
 

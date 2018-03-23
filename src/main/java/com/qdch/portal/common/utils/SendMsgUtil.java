@@ -14,7 +14,7 @@ public class SendMsgUtil {
 
 	public static  String presend(String tel){
 		String returnmsg = "";
-		String MessageCache = JedisUtils.get("MessageCache");
+		String MessageCache = JedisUtils.get("MessageCache"+tel);
 		if(MessageCache != null){
 			returnmsg = "发送过于频繁";
 			return returnmsg;
@@ -39,8 +39,10 @@ public class SendMsgUtil {
 		param += "&msg="+msg;
 		param += "&sign="+Constant.MSG_USER_SIGN;
 		String str = HttpClientUtil.sendPostRequest(Constant.MSG_API_URL, param,true);
-		if(str.equals("success")){
-			JedisUtils.set("MessageCache", code, 60*5);
+
+		System.out.println("-----"+str.substring(0,str.indexOf(",")));
+		if(str.substring(0,str.indexOf(",")).equals("success")){
+			JedisUtils.set("MessageCache"+phoneNum, code, 60*5);
 			return "true";
 		}else{
 			return "false";
@@ -69,9 +71,9 @@ public class SendMsgUtil {
 	/**
 	 * 校验验证码是否正确
 	 */
-	public static String  checkIndentifyCode(String code ){
+	public static String  checkIndentifyCode(String tel,String code ){
 		String returnmsg = "";
-		String sysCode =  JedisUtils.get("MessageCache");
+		String sysCode =  JedisUtils.get("MessageCache"+tel);
 		if(sysCode == null){
 			returnmsg = "请先点击发送验证码";
 			return returnmsg;

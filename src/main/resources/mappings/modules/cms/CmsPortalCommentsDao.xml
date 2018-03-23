@@ -204,5 +204,10 @@
 		) b ON m.id = b.source_id
 
 	</select>
+
+	<select id="changeState" resultType="CmsPortalComments">
+
+		update cms_portal_comments  set status=#{status} where id=${id}
+	</select>
 	
 </mapper>

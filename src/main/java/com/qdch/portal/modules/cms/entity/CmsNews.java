@@ -53,6 +53,16 @@ public class CmsNews extends DataEntity<CmsNews> {
 
 	private List<Dict> typeDict;
 
+	private String tagslabel;
+
+	public String getTagslabel() {
+		return tagslabel;
+	}
+
+	public void setTagslabel(String tagslabel) {
+		this.tagslabel = tagslabel;
+	}
+
 	public List<Dict> getTypeDict() {
 		return typeDict;
 	}

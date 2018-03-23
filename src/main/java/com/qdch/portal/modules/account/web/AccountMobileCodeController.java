@@ -108,17 +108,25 @@ public class AccountMobileCodeController extends BaseController {
 	public void sendCheckCode(HttpServletRequest request,HttpServletResponse response){
 		try{
 			String mobile = request.getParameter("mobile");
-			String codes = request.getParameter("codes");
+//			String codes = request.getParameter("codes");
 			String uasge = request.getParameter("uasge")==null?"0":request.getParameter("uasge");
 			String str = SendMsgUtil.presend(mobile);
 			if(str.equals("true")){
 				AccountMobileCode accountMobileCode = new AccountMobileCode();
 				accountMobileCode.setMobile(mobile);
-				accountMobileCode.setCodes(JedisUtils.get("MessageCache"));
+				accountMobileCode.setCodes(JedisUtils.get("MessageCache"+mobile));
 				accountMobileCode.setUasge(uasge);
 				accountMobileCodeService.save(accountMobileCode);
+				this.resultSuccessData(request,response, "操作成功", true);
+				return;
+			}else if(str.equals("false")){
+				this.resultSuccessData(request,response, "操作失败", false);
+				return ;
+			}else{
+				this.resultSuccessData(request,response, str, false);
+				return ;
 			}
-			this.resultSuccessData(request,response, "操作成功", true);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultSuccessData(request,response, "操作失败", false);
@@ -134,7 +142,8 @@ public class AccountMobileCodeController extends BaseController {
 	 */
 	@RequestMapping(value = "${portalPath}/account/accountMobileCode/checkIndentifyCode")
 	public void checkIndentifyCode(HttpServletRequest request,HttpServletResponse response){
-		String str = SendMsgUtil.checkIndentifyCode(request.getParameter("codes"));
+		String str = SendMsgUtil.checkIndentifyCode(request.getParameter("mobile"),
+				request.getParameter("codes"));
 		if(str.equals("true")){
 			this.resultSuccessData(request,response, "操作成功", true);
 			return ;

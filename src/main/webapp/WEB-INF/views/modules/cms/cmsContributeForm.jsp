@@ -68,17 +68,21 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">内容 包含HTML标签：</label>
+			<label class="control-label">内容：</label>
 			<div class="controls">
-				<form:input disabled="true" path="contentHtml" htmlEscape="false" class="input-xlarge "/>
+				<form:textarea    id="contentHtml" htmlEscape="false" path="contentHtml" rows="4" maxlength="200" class="input-xxlarge"/>
+				<sys:ckeditor replace="contentHtml" uploadPath="/cms/cmsContribute" />
 			</div>
+			<%--<div class="controls">--%>
+				<%--<form:input disabled="true" path="contentHtml" htmlEscape="false" class="input-xlarge "/>--%>
+			<%--</div>--%>
 		</div>
-		<div class="control-group">
-			<label class="control-label">内容 不包含HTML标签：</label>
-			<div class="controls">
-				<form:textarea disabled="true" path="content" htmlEscape="false" rows="4" class="input-xxlarge "/>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">内容 不包含HTML标签：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:textarea disabled="true" path="content" htmlEscape="false" rows="4" class="input-xxlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="control-group">
 			<label class="control-label">图片：</label>
 			<div class="controls">
@@ -95,7 +99,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">标签，多个 用&ldquo;，&rdquo;分开并且开头结尾也是逗号,比如 ,1,2,3,：</label>
+			<label class="control-label">标签：</label>
 			<div class="controls">
 				<form:input disabled="true" path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
@@ -119,12 +123,12 @@
 				</form:select>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">备注信息：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="form-actions">
 <%-- 			<shiro:hasPermission name="cms:cmsContribute:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="审核通过"/>&nbsp;</shiro:hasPermission>
  --%>			

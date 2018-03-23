@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao;
 import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.entity.CmsNewsData;
 import com.qdch.portal.modules.cms.service.CmsNewsDataService;
@@ -47,6 +48,7 @@ public class CmsContributeController extends BaseController {
 
 	@Autowired
 	private CmsNewsDataService cmsNewsDataService;
+
 	
 	@ModelAttribute
 	
@@ -72,6 +74,8 @@ public class CmsContributeController extends BaseController {
 	@RequiresPermissions("cms:cmsContribute:view")
 	@RequestMapping(value = "${adminPath}/cms/cmsContribute/form")
 	public String form(CmsContribute cmsContribute, Model model) {
+
+
 		model.addAttribute("cmsContribute", cmsContribute);
 		return "modules/cms/cmsContributeForm";
 	}
@@ -138,12 +142,13 @@ public class CmsContributeController extends BaseController {
                 cmsNewsDataService.save(cmsNewsData1);
 			}
 
-//		HashMap< String, Object> r=new HashMap<String, Object>();
-//		r.put("status", "value");
-			 this.resultSuccessData(request,response, "修改成功", null);
+			 this.resultSuccessData(request,response, "修改成功", true);
+			return;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			this.resultSuccessData(request,response, "修改失败", false);
+			return;
 		}
 	}
 
@@ -167,7 +172,7 @@ public class CmsContributeController extends BaseController {
 
 	/**
 	 * 前台-保存
-	 * @param cmsNews
+	 * @param 
 	 * @param model
 	 * @param request
 	 * @param response

@@ -43,6 +43,15 @@ public class CmsPortalComments extends DataEntity<CmsPortalComments> {
 
 	private String parentId;
 
+	private  String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public String getTradeCount() {
 		return tradeCount;
