@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsEducation/">投资教育列表</a></li>
+		<li><a href="${ctx}/cms/cmsEducation/list">投资教育列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsEducation/form?id=${cmsEducation.id}">投资教育<shiro:hasPermission name="cms:cmsEducation:edit">${not empty cmsEducation.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsEducation:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsEducation" action="${ctx}/cms/cmsEducation/save" method="post" class="form-horizontal">
@@ -62,7 +62,8 @@
 		<div class="control-group">
 			<label class="control-label">文章图片：</label>
 			<div class="controls">
-				<form:input path="image" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:hidden id="image" path="image" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="image" type="files" uploadPath="/cms/education" selectMultiple="false"/>
 			</div>
 		</div>
 		<div class="control-group">

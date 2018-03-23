@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsComment/">评论表列表</a></li>
+		<li><a href="${ctx}/cms/cmsComment/list">评论表列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsComment/form?id=${cmsComment.id}">评论表<shiro:hasPermission name="cms:cmsComment:edit">${not empty cmsComment.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsComment:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsComment" action="${ctx}/cms/cmsComment/save" method="post" class="form-horizontal">

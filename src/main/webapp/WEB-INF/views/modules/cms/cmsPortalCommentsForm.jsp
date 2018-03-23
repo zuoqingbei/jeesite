@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsPortalComments/">门户评论列表</a></li>
+		<li><a href="${ctx}/cms/cmsPortalComments/list">门户评论列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsPortalComments/form?id=${cmsPortalComments.id}">门户评论<shiro:hasPermission name="cms:cmsPortalComments:edit">${not empty cmsPortalComments.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsPortalComments:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsPortalComments" action="${ctx}/cms/cmsPortalComments/save" method="post" class="form-horizontal">

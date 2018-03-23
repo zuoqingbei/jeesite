@@ -18,7 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsBanner/">轮播图管理列表</a></li>
+		<li class="active"><a href="${ctx}/cms/cmsBanner/list">轮播图管理列表</a></li>
 		<shiro:hasPermission name="cms:cmsBanner:edit"><li><a href="${ctx}/cms/cmsBanner/form">轮播图管理添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsBanner" action="${ctx}/cms/cmsBanner/list" method="post" class="breadcrumb form-search">

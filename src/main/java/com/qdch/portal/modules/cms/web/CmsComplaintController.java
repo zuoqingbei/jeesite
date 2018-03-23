@@ -45,7 +45,7 @@ public class CmsComplaintController extends BaseController {
 		return entity;
 	}
 	
-	/*@RequiresPermissions("cms:cmsComplaint:view")*/
+	@RequiresPermissions("cms:cmsComplaint:view")
 	@RequestMapping(value = {"${adminPath}/cms/cmsComplaint/list"})
 	public String list(CmsComplaint cmsComplaint, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CmsComplaint> page = cmsComplaintService.findPage(new Page<CmsComplaint>(request, response), cmsComplaint); 
@@ -53,14 +53,14 @@ public class CmsComplaintController extends BaseController {
 		return "modules/cms/cmsComplaintList";
 	}
 
-	/*@RequiresPermissions("cms:cmsComplaint:view")*/
+	@RequiresPermissions("cms:cmsComplaint:view")
 	@RequestMapping(value = "${adminPath}/cms/cmsComplaint/form")
 	public String form(CmsComplaint cmsComplaint, Model model) {
 		model.addAttribute("cmsComplaint", cmsComplaint);
 		return "modules/cms/cmsComplaintForm";
 	}
 
-	/*@RequiresPermissions("cms:cmsComplaint:edit")*/
+	@RequiresPermissions("cms:cmsComplaint:edit")
 	@RequestMapping(value = "${adminPath}/cms/cmsComplaint/save")
 	public String save(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, cmsComplaint)){
@@ -71,7 +71,7 @@ public class CmsComplaintController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/cms/cmsComplaint/list?repage";
 	}
 	
-	/*@RequiresPermissions("cms:cmsComplaint:edit")*/
+	@RequiresPermissions("cms:cmsComplaint:edit")
 	@RequestMapping(value = "${adminPath}/cms/cmsComplaint/delete")
 	public String delete(CmsComplaint cmsComplaint, RedirectAttributes redirectAttributes) {
 		cmsComplaintService.delete(cmsComplaint);

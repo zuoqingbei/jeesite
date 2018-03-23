@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsPraise/">用户赞 踩记录列表</a></li>
+		<li><a href="${ctx}/cms/cmsPraise/list">用户赞 踩记录列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">用户赞 踩记录<shiro:hasPermission name="cms:cmsPraise:edit">${not empty cmsPraise.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsPraise:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsPraise" action="${ctx}/cms/cmsPraise/save" method="post" class="form-horizontal">
