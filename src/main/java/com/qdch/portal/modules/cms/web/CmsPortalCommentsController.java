@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao;
 import com.qdch.portal.modules.cms.entity.*;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,8 @@ import com.qdch.portal.modules.cms.service.CmsPortalCommentsService;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 
 /**
@@ -35,6 +38,8 @@ import java.util.Enumeration;
  */
 @Controller
 public class CmsPortalCommentsController extends BaseController {
+
+	private static  SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
 	@Autowired
 	private CmsPortalCommentsService cmsPortalCommentsService;
@@ -255,6 +260,8 @@ public class CmsPortalCommentsController extends BaseController {
 	public void  changeState(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
 		try {
 
+			cmsPortalComments.setAuditUserId(UserUtils.getUser().getUserId());
+			cmsPortalComments.setAuditDate(new Date());
 			cmsPortalCommentsDao.changeState(cmsPortalComments);
 			this.resultSuccessData(request,response, "修改成功", true);
 			return;

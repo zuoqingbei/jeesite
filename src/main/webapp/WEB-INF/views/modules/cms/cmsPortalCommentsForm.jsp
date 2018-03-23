@@ -111,7 +111,8 @@
                 data: {id:'${cmsPortalComments.id}',status:"1"},
                 dataType: "json",
                 success: function(data){
-                    alert(data.resMessage);
+                    console.log(data)
+                    alert(data.msg);
                     location.replace(document.referrer); //返回上一个页面，并刷新
                 }
             });
@@ -124,7 +125,7 @@
                 data: {id:'${cmsPortalComments.id}',status:"2"},
                 dataType: "json",
                 success: function(data){
-                    alert(data.resMessage);
+                    alert(data.msg);
                     location.replace(document.referrer);
                 }
             });

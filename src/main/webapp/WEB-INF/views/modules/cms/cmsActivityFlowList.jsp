@@ -55,7 +55,7 @@
 				<th>图片</th>
 				<th>流程结束时间</th>
 				<th>流程排序</th>
-				<th>当前流程内容介绍 支持HTML</th>
+				<%--<th>当前流程内容介绍 支持HTML</th>--%>
 				<th>创建人</th>
 				<th>收藏时间</th>
 				<%--<th>remarks</th>--%>
@@ -78,11 +78,11 @@
 				<td>
 					${cmsActivityFlow.orderNum}
 				</td>
+				<%--<td>--%>
+					<%--${cmsActivityFlow.descs}--%>
+				<%--</td>--%>
 				<td>
-					${cmsActivityFlow.descs}
-				</td>
-				<td>
-					${cmsActivityFlow.createBy.id}
+					${cmsActivityFlow.createBy}
 				</td>
 				<td>
 					<fmt:formatDate value="${cmsActivityFlow.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

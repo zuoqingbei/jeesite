@@ -67,9 +67,12 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsPraise">
 			<tr>
-				<td><a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">
-					${cmsPraise.sourceId}
-				</a></td>
+				<td>
+						${cmsPraise.sourceId}
+					<%--<a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">--%>
+					<%--${cmsPraise.sourceId}--%>
+				<%--</a>--%>
+				</td>
 				<td>
 					${cmsPraise.sourceTable}
 				</td>

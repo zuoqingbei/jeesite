@@ -19,7 +19,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/cms/cmsCollection/list">用户收藏记录列表</a></li>
-		<shiro:hasPermission name="cms:cmsCollection:edit"><li><a href="${ctx}/cms/cmsCollection/form">用户收藏记录添加</a></li></shiro:hasPermission>
+		<%--<shiro:hasPermission name="cms:cmsCollection:edit"><li><a href="${ctx}/cms/cmsCollection/form">用户收藏记录添加</a></li></shiro:hasPermission>--%>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsCollection" action="${ctx}/cms/cmsCollection/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -51,9 +51,13 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsCollection">
 			<tr>
-				<td><a href="${ctx}/cms/cmsCollection/form?id=${cmsCollection.id}">
-					${cmsCollection.sourceId}
-				</a></td>
+				<td>
+					<%--<a href="${ctx}/cms/cmsCollection/form?id=${cmsCollection.id}">--%>
+					<%--${cmsCollection.sourceId}--%>
+				<%--</a>--%>
+							${cmsCollection.sourceId}
+
+				</td>
 				<td>
 					${cmsCollection.sourceTable}
 				</td>
@@ -64,7 +68,7 @@
 					<fmt:formatDate value="${cmsCollection.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="cms:cmsCollection:edit"><td>
-    				<a href="${ctx}/cms/cmsCollection/form?id=${cmsCollection.id}">修改</a>
+    				<%--<a href="${ctx}/cms/cmsCollection/form?id=${cmsCollection.id}">修改</a>--%>
 					<a href="${ctx}/cms/cmsCollection/delete?id=${cmsCollection.id}" onclick="return confirmx('确认要删除该用户收藏记录吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
