@@ -54,9 +54,12 @@
 
 	<select id="getContent" resultType="CmsNews">
 		SELECT
-		a.*
+		<include refid="cmsNewsColumns"/>
+
 		,b.content,b.content_html
-		FROM cms_news a left join (select * from  cms_news_data where del_flag='0') b on a.id=b.news_id
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		left join (select * from  cms_news_data where del_flag='0') b on a.id=b.news_id
 		<!--<include refid="cmsNewsJoins"/>-->
 		WHERE a.id = #{id} and a.del_flag='0'
 	</select>
@@ -432,4 +435,23 @@
 
 	<!--</select>-->
 	<!---->
+
+
+	<select id="getSimilarByTags" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		where 1=1
+		<if test="list != null and list != ''">
+			and
+			<foreach collection="array" item="e" open="" separator=" and " close="">
+				FIND_IN_SET(#{e},a.tags)
+
+			</foreach>
+		</if>
+
+		order by a.recommend desc,a.update_date desc
+		limit 3
+	</select>
 </mapper>

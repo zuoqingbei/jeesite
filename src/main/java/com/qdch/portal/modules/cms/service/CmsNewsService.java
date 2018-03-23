@@ -6,10 +6,10 @@ package com.qdch.portal.modules.cms.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.cms.entity.CmsActivity;
 import com.qdch.portal.modules.sys.dao.DictDao;
 import com.qdch.portal.modules.sys.entity.Dict;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +18,9 @@ import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.service.CrudService;
 import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.dao.CmsNewsDao;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 资讯Service
@@ -70,7 +73,22 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 
 	@Transactional(readOnly = false)
 	public CmsNews getContent(CmsNews cmsNews) {
-		return dao.getContent(cmsNews);
+		cmsNews = dao.getContent(cmsNews);
+		Dict dict = new Dict();
+		dict.setType("tags_type");
+		String tags = cmsNews.getTags();
+		if(tags != null && !tags.equals("")){
+			tags = StringUtils.delFrontAndEndSymbol(tags);
+			dict.setValue(tags);
+			Dict dict1 = dictDao.getLabelByIds(dict);
+			if(dict1 != null && !dict1.equals("")){
+				cmsNews.setTagslabel(dict1.getLabel());
+			}
+		}else{
+			cmsNews.setTagslabel("");
+		}
+
+		return cmsNews;
 	}
 
 
@@ -91,12 +109,7 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 			dict.setType("tags_type");
 			String tags = news.getTags();
 			if(tags !=null  && !tags.equals("")){
-				if(tags.startsWith(",")){
-					tags = tags.substring(1);
-				}
-				if(tags.endsWith(",")){
-					tags = tags.substring(0,tags.length()-1);
-				}
+				tags = StringUtils.delFrontAndEndSymbol(tags);
 				dict.setValue(tags);
 				Dict dict1 =  dictDao.getLabelByIds(dict);
 				if(dict1 !=null && !dict1.equals("")){
@@ -111,6 +124,8 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 		page.setList(resultlist);
 		return page;
 	}
+
+
 
 
 }
