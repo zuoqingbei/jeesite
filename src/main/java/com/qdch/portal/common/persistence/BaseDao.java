@@ -9,5 +9,5 @@ package com.qdch.portal.common.persistence;
  * @version 2014-05-16
  */
 public interface BaseDao {
-
+	
 }

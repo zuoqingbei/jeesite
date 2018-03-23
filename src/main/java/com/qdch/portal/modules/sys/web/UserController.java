@@ -51,6 +51,16 @@ public class UserController extends BaseController {
 	@Autowired
 	private SystemService systemService;
 	
+	//分页查询
+	@ResponseBody
+	@RequiresPermissions("sys:user:view")
+	@RequestMapping(value = {"listData"})
+	public Page<User> listData(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<User> page = systemService.findUser(new Page<User>(request, response), user);
+		return page;
+	}
+	
+	
 	@ModelAttribute
 	public User get(@RequestParam(required=false) String id) {
 		if (StringUtils.isNotBlank(id)){
@@ -66,7 +76,7 @@ public class UserController extends BaseController {
 		return "modules/sys/userIndex";
 	}
 
-	//@RequiresPermissions("sys:user:view")
+	@RequiresPermissions("sys:user:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<User> page = systemService.findUser(new Page<User>(request, response), user);
@@ -74,13 +84,7 @@ public class UserController extends BaseController {
 		return "modules/sys/userList";
 	}
 	
-	@ResponseBody
-	@RequiresPermissions("sys:user:view")
-	@RequestMapping(value = {"listData"})
-	public Page<User> listData(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<User> page = systemService.findUser(new Page<User>(request, response), user);
-		return page;
-	}
+
 
 	@RequiresPermissions("sys:user:view")
 	@RequestMapping(value = "form")

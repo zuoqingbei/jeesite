@@ -45,6 +45,7 @@ public class AccountSubscribeHistoryController extends BaseController {
 
 	@Autowired
 	private AccountSubscribeHistoryService accountSubscribeHistoryService;
+	
 	@Autowired
 	private SystemService systemService;
 	
@@ -57,7 +58,7 @@ public class AccountSubscribeHistoryController extends BaseController {
 	}
 	//添加订阅,取消订阅
 	@ResponseBody
-	@RequestMapping(value = "${adminPath}/subscrisbe/accountSubscribeHistory/save")
+	@RequestMapping(value = "${adminPath}/subscribe/accountSubscribeHistory/save")
 	public void save(AccountSubscribeHistory accountSubscribeHistory,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			//获取请求参数

@@ -61,7 +61,7 @@ public class User extends DataEntity<User> {
 	private Role role;	// 根据角色查询用户条件
 	private int type;
 	
-	//添加订阅
+
 	private List<AccountSubscribeHistory> accountSubscribeHistorylist; //查询用户订阅
 	
 	
