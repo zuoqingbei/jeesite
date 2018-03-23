@@ -21,6 +21,7 @@ public class AccountSubscribeHistory extends DataEntity<AccountSubscribeHistory>
 	private String lgoinName;	//用于显示登录名
 	private String label;		//用于显示订阅标签
 
+	
 	public String getLgoinName() {
 		return lgoinName;
 	}

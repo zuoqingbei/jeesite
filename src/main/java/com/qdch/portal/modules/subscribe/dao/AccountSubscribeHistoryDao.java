@@ -21,7 +21,4 @@ public interface AccountSubscribeHistoryDao extends CrudDao<AccountSubscribeHist
 	 * @param accountSubscribeHistory 用户订阅实体
 	 */
 	public void save(AccountSubscribeHistory accountSubscribeHistory);
-	
-	
-	
 }

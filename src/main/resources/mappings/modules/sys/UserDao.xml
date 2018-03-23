@@ -138,12 +138,11 @@
 	     </foreach>
     </select>
 	
-	<!-- 分页查询用户信息 -->
 	<select id="findList" resultType="User">
 		SELECT
 			<include refid="userColumns"/>
 		FROM sys_user a
-		<include refid="userJoins"/>
+			<include refid="userJoins"/>
 		<if test="role != null and role.id != null and role.id != ''">
 			JOIN sys_user_role ur ON ur.user_id = a.id AND ur.role_id = #{role.id}
 		</if>
@@ -160,7 +159,7 @@
 					<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
 					<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
 		</if>
-		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		如果不是超级管理员，则不显示超级管理员用户
 		<if test="!currentUser.admin">
 			AND a.id != '1'
 		</if>
@@ -176,7 +175,7 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
 		</if>
-		<!-- 数据范围过滤 -->
+		数据范围过滤
 		${sqlMap.dsf}
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -186,7 +185,8 @@
 				ORDER BY c.code, o.code, a.name
 			</otherwise>
 		</choose>
-	</select>	
+	</select> 
+
 	
 	<!-- 根据登录名查询用户 -->
 	<select id="getByLoginName" resultType="User" parameterType="User">

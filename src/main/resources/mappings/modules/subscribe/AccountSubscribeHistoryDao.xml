@@ -24,7 +24,7 @@
 				on u.id = a.user_id
 				left join sys_dict s
 				on a.lab_id = s.id
-			<!-- <include refid="accountSubscribeHistoryJoins"/> -->
+			<include refid="accountSubscribeHistoryJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="lgoinName != null and lgoinName != ''">
