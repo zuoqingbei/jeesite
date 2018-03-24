@@ -108,5 +108,13 @@
 	<select id="findByType" resultType="Dict">
 		select * from sys_dict where type=#{type} and del_flag='0' order by sort
 	</select>
+
+	<select id="getLabelByIds" resultType="Dict">
+		select GROUP_CONCAT(label) label from sys_dict where type=#{type} and del_flag='0'
+		<if test="value != null and value != ''">
+			AND value in  (#{value})
+		</if>
+		 order by sort
+	</select>
 	
 </mapper>

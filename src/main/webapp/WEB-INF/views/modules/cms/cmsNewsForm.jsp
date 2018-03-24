@@ -86,7 +86,28 @@
 						<form:option value="${a.value}" label="${a.label}"/>
 					</c:forEach>
 				</form:select>--%>
-				<form:checkboxes items="${fns:getDictList('tags_type')}" path="tags" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				<c:choose>
+					<c:when test="${ cmsNews.id eq null }">
+						<form:checkboxes items="${fns:getDictList('tags_type')}" path="tags" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var ="dicts" items="${fns:getDictList('tags_type')}" >
+							<c:forTokens var="a" items="${cmsNews.tags}" delims=",">
+									<c:choose>
+										<c:when test="${dicts.value eq a}">
+											<input type="checkbox" checked="checked" name="tags" value="${dicts.value}">${dicts.label}
+										</c:when>
+										<%--<c:otherwise>--%>
+											<%--<input type="checkbox" name="tags" value="${dicts.value}">${dicts.label}--%>
+										<%--</c:otherwise>--%>
+									</c:choose>
+							</c:forTokens>
+							<input type="checkbox" checked="checked" name="tags" value="${dicts.value}">${dicts.label}
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+
+
 			</div>
 		</div>
 		<div class="control-group">
@@ -218,24 +239,24 @@
 				<form:input path="reason" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">一级分类：</label>
-			<div class="controls">
-				<form:input path="category1" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">二级分类：</label>
-			<div class="controls">
-				<form:input path="category2" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">三级分类：</label>
-			<div class="controls">
-				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">一级分类：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="category1" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">二级分类：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="category2" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">三级分类：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="category3" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 
 		<div class="control-group">
 			<label class="control-label">正文:</label>
@@ -244,12 +265,12 @@
 				<sys:ckeditor replace="contentHtml" uploadPath="/cms/news" />
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">备注信息：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="form-actions">
 			<shiro:hasPermission name="cms:cmsNews:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

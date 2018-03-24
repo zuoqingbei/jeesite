@@ -7,12 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.common.utils.JedisUtils;
+import com.qdch.portal.modules.cms.dao.CmsNewsDao;
 import com.qdch.portal.modules.cms.dao.CmsNewsDataDao;
 import com.qdch.portal.modules.cms.entity.CmsNewsData;
 import com.qdch.portal.modules.cms.service.CmsNewsDataService;
 import com.qdch.portal.modules.cms.utils.RegUtils;
 import com.qdch.portal.modules.sys.entity.Dict;
 import com.qdch.portal.modules.sys.service.DictService;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,7 @@ import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
 import redis.clients.jedis.Jedis;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,6 +54,9 @@ public class CmsNewsController extends BaseController {
 
 	@Autowired
 	private CmsNewsDataService cmsNewsDataService;
+
+	@Autowired
+	private CmsNewsDao cmsNewsDao;
 
 
 	@Autowired
@@ -93,12 +99,20 @@ public class CmsNewsController extends BaseController {
 //	@RequiresPermissions("cms:cmsNews:view")
 	@RequestMapping(value = "${adminPath}/cms/cmsNews/form")
 	public String form(CmsNews cmsNews, Model model) {
-		Dict dict = new Dict();
-		dict.setType("tags_type");
-		cmsNews  = cmsNewsService.getContent(cmsNews);
-		cmsNews.setTypeDict(dictService.findByType(dict));
-		model.addAttribute("cmsNews", cmsNews);
-		model.addAttribute("table","CmsNews");
+		try {
+			Dict dict = new Dict();
+			dict.setType("tags_type");
+			cmsNews  = cmsNewsService.getContent(cmsNews);
+			if(cmsNews == null){
+				cmsNews = new CmsNews();
+			}
+			List<Dict> dicts = dictService.findByType(dict);
+			cmsNews.setTypeDict(dicts);
+			model.addAttribute("cmsNews", cmsNews);
+//			model.addAttribute("table","CmsNews");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "modules/cms/cmsNewsForm";
 	}
 
@@ -109,6 +123,8 @@ public class CmsNewsController extends BaseController {
 			return form(cmsNews, model);
 		}
 		try {
+			cmsNews.setDataType("2");
+			cmsNews.setUser(UserUtils.getUser());
 			cmsNewsService.save(cmsNews);
 			CmsNewsData cmsNewsData = cmsNewsDataDao.getByNewId(cmsNews.getId());
 			if(cmsNewsData == null){
@@ -143,8 +159,15 @@ public class CmsNewsController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
 	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
 
-		CmsNews cmsNews1 = cmsNewsService.get(cmsNews);
-		this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
+		try {
+			CmsNews cmsNews1 = cmsNewsService.getContent(cmsNews);
+			this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
+			return ;
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "获取数据失败", "false");
+			return ;
+		}
 
 
 	}
@@ -191,12 +214,24 @@ public class CmsNewsController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRank")
 	public void getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
+			String tags = cmsNews.getTags();
+			if(tags !=null  && !tags.equals("")){
+				if(tags.startsWith(",")){
+					tags = tags.substring(1);
+				}
+				if(tags.endsWith(",")){
+					tags = tags.substring(0,tags.length()-1);
+				}
+				cmsNews.setTags(tags);
+			}
 			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
 			this.resultSuccessData(request,response, "获取数据成功",
 					mapJson(page,"success","获取数据成功"));
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
+			this.resultSuccessData(request,response, "获取数据失败",
+					"false");
+			return;
 		}
 	}
 
@@ -219,9 +254,34 @@ public class CmsNewsController extends BaseController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "保存数据失败", null);
+			this.resultSuccessData(request,response, "保存数据失败", "false");
 		}
-		this.resultSuccessData(request,response, "保存数据成功", null);
+		this.resultSuccessData(request,response, "保存数据成功", "true");
+
+	}
+
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getSimilarByTags")
+	public void getSimilarByTags(HttpServletRequest request, HttpServletResponse response){
+
+		try {
+			CmsNews cmsNews = cmsNewsService.get(request.getParameter("id"));
+			if(cmsNews == null){
+                return ;
+            }
+			String tags = cmsNews.getTags();
+			List<CmsNews> results = new ArrayList<CmsNews>();
+			String []  tagList = null;
+			if(tags != null &&!tags.equals("")){
+                tagList = tags.split(",");
+
+            }
+			results = cmsNewsDao.getSimilarByTags(tagList);
+			this.resultSuccessData(request,response, "操作成功", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "操作失败", "false");
+			return ;
+		}
 
 	}
 

@@ -48,4 +48,7 @@ public interface CmsPortalCommentsDao extends CrudDao<CmsPortalComments> {
      */
 
     public  List<CmsPortalComments> getCommentsAndPraise(CmsPortalComments cmsPortalComments);
+
+
+    public void changeState(CmsPortalComments cmsPortalComments);
 }

@@ -21,7 +21,7 @@
 		<li class="active"><a href="${ctx}/cms/cmsNews/list">资讯列表</a></li>
 		<shiro:hasPermission name="cms:cmsNews:edit"><li><a href="${ctx}/cms/cmsNews/form">资讯添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="cmsNews" action="${ctx}/cms/cmsNews/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="cmsNews" action="${ctx}/cms/cmsNews/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -43,43 +43,43 @@
 			<%-- <li><label>关键字</label>
 				<form:input path="keywords" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li> --%>
-			<li><label>是否推荐</label>
-				<form:select path="recommend" class="input-medium">
-					<form:option value="" label=""/>
-					<form:option value="0" label="否"/>
-					<form:option value="1" label="是"/>
-				</form:select>
-			</li>
-			<li><label>是否允许评论</label>
-				<form:select path="allowComment" class="input-medium">
-					<form:option value="" label=""/>
-					<form:option value="0" label="是"/>
-					<form:option value="1" label="否"/>
-				</form:select>
-			</li>
-			<li><label>是否需要审核</label>
-				<form:select path="commentAudit" class="input-medium">
-					<form:option value="" label=""/>
-					<form:option value="0" label="是"/>
-					<form:option value="1" label="否"/>
-				</form:select>
-			</li>
-			<li><label>是否允许举报</label>
-				<form:select path="allowReport" class="input-medium">
-					<form:option value="" label=""/>
-					<form:option value="0" label="是"/>
-					<form:option value="1" label="否"/>
-<%-- 					<form:options items="${fns:getDictList('0,1')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
- --%>			</form:select>
-			</li>
-			<li><label>内容是否下架 </label>
-			<form:select path="undercarriage" class="input-medium">
-					<form:option value="" label=""/>
-					<form:option value="0" label="否"/>
-					<form:option value="1" label="是"/>
-				</form:select>
-<%-- 				<form:input path="undercarriage" htmlEscape="false" maxlength="1" class="input-medium"/>
- --%>			</li>
+			<%--<li><label>是否推荐</label>--%>
+				<%--<form:select path="recommend" class="input-medium">--%>
+					<%--<form:option value="" label=""/>--%>
+					<%--<form:option value="0" label="否"/>--%>
+					<%--<form:option value="1" label="是"/>--%>
+				<%--</form:select>--%>
+			<%--</li>--%>
+			<%--<li><label>是否允许评论</label>--%>
+				<%--<form:select path="allowComment" class="input-medium">--%>
+					<%--<form:option value="" label=""/>--%>
+					<%--<form:option value="0" label="是"/>--%>
+					<%--<form:option value="1" label="否"/>--%>
+				<%--</form:select>--%>
+			<%--</li>--%>
+			<%--<li><label>是否需要审核</label>--%>
+				<%--<form:select path="commentAudit" class="input-medium">--%>
+					<%--<form:option value="" label=""/>--%>
+					<%--<form:option value="0" label="是"/>--%>
+					<%--<form:option value="1" label="否"/>--%>
+				<%--</form:select>--%>
+			<%--</li>--%>
+			<%--<li><label>是否允许举报</label>--%>
+				<%--<form:select path="allowReport" class="input-medium">--%>
+					<%--<form:option value="" label=""/>--%>
+					<%--<form:option value="0" label="是"/>--%>
+					<%--<form:option value="1" label="否"/>--%>
+<%--&lt;%&ndash; 					<form:options items="${fns:getDictList('0,1')}" itemLabel="label" itemValue="value" htmlEscape="false"/>--%>
+ <%--&ndash;%&gt;			</form:select>--%>
+			<%--</li>--%>
+			<%--<li><label>内容是否下架 </label>--%>
+			<%--<form:select path="undercarriage" class="input-medium">--%>
+					<%--<form:option value="" label=""/>--%>
+					<%--<form:option value="0" label="否"/>--%>
+					<%--<form:option value="1" label="是"/>--%>
+				<%--</form:select>--%>
+<%--&lt;%&ndash; 				<form:input path="undercarriage" htmlEscape="false" maxlength="1" class="input-medium"/>--%>
+ <%--&ndash;%&gt;			</li>--%>
 			<li><label>创建时间</label>
 				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${cmsNews.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
@@ -101,7 +101,7 @@
 				<!-- <th>关键字</th>
 				<th>标签</th> -->
 <!-- 				<th>描述</th>
- -->				<th>权重</th>
+ <%---->				<th>权重</th>--%>
 				<!-- <th>点击数</th>
 				<th>转发数</th>
 				<th>评论数</th>
@@ -112,11 +112,11 @@
 				<th>评价数量</th>
 				<th>打赏次数</th> 
 				<th>曝光量</th>-->
-				<th>是否推荐</th>
-				<th>是否允许评论</th>
-				<th>评论是否需要审核</th>
-				<th>是否允许举报</th>
-				<th>内容是否下架</th>
+				<%--<th>是否推荐</th>--%>
+				<%--<th>是否允许评论</th>--%>
+				<%--<th>评论是否需要审核</th>--%>
+				<%--<th>是否允许举报</th>--%>
+				<%--<th>内容是否下架</th>--%>
 				<!-- <th>下架原因</th> -->
 			<!-- 	<th>一级分类</th>
 				<th>二级分类</th>
@@ -148,7 +148,8 @@
 					
 				</td>
 				<td>
-					${cmsNews.image}
+					<img src="${cmsNews.image}" style="width:80px;height:80px;"/>
+
 				</td>
 			<%-- 	<td>
 					${cmsNews.keywords}
@@ -159,9 +160,9 @@
 			<%-- 	<td>
 					${cmsNews.description}
 				</td> --%>
-				<td>
-					${cmsNews.weight}
-				</td>
+				<%--<td>--%>
+					<%--${cmsNews.weight}--%>
+				<%--</td>--%>
 				<%-- <td>
 					${cmsNews.hits}
 				</td>
@@ -192,31 +193,31 @@
 				<td>
 					${cmsNews.view}
 				</td> --%>
-				<td>
-				<c:if test="${cmsNews.recommend eq '0' }">否</c:if>
-				<c:if test="${cmsNews.recommend eq '1' }">是</c:if>
-<%-- 					${fns:getDictLabel(cmsNews.recommend, '0,1', '')}
- --%>				</td>
-				<td>
-				<c:if test="${cmsNews.allowComment eq '0' }">是</c:if>
-				<c:if test="${cmsNews.allowComment eq '1' }">否</c:if>
-<%-- 					${fns:getDictLabel(cmsNews.allowComment, '0,1', '')}
- --%>				</td>
-				<td>
-				<c:if test="${cmsNews.commentAudit eq '0' }">是</c:if>
-				<c:if test="${cmsNews.commentAudit eq '1' }">否</c:if>
-<%-- 					${fns:getDictLabel(cmsNews.commentAudit, '0,1', '')}
- --%>				</td>
-				<td>
-				<c:if test="${cmsNews.allowReport eq '0' }">是</c:if>
-				<c:if test="${cmsNews.allowReport eq '1' }">否</c:if>
-<%-- 					${fns:getDictLabel(cmsNews.allowReport, '0,1', '')}
- --%>				</td>
-				<td>
-				<c:if test="${cmsNews.undercarriage eq '0' }">否</c:if>
-				<c:if test="${cmsNews.undercarriage eq '1' }">是</c:if>
-<%-- 					${cmsNews.undercarriage}
- --%>				</td>
+				<%--<td>--%>
+				<%--<c:if test="${cmsNews.recommend eq '0' }">否</c:if>--%>
+				<%--<c:if test="${cmsNews.recommend eq '1' }">是</c:if>--%>
+<%--&lt;%&ndash; 					${fns:getDictLabel(cmsNews.recommend, '0,1', '')}--%>
+ <%--&ndash;%&gt;				</td>--%>
+				<%--<td>--%>
+				<%--<c:if test="${cmsNews.allowComment eq '0' }">是</c:if>--%>
+				<%--<c:if test="${cmsNews.allowComment eq '1' }">否</c:if>--%>
+<%--&lt;%&ndash; 					${fns:getDictLabel(cmsNews.allowComment, '0,1', '')}--%>
+ <%--&ndash;%&gt;				</td>--%>
+				<%--<td>--%>
+				<%--<c:if test="${cmsNews.commentAudit eq '0' }">是</c:if>--%>
+				<%--<c:if test="${cmsNews.commentAudit eq '1' }">否</c:if>--%>
+<%--&lt;%&ndash; 					${fns:getDictLabel(cmsNews.commentAudit, '0,1', '')}--%>
+ <%--&ndash;%&gt;				</td>--%>
+				<%--<td>--%>
+				<%--<c:if test="${cmsNews.allowReport eq '0' }">是</c:if>--%>
+				<%--<c:if test="${cmsNews.allowReport eq '1' }">否</c:if>--%>
+<%--&lt;%&ndash; 					${fns:getDictLabel(cmsNews.allowReport, '0,1', '')}--%>
+ <%--&ndash;%&gt;				</td>--%>
+				<%--<td>--%>
+				<%--<c:if test="${cmsNews.undercarriage eq '0' }">否</c:if>--%>
+				<%--<c:if test="${cmsNews.undercarriage eq '1' }">是</c:if>--%>
+<%--&lt;%&ndash; 					${cmsNews.undercarriage}--%>
+ <%--&ndash;%&gt;				</td>--%>
 			<%-- 	<td>
 					${cmsNews.reason}
 				</td>

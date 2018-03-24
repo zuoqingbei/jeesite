@@ -41,7 +41,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">内容来源表 比如 资讯 政策解读 攻略为portal_news：</label>
+			<label class="control-label">内容来源表：</label>
 			<div class="controls">
 				<form:input path="sourceTable" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
@@ -55,7 +55,7 @@
 			</div>
 		</div>
 		<div class="form-actions">
-			<shiro:hasPermission name="cms:cmsCollection:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<%--<shiro:hasPermission name="cms:cmsCollection:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>--%>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

@@ -19,7 +19,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/cms/cmsPraise/list">用户赞 踩记录列表</a></li>
-		<shiro:hasPermission name="cms:cmsPraise:edit"><li><a href="${ctx}/cms/cmsPraise/form">用户赞 踩记录添加</a></li></shiro:hasPermission>
+		<%--<shiro:hasPermission name="cms:cmsPraise:edit"><li><a href="${ctx}/cms/cmsPraise/form">用户赞 踩记录添加</a></li></shiro:hasPermission>--%>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsPraise" action="${ctx}/cms/cmsPraise/list" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -67,9 +67,12 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsPraise">
 			<tr>
-				<td><a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">
-					${cmsPraise.sourceId}
-				</a></td>
+				<td>
+						${cmsPraise.sourceId}
+					<%--<a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">--%>
+					<%--${cmsPraise.sourceId}--%>
+				<%--</a>--%>
+				</td>
 				<td>
 					${cmsPraise.sourceTable}
 				</td>
@@ -85,7 +88,7 @@
 					<fmt:formatDate value="${cmsPraise.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="cms:cmsPraise:edit"><td>
-    				<a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">修改</a>
+    				<%--<a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">修改</a>--%>
 					<a href="${ctx}/cms/cmsPraise/delete?id=${cmsPraise.id}" onclick="return confirmx('确认要删除该用户赞 踩记录吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>

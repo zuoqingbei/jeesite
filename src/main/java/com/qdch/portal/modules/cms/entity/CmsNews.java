@@ -3,6 +3,7 @@
  */
 package com.qdch.portal.modules.cms.entity;
 
+import com.qdch.portal.common.utils.Json;
 import com.qdch.portal.modules.sys.entity.Dict;
 import org.hibernate.validator.constraints.Length;
 import com.qdch.portal.modules.sys.entity.User;
@@ -21,10 +22,14 @@ public class CmsNews extends DataEntity<CmsNews> {
 	private static final long serialVersionUID = 1L;
 	private String link;		// 源链接 如果是用户投稿 该字段保存投稿主键
 	private String dataType;		// 数据来源类型 0-采集 1-用户投稿 2-管理人员发布
+	@Json
 	private User user;		// 创建者 用户发布id  采集源也可以当做用户
+	@Json
 	private String title;		// 标题
+	@Json
 	private String image;		// 文章图片
 	private String keywords;		// 关键字
+
 	private String tags;		// 标签，多个 用&ldquo;，&rdquo;分开并且开头结尾也是逗号,比如 ,1,2,3,
 	private String description;		// 描述、摘要
 	private String weight;		// 权重，越大越靠前
@@ -52,6 +57,16 @@ public class CmsNews extends DataEntity<CmsNews> {
 	private String contentHtml;		// 文章内容 包含HTML
 
 	private List<Dict> typeDict;
+
+	private String tagslabel;
+
+	public String getTagslabel() {
+		return tagslabel;
+	}
+
+	public void setTagslabel(String tagslabel) {
+		this.tagslabel = tagslabel;
+	}
 
 	public List<Dict> getTypeDict() {
 		return typeDict;

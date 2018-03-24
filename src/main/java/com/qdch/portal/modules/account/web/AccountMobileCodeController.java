@@ -6,7 +6,9 @@ package com.qdch.portal.modules.account.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.common.utils.JedisUtils;
 import com.qdch.portal.common.utils.MessageUtils;
+import com.qdch.portal.common.utils.SendMsgUtil;
 import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,26 +97,65 @@ public class AccountMobileCodeController extends BaseController {
 			accountMobileCodeService.save(accountMobileCode);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "保存数据失败", null);
+			this.resultSuccessData(request,response, "保存数据失败", false);
 			return ;
 		}
-		this.resultSuccessData(request,response, "保存数据成功", null);
+		this.resultSuccessData(request,response, "保存数据成功", true);
 
 	}
 
 	@RequestMapping(value = "${portalPath}/account/accountMobileCode/sendCheckCode")
 	public void sendCheckCode(HttpServletRequest request,HttpServletResponse response){
 		try{
-			new MessageUtils().sendMessage(request.getParameter("tel"));
+			String mobile = request.getParameter("mobile");
+//			String codes = request.getParameter("codes");
+			String uasge = request.getParameter("uasge")==null?"0":request.getParameter("uasge");
+			String str = SendMsgUtil.presend(mobile);
+			if(str.equals("true")){
+				AccountMobileCode accountMobileCode = new AccountMobileCode();
+				accountMobileCode.setMobile(mobile);
+				accountMobileCode.setCodes(JedisUtils.get("MessageCache"+mobile));
+				accountMobileCode.setUasge(uasge);
+				accountMobileCodeService.save(accountMobileCode);
+				this.resultSuccessData(request,response, "操作成功", true);
+				return;
+			}else if(str.equals("false")){
+				this.resultSuccessData(request,response, "操作失败", false);
+				return ;
+			}else{
+				this.resultSuccessData(request,response, str, false);
+				return ;
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败", null);
+			this.resultSuccessData(request,response, "操作失败", false);
 			return ;
 		}
-			this.resultSuccessData(request,response, "操作成功", null);
-
 
 		}
+
+	/**
+	 * 校验验证码
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/account/accountMobileCode/checkIndentifyCode")
+	public void checkIndentifyCode(HttpServletRequest request,HttpServletResponse response){
+		String str = SendMsgUtil.checkIndentifyCode(request.getParameter("mobile"),
+				request.getParameter("codes"));
+		if(str.equals("true")){
+			this.resultSuccessData(request,response, "操作成功", true);
+			return ;
+		}if(str.equals("false")){
+			this.resultSuccessData(request,response, "操作失败", false);
+			return ;
+		}else {
+			this.resultSuccessData(request,response, str, false);
+		}
+
+
+	}
 
 
 }

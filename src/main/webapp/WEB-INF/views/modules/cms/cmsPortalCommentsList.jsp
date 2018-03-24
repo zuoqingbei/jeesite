@@ -58,6 +58,7 @@
 				<th>评论姓名</th>
 				<th>评论IP</th>
 				<th>评论时间</th>
+				<th>状态</th>
 				<th>审核人</th>
 				<th>审核时间</th>
 				<shiro:hasPermission name="cms:cmsPortalComments:edit"><th>操作</th></shiro:hasPermission>
@@ -82,15 +83,40 @@
 					<fmt:formatDate value="${cmsPortalComments.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
+						<%--${cmsPortalComments.status}--%>
+					<c:if test="${cmsPortalComments.status eq '0'}">未审核</c:if>
+					<c:if test="${cmsPortalComments.status eq '1'}">审核通过</c:if>
+					<c:if test="${cmsPortalComments.status eq '2'}">未通过</c:if>
+
+				</td>
+				<td>
 					${cmsPortalComments.auditUserId}
 				</td>
 				<td>
 					<fmt:formatDate value="${cmsPortalComments.auditDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
-				<shiro:hasPermission name="cms:cmsPortalComments:edit"><td>
-    				<a href="${ctx}/cms/cmsPortalComments/form?id=${cmsPortalComments.id}">审核</a>
-					<a href="${ctx}/cms/cmsPortalComments/delete?id=${cmsPortalComments.id}" onclick="return confirmx('确认要删除该门户评论吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+
+
+				<c:choose>
+					<c:when test="${cmsPortalComments.status eq '1'}">
+						<shiro:hasPermission name="cms:cmsPortalComments:edit"><td>
+								<%--
+                                                                <a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">审核</a>
+                                --%>
+							<a href="${ctx}/cms/cmsPortalComments/delete?id=${cmsPortalComments.id}" onclick="return confirmx('确认要删除吗？', this.href)">删除</a>
+						</td></shiro:hasPermission>
+					</c:when>
+					<c:otherwise>
+						<shiro:hasPermission name="cms:cmsPortalComments:edit"><td>
+							<a href="${ctx}/cms/cmsPortalComments/form?id=${cmsPortalComments.id}">审核</a>
+							<a href="${ctx}/cms/cmsPortalComments/delete?id=${cmsPortalComments.id}" onclick="return confirmx('确认要删除吗？', this.href)">删除</a>
+						</td></shiro:hasPermission>
+					</c:otherwise>
+				</c:choose>
+				<%--<shiro:hasPermission name="cms:cmsPortalComments:edit"><td>--%>
+    				<%--<a href="${ctx}/cms/cmsPortalComments/form?id=${cmsPortalComments.id}">审核</a>--%>
+					<%--<a href="${ctx}/cms/cmsPortalComments/delete?id=${cmsPortalComments.id}" onclick="return confirmx('确认要删除该门户评论吗？', this.href)">删除</a>--%>
+				<%--</td></shiro:hasPermission>--%>
 			</tr>
 		</c:forEach>
 		</tbody>

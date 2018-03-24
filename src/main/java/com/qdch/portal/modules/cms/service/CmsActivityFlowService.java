@@ -5,6 +5,7 @@ package com.qdch.portal.modules.cms.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,9 @@ public class CmsActivityFlowService extends CrudService<CmsActivityFlowDao, CmsA
 	
 	@Transactional(readOnly = false)
 	public void save(CmsActivityFlow cmsActivityFlow) {
+		if(StringUtils.isNotBlank(cmsActivityFlow.getImages())&&cmsActivityFlow.getImages().startsWith("|")){
+			cmsActivityFlow.setImages(cmsActivityFlow.getImages().substring(1));
+		}
 		super.save(cmsActivityFlow);
 	}
 	

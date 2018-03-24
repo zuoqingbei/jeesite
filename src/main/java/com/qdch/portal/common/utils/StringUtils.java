@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.qdch.portal.modules.sys.entity.Dict;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -390,5 +391,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     	result.append(val.substring(1));
     	return result.toString();
     }
+
+	/**
+	 * 去掉字符串前后的，
+	 * @param tags
+	 * @return
+	 */
+	public static String delFrontAndEndSymbol(String tags){
+		if(tags !=null  && !tags.equals("")){
+			if(tags.startsWith(",")){
+				tags = tags.substring(1);
+			}
+			if(tags.endsWith(",")){
+				tags = tags.substring(0,tags.length()-1);
+			}
+		}
+    	return tags;
+	}
     
 }

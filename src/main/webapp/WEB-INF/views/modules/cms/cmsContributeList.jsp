@@ -27,9 +27,9 @@
 			<%-- <li><label>编号：</label>
 				<form:input path="id" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li> --%>
-			<li><label>源链接：</label>
-				<form:input path="link" htmlEscape="false" maxlength="255" class="input-medium"/>
-			</li>
+			<%--<li><label>源链接：</label>--%>
+				<%--<form:input path="link" htmlEscape="false" maxlength="255" class="input-medium"/>--%>
+			<%--</li>--%>
 			<li><label>投稿类型 ：</label>
 				<form:select path="dataType" class="input-xlarge ">
 					<form:option value="" label=""/>
@@ -55,20 +55,20 @@
 			<%-- <li><label>图片：</label>
 				<form:input path="image" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li> --%>
-			<li><label>关键字：</label>
-				<form:input path="keywords" htmlEscape="false" maxlength="255" class="input-medium"/>
-			</li>
+			<%--<li><label>关键字：</label>--%>
+				<%--<form:input path="keywords" htmlEscape="false" maxlength="255" class="input-medium"/>--%>
+			<%--</li>--%>
 			<%-- <li><label>标签，多个 用&ldquo;，&rdquo;分开并且开头结尾也是逗号,比如 ,1,2,3,：</label>
 				<form:input path="tags" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
 			<li><label>描述、摘要：</label>
 				<form:input path="description" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li> --%>
-			<li><label>创建时间：</label>
-				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${cmsContribute.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</li>
+			<%--<li><label>创建时间：</label>--%>
+				<%--<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"--%>
+					<%--value="<fmt:formatDate value="${cmsContribute.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"--%>
+					<%--onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>--%>
+			<%--</li>--%>
 			<%-- <li><label>更新者：</label>
 				<form:input path="updateBy.id" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li> --%>
@@ -78,7 +78,7 @@
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
 			<li><label>状态：</label>
-			<form:select path="status" class="input-xlarge ">
+			<form:select path="status" class="input-xlarge " style="width:100">
 					<form:option value="" label=""/>
 					<form:option value="0" label="草稿"/>
 					<form:option value="1" label="已投稿,审核中"/>

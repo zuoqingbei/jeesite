@@ -10,6 +10,18 @@ import com.qdch.portal.thirdplat.utils.HttpClientUtil;
  * @author zuoqb
  */
 public class SendMsgUtil {
+
+
+	public static  String presend(String tel){
+		String returnmsg = "";
+		String MessageCache = JedisUtils.get("MessageCache"+tel);
+		if(MessageCache != null){
+			returnmsg = "发送过于频繁";
+			return returnmsg;
+		}
+		return sentMsg(0,tel);
+
+	}
 	
 	/***
 	 * 发送短信
@@ -21,11 +33,20 @@ public class SendMsgUtil {
 		param += "&upsd="+Constant.MSG_USER_PWD;
 		param += "&sendtele="+phoneNum;
 		String msg = Constant.MSG_MODEL[type];
-		msg = msg.replace("NUM", gen6MobileCode());
+		String code = gen6MobileCode();
+		msg = msg.replace("NUM", code);
 		System.out.println(msg);
 		param += "&msg="+msg;
 		param += "&sign="+Constant.MSG_USER_SIGN;
-		return HttpClientUtil.sendPostRequest(Constant.MSG_API_URL, param,true);
+		String str = HttpClientUtil.sendPostRequest(Constant.MSG_API_URL, param,true);
+
+		System.out.println("-----"+str.substring(0,str.indexOf(",")));
+		if(str.substring(0,str.indexOf(",")).equals("success")){
+			JedisUtils.set("MessageCache"+phoneNum, code, 60*5);
+			return "true";
+		}else{
+			return "false";
+		}
 	}
 	/**
 	 * @todo   生成6位随机数
@@ -44,6 +65,26 @@ public class SendMsgUtil {
 	public static void main(String[] args){
 		String result = sentMsg(0,"15805422889");
 		System.out.println(result);
+	}
+
+
+	/**
+	 * 校验验证码是否正确
+	 */
+	public static String  checkIndentifyCode(String tel,String code ){
+		String returnmsg = "";
+		String sysCode =  JedisUtils.get("MessageCache"+tel);
+		if(sysCode == null){
+			returnmsg = "请先点击发送验证码";
+			return returnmsg;
+		}
+		if(code.equals(sysCode)){
+			returnmsg = "true";
+		}else{
+			returnmsg = "false";
+		}
+		return returnmsg;
+
 	}
 
 }
