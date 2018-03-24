@@ -8,6 +8,7 @@ import java.util.List;
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
 import com.qdch.portal.modules.sys.entity.Dict;
+import com.qdch.portal.modules.sys.entity.User;
 
 /**
  * 字典DAO接口
@@ -20,5 +21,8 @@ public interface DictDao extends CrudDao<Dict> {
 	public List<String> findTypeList(Dict dict);
 
 	public List<Dict> findByType(Dict dict);
+	
+	//查询是否订阅
+	public List<Dict> findByIds(String[] ids);
 	
 }
