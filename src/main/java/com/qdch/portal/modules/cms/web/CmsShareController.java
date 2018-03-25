@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.modules.cms.dao.CmsShareDao;
+import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.cms.entity.CmsShare;
 import com.qdch.portal.modules.cms.service.CmsShareService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 用户分享记录Controller
@@ -94,11 +98,16 @@ public class CmsShareController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsShare/saveShare")
 	public void saveShare(CmsShare cmsShare,Model model, HttpServletRequest request,HttpServletResponse response){
 		try {
+			if(cmsShare.getSourceId()==null||cmsShare.getSourceTable()==null||
+					cmsShare.getSourceId().equals("")||cmsShare.getSourceTable().equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceId和sourceTable的值", null);
+				return;
+			}
 			cmsShare.setUser(UserUtils.getUser());
 			cmsShareService.save(cmsShare);
 		} catch (Exception e) {
 			e.printStackTrace();
-			 this.resultSuccessData(request,response, "保存数据失败", null);
+			 this.resultFaliureData(request,response, "保存数据失败", null);
 			 return;
 		}
 		this.resultSuccessData(request,response, "保存数据成功", null);
@@ -106,20 +115,36 @@ public class CmsShareController extends BaseController {
 	}
 
 	/**
-	 * 得到某条资讯的收藏量
+	 * 得到某条资讯的分享量
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsShare/getCount")
 	public void  getCount(CmsShare cmsShare,HttpServletRequest request,HttpServletResponse response){
-		int count = 0;
 		try {
-			count = cmsShareDao.getShareCount(cmsShare);
+			String sourceTable = cmsShare.getSourceTable();
+			String sourceId = cmsShare.getSourceId();
+			if(sourceTable==null||sourceTable.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceTable", "");
+				return;
+			}
+			if(sourceId==null||sourceId.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceId", "");
+				return;
+			}
+			cmsShare  = cmsShareDao.getShareCount(cmsShare);
+			if(cmsShare != null && !cmsShare.equals("")){
+				this.resultSuccessData(request,response, "操作成功", cmsShare.getCount());
+				return ;
+			}else{
+				this.resultSuccessData(request,response, "操作成功", "0");
+				return ;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败", count);
+			this.resultFaliureData(request,response, "操作失败", "");
 			return;
 		}
-		this.resultSuccessData(request,response, "操作成功", count);
+
 	}
 
 	/**
@@ -130,13 +155,32 @@ public class CmsShareController extends BaseController {
 	public void  isOperate(CmsShare cmsShare,HttpServletRequest request,HttpServletResponse response){
 		boolean flag = false;
 		try {
+			String sourceTable = cmsShare.getSourceTable();
+			String sourceId = cmsShare.getSourceId();
+			String userid = cmsShare.getUserId();
+			Map<String,Object> res = new HashMap<String, Object>();
+			if(sourceTable==null||sourceTable.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceTable", "");
+				return;
+			}
+			if(sourceId==null||sourceId.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceId", "");
+				return;
+			}
+			if(userid==null||userid.equals("")){
+				this.resultFaliureData(request,response, "请先输入userid", "");
+				return;
+			}
 			flag = cmsShareService.getDynamicSelf(cmsShare);
+//			res.put("result",flag);
+			this.resultSuccessData(request,response, "操作成功", flag);
+			return ;
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败", flag);
+			this.resultFaliureData(request,response, "操作失败", flag);
 			return;
 		}
-		this.resultSuccessData(request,response, "操作成功", flag);
+
 	}
 
 }

@@ -46,7 +46,7 @@ public class CmsPraiseService extends CrudService<CmsPraiseDao, CmsPraise> {
 
 	@Transactional(readOnly = false)
 	public boolean getDynamicSelf(CmsPraise cmsPraise) {
-		return  dao.getDynamicSelf(cmsPraise)>0?true:false;
+		return  Integer.parseInt(dao.getDynamicSelf(cmsPraise).getCount())>0?true:false;
 	}
 	
 }

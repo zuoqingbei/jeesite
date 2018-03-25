@@ -37,7 +37,8 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		u4.name AS "user.name"
+		u4.name AS "user.name",
+		u4.photo AS "user.photo"
 	</sql>
 	
 	<sql id="cmsNewsJoins">

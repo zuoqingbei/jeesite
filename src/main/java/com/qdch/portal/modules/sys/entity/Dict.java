@@ -24,8 +24,17 @@ public class Dict extends DataEntity<Dict> {
 	private String description;// 描述
 	private Integer sort;	// 排序
 	private String parentId;//父Id
-	
-	
+
+	private String tagslabel;
+
+
+	public String getTagslabel() {
+		return tagslabel;
+	}
+
+	public void setTagslabel(String tagslabel) {
+		this.tagslabel = tagslabel;
+	}
 
 	public Dict() {
 		super();

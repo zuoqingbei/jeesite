@@ -22,7 +22,17 @@ public class CmsShare extends DataEntity<CmsShare> {
 	private String platform;		// 分享平台  比如QQ、微信
 	private String title;		// 分享标题
 	private String url;		// 分享地址
-	
+
+	private String count ;
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
+
 	public CmsShare() {
 		super();
 	}

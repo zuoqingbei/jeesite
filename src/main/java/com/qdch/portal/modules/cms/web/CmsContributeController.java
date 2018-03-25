@@ -14,6 +14,7 @@ import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.entity.CmsNewsData;
 import com.qdch.portal.modules.cms.service.CmsNewsDataService;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -142,12 +143,12 @@ public class CmsContributeController extends BaseController {
                 cmsNewsDataService.save(cmsNewsData1);
 			}
 
-			 this.resultSuccessData(request,response, "修改成功", true);
+			this.resultSuccessData(request,response, "修改成功", true);
 			return;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "修改失败", false);
+			this.resultFaliureData(request,response, "修改失败", false);
 			return;
 		}
 	}
@@ -162,10 +163,18 @@ public class CmsContributeController extends BaseController {
 
     public void  getUserContribute(CmsContribute cmsContribute, HttpServletRequest request,  HttpServletResponse response) {
         try {
+        	String userId = request.getParameter("userId");
+        	if(userId == null || userId.equals("")){
+				this.resultFaliureData(request,response, "请输入userId", "");
+				return ;
+			}
+			cmsContribute.setUser(UserUtils.get(userId));
             Page<CmsContribute> cmsContribute1 = cmsContributeService.getUserContribute(new Page<CmsContribute>(request, response),cmsContribute);
             this.resultSuccessData(request,response, "获取数据成功", cmsContribute1);
         } catch (Exception e) {
             e.printStackTrace();
+			this.resultFaliureData(request,response, "操作失败", null);
+			return ;
         }
 
     }
@@ -189,9 +198,10 @@ public class CmsContributeController extends BaseController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "保存数据成功", null);
+			this.resultFaliureData(request,response, "保存数据失败", null);
+			return ;
 		}
-		this.resultSuccessData(request,response, "保存数据失败", null);
+		this.resultSuccessData(request,response, "保存数据成功", null);
 
 	}
 

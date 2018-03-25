@@ -146,8 +146,13 @@ public class AccountMobileCodeController extends BaseController {
 	 */
 	@RequestMapping(value = "${portalPath}/account/accountMobileCode/checkIndentifyCode")
 	public void checkIndentifyCode(HttpServletRequest request,HttpServletResponse response){
-		String str = SendMsgUtil.checkIndentifyCode(request.getParameter("mobile"),
-				request.getParameter("codes"));
+		String mobile = request.getParameter("mobile");
+		String codes = request.getParameter("codes");
+		if(mobile==null||mobile.equals("")||codes==null||codes.equals("")){
+			this.resultFaliureData(request,response, "请先输入手机号和验证码", false);
+			return ;
+		}
+		String str = SendMsgUtil.checkIndentifyCode(mobile,codes);
 		if(str.equals("true")){
 			this.resultSuccessData(request,response, "操作成功", true);
 			return ;

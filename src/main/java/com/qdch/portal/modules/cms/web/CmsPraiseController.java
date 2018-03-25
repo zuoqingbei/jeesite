@@ -24,6 +24,9 @@ import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.cms.entity.CmsPraise;
 import com.qdch.portal.modules.cms.service.CmsPraiseService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 用户赞 踩记录Controller
  * @author wangfeng
@@ -91,13 +94,25 @@ public class CmsPraiseController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsPraise/getTradeCount")
 	public void  getTradeCount(CmsPraise cmsPraise, HttpServletRequest request, HttpServletResponse response){
 		try {
-			cmsPraiseDao.getTradeCount(cmsPraise);
+			String sourceTable = cmsPraise.getSourceTable();
+			String sourceId = cmsPraise.getSourceId();
+			if(sourceTable==null||sourceTable.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceTable", "");
+				return;
+			}
+			if(sourceId==null||sourceId.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceId", "");
+				return;
+			}
+
+			CmsPraise cmsPraise1 = cmsPraiseDao.getTradeCount(cmsPraise);
+			this.resultSuccessData(request,response, "操作成功", cmsPraise1.getCount());
+			return ;
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败", null);
+			this.resultFaliureData(request,response, "操作失败", null);
 			return;
 		}
-		this.resultSuccessData(request,response, "操作成功", null);
 	}
 
 	/**
@@ -107,13 +122,26 @@ public class CmsPraiseController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsPraise/getPraiseCount")
 	public void  getPraiseCount(CmsPraise cmsPraise, HttpServletRequest request, HttpServletResponse response){
 		try {
-			cmsPraiseDao.getPraiseCount(cmsPraise);
+			String sourceTable = cmsPraise.getSourceTable();
+			String sourceId = cmsPraise.getSourceId();
+			if(sourceTable==null||sourceTable.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceTable", "");
+				return;
+			}
+			if(sourceId==null||sourceId.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceId", "");
+				return;
+			}
+
+			cmsPraise.setOperateType("1");//赞
+			CmsPraise cmsPraise1 = cmsPraiseDao.getPraiseCount(cmsPraise);
+			this.resultSuccessData(request,response, "操作成功", cmsPraise1.getCount());
+			return ;
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败", null);
+			this.resultFaliureData(request,response, "操作失败", null);
 			return;
 		}
-		this.resultSuccessData(request,response, "操作成功", null);
 	}
 
 	/**
@@ -124,13 +152,34 @@ public class CmsPraiseController extends BaseController {
 	public void  isOperate(CmsPraise cmsPraise,HttpServletRequest request,HttpServletResponse response){
 		boolean flag = false;
 		try {
+			String sourceTable = cmsPraise.getSourceTable();
+			String sourceId = cmsPraise.getSourceId();
+			String userid = cmsPraise.getUserId();
+			String operatype = cmsPraise.getOperateType();
+			Map<String,Object> res = new HashMap<String, Object>();
+			if(sourceTable==null||sourceTable.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceTable", "");
+				return;
+			}
+			if(sourceId==null||sourceId.equals("")){
+				this.resultFaliureData(request,response, "请先输入sourceId", "");
+				return;
+			}
+			if(userid==null||userid.equals("")){
+				this.resultFaliureData(request,response, "请先输入userid", "");
+				return;
+			}
+			if(operatype==null||operatype.equals("")){
+				cmsPraise.setOperateType("1");
+			}
 			flag = cmsPraiseService.getDynamicSelf(cmsPraise);
+			this.resultSuccessData(request,response, "操作成功", flag);
+			return ;
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败", flag);
+			this.resultFaliureData(request,response, "操作失败", null);
 			return;
 		}
-		this.resultSuccessData(request,response, "操作成功", flag);
 	}
 
 }

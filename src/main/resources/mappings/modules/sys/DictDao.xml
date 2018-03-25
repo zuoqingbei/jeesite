@@ -114,7 +114,7 @@
 		<if test="value != null and value != ''">
 			AND value in  (#{value})
 		</if>
-		 order by sort
+
 	</select>
 	
 </mapper>

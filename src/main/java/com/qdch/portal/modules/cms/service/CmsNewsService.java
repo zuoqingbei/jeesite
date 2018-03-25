@@ -116,8 +116,10 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 					news.setTagslabel(dict1.getLabel());
 				}
 
+			}else{
+				news.setTagslabel("");
 			}
-			news.setTagslabel("");
+
 			resultlist.add(news);
 		}
 
