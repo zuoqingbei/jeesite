@@ -3,10 +3,12 @@
  */
 package com.qdch.portal.modules.sys.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -15,6 +17,7 @@ import com.qdch.portal.common.utils.CacheUtils;
 import com.qdch.portal.common.utils.SpringContextHolder;
 import com.qdch.portal.modules.sys.dao.DictDao;
 import com.qdch.portal.modules.sys.entity.Dict;
+import com.qdch.portal.modules.sys.entity.User;
 
 /**
  * 字典工具类
@@ -26,6 +29,23 @@ public class DictUtils {
 	private static DictDao dictDao = SpringContextHolder.getBean(DictDao.class);
 
 	public static final String CACHE_DICT_MAP = "dictMap";
+	
+	
+	
+	
+	
+	/**
+	 * 查询是否订阅
+	 * @user lianjiming
+	 * @param keys
+	 * @date 2018年3月24日
+	 * @return
+	 */
+	public static List<Dict> findByIds(String[] ids){
+		List<Dict> list = new ArrayList<Dict>();
+		list = dictDao.findByIds(ids);
+		return list;
+	}
 	
 	public static String getDictLabel(String value, String type, String defaultValue){
 		if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(value)){

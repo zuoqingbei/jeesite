@@ -15,6 +15,10 @@
 	<sql id="accountSubscribeHistoryJoins">
 	</sql>
 	
+
+	
+	
+	
 	<!-- 列表查询 -->
 	<select id="findList" resultType="AccountSubscribeHistory">
 		SELECT 

@@ -24,6 +24,8 @@ public class Dict extends DataEntity<Dict> {
 	private String description;// 描述
 	private Integer sort;	// 排序
 	private String parentId;//父Id
+	
+	
 
 	public Dict() {
 		super();

@@ -80,6 +80,7 @@
 		a.update_by AS "updateBy.id",
 		a.update_date,
 		a.del_flag,
+		a.integration,
     	c.name AS "company.name",
     	c.parent_id AS "company.parent.id",
     	c.parent_ids AS "company.parentIds",
@@ -302,6 +303,7 @@
 			remarks = #{remarks},
 			login_flag = #{loginFlag},
 			photo = #{photo}
+			
 		WHERE id = #{id}
 	</update>
 	
@@ -330,7 +332,8 @@
 			update_by = #{updateBy.id}, 
 			update_date = #{updateDate}, 
 			remarks = #{remarks},
-			photo = #{photo}
+			photo = #{photo},
+			integration = #{integration}
 		WHERE id = #{id}
 	</update>
 	

@@ -43,7 +43,7 @@
 				<th>被关注方登录名</th>
 				<th>关注时间</th>
 				<!-- <th>删除标记 </th> -->
-				<shiro:hasPermission name="account:accountAttention:edit"><th>操作</th></shiro:hasPermission>
+				<%-- <shiro:hasPermission name="account:accountAttention:edit"><th>操作</th></shiro:hasPermission> --%>
 			</tr>
 		</thead>
 		<tbody>
@@ -64,10 +64,10 @@
 				<!--  <td>
 					${fns:getDictLabel(accountAttention.delFlag, 'del_flag', '')}
 				</td>-->
-				<shiro:hasPermission name="account:accountAttention:edit"><td>
+				<%-- <shiro:hasPermission name="account:accountAttention:edit"><td>
     				<a href="${ctx}/account/accountAttention/form?id=${accountAttention.id}">修改</a>
 					<a href="${ctx}/account/accountAttention/delete?id=${accountAttention.id}" onclick="return confirmx('确认要删除该用户关注吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+				</td></shiro:hasPermission> --%>
 			</tr>
 		</c:forEach>
 		</tbody>

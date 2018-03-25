@@ -61,10 +61,20 @@ public class User extends DataEntity<User> {
 	private Role role;	// 根据角色查询用户条件
 	private int type;
 	
+	
+	private String integration;//用户活跃度
 
 	private List<AccountSubscribeHistory> accountSubscribeHistorylist; //查询用户订阅
 	
 	
+	public String getIntegration() {
+		return integration;
+	}
+
+	public void setIntegration(String integration) {
+		this.integration = integration;
+	}
+
 	public List<AccountSubscribeHistory> getAccountSubscribeHistorylist() {
 		return accountSubscribeHistorylist;
 	}
