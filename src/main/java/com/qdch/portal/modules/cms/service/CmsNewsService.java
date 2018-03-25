@@ -67,7 +67,7 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 
 
 	@Transactional(readOnly = false)
-	public String getByLinkId(CmsNews cmsNews) {
+	public CmsNews getByLinkId(CmsNews cmsNews) {
 		return dao.getByLinkId(cmsNews);
 	}
 

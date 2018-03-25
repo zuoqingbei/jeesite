@@ -112,6 +112,20 @@ public class CmsContributeController extends BaseController {
 	@RequestMapping(value = "${adminPath}/cms/cmsContribute/changeState")
 	public void  changeState(CmsContribute cmsContribute, HttpServletRequest request, HttpServletResponse response) {
 		try {
+			if(cmsContribute.getId()==null ||cmsContribute.getId().equals("")){
+				this.resultFaliureData(request,response, "请输入要修改的投稿的id", null);
+				return;
+			}
+			CmsContribute cmsContribute1 = cmsContributeService.get(cmsContribute.getId());
+			if(cmsContribute1.getStatus().equals("2")){
+				this.resultFaliureData(request,response, "该投稿已经审核通过了，不能再审核", null);
+				return;
+			}
+			if(request.getParameter("status") == null || request.getParameter("status").equals("")){
+				this.resultFaliureData(request,response, "请输入要修改的投稿的状态status", null);
+				return;
+			}
+
 			cmsContributeService.changeState(cmsContribute);
 			//如果是审核通过，则加到news表和news_data表中
 			if(cmsContribute.getStatus().equals("2")){
@@ -135,7 +149,10 @@ public class CmsContributeController extends BaseController {
 
 				//保存cmsData表
 
-                String newsid = cmsNewsService.getByLinkId(cmsNews);
+
+                String newsid = "";
+                cmsNews = cmsNewsService.getByLinkId(cmsNews);
+                newsid = cmsNews.getId();
                 CmsNewsData cmsNewsData1 = new CmsNewsData();
                 cmsNewsData1.setNewsId(newsid);
                 cmsNewsData1.setContent(cmsContribute.getContent());

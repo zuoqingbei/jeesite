@@ -95,13 +95,18 @@ public class CmsActivityFlowController extends BaseController {
 
 		List<CmsActivityFlow> cmsActivityFlow1 = null;
 		try {
+			if(cmsActivityFlow.getActivityId() == null || cmsActivityFlow.getActivityId().equals("")){
+				this.resultFaliureData(request,response, "请先输入活动的id", null);
+				return;
+			}
 			cmsActivityFlow1 = cmsActivityFlowDao.getByActivity(cmsActivityFlow);
+			this.resultSuccessData(request,response, "获取数据成功", cmsActivityFlow1);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "获取数据失败", cmsActivityFlow1);
+			this.resultFaliureData(request,response, "获取数据失败", null);
 			return;
 		}
-		this.resultSuccessData(request,response, "获取数据成功", cmsActivityFlow1);
+
 
 	}
 

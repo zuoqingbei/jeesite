@@ -24,7 +24,8 @@
 		a.tip AS "tip",
 		a.create_date AS "createDate",
 		a.category AS "category",
-		u2.name AS "user.name"
+		u2.name AS "user.name",
+		u2.photo AS "user.photo"
 	</sql>
 	
 	<sql id="viewRecommendJoins">
@@ -170,7 +171,7 @@
 			and FIND_IN_SET(#{tags},a.tags)
 		</if>
 		<include refid="viewRecommendJoins"/>
-		ORDER by weight desc,create_date desc
+		ORDER by weight desc,a.create_date desc
 	</select>
 	
 </mapper>

@@ -242,7 +242,7 @@
 		<!--<include refid="cmsActivityColumns"/>-->
 		<!--FROM cms_activity a-->
 		<!--<include refid="cmsActivityJoins"/>-->
-		<!--WHERE a.id = #{id}-->
+		<!--WHERE a.id = #{activityId}  and del_flag='0'-->
 	<!--</select>-->
-	<!---->
+
 </mapper>

@@ -70,8 +70,10 @@ public class ViewRecommendService extends CrudService<ViewRecommendDao, ViewReco
 					news.setTagslabel(dict1.getLabel());
 				}
 
+			}else {
+				news.setTagslabel("");
 			}
-			news.setTagslabel("");
+
 			results.add(news);
 		}
 		page.setList(list);

@@ -94,14 +94,19 @@ public class CmsActivityOrganizationController extends BaseController {
 							  HttpServletResponse response){
 		CmsActivityOrganization cmsActivityOrganization1 = null;
 		try {
+			if(cmsActivityOrganization.getActivityId() == null || cmsActivityOrganization.getActivityId().equals("")){
+				this.resultFaliureData(request,response, "请先输入活动的id", null);
+				return;
+			}
 			 cmsActivityOrganization1 = cmsActivityOrganizationDao.getByActivity(cmsActivityOrganization);
+			this.resultSuccessData(request,response, "获取数据成功", cmsActivityOrganization1);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败", cmsActivityOrganization1);
+			this.resultFaliureData(request,response, "操作失败", null);
 			return;
 		}
 
-		this.resultSuccessData(request,response, "获取数据成功", cmsActivityOrganization1);
+
 
 	}
 

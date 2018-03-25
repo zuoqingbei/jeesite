@@ -94,8 +94,8 @@ public class CmsActivityController extends BaseController {
 			page = cmsActivityService.findPage(new Page<CmsActivity>(request, response), cmsActivity);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败",
-					mapJson(page,"fail","操作失败"));
+			this.resultFaliureData(request,response, "操作失败",
+					null);
 			return;
 		}
 		this.resultSuccessData(request,response, "获取数据成功",
