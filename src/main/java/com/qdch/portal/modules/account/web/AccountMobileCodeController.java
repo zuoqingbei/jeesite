@@ -97,7 +97,7 @@ public class AccountMobileCodeController extends BaseController {
 			accountMobileCodeService.save(accountMobileCode);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "保存数据失败", false);
+			this.resultFaliureData(request,response, "保存数据失败", false);
 			return ;
 		}
 		this.resultSuccessData(request,response, "保存数据成功", true);
@@ -108,6 +108,10 @@ public class AccountMobileCodeController extends BaseController {
 	public void sendCheckCode(HttpServletRequest request,HttpServletResponse response){
 		try{
 			String mobile = request.getParameter("mobile");
+			if(mobile == null ||mobile.equals("")){
+				this.resultFaliureData(request,response, "请先输入手机号", false);
+				return ;
+			}
 //			String codes = request.getParameter("codes");
 			String uasge = request.getParameter("uasge")==null?"0":request.getParameter("uasge");
 			String str = SendMsgUtil.presend(mobile);
@@ -120,16 +124,16 @@ public class AccountMobileCodeController extends BaseController {
 				this.resultSuccessData(request,response, "操作成功", true);
 				return;
 			}else if(str.equals("false")){
-				this.resultSuccessData(request,response, "操作失败", false);
+				this.resultFaliureData(request,response, "操作失败", false);
 				return ;
 			}else{
-				this.resultSuccessData(request,response, str, false);
+				this.resultFaliureData(request,response, str, false);
 				return ;
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "操作失败", false);
+			this.resultFaliureData(request,response, "操作失败", false);
 			return ;
 		}
 
@@ -148,10 +152,10 @@ public class AccountMobileCodeController extends BaseController {
 			this.resultSuccessData(request,response, "操作成功", true);
 			return ;
 		}if(str.equals("false")){
-			this.resultSuccessData(request,response, "操作失败", false);
+			this.resultFaliureData(request,response, "操作失败", false);
 			return ;
 		}else {
-			this.resultSuccessData(request,response, str, false);
+			this.resultFaliureData(request,response, str, false);
 		}
 
 

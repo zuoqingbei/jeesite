@@ -31,7 +31,7 @@ public interface CmsNewsDao extends CrudDao<CmsNews> {
 
     public List<CmsNews> getRank(CmsNews cmsNews);
 
-    public List<CmsNews> getSimilarByTags(String[] list);
+    public List<CmsNews> getSimilarByTags(CmsNews cmsNews);
 
 
 

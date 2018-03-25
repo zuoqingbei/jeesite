@@ -20,7 +20,17 @@ public class CmsPraise extends DataEntity<CmsPraise> {
 	private String sourceTable;		// 内容来源表 比如 资讯 政策解读 攻略为portal_news
 	private User user;		// 用户id
 	private String operateType;		// 操作类型 0-踩 1-赞
-	
+
+	private String count;
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
+
 	public CmsPraise() {
 		super();
 	}

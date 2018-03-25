@@ -16,7 +16,8 @@
 		a.audit_user_id AS "auditUserId",
 		a.audit_date AS "auditDate",
 		a.del_flag AS "delFlag",
-		u7.name AS "user.name"
+		u7.name AS "user.name",
+		u7.photo as "user.photo"
 	</sql>
 	
 	<sql id="cmsPortalCommentsJoins">
@@ -28,7 +29,7 @@
 			<include refid="cmsPortalCommentsColumns"/>
 		FROM cms_portal_comments a
 		<include refid="cmsPortalCommentsJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.id = #{id}  and a.del_flag='0'
 	</select>
 	
 	<select id="findList" resultType="CmsPortalComments">
@@ -133,6 +134,16 @@
 		WHERE id = #{id}
 	</update>
 
+	<select id="getBySource" resultType="CmsPortalComments">
+		SELECT
+		<include refid="cmsPortalCommentsColumns"/>
+		FROM cms_portal_comments a
+		<include refid="cmsPortalCommentsJoins"/>
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		and a.del_flag='0'
+	</select>
 
 	<select id="getPortalCommentsCount" resultType="CmsPortalComments">
 		SELECT
@@ -171,7 +182,7 @@
 
 	<select id="getCommentsAndPraise" resultType="CmsPortalComments">
 		SELECT
-			*
+		m.*,tradeCount,praiseCount
 		FROM
 			(
 				SELECT
@@ -179,8 +190,12 @@
 				FROM
 					cms_portal_comments
 				WHERE
-					source_table = 'cms_news'
-				AND source_id = '1'
+					source_table = #{sourceTable}
+
+				<if test="sourceId != null and sourceId != ''">
+					AND source_id = #{sourceId}
+				</if>
+
 			) m
 		LEFT JOIN (
 			SELECT
@@ -214,5 +229,73 @@
 		update cms_portal_comments  set status=#{status}  ,  a.audit_user_id = #{auditUserId},
 		 audit_date=#{auditDate} where id=#{id}
 	</select>
+
+
+	<!--该评论底下的评论数-->
+	<select id="getCommentsCount" resultType="CmsPortalComments">
+		SELECT
+			count(id) commentsCount
+		FROM
+			cms_portal_comments a
+		WHERE
+			a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		and a.del_flag='0'
+		AND FIND_IN_SET(#{parentId},a.parent_ids)
+	</select>
+
+	<!--父评论-->
+	<select id="getParentComments" resultType="CmsPortalComments">
+		SELECT
+		<include refid="cmsPortalCommentsColumns"/>
+		FROM cms_portal_comments a
+		<include refid="cmsPortalCommentsJoins"/>
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.parent_id = '-1'
+		and a.del_flag='0'
+	</select>
+
+	<!--子评论-->
+	<select id="getChildComments" resultType="CmsPortalComments">
+		SELECT
+		<include refid="cmsPortalCommentsColumns"/>
+		FROM cms_portal_comments a
+		<include refid="cmsPortalCommentsJoins"/>
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.parent_id = #{parentId}
+		and a.del_flag='0'
+	</select>
+
+	<select id="getHotComments"  resultType="CmsPortalComments">
+		SELECT
+		<include refid="cmsPortalCommentsColumns"/>
+		, b.praiseCount
+		FROM
+			(
+				SELECT
+					a.source_id,
+					COUNT(a.source_id) praiseCount
+				FROM
+					cms_praise a
+				WHERE
+					a.source_table = 'cms_portal_comments'
+				AND a.operate_type = '1'
+				AND a.del_flag = '0'
+				GROUP BY
+					a.source_id
+				ORDER BY
+					praiseCount DESC
+				LIMIT 2
+			) b
+		LEFT JOIN cms_portal_comments a
+		<include refid="cmsPortalCommentsJoins"/>
+		ON b.source_id = a.id
+	</select>
+
+
 	
 </mapper>

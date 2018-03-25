@@ -26,7 +26,7 @@ public interface CmsPraiseDao extends CrudDao<CmsPraise> {
      * @param cmsPraise
      * @return
      */
-    public int getPraiseCount(CmsPraise cmsPraise);
+    public CmsPraise getPraiseCount(CmsPraise cmsPraise);
 
     /**
      * 我是否有踩或赞过

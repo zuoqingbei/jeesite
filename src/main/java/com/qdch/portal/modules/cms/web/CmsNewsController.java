@@ -266,6 +266,7 @@ public class CmsNewsController extends BaseController {
 		try {
 			CmsNews cmsNews = cmsNewsService.get(request.getParameter("id"));
 			if(cmsNews == null){
+				this.resultSuccessData(request,response, "操作成功", null);
                 return ;
             }
 			String tags = cmsNews.getTags();
@@ -273,10 +274,12 @@ public class CmsNewsController extends BaseController {
 			String []  tagList = null;
 			if(tags != null &&!tags.equals("")){
                 tagList = tags.split(",");
+                cmsNews.setTagsvalue(tagList);
 
             }
-			results = cmsNewsDao.getSimilarByTags(tagList);
-			this.resultSuccessData(request,response, "操作成功", null);
+
+			results = cmsNewsDao.getSimilarByTags(cmsNews);
+			this.resultSuccessData(request,response, "操作成功", results);
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultSuccessData(request,response, "操作失败", "false");

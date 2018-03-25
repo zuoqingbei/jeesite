@@ -68,7 +68,7 @@
 			<label class="control-label">文章图片：</label>
 			<div class="controls">
 				<form:hidden id="image" path="image" htmlEscape="false" maxlength="255" class="input-xlarge"/>
-				<sys:ckfinder input="image" type="files" uploadPath="/cms/cmsBanner" selectMultiple="true"/>
+				<sys:ckfinder input="image" type="files" uploadPath="/cms/cmsNews" selectMultiple="true"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -92,17 +92,14 @@
 					</c:when>
 					<c:otherwise>
 						<c:forEach var ="dicts" items="${fns:getDictList('tags_type')}" >
-							<c:forTokens var="a" items="${cmsNews.tags}" delims=",">
-									<c:choose>
-										<c:when test="${dicts.value eq a}">
-											<input type="checkbox" checked="checked" name="tags" value="${dicts.value}">${dicts.label}
-										</c:when>
-										<%--<c:otherwise>--%>
-											<%--<input type="checkbox" name="tags" value="${dicts.value}">${dicts.label}--%>
-										<%--</c:otherwise>--%>
-									</c:choose>
-							</c:forTokens>
-							<input type="checkbox" checked="checked" name="tags" value="${dicts.value}">${dicts.label}
+							<c:choose>
+								<c:when test="${fn:contains(cmsNews.tags,dicts.value)}">
+									<input type="checkbox" checked="checked" name="tags" value="${dicts.value}">${dicts.label}
+								</c:when>
+								<c:otherwise>
+									<input type="checkbox"  name="tags" value="${dicts.value}">${dicts.label}
+								</c:otherwise>
+							</c:choose>
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>

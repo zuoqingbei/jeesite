@@ -442,10 +442,10 @@
 		<include refid="cmsNewsColumns"/>
 		FROM cms_news a
 		<include refid="cmsNewsJoins"/>
-		where 1=1
-		<if test="list != null and list != ''">
+		where 1=1 and a.id !=#{id}
+		<if test="tagsvalue != null and tagsvalue != ''">
 			and
-			<foreach collection="array" item="e" open="" separator=" and " close="">
+			<foreach collection="tagsvalue" item="e" open="" separator=" or " close="">
 				FIND_IN_SET(#{e},a.tags)
 
 			</foreach>
