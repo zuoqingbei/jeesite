@@ -27,10 +27,6 @@ public interface AccountSubscribeHistoryDao extends CrudDao<AccountSubscribeHist
 	 */
 	public void save(AccountSubscribeHistory accountSubscribeHistory);
 	
-	/**根据用户id查询用户订阅
-	 * @author lianjiming
-	 * @version 2018-03-24
-	 * @param accountSubscribeHistory 用户订阅实体
-	 */
+
 	
 }

@@ -103,6 +103,9 @@
     	ou.name AS "office.primaryPerson.name",
     	ou2.id AS "office.deputyPerson.id",
     	ou2.name AS "office.deputyPerson.name"
+    	
+    	
+    	
     	<!-- ,
 	        r.id AS "roleList.id",
 	        r.office_id AS "roleList.office.id",
@@ -137,6 +140,23 @@
 	     <foreach collection="array" item="keyList" index="index" open="(" separator="," close=")">     
 	        #{keyList}  
 	     </foreach>
+    </select>
+    
+    <!-- 查询用户信息 -->
+    <select id="getUserInfo" resultType="User">
+    	   select  <include refid="userColumns"/>
+    	   			,a.countFans,a.countCommen,a.countSubscribe
+    	   from(
+	    	     select a.*,t1.fs as countFans,t2.gz as countCommen,t3.dy as countSubscribe
+				 from 
+				 	sys_user a,
+					(select count(a.to_user) fs  from account_attention a where a.del_flag = 0 group by a.to_user having a.to_user = #{id})  t1,
+					(select count(a.from_user)  gz from account_attention a  where a.del_flag = 0 group by a.from_user having a.from_user = #{id})  t2,
+					(select count(a.user_id)  dy from account_subscribe_history a  where a.del_flag = 0 group by a.user_id having a.user_id = #{id})  t3
+				 where a.id = #{id}
+    	   )a
+			<include refid="userJoins"/>
+			 where a.id = #{id}
     </select>
 	
 	<select id="findList" resultType="User">

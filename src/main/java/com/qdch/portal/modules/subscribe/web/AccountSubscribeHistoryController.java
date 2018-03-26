@@ -55,7 +55,7 @@ public class AccountSubscribeHistoryController extends BaseController {
 	
 	//查询用户订阅
 	@ResponseBody
-	@RequestMapping(value = "${adminPath}/subscribe/accountSubscribeHistory/find")
+	@RequestMapping(value = "${portalPath}/subscribe/accountSubscribeHistory/find")
 	public void find(AccountSubscribeHistory accountSubscribeHistory,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			//获取请求参数
@@ -69,16 +69,12 @@ public class AccountSubscribeHistoryController extends BaseController {
 				list = DictUtils.getDictList("tags_type");
 				this.resultSuccessData(request,response, "添加订阅", list);
 			}else{//用户登录并且有订阅
-				String[] set2Array = JedisUtils.Set2Array(set);
-				list = DictUtils.findByIds(set2Array);
+				list = DictUtils.findByIds(JedisUtils.Set2Array(set));
 				this.resultSuccessData(request,response, "已经订阅", list);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
 	
 	//列表查询
@@ -90,7 +86,7 @@ public class AccountSubscribeHistoryController extends BaseController {
 	}
 	//添加订阅,取消订阅
 	@ResponseBody
-	@RequestMapping(value = "${adminPath}/subscribe/accountSubscribeHistory/save")
+	@RequestMapping(value = "${portalPath}/subscribe/accountSubscribeHistory/save")
 	public void save(AccountSubscribeHistory accountSubscribeHistory,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			//获取请求参数
