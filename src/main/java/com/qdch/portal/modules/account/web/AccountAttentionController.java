@@ -43,6 +43,25 @@ public class AccountAttentionController extends BaseController {
 
 	@Autowired
 	private AccountAttentionService accountAttentionService;
+	
+	//查询用户信息
+	@RequestMapping(value = {"${portalPath}/account/getUserInfo"})
+	@ResponseBody
+	public void getUserInfo (User user,HttpServletRequest request,HttpServletResponse response){
+		//获取请求参数
+		try {
+			String userId = request.getParameter("userId");
+			if(userId != null){
+				user.setId(userId);
+				List<User> list = UserUtils.getUserInfo(user);
+				this.resultSuccessData(request,response, "用户信息", list);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	/**用户添加关注
 	 * @author lianjiming
 	 * @version 2018-03-13

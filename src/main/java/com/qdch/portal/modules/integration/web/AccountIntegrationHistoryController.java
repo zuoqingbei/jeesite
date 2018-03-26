@@ -52,7 +52,7 @@ public class AccountIntegrationHistoryController extends BaseController {
 	
 	//修改用户活跃度记录（包括加分和减分）
 	//@RequiresPermissions("integration:accountIntegrationHistory:edit")
-	@RequestMapping(value = "${adminPath}/integration/accountIntegrationHistory/saveIntegration")
+	@RequestMapping(value = "${portalPath}/integration/accountIntegrationHistory/saveIntegration")
 	public void saveIntegration(AccountIntegrationHistory accountIntegrationHistory,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			//获取请求参数
@@ -67,7 +67,7 @@ public class AccountIntegrationHistoryController extends BaseController {
 					integration = "0";//默认用户最初零分
 				}
 				if(nums==null){
-					nums = "0";//修改分数为空，默认修改零分
+					nums = "0";//变更分数为空，默认变更零分
 				}
 				//类型转换
 				Double d_integration = Double.valueOf(integration);
