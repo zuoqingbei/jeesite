@@ -64,7 +64,8 @@ public class ViewRecommendService extends CrudService<ViewRecommendDao, ViewReco
 			String tags = news.getTags();
 			if(tags !=null  && !tags.equals("")){
 				tags = StringUtils.delFrontAndEndSymbol(tags);
-				dict.setValue(tags);
+//				dict.setValue(tags);
+				dict.setTagsvalue(tags.split(","));
 				Dict dict1 =  dictDao.getLabelByIds(dict);
 				if(dict1 !=null && !dict1.equals("")){
 					news.setTagslabel(dict1.getLabel());
