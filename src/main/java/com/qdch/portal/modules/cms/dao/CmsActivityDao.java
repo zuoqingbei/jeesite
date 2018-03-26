@@ -7,6 +7,8 @@ import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
 import com.qdch.portal.modules.cms.entity.CmsActivity;
 
+import java.util.List;
+
 /**
  * 活动DAO接口
  * @author wangfeng
@@ -14,5 +16,7 @@ import com.qdch.portal.modules.cms.entity.CmsActivity;
  */
 @MyBatisDao
 public interface CmsActivityDao extends CrudDao<CmsActivity> {
+
+
 	
 }

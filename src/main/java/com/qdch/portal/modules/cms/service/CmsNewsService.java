@@ -67,7 +67,7 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 
 
 	@Transactional(readOnly = false)
-	public String getByLinkId(CmsNews cmsNews) {
+	public CmsNews getByLinkId(CmsNews cmsNews) {
 		return dao.getByLinkId(cmsNews);
 	}
 
@@ -116,8 +116,10 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 					news.setTagslabel(dict1.getLabel());
 				}
 
+			}else{
+				news.setTagslabel("");
 			}
-			news.setTagslabel("");
+
 			resultlist.add(news);
 		}
 

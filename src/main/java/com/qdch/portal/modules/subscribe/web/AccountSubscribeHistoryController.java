@@ -3,6 +3,7 @@
  */
 package com.qdch.portal.modules.subscribe.web;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -31,8 +32,11 @@ import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.account.entity.AccountAttention;
 import com.qdch.portal.modules.subscribe.entity.AccountSubscribeHistory;
 import com.qdch.portal.modules.subscribe.service.AccountSubscribeHistoryService;
+import com.qdch.portal.modules.sys.entity.Dict;
 import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.service.SystemService;
+import com.qdch.portal.modules.sys.utils.DictUtils;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 用户订阅历史Controller
@@ -48,6 +52,34 @@ public class AccountSubscribeHistoryController extends BaseController {
 	
 	@Autowired
 	private SystemService systemService;
+	
+	//查询用户订阅
+	@ResponseBody
+	@RequestMapping(value = "${adminPath}/subscribe/accountSubscribeHistory/find")
+	public void find(AccountSubscribeHistory accountSubscribeHistory,HttpServletRequest request,HttpServletResponse response) {
+		try {
+			//获取请求参数
+			String userId = request.getParameter("userId");
+			//读取缓存 
+			accountSubscribeHistory.setUser(userId);
+			String key = "accountSubscribeHistoryCache_"+userId;
+			Set<String> set = JedisUtils.getSet(key);
+			List<Dict> list = new ArrayList<Dict>();
+			if(set == null || userId == null){//没有订阅或者没有登录,返回所有订阅标签,tpye=tags_type
+				list = DictUtils.getDictList("tags_type");
+				this.resultSuccessData(request,response, "添加订阅", list);
+			}else{//用户登录并且有订阅
+				String[] set2Array = JedisUtils.Set2Array(set);
+				list = DictUtils.findByIds(set2Array);
+				this.resultSuccessData(request,response, "已经订阅", list);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
 	
 	//列表查询
 	@RequestMapping(value = {"${adminPath}/subscribe/accountSubscribeHistory/list"})

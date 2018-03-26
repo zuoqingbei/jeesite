@@ -181,6 +181,7 @@ public class HttpClientUtil {
 				EntityUtils.consume(entity);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error("与[" + reqURL + "]通信过程中发生异常,堆栈信息如下", e);
 		} finally {
 			httpClient.getConnectionManager().shutdown();

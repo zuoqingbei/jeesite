@@ -252,7 +252,5 @@ public class AccountAttentionController extends BaseController {
 		addMessage(redirectAttributes, "保存用户关注成功");
 		return "redirect:"+Global.getAdminPath()+"/account/accountAttention/list?repage";
 	}
-	
-
 
 }

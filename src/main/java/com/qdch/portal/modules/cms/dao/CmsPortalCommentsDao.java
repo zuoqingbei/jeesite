@@ -51,4 +51,18 @@ public interface CmsPortalCommentsDao extends CrudDao<CmsPortalComments> {
 
 
     public void changeState(CmsPortalComments cmsPortalComments);
+
+    //该条评论下的回复数
+    public CmsPortalComments getCommentsCount(CmsPortalComments portalComments);
+
+    //第一层评论
+    public List<CmsPortalComments> getParentComments(CmsPortalComments cmsPortalComments);
+
+    //子评论
+    public List<CmsPortalComments> getChildComments(CmsPortalComments cmsPortalComments);
+
+    public List<CmsPortalComments> getHotComments(CmsPortalComments cmsPortalComments);
+
+
+
 }

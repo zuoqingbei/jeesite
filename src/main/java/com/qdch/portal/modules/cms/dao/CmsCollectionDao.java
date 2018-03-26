@@ -21,7 +21,7 @@ public interface CmsCollectionDao extends CrudDao<CmsCollection> {
      * @param cmsCollection
      * @return
      */
-    public int getCollectionCount(CmsCollection cmsCollection);
+    public CmsCollection getCollectionCount(CmsCollection cmsCollection);
 
 
     /**
@@ -29,6 +29,6 @@ public interface CmsCollectionDao extends CrudDao<CmsCollection> {
      * @param cmsCollection
      * @return
      */
-    public int getDynamicSelf(CmsCollection cmsCollection);
+    public CmsCollection getDynamicSelf(CmsCollection cmsCollection);
 	
 }

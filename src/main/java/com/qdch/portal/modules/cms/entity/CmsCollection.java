@@ -19,7 +19,17 @@ public class CmsCollection extends DataEntity<CmsCollection> {
 	private String sourceId;		// 收藏内容源id
 	private String sourceTable;		// 内容来源表 比如 资讯 政策解读 攻略为portal_news
 	private User user;		// 用户id
-	
+
+	private String count;
+
+	public String getCount() {
+		return count;
+	}
+
+	public void setCount(String count) {
+		this.count = count;
+	}
+
 	public CmsCollection() {
 		super();
 	}
