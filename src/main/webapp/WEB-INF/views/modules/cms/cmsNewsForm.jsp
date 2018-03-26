@@ -116,7 +116,7 @@
 		<div class="control-group">
 			<label class="control-label">权重，越大越靠前：</label>
 			<div class="controls">
-				<form:input path="weight" htmlEscape="false" maxlength="11" class="input-xlarge " value="0"/>
+				<form:input path="weight" htmlEscape="false" maxlength="11" class="input-xlarge "/>
 			</div>
 		</div>
 		<%-- <div class="control-group">

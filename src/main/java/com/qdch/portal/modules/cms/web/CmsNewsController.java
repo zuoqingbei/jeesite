@@ -100,14 +100,14 @@ public class CmsNewsController extends BaseController {
 	@RequestMapping(value = "${adminPath}/cms/cmsNews/form")
 	public String form(CmsNews cmsNews, Model model) {
 		try {
-			Dict dict = new Dict();
-			dict.setType("tags_type");
-			cmsNews  = cmsNewsService.getContent(cmsNews);
-			if(cmsNews == null){
-				cmsNews = new CmsNews();
-			}
-			List<Dict> dicts = dictService.findByType(dict);
-			cmsNews.setTypeDict(dicts);
+//			Dict dict = new Dict();
+//			dict.setType("tags_type");
+//			cmsNews  = cmsNewsService.getContent(cmsNews);
+//			if(cmsNews == null){
+//				cmsNews = new CmsNews();
+//			}
+//			List<Dict> dicts = dictService.findByType(dict);
+//			cmsNews.setTypeDict(dicts);
 			model.addAttribute("cmsNews", cmsNews);
 //			model.addAttribute("table","CmsNews");
 		} catch (Exception e) {
@@ -124,6 +124,9 @@ public class CmsNewsController extends BaseController {
 		}
 		try {
 			cmsNews.setDataType("2"); //管理人员发布
+			if(cmsNews.getWeight()==null||cmsNews.getWeight().equals("")){
+				cmsNews.setWeight("0");
+			}
 			cmsNews.setUser(UserUtils.getUser());
 			cmsNewsService.save(cmsNews);
 			CmsNewsData cmsNewsData = cmsNewsDataDao.getByNewId(cmsNews.getId());

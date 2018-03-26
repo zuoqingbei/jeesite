@@ -148,7 +148,8 @@ public class AccountMobileCodeController extends BaseController {
 	public void checkIndentifyCode(HttpServletRequest request,HttpServletResponse response){
 		String mobile = request.getParameter("mobile");
 		String codes = request.getParameter("codes");
-		if(mobile==null||mobile.equals("")||codes==null||codes.equals("")){
+
+		if(StringUtils.isBlank(mobile)||StringUtils.isBlank(codes)){
 			this.resultFaliureData(request,response, "请先输入手机号和验证码", false);
 			return ;
 		}

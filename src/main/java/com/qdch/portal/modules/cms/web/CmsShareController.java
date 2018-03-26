@@ -98,8 +98,7 @@ public class CmsShareController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsShare/saveShare")
 	public void saveShare(CmsShare cmsShare,Model model, HttpServletRequest request,HttpServletResponse response){
 		try {
-			if(cmsShare.getSourceId()==null||cmsShare.getSourceTable()==null||
-					cmsShare.getSourceId().equals("")||cmsShare.getSourceTable().equals("")){
+			if(StringUtils.isBlank(cmsShare.getSourceTable())||StringUtils.isBlank(cmsShare.getSourceId())){
 				this.resultFaliureData(request,response, "请先输入sourceId和sourceTable的值", null);
 				return;
 			}
@@ -123,11 +122,11 @@ public class CmsShareController extends BaseController {
 		try {
 			String sourceTable = cmsShare.getSourceTable();
 			String sourceId = cmsShare.getSourceId();
-			if(sourceTable==null||sourceTable.equals("")){
+			if(StringUtils.isBlank(sourceTable)){
 				this.resultFaliureData(request,response, "请先输入sourceTable", "");
 				return;
 			}
-			if(sourceId==null||sourceId.equals("")){
+			if(StringUtils.isBlank(sourceId)){
 				this.resultFaliureData(request,response, "请先输入sourceId", "");
 				return;
 			}
@@ -159,15 +158,15 @@ public class CmsShareController extends BaseController {
 			String sourceId = cmsShare.getSourceId();
 			String userid = cmsShare.getUserId();
 			Map<String,Object> res = new HashMap<String, Object>();
-			if(sourceTable==null||sourceTable.equals("")){
+			if(StringUtils.isBlank(sourceTable)){
 				this.resultFaliureData(request,response, "请先输入sourceTable", "");
 				return;
 			}
-			if(sourceId==null||sourceId.equals("")){
+			if(StringUtils.isBlank(sourceId)){
 				this.resultFaliureData(request,response, "请先输入sourceId", "");
 				return;
 			}
-			if(userid==null||userid.equals("")){
+			if(StringUtils.isBlank(userid)){
 				this.resultFaliureData(request,response, "请先输入userid", "");
 				return;
 			}

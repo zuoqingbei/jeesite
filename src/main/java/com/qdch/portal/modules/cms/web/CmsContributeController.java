@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao;
+import com.qdch.portal.modules.cms.entity.CmsEducation;
 import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.entity.CmsNewsData;
+import com.qdch.portal.modules.cms.service.CmsEducationService;
 import com.qdch.portal.modules.cms.service.CmsNewsDataService;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
 import com.qdch.portal.modules.sys.utils.UserUtils;
@@ -49,6 +51,9 @@ public class CmsContributeController extends BaseController {
 
 	@Autowired
 	private CmsNewsDataService cmsNewsDataService;
+
+	@Autowired
+	private CmsEducationService cmsEducationService;
 
 	
 	@ModelAttribute
@@ -129,35 +134,44 @@ public class CmsContributeController extends BaseController {
 			cmsContributeService.changeState(cmsContribute);
 			//如果是审核通过，则加到news表和news_data表中
 			if(cmsContribute.getStatus().equals("2")){
-				CmsNews cmsNews = new CmsNews();
-				CmsNewsData cmsNewsData = new CmsNewsData();
-				cmsNews.setLink(cmsContribute.getId());
-				cmsNews.setDataType("1");//用户投稿
-				cmsNews.setUser(cmsContribute.getUser());
-				cmsNews.setImage(cmsContribute.getImage());
-				cmsNews.setKeywords(cmsContribute.getKeywords());
-				cmsNews.setTags(cmsContribute.getTags());
-				cmsNews.setDescription(cmsContribute.getDescription());
-				cmsNews.setCreateDate(cmsContribute.getCreateDate());
-				cmsNews.setUpdateBy(cmsContribute.getUpdateBy());
-				cmsNews.setUpdateDate(cmsContribute.getUpdateDate());
-				cmsNews.setCreateBy(cmsContribute.getCreateBy());
-				cmsNews.setRemarks(cmsContribute.getRemarks());
-				cmsNews.setCategory1("");
-				cmsNews.setTitle(cmsContribute.getTitle());
-				cmsNewsService.save(cmsNews);
+				if(cmsContribute.getDataType().equals("0")){ // 投稿类型 0-资讯 1-案例 2-投资教育 3-问答
+					CmsNews cmsNews = new CmsNews();
+					CmsNewsData cmsNewsData = new CmsNewsData();
+					cmsNews.setLink(cmsContribute.getId());
+					cmsNews.setDataType("1");//用户投稿
+					cmsNews.setUser(cmsContribute.getUser());
+					cmsNews.setImage(cmsContribute.getImage());
+					cmsNews.setKeywords(cmsContribute.getKeywords());
+					cmsNews.setTags(cmsContribute.getTags());
+					cmsNews.setDescription(cmsContribute.getDescription());
+					cmsNews.setCreateDate(cmsContribute.getCreateDate());
+					cmsNews.setUpdateBy(cmsContribute.getUpdateBy());
+					cmsNews.setUpdateDate(cmsContribute.getUpdateDate());
+					cmsNews.setCreateBy(cmsContribute.getCreateBy());
+					cmsNews.setRemarks(cmsContribute.getRemarks());
+					cmsNews.setCategory1("");
+					cmsNews.setTitle(cmsContribute.getTitle());
+					cmsNewsService.save(cmsNews);
 
-				//保存cmsData表
+					//保存cmsData表
+					String newsid = "";
+					cmsNews = cmsNewsService.getByLinkId(cmsNews);
+					newsid = cmsNews.getId();
+					CmsNewsData cmsNewsData1 = new CmsNewsData();
+					cmsNewsData1.setNewsId(newsid);
+					cmsNewsData1.setContent(cmsContribute.getContent());
+					cmsNewsData1.setContentHtml(cmsContribute.getContentHtml());
+					cmsNewsDataService.save(cmsNewsData1);
+				}else if(cmsContribute.getDataType().equals("1")){ //案例
+					saveSame(cmsContribute,"1");
+				}else if(cmsContribute.getDataType().equals("2")){  //-投资教育
+					saveSame(cmsContribute,"0");
+				}else if(cmsContribute.getDataType().equals("3")){ //问答
+
+				}
 
 
-                String newsid = "";
-                cmsNews = cmsNewsService.getByLinkId(cmsNews);
-                newsid = cmsNews.getId();
-                CmsNewsData cmsNewsData1 = new CmsNewsData();
-                cmsNewsData1.setNewsId(newsid);
-                cmsNewsData1.setContent(cmsContribute.getContent());
-                cmsNewsData1.setContentHtml(cmsContribute.getContentHtml());
-                cmsNewsDataService.save(cmsNewsData1);
+
 			}
 
 			this.resultSuccessData(request,response, "修改成功", true);
@@ -220,6 +234,28 @@ public class CmsContributeController extends BaseController {
 		}
 		this.resultSuccessData(request,response, "保存数据成功", null);
 
+	}
+
+	public void saveSame(CmsContribute cmsContribute,String catalog){
+		CmsEducation cmsEducation = new CmsEducation();
+		CmsNewsData cmsNewsData = new CmsNewsData();
+		cmsEducation.setLink(cmsContribute.getId());
+		cmsEducation.setDataType("1");//用户投稿
+		cmsEducation.setUser(cmsContribute.getUser());
+		cmsEducation.setImage(cmsContribute.getImage());
+		cmsEducation.setKeywords(cmsContribute.getKeywords());
+		cmsEducation.setTags(cmsContribute.getTags());
+		cmsEducation.setDescription(cmsContribute.getDescription());
+		cmsEducation.setCreateDate(cmsContribute.getCreateDate());
+		cmsEducation.setUpdateBy(cmsContribute.getUpdateBy());
+		cmsEducation.setUpdateDate(cmsContribute.getUpdateDate());
+		cmsEducation.setCreateBy(cmsContribute.getCreateBy());
+		cmsEducation.setRemarks(cmsContribute.getRemarks());
+		cmsEducation.setCategory1(catalog);  //一级分类0-投资教育 1-案例 2-政策解读 3-攻略
+		cmsEducation.setTitle(cmsContribute.getTitle());
+		cmsEducation.setContentHtml(cmsContribute.getContentHtml());
+		cmsEducation.setContent(StringUtils.replaceMobileHtml(cmsContribute.getContentHtml()));
+		cmsEducationService.save(cmsEducation);
 	}
 
 }

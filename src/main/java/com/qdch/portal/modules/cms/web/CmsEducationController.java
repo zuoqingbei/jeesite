@@ -6,6 +6,8 @@ package com.qdch.portal.modules.cms.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.modules.sys.entity.Dict;
+import com.qdch.portal.modules.sys.service.DictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.cms.entity.CmsEducation;
 import com.qdch.portal.modules.cms.service.CmsEducationService;
 
+import java.util.List;
+
 /**
  * 投资教育Controller
  * @author wangfeng
@@ -32,6 +36,8 @@ public class CmsEducationController extends BaseController {
 
 	@Autowired
 	private CmsEducationService cmsEducationService;
+
+	private DictService dictService;
 	
 	@ModelAttribute
 	public CmsEducation get(@RequestParam(required=false) String id) {
@@ -56,6 +62,7 @@ public class CmsEducationController extends BaseController {
 	@RequiresPermissions("cms:cmsEducation:view")
 	@RequestMapping(value = "${adminPath}/cms/cmsEducation/form")
 	public String form(CmsEducation cmsEducation, Model model) {
+
 		model.addAttribute("cmsEducation", cmsEducation);
 		return "modules/cms/cmsEducationForm";
 	}
@@ -63,12 +70,20 @@ public class CmsEducationController extends BaseController {
 	@RequiresPermissions("cms:cmsEducation:edit")
 	@RequestMapping(value = "${adminPath}/cms/cmsEducation/save")
 	public String save(CmsEducation cmsEducation, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, cmsEducation)){
-			return form(cmsEducation, model);
+		try {
+			if (!beanValidator(model, cmsEducation)){
+                return form(cmsEducation, model);
+            }
+			if(cmsEducation.getWeight()==null||cmsEducation.getWeight().equals("")){
+                cmsEducation.setWeight("0");
+            }
+			cmsEducationService.save(cmsEducation);
+			addMessage(redirectAttributes, "保存投资教育成功");
+			return "redirect:"+Global.getAdminPath()+"/cms/cmsEducation/list?repage";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
 		}
-		cmsEducationService.save(cmsEducation);
-		addMessage(redirectAttributes, "保存投资教育成功");
-		return "redirect:"+Global.getAdminPath()+"/cms/cmsEducation/list?repage";
 	}
 	
 	@RequiresPermissions("cms:cmsEducation:edit")
@@ -77,6 +92,20 @@ public class CmsEducationController extends BaseController {
 		cmsEducationService.delete(cmsEducation);
 		addMessage(redirectAttributes, "删除投资教育成功");
 		return "redirect:"+Global.getAdminPath()+"/cms/cmsEducation/list?repage";
+	}
+
+	/**
+	 * 前台列表
+	 * @param request
+	 * @param response
+	 */
+
+	@RequestMapping(value = "${portalPath}/cms/cmsEducation/getList")
+	public void getList(HttpServletRequest request,HttpServletResponse response){
+
+
+		this.resultSuccessData(request,response, "保存数据成功", null);
+
 	}
 
 }

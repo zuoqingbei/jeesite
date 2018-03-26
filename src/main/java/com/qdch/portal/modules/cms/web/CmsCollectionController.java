@@ -98,11 +98,11 @@ public class CmsCollectionController extends BaseController {
 		try {
 			String sourceTable = cmsCollection.getSourceTable();
 			String sourceId = cmsCollection.getSourceId();
-			if(sourceTable==null||sourceTable.equals("")){
+			if(StringUtils.isBlank(sourceTable)){
 				this.resultFaliureData(request,response, "请先输入sourceTable", "");
 				return;
 			}
-			if(sourceId==null||sourceId.equals("")){
+			if(StringUtils.isBlank(sourceId)){
 				this.resultFaliureData(request,response, "请先输入sourceId", "");
 				return;
 			}
@@ -134,15 +134,15 @@ public class CmsCollectionController extends BaseController {
 			String sourceId = cmsCollection.getSourceId();
 			String userid = cmsCollection.getUserId();
 			Map<String,Object> res = new HashMap<String, Object>();
-			if(sourceTable==null||sourceTable.equals("")){
+			if(StringUtils.isBlank(sourceTable)){
 				this.resultFaliureData(request,response, "请先输入sourceTable", "");
 				return;
 			}
-			if(sourceId==null||sourceId.equals("")){
+			if(StringUtils.isBlank(sourceId)){
 				this.resultFaliureData(request,response, "请先输入sourceId", "");
 				return;
 			}
-			if(userid==null||userid.equals("")){
+			if(StringUtils.isBlank(userid)){
 				this.resultFaliureData(request,response, "请先输入userid", "");
 				return;
 			}
