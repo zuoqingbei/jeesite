@@ -4,9 +4,12 @@
 package com.qdch.portal.modules.cms.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.qdch.portal.common.utils.Json;
 import org.hibernate.validator.constraints.Length;
 import com.qdch.portal.modules.sys.entity.User;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.qdch.portal.common.persistence.DataEntity;
@@ -23,15 +26,44 @@ public class CmsPortalComments extends DataEntity<CmsPortalComments> {
 	private String parentIds;		// 所有父级id用逗号拼接，并且以逗号开头结尾 比如 ,1,2,
 	private String sourceId;		// 评论内容源id
 	private String sourceTable;		// 内容来源表 比如 资讯 政策解读 攻略为portal_news
+	@Json
 	private String content;		// 评论内容
+	@Json
 	private User user;		// 评论姓名
 	private String ip;		// 评论IP
 	private String auditUserId;		// 审核人
 	private Date auditDate;		// 审核时间
 
+	@Json
 	private String tradeCount; //踩的数量
 
+	@Json
 	private String praiseCount; //赞的数量
+
+	@Json
+	private String  commentsCount; //评论的数量
+
+
+	public String getCommentsCount() {
+		return commentsCount;
+	}
+
+	public void setCommentsCount(String commentsCount) {
+		this.commentsCount = commentsCount;
+	}
+
+	@Json
+	private List<CmsPortalComments>  commentsList; //子评论
+
+	public List<CmsPortalComments> getCommentsList() {
+		return commentsList;
+	}
+
+	public void setCommentsList(List<CmsPortalComments> commentsList) {
+		this.commentsList = commentsList;
+	}
+
+
 
 	public String getParentId() {
 		return parentId;

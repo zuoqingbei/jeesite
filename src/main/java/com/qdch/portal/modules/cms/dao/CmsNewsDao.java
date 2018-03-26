@@ -24,14 +24,14 @@ public interface CmsNewsDao extends CrudDao<CmsNews> {
      */
     public List<CmsNews>  getRecommend(CmsNews cmsNews);
 
-    public String getByLinkId(CmsNews cmsNews);
+    public CmsNews getByLinkId(CmsNews cmsNews);
 
     public CmsNews getContent(CmsNews cmsNews);
 
 
     public List<CmsNews> getRank(CmsNews cmsNews);
 
-    public List<CmsNews> getSimilarByTags(String[] list);
+    public List<CmsNews> getSimilarByTags(CmsNews cmsNews);
 
 
 

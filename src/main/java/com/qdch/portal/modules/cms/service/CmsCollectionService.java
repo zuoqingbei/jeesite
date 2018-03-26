@@ -48,7 +48,7 @@ public class CmsCollectionService extends CrudService<CmsCollectionDao, CmsColle
 
 	@Transactional(readOnly = false)
 	public boolean getDynamicSelf(CmsCollection cmsCollection) {
-		return  dao.getDynamicSelf(cmsCollection)>0?true:false;
+		return  Integer.parseInt(dao.getDynamicSelf(cmsCollection).getCount())>0?true:false;
 	}
 	
 }

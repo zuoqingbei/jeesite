@@ -5,18 +5,19 @@ package com.qdch.portal.modules.cms.dao;
 
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
-import com.qdch.portal.modules.cms.entity.CmsActivity;
+import com.qdch.portal.modules.cms.entity.ViewRecommend;
 
+import javax.swing.text.View;
 import java.util.List;
 
 /**
- * 活动DAO接口
+ * 推荐DAO接口
  * @author wangfeng
- * @version 2018-03-21
+ * @version 2018-03-24
  */
 @MyBatisDao
-public interface CmsActivityDao extends CrudDao<CmsActivity> {
+public interface ViewRecommendDao extends CrudDao<ViewRecommend> {
 
-
+    public List<ViewRecommend> getRecommend(ViewRecommend recommend);
 	
 }

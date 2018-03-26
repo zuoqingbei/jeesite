@@ -3,6 +3,8 @@
  */
 package com.qdch.portal.thirdplat.web;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,6 +39,7 @@ import com.qdch.portal.thirdplat.entity.AccessToken;
 import com.qdch.portal.thirdplat.entity.AccountThirdplat;
 import com.qdch.portal.thirdplat.entity.WxUserInfo;
 import com.qdch.portal.thirdplat.service.AccountThirdplatService;
+import com.qdch.portal.thirdplat.utils.HttpClientUtil;
 import com.qdch.portal.thirdplat.utils.WxpubOAuth;
 
 /**
@@ -70,6 +73,16 @@ public class WxAuthController extends BaseController{
 		System.out.println(redictUrl);
 		return "redirect:" + redictUrl;
 	}
+/*	@RequestMapping(value = {"${portalPath}/wx/auth2"}, method = RequestMethod.GET)
+	public String wxAuth2(Model model,HttpServletRequest request, HttpServletResponse response){
+		String to=request.getParameter("to");
+		String url = "http://www.hlsofttech.com/portal/authorize";
+		String redictUrl=WxpubOAuth.createOauthUrlForCode(url, true);
+		System.out.println(redictUrl);
+        String token=HttpClientUtil.sendPostSSLRequest(redictUrl, new HashMap<String,String>());
+        System.out.println(token);
+		return "redirect:" + to;
+	}*/
 	/**
 	 * @todo   处理微信用户验证
 	 * @time   2018年3月21日 上午10:00:16

@@ -14,6 +14,7 @@ import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.entity.CmsNewsData;
 import com.qdch.portal.modules.cms.service.CmsNewsDataService;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -111,6 +112,20 @@ public class CmsContributeController extends BaseController {
 	@RequestMapping(value = "${adminPath}/cms/cmsContribute/changeState")
 	public void  changeState(CmsContribute cmsContribute, HttpServletRequest request, HttpServletResponse response) {
 		try {
+			if(cmsContribute.getId()==null ||cmsContribute.getId().equals("")){
+				this.resultFaliureData(request,response, "请输入要修改的投稿的id", null);
+				return;
+			}
+			CmsContribute cmsContribute1 = cmsContributeService.get(cmsContribute.getId());
+			if(cmsContribute1.getStatus().equals("2")){
+				this.resultFaliureData(request,response, "该投稿已经审核通过了，不能再审核", null);
+				return;
+			}
+			if(request.getParameter("status") == null || request.getParameter("status").equals("")){
+				this.resultFaliureData(request,response, "请输入要修改的投稿的状态status", null);
+				return;
+			}
+
 			cmsContributeService.changeState(cmsContribute);
 			//如果是审核通过，则加到news表和news_data表中
 			if(cmsContribute.getStatus().equals("2")){
@@ -134,7 +149,10 @@ public class CmsContributeController extends BaseController {
 
 				//保存cmsData表
 
-                String newsid = cmsNewsService.getByLinkId(cmsNews);
+
+                String newsid = "";
+                cmsNews = cmsNewsService.getByLinkId(cmsNews);
+                newsid = cmsNews.getId();
                 CmsNewsData cmsNewsData1 = new CmsNewsData();
                 cmsNewsData1.setNewsId(newsid);
                 cmsNewsData1.setContent(cmsContribute.getContent());
@@ -142,12 +160,12 @@ public class CmsContributeController extends BaseController {
                 cmsNewsDataService.save(cmsNewsData1);
 			}
 
-			 this.resultSuccessData(request,response, "修改成功", true);
+			this.resultSuccessData(request,response, "修改成功", true);
 			return;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "修改失败", false);
+			this.resultFaliureData(request,response, "修改失败", false);
 			return;
 		}
 	}
@@ -162,10 +180,18 @@ public class CmsContributeController extends BaseController {
 
     public void  getUserContribute(CmsContribute cmsContribute, HttpServletRequest request,  HttpServletResponse response) {
         try {
+        	String userId = request.getParameter("userId");
+        	if(userId == null || userId.equals("")){
+				this.resultFaliureData(request,response, "请输入userId", "");
+				return ;
+			}
+			cmsContribute.setUser(UserUtils.get(userId));
             Page<CmsContribute> cmsContribute1 = cmsContributeService.getUserContribute(new Page<CmsContribute>(request, response),cmsContribute);
             this.resultSuccessData(request,response, "获取数据成功", cmsContribute1);
         } catch (Exception e) {
             e.printStackTrace();
+			this.resultFaliureData(request,response, "操作失败", null);
+			return ;
         }
 
     }
@@ -189,9 +215,10 @@ public class CmsContributeController extends BaseController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "保存数据成功", null);
+			this.resultFaliureData(request,response, "保存数据失败", null);
+			return ;
 		}
-		this.resultSuccessData(request,response, "保存数据失败", null);
+		this.resultSuccessData(request,response, "保存数据成功", null);
 
 	}
 

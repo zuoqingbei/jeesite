@@ -21,7 +21,7 @@ public interface CmsShareDao extends CrudDao<CmsShare> {
      * @param cmsShare
      * @return
      */
-    public int getShareCount(CmsShare cmsShare);
+    public CmsShare getShareCount(CmsShare cmsShare);
 
 
     /**
@@ -29,6 +29,6 @@ public interface CmsShareDao extends CrudDao<CmsShare> {
      * @param cmsShare
      * @return
      */
-    public int getDynamicSelf(CmsShare cmsShare);
+    public CmsShare getDynamicSelf(CmsShare cmsShare);
 	
 }

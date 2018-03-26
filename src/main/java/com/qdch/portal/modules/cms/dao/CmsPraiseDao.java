@@ -6,6 +6,7 @@ package com.qdch.portal.modules.cms.dao;
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
 import com.qdch.portal.modules.cms.entity.CmsPraise;
+import com.qdch.portal.modules.cms.entity.CmsShare;
 
 /**
  * 用户赞 踩记录DAO接口
@@ -20,20 +21,20 @@ public interface CmsPraiseDao extends CrudDao<CmsPraise> {
      * @param cmsPraise
      * @return
      */
-    public int getTradeCount(CmsPraise cmsPraise);
+    public CmsPraise getTradeCount(CmsPraise cmsPraise);
     /**
      * 获得赞的数量
      * @param cmsPraise
      * @return
      */
-    public int getPraiseCount(CmsPraise cmsPraise);
+    public CmsPraise getPraiseCount(CmsPraise cmsPraise);
 
     /**
      * 我是否有踩或赞过
      * @param cmsPraise
      * @return
      */
-    public int getDynamicSelf(CmsPraise cmsPraise);
+    public CmsPraise getDynamicSelf(CmsPraise cmsPraise);
 
 
 

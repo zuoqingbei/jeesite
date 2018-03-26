@@ -28,25 +28,29 @@ public class SendMsgUtil {
 	 * 发送号码。多个号码请用“,”分隔。最多1000个号码
 	 */
 	public static String sentMsg(int type,String phoneNum){
-		String param = "";
-		param += "uid="+Constant.MSG_USER;
-		param += "&upsd="+Constant.MSG_USER_PWD;
-		param += "&sendtele="+phoneNum;
-		String msg = Constant.MSG_MODEL[type];
-		String code = gen6MobileCode();
-		msg = msg.replace("NUM", code);
-		System.out.println(msg);
-		param += "&msg="+msg;
-		param += "&sign="+Constant.MSG_USER_SIGN;
-		String str = HttpClientUtil.sendPostRequest(Constant.MSG_API_URL, param,true);
-
-		System.out.println("-----"+str.substring(0,str.indexOf(",")));
-		if(str.substring(0,str.indexOf(",")).equals("success")){
-			JedisUtils.set("MessageCache"+phoneNum, code, 60*5);
-			return "true";
-		}else{
+		try {
+			String param = "";
+			param += "uid="+Constant.MSG_USER;
+			param += "&upsd="+Constant.MSG_USER_PWD;
+			param += "&sendtele="+phoneNum;
+			String msg = Constant.MSG_MODEL[type];
+			String code = gen6MobileCode();
+			msg = msg.replace("NUM", code);
+			System.out.println(msg);
+			param += "&msg="+msg;
+			param += "&sign="+Constant.MSG_USER_SIGN;
+			String str = HttpClientUtil.sendPostRequest(Constant.MSG_API_URL, param,true);
+			if(str.startsWith("success")){
+                JedisUtils.set("MessageCache"+phoneNum, code, 60*5);
+                return "true";
+            }else{
+                return "false";
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
 			return "false";
 		}
+
 	}
 	/**
 	 * @todo   生成6位随机数

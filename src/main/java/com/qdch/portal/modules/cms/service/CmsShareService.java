@@ -47,7 +47,7 @@ public class CmsShareService extends CrudService<CmsShareDao, CmsShare> {
 
 	@Transactional(readOnly = false)
 	public boolean getDynamicSelf(CmsShare cmsShare) {
-		return  dao.getDynamicSelf(cmsShare)>0?true:false;
+		return  Integer.parseInt(dao.getDynamicSelf(cmsShare).getCount())>0?true:false;
 	}
 	
 }
