@@ -87,7 +87,7 @@
 			<label class="control-label">图片：</label>
 			<div class="controls">
 				<form:hidden id="image" path="image" htmlEscape="false" maxlength="255" class="input-xlarge"/>
-				<sys:ckfinder input="image" type="files" uploadPath="/cms/cmsBanner" selectMultiple="true"/>
+				<sys:ckfinder input="image" type="files" uploadPath="/cms/cmsContribute" selectMultiple="true"/>
 			</div>
 				<%--<form:input disabled="true"   path="image" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
 			</div>
@@ -101,13 +101,32 @@
 		<div class="control-group">
 			<label class="control-label">标签：</label>
 			<div class="controls">
-				<form:input disabled="true" path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<c:choose>
+					<c:when test="${ cmsContribute.id eq null }">
+						<form:checkboxes items="${fns:getDictList('tags_type')}" path="tags" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var ="dicts" items="${fns:getDictList('tags_type')}" >
+							<c:choose>
+								<c:when test="${fn:contains(cmsContribute.tags,dicts.value)}">
+									<input type="checkbox" checked="checked" name="tags" value="${dicts.value}">${dicts.label}
+								</c:when>
+								<c:otherwise>
+									<input type="checkbox"  name="tags" value="${dicts.value}">${dicts.label}
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+				<%--<form:input disabled="true" path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">描述、摘要：</label>
 			<div class="controls">
-				<form:input disabled="true"  path="description" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:textarea path="description" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+
+				<%--<form:input disabled="true"  path="description" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
 			</div>
 		</div>
 		<div class="control-group">
@@ -130,11 +149,19 @@
 			<%--</div>--%>
 		<%--</div>--%>
 		<div class="form-actions">
-<%-- 			<shiro:hasPermission name="cms:cmsContribute:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="审核通过"/>&nbsp;</shiro:hasPermission>
- --%>			
- <input id="btnAccept" class="btn" type="button" value="审核通过" onclick="accepts()"/>
- <input id="btnReject" class="btn" type="button" value="驳回" onclick="rejects()"/>
- <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+			<%--<shiro:hasPermission name="cms:cmsContribute:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;</shiro:hasPermission>--%>
+<c:choose>
+	<c:when test="${cmsContribute.status eq '1'}">
+		<input id="btnAccept" class="btn" type="button" value="审核通过" onclick="accepts()"/>
+		<input id="btnReject" class="btn" type="button" value="驳回" onclick="rejects()"/>
+		<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+	</c:when>
+	<c:otherwise>
+		<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+	</c:otherwise>
+
+</c:choose>
+
 		</div>
 	</form:form>
 	<script type="text/javascript">
@@ -145,7 +172,7 @@
 		             data: {id:'${cmsContribute.id}',status:"2"},
 		             dataType: "json",
 		             success: function(data){
-		            	 alert(data.resMessage);
+		            	 alert(data.msg);
                          location.replace(document.referrer); //返回上一个页面，并刷新
 		                      }
 		   		 });
@@ -158,7 +185,7 @@
 		             data: {id:'${cmsContribute.id}',status:"3"},
 		             dataType: "json",
 		             success: function(data){
-		            	alert(data.resMessage);
+		            	alert(data.msg);
                          location.replace(document.referrer);
 		                      }
 		   		 });

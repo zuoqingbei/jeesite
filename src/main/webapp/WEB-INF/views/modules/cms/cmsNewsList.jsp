@@ -148,8 +148,9 @@
 					
 				</td>
 				<td>
-					<img src="${cmsNews.image}" style="width:80px;height:80px;"/>
-
+					<c:if test="${ not empty cmsNews.image}">
+						<img src="${cmsNews.image}" style="width:80px;height:80px;"/>
+					</c:if>
 				</td>
 			<%-- 	<td>
 					${cmsNews.keywords}

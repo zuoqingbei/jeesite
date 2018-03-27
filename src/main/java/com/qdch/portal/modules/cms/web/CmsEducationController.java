@@ -77,6 +77,22 @@ public class CmsEducationController extends BaseController {
 			if(cmsEducation.getWeight()==null||cmsEducation.getWeight().equals("")){
                 cmsEducation.setWeight("0");
             }
+
+			if(StringUtils.isBlank(cmsEducation.getRecommend())){
+				cmsEducation.setRecommend("0"); //不推荐
+			}
+			if(StringUtils.isBlank(cmsEducation.getAllowComment())){
+				cmsEducation.setAllowComment("0"); //允许评论
+			}
+			if(StringUtils.isBlank(cmsEducation.getUndercarriage())){
+				cmsEducation.setUndercarriage("0"); //未下架
+			}
+			if(StringUtils.isBlank(cmsEducation.getCommentAudit())){
+				cmsEducation.setCommentAudit("1");//评论不需要审核
+			}
+			if(StringUtils.isBlank(cmsEducation.getAllowReport())){
+				cmsEducation.setAllowReport("0"); //允许举报
+			}
 			cmsEducationService.save(cmsEducation);
 			addMessage(redirectAttributes, "保存投资教育成功");
 			return "redirect:"+Global.getAdminPath()+"/cms/cmsEducation/list?repage";

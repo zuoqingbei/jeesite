@@ -259,7 +259,7 @@
 			<label class="control-label">正文:</label>
 			<div class="controls">
 				<form:textarea    id="contentHtml" htmlEscape="false" path="contentHtml" rows="4" maxlength="200" class="input-xxlarge"/>
-				<sys:ckeditor replace="contentHtml" uploadPath="/cms/news" />
+				<sys:ckeditor replace="contentHtml" uploadPath="/cms/cmsNews" />
 			</div>
 		</div>
 		<%--<div class="control-group">--%>

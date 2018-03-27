@@ -3,48 +3,42 @@
  */
 package com.qdch.portal.modules.cms.entity;
 
-import com.qdch.portal.common.utils.Json;
-import com.qdch.portal.modules.sys.entity.Dict;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.validator.constraints.Length;
 import com.qdch.portal.modules.sys.entity.User;
 
 import com.qdch.portal.common.persistence.DataEntity;
 
-import java.util.List;
-
 /**
- * 资讯Entity
+ * 问答表Entity
  * @author wangfeng
- * @version 2018-03-13
+ * @version 2018-03-27
  */
-public class CmsNews extends DataEntity<CmsNews> {
+public class CmsQuestionAnswer extends DataEntity<CmsQuestionAnswer> {
 	
 	private static final long serialVersionUID = 1L;
+	private CmsQuestionAnswer parent;		// 父级id 问题-1 回答不是-1
 	private String link;		// 源链接 如果是用户投稿 该字段保存投稿主键
 	private String dataType;		// 数据来源类型 0-采集 1-用户投稿 2-管理人员发布
-	@Json
 	private User user;		// 创建者 用户发布id  采集源也可以当做用户
-	@Json
 	private String title;		// 标题
-	@Json
 	private String image;		// 文章图片
 	private String keywords;		// 关键字
-
-	@Json
 	private String tags;		// 标签，多个 用&ldquo;，&rdquo;分开并且开头结尾也是逗号,比如 ,1,2,3,
 	private String description;		// 描述、摘要
+	private String content;		// 内容 不包含HTML
+	private String contentHtml;		// 内容 包含HTML
 	private String weight;		// 权重，越大越靠前
 	private String hits;		// 点击数、阅读数
 	private String transmit;		// 转发数 分享数
 	private String discess;		// 评论数  回复数
-	@Json
 	private String praise;		// 赞数量
 	private String tread;		// 踩数量
 	private String collection;		// 收藏量
 	private String report;		// 举报数量
-	@Json
 	private String evaluate;		// 评价数量
 	private String tip;		// 打赏次数
+	private String answer;		// 回复数量
 	private String view;		// 曝光量
 	private String recommend;		// 是否推荐 0-普通 1-推荐
 	private String allowComment;		// 是否允许评论 0-允许 1-不允许
@@ -55,63 +49,24 @@ public class CmsNews extends DataEntity<CmsNews> {
 	private String category1;		// 一级分类
 	private String category2;		// 二级分类
 	private String category3;		// 三级分类
-
-	private String content;		// 文章内容 不包含HTML
-	private String contentHtml;		// 文章内容 包含HTML
-
-	private List<Dict> typeDict;
-
-	private String tagslabel;
-	private String [] tagsvalue;
-
-	public String[] getTagsvalue() {
-		return tagsvalue;
-	}
-
-	public void setTagsvalue(String[] tagsvalue) {
-		this.tagsvalue = tagsvalue;
-	}
-
-	public String getTagslabel() {
-		return tagslabel;
-	}
-
-	public void setTagslabel(String tagslabel) {
-		this.tagslabel = tagslabel;
-	}
-
-	public List<Dict> getTypeDict() {
-		return typeDict;
-	}
-
-	public void setTypeDict(List<Dict> typeDict) {
-		this.typeDict = typeDict;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getContentHtml() {
-		return contentHtml;
-	}
-
-	public void setContentHtml(String contentHtml) {
-		this.contentHtml = contentHtml;
-	}
-
-	public CmsNews() {
+	
+	public CmsQuestionAnswer() {
 		super();
 	}
 
-	public CmsNews(String id){
+	public CmsQuestionAnswer(String id){
 		super(id);
 	}
 
+	@JsonBackReference
+	public CmsQuestionAnswer getParent() {
+		return parent;
+	}
+
+	public void setParent(CmsQuestionAnswer parent) {
+		this.parent = parent;
+	}
+	
 	@Length(min=0, max=255, message="源链接 如果是用户投稿 该字段保存投稿主键长度必须介于 0 和 255 之间")
 	public String getLink() {
 		return link;
@@ -181,6 +136,22 @@ public class CmsNews extends DataEntity<CmsNews> {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public String getContentHtml() {
+		return contentHtml;
+	}
+
+	public void setContentHtml(String contentHtml) {
+		this.contentHtml = contentHtml;
 	}
 	
 	@Length(min=0, max=11, message="权重，越大越靠前长度必须介于 0 和 11 之间")
@@ -273,6 +244,15 @@ public class CmsNews extends DataEntity<CmsNews> {
 		this.tip = tip;
 	}
 	
+	@Length(min=0, max=11, message="回复数量长度必须介于 0 和 11 之间")
+	public String getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
+	
 	@Length(min=0, max=11, message="曝光量长度必须介于 0 和 11 之间")
 	public String getView() {
 		return view;
@@ -336,7 +316,7 @@ public class CmsNews extends DataEntity<CmsNews> {
 		this.reason = reason;
 	}
 	
-	@Length(min=0, max=64, message="一级分类长度必须介于 0 和 64 之间")
+	@Length(min=1, max=64, message="一级分类长度必须介于 1 和 64 之间")
 	public String getCategory1() {
 		return category1;
 	}

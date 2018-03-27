@@ -9,17 +9,15 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.common.persistence.DataEntity;
 import com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao;
-import com.qdch.portal.modules.cms.entity.CmsEducation;
-import com.qdch.portal.modules.cms.entity.CmsNews;
-import com.qdch.portal.modules.cms.entity.CmsNewsData;
-import com.qdch.portal.modules.cms.service.CmsEducationService;
-import com.qdch.portal.modules.cms.service.CmsNewsDataService;
-import com.qdch.portal.modules.cms.service.CmsNewsService;
+import com.qdch.portal.modules.cms.entity.*;
+import com.qdch.portal.modules.cms.service.*;
 import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +29,6 @@ import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
-import com.qdch.portal.modules.cms.entity.CmsContribute;
-import com.qdch.portal.modules.cms.service.CmsContributeService;
 
 /**
  * 用户投稿Controller
@@ -54,6 +50,9 @@ public class CmsContributeController extends BaseController {
 
 	@Autowired
 	private CmsEducationService cmsEducationService;
+
+	@Autowired
+	private CmsQuestionAnswerService cmsQuestionAnswerService;
 
 	
 	@ModelAttribute
@@ -114,19 +113,24 @@ public class CmsContributeController extends BaseController {
 	 */
 
 //	@RequiresPermissions("cms:cmsContribute:edit")
+    @Transactional(readOnly = false)
 	@RequestMapping(value = "${adminPath}/cms/cmsContribute/changeState")
 	public void  changeState(CmsContribute cmsContribute, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if(cmsContribute.getId()==null ||cmsContribute.getId().equals("")){
+			if(StringUtils.isBlank(request.getParameter("id"))){
 				this.resultFaliureData(request,response, "请输入要修改的投稿的id", null);
 				return;
 			}
 			CmsContribute cmsContribute1 = cmsContributeService.get(cmsContribute.getId());
-			if(cmsContribute1.getStatus().equals("2")){
-				this.resultFaliureData(request,response, "该投稿已经审核通过了，不能再审核", null);
-				return;
-			}
-			if(request.getParameter("status") == null || request.getParameter("status").equals("")){
+            if(!cmsContribute1.getStatus().equals("1")){
+                this.resultFaliureData(request,response, "只有已投稿未审核状态的才可以进行审核", null);
+                return;
+            }
+//			if(cmsContribute1.getStatus().equals("2")){
+//				this.resultFaliureData(request,response, "该投稿已经审核通过了，不能再审核", null);
+//				return;
+//			}
+			if(StringUtils.isBlank(request.getParameter("status"))){
 				this.resultFaliureData(request,response, "请输入要修改的投稿的状态status", null);
 				return;
 			}
@@ -167,19 +171,16 @@ public class CmsContributeController extends BaseController {
 				}else if(cmsContribute.getDataType().equals("2")){  //-投资教育
 					saveSame(cmsContribute,"0");
 				}else if(cmsContribute.getDataType().equals("3")){ //问答
-
+                    saveQuestoinAndAnswer(cmsContribute,"");
 				}
-
-
-
 			}
 
-			this.resultSuccessData(request,response, "修改成功", true);
+			this.resultSuccessData(request,response, "修改成功", null);
 			return;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "修改失败", false);
+			this.resultFaliureData(request,response, "修改失败", null);
 			return;
 		}
 	}
@@ -196,7 +197,7 @@ public class CmsContributeController extends BaseController {
         try {
         	String userId = request.getParameter("userId");
         	if(userId == null || userId.equals("")){
-				this.resultFaliureData(request,response, "请输入userId", "");
+				this.resultFaliureData(request,response, "请输入userId", null);
 				return ;
 			}
 			cmsContribute.setUser(UserUtils.get(userId));
@@ -221,10 +222,17 @@ public class CmsContributeController extends BaseController {
 
 	@RequestMapping(value = "${portalPath}/cms/cmsContribute/saveData")
 	public void  saveData(CmsContribute cmsContribute, Model model, HttpServletRequest request,HttpServletResponse response) {
-//		if (!beanValidator(model, cmsNews)){
-//			return form(cmsNews, model);
-//		}
 		try {
+			if(StringUtils.isBlank(cmsContribute.getTitle())){
+				this.resultFaliureData(request,response, "请先输入标题", null);
+				return ;
+			}
+			if(StringUtils.isBlank(cmsContribute.getDataType())){
+				this.resultFaliureData(request,response, "请先选择投稿类型", null);
+				return ;
+			}
+			cmsContribute.setContent(cmsContribute.getContentHtml());
+			cmsContribute.setStatus("0"); //保存后默认是草稿状态
 			cmsContributeService.save(cmsContribute);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -236,8 +244,36 @@ public class CmsContributeController extends BaseController {
 
 	}
 
-	public void saveSame(CmsContribute cmsContribute,String catalog){
-		CmsEducation cmsEducation = new CmsEducation();
+
+	/**
+	 * 前台-投稿
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsContribute/contribute")
+	public void contribute(CmsContribute contribute,HttpServletRequest request,HttpServletResponse response){
+//		String status = request.getParameter("status");
+		try {
+			if(contribute.getId()==null ||contribute.getId().equals("")){
+                this.resultFaliureData(request,response, "请输入要修改的投稿的id", null);
+                return;
+            }
+			CmsContribute cmsContribute = cmsContributeService.get(contribute.getId());
+			if(!cmsContribute.getStatus().equals("0")){
+                this.resultFaliureData(request,response, "只有草稿状态才可以投稿", null);
+                return;
+            }
+            cmsContribute.setStatus("1");
+			cmsContributeService.changeState(cmsContribute);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultFaliureData(request,response, "操作失败", null);
+			return;
+		}
+		this.resultSuccessData(request,response, "操作成功", null);
+
+	}
+
+	public void saveSame(CmsContribute cmsContribute, String catalog){
+		CmsEducation cmsEducation =new CmsEducation();
 		CmsNewsData cmsNewsData = new CmsNewsData();
 		cmsEducation.setLink(cmsContribute.getId());
 		cmsEducation.setDataType("1");//用户投稿
@@ -257,5 +293,28 @@ public class CmsContributeController extends BaseController {
 		cmsEducation.setContent(StringUtils.replaceMobileHtml(cmsContribute.getContentHtml()));
 		cmsEducationService.save(cmsEducation);
 	}
+
+    public void saveQuestoinAndAnswer(CmsContribute cmsContribute, String catalog){
+        CmsQuestionAnswer questionAnswer = new CmsQuestionAnswer();
+        questionAnswer.setLink(cmsContribute.getId());
+        questionAnswer.setDataType("1");//用户投稿
+        questionAnswer.setUser(cmsContribute.getUser());
+        questionAnswer.setImage(cmsContribute.getImage());
+        questionAnswer.setKeywords(cmsContribute.getKeywords());
+        questionAnswer.setTags(cmsContribute.getTags());
+        questionAnswer.setDescription(cmsContribute.getDescription());
+        questionAnswer.setCreateDate(cmsContribute.getCreateDate());
+        questionAnswer.setUpdateBy(cmsContribute.getUpdateBy());
+        questionAnswer.setUpdateDate(cmsContribute.getUpdateDate());
+        questionAnswer.setCreateBy(cmsContribute.getCreateBy());
+        questionAnswer.setRemarks(cmsContribute.getRemarks());
+        questionAnswer.setCategory1(catalog);  //一级分类0-投资教育 1-案例 2-政策解读 3-攻略
+        questionAnswer.setTitle(cmsContribute.getTitle());
+        questionAnswer.setContentHtml(cmsContribute.getContentHtml());
+        questionAnswer.setContent(StringUtils.replaceMobileHtml(cmsContribute.getContentHtml()));
+        cmsQuestionAnswerService.save(questionAnswer);
+    }
+
+
 
 }

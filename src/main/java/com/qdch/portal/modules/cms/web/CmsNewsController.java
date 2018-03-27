@@ -108,6 +108,8 @@ public class CmsNewsController extends BaseController {
 //			}
 //			List<Dict> dicts = dictService.findByType(dict);
 //			cmsNews.setTypeDict(dicts);
+			CmsNewsData newsData = cmsNewsDataDao.getByNewId(cmsNews.getId());
+			cmsNews.setContentHtml(newsData.getContentHtml());
 			model.addAttribute("cmsNews", cmsNews);
 //			model.addAttribute("table","CmsNews");
 		} catch (Exception e) {
@@ -124,8 +126,24 @@ public class CmsNewsController extends BaseController {
 		}
 		try {
 			cmsNews.setDataType("2"); //管理人员发布
-			if(cmsNews.getWeight()==null||cmsNews.getWeight().equals("")){
+			if(StringUtils.isBlank(cmsNews.getWeight())){
 				cmsNews.setWeight("0");
+			}
+
+			if(StringUtils.isBlank(cmsNews.getRecommend())){
+				cmsNews.setRecommend("0"); //不推荐
+			}
+			if(StringUtils.isBlank(cmsNews.getAllowComment())){
+				cmsNews.setAllowComment("0"); //允许评论
+			}
+			if(StringUtils.isBlank(cmsNews.getUndercarriage())){
+				cmsNews.setUndercarriage("0"); //未下架
+			}
+			if(StringUtils.isBlank(cmsNews.getCommentAudit())){
+				cmsNews.setCommentAudit("1");//评论不需要审核
+			}
+			if(StringUtils.isBlank(cmsNews.getAllowReport())){
+				cmsNews.setAllowReport("0"); //允许举报
 			}
 			cmsNews.setUser(UserUtils.getUser());
 			cmsNewsService.save(cmsNews);
@@ -219,12 +237,7 @@ public class CmsNewsController extends BaseController {
 		try {
 			String tags = cmsNews.getTags();
 			if(tags !=null  && !tags.equals("")){
-				if(tags.startsWith(",")){
-					tags = tags.substring(1);
-				}
-				if(tags.endsWith(",")){
-					tags = tags.substring(0,tags.length()-1);
-				}
+				tags = StringUtils.delFrontAndEndSymbol(tags);
 				cmsNews.setTags(tags);
 			}
 			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
@@ -233,7 +246,7 @@ public class CmsNewsController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultFaliureData(request,response, "获取数据失败",
-					"false");
+					null);
 			return;
 		}
 	}
@@ -275,37 +288,29 @@ public class CmsNewsController extends BaseController {
 		try {
 			String id = request.getParameter("id"); //资讯id
 			String tags = request.getParameter("tags") ; //该条资讯的标签
-			List<CmsNews> results = new ArrayList<CmsNews>();
-			if(tags ==null ||tags.equals("")){
-				String []  tagList = null;
-				CmsNews cmsNews = new CmsNews();
-				if(tags != null &&!tags.equals("")){
-					tagList = tags.split(",");
-					cmsNews.setTagsvalue(tagList);
-
-				}
-				results = cmsNewsDao.getSimilarByTags(cmsNews);
-			}else{
-				CmsNews cmsNews = cmsNewsService.get(id);
-				if(cmsNews == null){
-					this.resultSuccessData(request,response, "操作成功", null);
-					return ;
-				}
-				tags = cmsNews.getTags();
-
-				String []  tagList = null;
-				if(tags != null &&!tags.equals("")){
-					tagList = tags.split(",");
-					cmsNews.setTagsvalue(tagList);
-
-				}
-				results = cmsNewsDao.getSimilarByTags(cmsNews);
+			if(StringUtils.isBlank(id)&&StringUtils.isBlank(tags)){
+				this.resultFaliureData(request,response, "请先输入资讯的id或者标签tags", null);
+				return ;
 			}
+			List<CmsNews> results = new ArrayList<CmsNews>();
+			CmsNews cmsNews  = null;
+			if(StringUtils.isNotBlank(id)){
+				cmsNews= cmsNewsService.get(id);
+				tags = cmsNews.getTags();
+			}else {
+				cmsNews = new CmsNews();
+			}
+			String []  tagList = null;
+			if(StringUtils.isNotBlank(tags)){
+				tagList = tags.split(",");
+				cmsNews.setTagsvalue(tagList);
 
+			}
+			results = cmsNewsDao.getSimilarByTags(cmsNews);
 			this.resultSuccessData(request,response, "操作成功", results);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", "false");
+			this.resultFaliureData(request,response, "操作失败", null);
 			return ;
 		}
 

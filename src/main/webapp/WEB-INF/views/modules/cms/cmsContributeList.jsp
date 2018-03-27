@@ -144,7 +144,10 @@
 					${cmsContribute.content}
 				</td> --%>
 				<td>
-					<img src="${cmsContribute.image}" style="width:80px;height:80px;"/>
+					<c:if test="${ not empty cmsContribute.image}">
+						<img src="${cmsContribute.image}" style="width:80px;height:80px;"/>
+					</c:if>
+
 				</td>
 				<%-- <td>
 					${cmsContribute.keywords}
@@ -175,17 +178,15 @@
 				</td> --%>
 
 					<c:choose>
-						<c:when test="${cmsContribute.status eq '2'}">
+						<c:when test="${cmsContribute.status eq '1'}">
 							<shiro:hasPermission name="cms:cmsContribute:edit"><td>
-<%--
 								<a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">审核</a>
---%>
 								<a href="${ctx}/cms/cmsContribute/delete?id=${cmsContribute.id}" onclick="return confirmx('确认要删除该用户投稿吗？', this.href)">删除</a>
 							</td></shiro:hasPermission>
 						</c:when>
 						<c:otherwise>
 							<shiro:hasPermission name="cms:cmsContribute:edit"><td>
-								<a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">审核</a>
+								<%--<a href="${ctx}/cms/cmsContribute/form?id=${cmsContribute.id}">审核</a>--%>
 								<a href="${ctx}/cms/cmsContribute/delete?id=${cmsContribute.id}" onclick="return confirmx('确认要删除该用户投稿吗？', this.href)">删除</a>
 							</td></shiro:hasPermission>
 						</c:otherwise>

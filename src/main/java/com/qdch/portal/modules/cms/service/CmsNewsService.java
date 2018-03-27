@@ -103,29 +103,30 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 	public Page<CmsNews> getRank(Page<CmsNews> page,CmsNews cmsNews) {
 		cmsNews.setPage(page);
 		List<CmsNews> cmsNewsList = dao.getRank(cmsNews);
-		List<CmsNews> resultlist = new ArrayList<CmsNews>();
-		for(CmsNews news:cmsNewsList){
-			Dict dict = new Dict();
-			dict.setType("tags_type");
-			String tags = news.getTags();
-			if(tags !=null  && !tags.equals("")){
-				tags = StringUtils.delFrontAndEndSymbol(tags);
-//				dict.setValue(tags);
-				dict.setTagsvalue(tags.split(","));
-				Dict dict1 =  dictDao.getLabelByIds(dict);
-//				dict.setTagslabel(tags.split(","));
-				if(dict1 !=null && !dict1.equals("")){
-					news.setTagslabel(dict1.getLabel());
-				}
+//		List<CmsNews> resultlist = new ArrayList<CmsNews>();
+//		for(CmsNews news:cmsNewsList){ // 标签的名字
+//			Dict dict = new Dict();
+//			dict.setType("tags_type");
+//			String tags = news.getTags();
+//			if(tags !=null  && !tags.equals("")){
+//				tags = StringUtils.delFrontAndEndSymbol(tags);
+////				dict.setValue(tags);
+//				dict.setTagsvalue(tags.split(","));
+//				Dict dict1 =  dictDao.getLabelByIds(dict);
+////				dict.setTagslabel(tags.split(","));
+//				if(dict1 !=null && !dict1.equals("")){
+//					news.setTagslabel(dict1.getLabel());
+//				}
+//
+//			}else{
+//				news.setTagslabel("");
+//			}
+//
+//			resultlist.add(news);
+//		}
 
-			}else{
-				news.setTagslabel("");
-			}
-
-			resultlist.add(news);
-		}
-
-		page.setList(resultlist);
+//		page.setList(resultlist);
+		page.setList(cmsNewsList);
 		return page;
 	}
 
