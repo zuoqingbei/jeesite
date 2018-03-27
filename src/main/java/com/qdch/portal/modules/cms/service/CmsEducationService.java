@@ -47,5 +47,13 @@ public class CmsEducationService extends CrudService<CmsEducationDao, CmsEducati
 	public void delete(CmsEducation cmsEducation) {
 		super.delete(cmsEducation);
 	}
+
+	@Transactional(readOnly = false)
+	public Page<CmsEducation> getList(Page<CmsEducation> page,CmsEducation cmsEducation) {
+		cmsEducation.setPage(page);
+		page.setList(dao.getList(cmsEducation));
+		return  page;
+
+	}
 	
 }

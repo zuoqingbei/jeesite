@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.modules.cms.dao.CmsPraiseDao;
 import com.qdch.portal.modules.cms.entity.CmsShare;
+import com.qdch.portal.modules.sys.entity.User;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -179,6 +181,35 @@ public class CmsPraiseController extends BaseController {
 			e.printStackTrace();
 			this.resultFaliureData(request,response, "操作失败", null);
 			return;
+		}
+	}
+
+	/**
+	 * 点赞按钮
+	 * @param praise
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsPraise/addPraise")
+	public void addPraise(CmsPraise praise,HttpServletRequest request,HttpServletResponse response){
+
+		try {
+			String sourceId =request.getParameter("sourceId");
+			String sourceTable = request.getParameter("sourceTable");
+			if(StringUtils.isBlank(sourceId)||
+                    StringUtils.isBlank(sourceTable)){
+                this.resultFaliureData(request,response, "请先输入sourceId和sourceTable", false);
+                return ;
+            }
+			praise.setUser(UserUtils.getUser());
+			cmsPraiseService.save(praise);
+
+			this.resultSuccessData(request,response, "操作成功", true);
+			return ;
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultFaliureData(request,response, "操作失败", false);
+			return ;
 		}
 	}
 

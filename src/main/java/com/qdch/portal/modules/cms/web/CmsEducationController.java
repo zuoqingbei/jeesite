@@ -101,10 +101,13 @@ public class CmsEducationController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsEducation/getList")
-	public void getList(HttpServletRequest request,HttpServletResponse response){
-
-
-		this.resultSuccessData(request,response, "保存数据成功", null);
+	public void getList(CmsEducation cmsEducation,HttpServletRequest request,HttpServletResponse response){
+		try {
+			Page<CmsEducation> page  = cmsEducationService.getList(new Page<CmsEducation>(request,response),cmsEducation);
+			this.resultSuccessData(request,response, "操作成功", mapJson(page,"success","操作成功"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 

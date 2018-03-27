@@ -7,6 +7,8 @@ import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
 import com.qdch.portal.modules.cms.entity.CmsEducation;
 
+import java.util.List;
+
 /**
  * 投资教育DAO接口
  * @author wangfeng
@@ -14,5 +16,7 @@ import com.qdch.portal.modules.cms.entity.CmsEducation;
  */
 @MyBatisDao
 public interface CmsEducationDao extends CrudDao<CmsEducation> {
+
+    public List<CmsEducation> getList(CmsEducation cmsEducation);
 	
 }
