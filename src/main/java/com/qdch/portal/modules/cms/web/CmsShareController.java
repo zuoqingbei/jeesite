@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.modules.cms.dao.CmsShareDao;
 import com.qdch.portal.modules.cms.entity.CmsNews;
+import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,8 +99,19 @@ public class CmsShareController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsShare/saveShare")
 	public void saveShare(CmsShare cmsShare,Model model, HttpServletRequest request,HttpServletResponse response){
 		try {
+			User user = UserUtils.getUser();
+			if(StringUtils.isBlank(user.getId())){
+				this.resultFaliureData(request,response, "请先登录", null);
+				return;
+			}
+
 			if(StringUtils.isBlank(cmsShare.getSourceTable())||StringUtils.isBlank(cmsShare.getSourceId())){
 				this.resultFaliureData(request,response, "请先输入sourceId和sourceTable的值", null);
+				return;
+			}
+
+			if(StringUtils.isBlank(cmsShare.getPlatform())||StringUtils.isBlank(cmsShare.getUrl())){
+				this.resultFaliureData(request,response, "请先输入分享的平台和地址", null);
 				return;
 			}
 			cmsShare.setUser(UserUtils.getUser());

@@ -177,21 +177,21 @@ public class CmsNewsController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
-	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-
-		try {
-			CmsNews cmsNews1 = cmsNewsService.getContent(cmsNews);
-			this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
-			return ;
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.resultSuccessData(request,response, "获取数据失败", "false");
-			return ;
-		}
-
-
-	}
+//	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
+//	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
+//
+//		try {
+//			CmsNews cmsNews1 = cmsNewsService.getContent(cmsNews);
+//			this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
+//			return ;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			this.resultSuccessData(request,response, "获取数据失败", "false");
+//			return ;
+//		}
+//
+//
+//	}
 
 	/**
 	 * 强推资讯
@@ -199,15 +199,15 @@ public class CmsNewsController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend")
-	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-
-        Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
-//		mapJson(page,"success","获取数据成功")
-		this.resultSuccessData(request,response, "",mapJson(cmsNewsList,"success","获取数据成功"));
-
-
-	}
+//	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend")
+//	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
+//
+//        Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
+////		mapJson(page,"success","获取数据成功")
+//		this.resultSuccessData(request,response, "",mapJson(cmsNewsList,"success","获取数据成功"));
+//
+//
+//	}
 
 	/**
 	 * 前台获得资讯分页列表
@@ -217,11 +217,11 @@ public class CmsNewsController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist")
-	public void portallist(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews);
-		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
-	}
+//	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist")
+//	public void portallist(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
+//		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews);
+//		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
+//	}
 
 
 	/**

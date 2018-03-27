@@ -7,7 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.qdch.portal.modules.cms.dao.CmsCollectionDao;
+import com.qdch.portal.modules.cms.entity.CmsContribute;
 import com.qdch.portal.modules.cms.entity.CmsShare;
+import com.qdch.portal.modules.sys.entity.User;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -155,6 +158,53 @@ public class CmsCollectionController extends BaseController {
 			this.resultFaliureData(request,response, "操作失败", flag);
 			return;
 		}
+
+	}
+
+	/**
+	 * 点击收藏按钮
+	 * @param cmsCollection
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsCollection/doCollection")
+	public void doCollection(CmsCollection cmsCollection,HttpServletRequest request,HttpServletResponse response){
+		try {
+			User user = UserUtils.getUser();
+			String sourceId = cmsCollection.getSourceId();
+			String sourceTable = cmsCollection.getSourceTable();
+			if(StringUtils.isBlank(user.getId())){
+                this.resultFaliureData(request,response, "请先登录", null);
+                return;
+            }
+			if(StringUtils.isBlank(sourceTable)){
+                this.resultFaliureData(request,response, "请先输入sourceTable", "");
+                return;
+            }
+			if(StringUtils.isBlank(sourceId)){
+                this.resultFaliureData(request,response, "请先输入sourceId", "");
+                return;
+            }
+            cmsCollection.setUser(user);
+			CmsCollection collection = cmsCollectionDao.getBySource(cmsCollection);
+			CmsCollection collection1 = new CmsCollection();
+			collection1.setSourceId(sourceId);
+			collection1.setSourceTable(sourceTable);
+			collection1.setUser(user);
+			if(collection == null){
+                cmsCollectionService.save(collection1);
+                this.resultSuccessData(request,response, "点赞成功", null);
+            }else{
+				collection1.setId(collection.getId());
+                cmsCollectionService.delete(collection1);
+				this.resultSuccessData(request,response, "取消点赞成功", null);
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultFaliureData(request,response, "操作失败", null);
+			return;
+		}
+
 
 	}
 

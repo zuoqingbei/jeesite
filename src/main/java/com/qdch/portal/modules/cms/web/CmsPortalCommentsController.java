@@ -140,16 +140,16 @@ public class CmsPortalCommentsController extends BaseController {
 	public void saveData(CmsPortalComments cmsPortalComments,HttpServletRequest request,HttpServletResponse response){
 		try {
 
-			if(cmsPortalComments.getSourceId() == null || cmsPortalComments.getSourceTable() == null ||
-					cmsPortalComments.getContent()==null ||cmsPortalComments.getSourceId().equals("")||
-					cmsPortalComments.getSourceTable().equals("")||cmsPortalComments.getContent().equals("")){
-				this.resultSuccessData(request,response, "请先输入信息", null);
+			if(StringUtils.isBlank(cmsPortalComments.getSourceId()) ||
+					StringUtils.isBlank(cmsPortalComments.getSourceTable())||
+					StringUtils.isBlank(cmsPortalComments.getContent())){
+				this.resultFaliureData(request,response, "请先输入信息sourceId、sourceTable、content", null);
 				return;
 			}
 
 			String parentID = cmsPortalComments.getParentId();
 			CmsPortalComments parent = null;
-			if(parentID == null||parentID.equals("")){
+			if(StringUtils.isBlank(parentID)){
 				parent = new CmsPortalComments();
 				parent.setId("-1");
 				cmsPortalComments.setParent(parent);
@@ -204,13 +204,14 @@ public class CmsPortalCommentsController extends BaseController {
 	public void getCommentsAndPraise(CmsPortalComments cmsPortalComments,HttpServletRequest request,HttpServletResponse response){
 		Page<CmsPortalComments> page = null;
 		try {
-			if(cmsPortalComments.getSourceId()==null ||cmsPortalComments.getSourceId().equals("")){
+			if(StringUtils.isBlank(cmsPortalComments.getSourceId())){
 				this.resultSuccessData(request,response, "请输入资讯的id",
 						"false");
 				return;
 			}
-			cmsPortalComments.setSourceTable("cms_news");
-
+			if(StringUtils.isBlank(cmsPortalComments.getSourceTable())){
+				cmsPortalComments.setSourceTable("cms_news");
+			}
 			page = cmsPortalCommentsService.getCommentsAndPraise(
 					new Page<CmsPortalComments>(request,response),cmsPortalComments);
 			this.resultSuccessData(request,response, "操作成功",
@@ -236,12 +237,14 @@ public class CmsPortalCommentsController extends BaseController {
 	public void getHotComments(CmsPortalComments cmsPortalComments,HttpServletRequest request,HttpServletResponse response){
 		List<CmsPortalComments> list = null;
 		try {
-			if(cmsPortalComments.getSourceId()==null ||cmsPortalComments.getSourceId().equals("")){
+			if(StringUtils.isBlank(cmsPortalComments.getSourceId())){
 				this.resultSuccessData(request,response, "请输入资讯的id",
 						"false");
 				return;
 			}
-			cmsPortalComments.setSourceTable("cms_news");
+			if(StringUtils.isBlank(cmsPortalComments.getSourceTable())){
+				cmsPortalComments.setSourceTable("cms_news");
+			}
 
 			list = cmsPortalCommentsService.getHotComments(cmsPortalComments);
 			this.resultSuccessData(request,response, "操作成功",
@@ -263,29 +266,6 @@ public class CmsPortalCommentsController extends BaseController {
 	 */
 	@SuppressWarnings("unchecked")
 	public static String  getServerIp(HttpServletRequest request){
-//		String SERVER_IP = null;
-//		try {
-//			Enumeration netInterfaces = NetworkInterface.getNetworkInterfaces();
-//			InetAddress ip = null;
-//			while (netInterfaces.hasMoreElements()) {
-//				NetworkInterface ni = (NetworkInterface) netInterfaces.nextElement();
-//				ip = (InetAddress) ni.getInetAddresses().nextElement();
-//				SERVER_IP = ip.getHostAddress();
-//				if (!ip.isSiteLocalAddress() && !ip.isLoopbackAddress()
-//						&& ip.getHostAddress().indexOf(":") == -1) {
-//					SERVER_IP = ip.getHostAddress();
-//					break;
-//				} else {
-//					ip = null;
-//				}
-//			}
-//		} catch (SocketException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		return SERVER_IP;
-
 			 String ipAddress = request.getHeader("x-forwarded-for");
 			 if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
 			             ipAddress = request.getHeader("Proxy-Client-IP");

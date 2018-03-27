@@ -56,7 +56,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>赞踩内容源id</th>
+				<%--<th>赞踩内容源id</th>--%>
 				<th>内容来源表</th>
 				<th>用户</th>
 				<th>操作类型</th>
@@ -67,12 +67,12 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsPraise">
 			<tr>
-				<td>
-						${cmsPraise.sourceId}
-					<%--<a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">--%>
-					<%--${cmsPraise.sourceId}--%>
-				<%--</a>--%>
-				</td>
+				<%--<td>--%>
+						<%--${cmsPraise.sourceId}--%>
+					<%--&lt;%&ndash;<a href="${ctx}/cms/cmsPraise/form?id=${cmsPraise.id}">&ndash;%&gt;--%>
+					<%--&lt;%&ndash;${cmsPraise.sourceId}&ndash;%&gt;--%>
+				<%--&lt;%&ndash;</a>&ndash;%&gt;--%>
+				<%--</td>--%>
 				<td>
 					${cmsPraise.sourceTable}
 				</td>

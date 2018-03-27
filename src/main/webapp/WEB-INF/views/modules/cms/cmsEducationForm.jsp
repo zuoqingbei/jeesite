@@ -98,7 +98,7 @@
 		<div class="control-group">
 			<label class="control-label">描述、摘要：</label>
 			<div class="controls">
-				<form:input path="description" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:textarea path="description" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<%--<div class="control-group">--%>
@@ -268,7 +268,7 @@
 					<form:option value="3" label="攻略"/>
 				</form:select>
 				<%--<form:input path="category1" htmlEscape="false" maxlength="64" class="input-xlarge required"/>--%>
-				<span class="help-inline"><font color="red">*</font> </span>
+				<%--<span class="help-inline"><font color="red">*</font> </span>--%>
 			</div>
 		</div>
 		<div class="control-group">

@@ -79,7 +79,9 @@
 					${cmsEducation.title}
 				</a></td>
 				<td>
-					<img  src="${cmsEducation.image}" style="width:80px;height:80px;">
+					<c:if test="${ not empty cmsEducation.image}">
+						<img src="${cmsEducation.image}" style="width:80px;height:80px;"/>
+					</c:if>
 				</td>
 				<%--<td>--%>
 					<%--${cmsEducation.contentHtml}--%>

@@ -203,14 +203,17 @@
 		FROM cms_contribute a
 		<include refid="cmsContributeJoins"/>
 		WHERE a.user_id = #{user.id} and a.del_flag='0'
-		<choose>
-			<when test="status != null and status != ''">
-				and a.status =#{status}
-			</when>
-			<otherwise>
-				and a.status !='0'
-			</otherwise>
-		</choose>
+		<if test="status != null and status != ''">
+			and a.status =#{status}
+		</if>
+		<!--<choose>-->
+			<!--<when test="status != null and status != ''">-->
+				<!--and a.status =#{status}-->
+			<!--</when>-->
+			<!--<otherwise>-->
+				<!--and a.status !='0'-->
+			<!--</otherwise>-->
+		<!--</choose>-->
 
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

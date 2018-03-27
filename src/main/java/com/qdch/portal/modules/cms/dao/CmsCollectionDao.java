@@ -30,5 +30,8 @@ public interface CmsCollectionDao extends CrudDao<CmsCollection> {
      * @return
      */
     public CmsCollection getDynamicSelf(CmsCollection cmsCollection);
+
+
+    public CmsCollection getBySource(CmsCollection collection);
 	
 }
