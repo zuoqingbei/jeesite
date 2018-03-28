@@ -61,10 +61,39 @@ public class User extends DataEntity<User> {
 	private Role role;	// 根据角色查询用户条件
 	private int type;
 	
-	
 	private String integration;//用户活跃度
-
+	private String countSubscribe;//用户总订阅数
+	private String countCommen;//用户总关注数
+	private String countFans;//用户总粉丝数
+	
 	private List<AccountSubscribeHistory> accountSubscribeHistorylist; //查询用户订阅
+	
+	public String getCountSubscribe() {
+		return countSubscribe;
+	}
+
+	public void setCountSubscribe(String countSubscribe) {
+		this.countSubscribe = countSubscribe;
+	}
+
+	public String getCountCommen() {
+		return countCommen;
+	}
+
+	public void setCountCommen(String countCommen) {
+		this.countCommen = countCommen;
+	}
+
+	public String getCountFans() {
+		return countFans;
+	}
+
+	public void setCountFans(String countFans) {
+		this.countFans = countFans;
+	}
+
+
+
 	
 	
 	public String getIntegration() {

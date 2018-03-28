@@ -57,25 +57,26 @@ public class ViewRecommendService extends CrudService<ViewRecommendDao, ViewReco
 	public  Page<ViewRecommend> getRecommend(Page<ViewRecommend> page, ViewRecommend viewRecommend) {
 		viewRecommend.setPage(page);
 		List<ViewRecommend> list = dao.getRecommend(viewRecommend);
-		List<ViewRecommend> results = new ArrayList<ViewRecommend>();
-		for(ViewRecommend news:list){
-			Dict dict = new Dict();
-			dict.setType("tags_type");
-			String tags = news.getTags();
-			if(tags !=null  && !tags.equals("")){
-				tags = StringUtils.delFrontAndEndSymbol(tags);
-				dict.setValue(tags);
-				Dict dict1 =  dictDao.getLabelByIds(dict);
-				if(dict1 !=null && !dict1.equals("")){
-					news.setTagslabel(dict1.getLabel());
-				}
-
-			}else {
-				news.setTagslabel("");
-			}
-
-			results.add(news);
-		}
+//		List<ViewRecommend> results = new ArrayList<ViewRecommend>();
+//		for(ViewRecommend news:list){
+//			Dict dict = new Dict();
+//			dict.setType("tags_type");
+//			String tags = news.getTags();
+//			if(tags !=null  && !tags.equals("")){
+//				tags = StringUtils.delFrontAndEndSymbol(tags);
+////				dict.setValue(tags);
+//				dict.setTagsvalue(tags.split(","));
+//				Dict dict1 =  dictDao.getLabelByIds(dict);
+//				if(dict1 !=null && !dict1.equals("")){
+//					news.setTagslabel(dict1.getLabel());
+//				}
+//
+//			}else {
+//				news.setTagslabel("");
+//			}
+//
+//			results.add(news);
+//		}
 		page.setList(list);
 		return page;
 	}

@@ -73,6 +73,20 @@ public class UserUtils {
 	}
 	
 	/**
+	 * 查询用户信息
+	 * @user lianjiming
+	 * @param user
+	 * @date 2018年3月26日
+	 * @return
+	 */
+	public static List<User> getUserInfo(User user){
+		List<User> list = new ArrayList<User>();
+		list = userDao.getUserInfo(user);
+		return list;
+	}
+	
+	
+	/**
 	 * 根据ID获取用户
 	 * @param id
 	 * @return 取不到返回null

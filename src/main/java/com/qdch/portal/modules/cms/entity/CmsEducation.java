@@ -315,7 +315,7 @@ public class CmsEducation extends DataEntity<CmsEducation> {
 		this.reason = reason;
 	}
 	
-	@Length(min=1, max=64, message="一级分类0-投资教育 1-案例 2-政策解读 3-攻略长度必须介于 1 和 64 之间")
+//	@Length(min=1, max=64, message="一级分类0-投资教育 1-案例 2-政策解读 3-攻略长度必须介于 1 和 64 之间")
 	public String getCategory1() {
 		return category1;
 	}

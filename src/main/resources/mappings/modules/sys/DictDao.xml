@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qdch.portal.modules.sys.dao.DictDao">
     
-	 
+	<!--  用户查询订阅使用 -->
 	<select id="findByIds" resultType="Dict">
     	 select *
     	 from sys_dict a  
@@ -111,8 +111,15 @@
 
 	<select id="getLabelByIds" resultType="Dict">
 		select GROUP_CONCAT(label) label from sys_dict where type=#{type} and del_flag='0'
-		<if test="value != null and value != ''">
-			AND value in  (#{value})
+		<!--<if test="value != null and value != ''">-->
+			<!--AND value in  (#{value})-->
+		<!--</if>-->
+		<if test="tagsvalue != null and tagsvalue != ''">
+			and VALUE  in
+			<foreach collection="tagsvalue" item="e" open="(" separator="," close=")">
+				#{e}
+
+			</foreach>
 		</if>
 
 	</select>

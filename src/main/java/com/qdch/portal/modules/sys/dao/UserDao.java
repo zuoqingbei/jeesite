@@ -22,6 +22,14 @@ public interface UserDao extends CrudDao<User> {
 	 */
 	public List<User> findCommonAttention(String[] keys);
 	
+	
+	/**
+	 * 查询用户信息 （登录名，我的关注数量，我的粉丝数量，订阅数量，活跃度）
+	 */
+	public List<User> getUserInfo(User user);
+	
+	
+	
 	/**
 	 * 根据登录名称查询用户
 	 * @param loginName

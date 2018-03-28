@@ -5,18 +5,18 @@ package com.qdch.portal.modules.cms.dao;
 
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
-import com.qdch.portal.modules.cms.entity.CmsEducation;
+import com.qdch.portal.modules.cms.entity.CmsQuestionAnswer;
 
 import java.util.List;
 
 /**
- * 投资教育DAO接口
+ * 问答表DAO接口
  * @author wangfeng
- * @version 2018-03-21
+ * @version 2018-03-27
  */
 @MyBatisDao
-public interface CmsEducationDao extends CrudDao<CmsEducation> {
+public interface CmsQuestionAnswerDao extends CrudDao<CmsQuestionAnswer> {
 
-    public List<CmsEducation> getList(CmsEducation cmsEducation);
+    public List<CmsQuestionAnswer>  getRank(CmsQuestionAnswer questionAnswer);
 	
 }

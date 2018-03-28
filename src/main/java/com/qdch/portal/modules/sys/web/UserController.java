@@ -53,13 +53,15 @@ public class UserController extends BaseController {
 	
 	//分页查询
 	@ResponseBody
-	@RequiresPermissions("sys:user:view")
-	@RequestMapping(value = {"listData"})
+	//@RequiresPermissions("sys:user:view")
+	@RequestMapping(value = "${/listData")
 	public Page<User> listData(User user, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<User> page = systemService.findUser(new Page<User>(request, response), user);
 		return page;
 	}
 	
+	
+
 	
 	@ModelAttribute
 	public User get(@RequestParam(required=false) String id) {

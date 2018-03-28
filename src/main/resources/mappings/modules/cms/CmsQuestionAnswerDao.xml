@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qdch.portal.modules.cms.dao.CmsEducationDao">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsQuestionAnswerDao">
     
-	<sql id="cmsEducationColumns">
+	<sql id="cmsQuestionAnswerColumns">
 		a.id AS "id",
+		a.parent_id AS "parent.id",
 		a.link AS "link",
 		a.data_type AS "dataType",
 		a.user_id AS "user.id",
@@ -14,8 +15,6 @@
 		a.description AS "description",
 		a.content AS "content",
 		a.content_html AS "contentHtml",
-		a.video_url AS "videoUrl",
-		a.teacher_id AS "teacherId",
 		a.weight AS "weight",
 		a.hits AS "hits",
 		a.transmit AS "transmit",
@@ -26,6 +25,7 @@
 		a.report AS "report",
 		a.evaluate AS "evaluate",
 		a.tip AS "tip",
+		a.answer AS "answer",
 		a.view AS "view",
 		a.recommend AS "recommend",
 		a.allow_comment AS "allowComment",
@@ -41,27 +41,26 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		u4.name AS "user.name",
-		u4.photo AS "user.photo"
+		u5.name AS "user.name"
 	</sql>
 	
-	<sql id="cmsEducationJoins">
-		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	<sql id="cmsQuestionAnswerJoins">
+		LEFT JOIN sys_user u5 ON u5.id = a.user_id
 	</sql>
     
-	<select id="get" resultType="CmsEducation">
+	<select id="get" resultType="CmsQuestionAnswer">
 		SELECT 
-			<include refid="cmsEducationColumns"/>
-		FROM cms_education a
-		<include refid="cmsEducationJoins"/>
+			<include refid="cmsQuestionAnswerColumns"/>
+		FROM cms_question_answer a
+		<include refid="cmsQuestionAnswerJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="CmsEducation">
+	<select id="findList" resultType="CmsQuestionAnswer">
 		SELECT 
-			<include refid="cmsEducationColumns"/>
-		FROM cms_education a
-		<include refid="cmsEducationJoins"/>
+			<include refid="cmsQuestionAnswerColumns"/>
+		FROM cms_question_answer a
+		<include refid="cmsQuestionAnswerJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="title != null and title != ''">
@@ -70,11 +69,8 @@
 					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
 			</if>
-			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
-			</if>
-			<if test="updateDate != null and updateDate != ''">
-				AND a.update_date = #{updateDate}
+			<if test="tags != null and tags != ''">
+				AND a.tags = #{tags}
 			</if>
 		</where>
 		<choose>
@@ -87,11 +83,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="CmsEducation">
+	<select id="findAllList" resultType="CmsQuestionAnswer">
 		SELECT 
-			<include refid="cmsEducationColumns"/>
-		FROM cms_education a
-		<include refid="cmsEducationJoins"/>
+			<include refid="cmsQuestionAnswerColumns"/>
+		FROM cms_question_answer a
+		<include refid="cmsQuestionAnswerJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		
@@ -106,8 +102,9 @@
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO cms_education(
+		INSERT INTO cms_question_answer(
 			id,
+			parent_id,
 			link,
 			data_type,
 			user_id,
@@ -118,8 +115,6 @@
 			description,
 			content,
 			content_html,
-			video_url,
-			teacher_id,
 			weight,
 			hits,
 			transmit,
@@ -130,6 +125,7 @@
 			report,
 			evaluate,
 			tip,
+			answer,
 			view,
 			recommend,
 			allow_comment,
@@ -147,6 +143,7 @@
 			del_flag
 		) VALUES (
 			#{id},
+			#{parent.id},
 			#{link},
 			#{dataType},
 			#{user.id},
@@ -157,8 +154,6 @@
 			#{description},
 			#{content},
 			#{contentHtml},
-			#{videoUrl},
-			#{teacherId},
 			#{weight},
 			#{hits},
 			#{transmit},
@@ -169,6 +164,7 @@
 			#{report},
 			#{evaluate},
 			#{tip},
+			#{answer},
 			#{view},
 			#{recommend},
 			#{allowComment},
@@ -188,7 +184,8 @@
 	</insert>
 	
 	<update id="update">
-		UPDATE cms_education SET 	
+		UPDATE cms_question_answer SET 	
+			parent_id = #{parent.id},
 			link = #{link},
 			data_type = #{dataType},
 			user_id = #{user.id},
@@ -199,8 +196,6 @@
 			description = #{description},
 			content = #{content},
 			content_html = #{contentHtml},
-			video_url = #{videoUrl},
-			teacher_id = #{teacherId},
 			weight = #{weight},
 			hits = #{hits},
 			transmit = #{transmit},
@@ -211,6 +206,7 @@
 			report = #{report},
 			evaluate = #{evaluate},
 			tip = #{tip},
+			answer = #{answer},
 			view = #{view},
 			recommend = #{recommend},
 			allow_comment = #{allowComment},
@@ -228,23 +224,56 @@
 	</update>
 	
 	<update id="delete">
-		UPDATE cms_education SET 
+		UPDATE cms_question_answer SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 
-	<select id="getList" resultType="CmsEducation">
+
+
+	<!--列表 根据标签和排行-->
+	<select id="getRank" resultType="CmsQuestionAnswer">
 		SELECT
-		<include refid="cmsEducationColumns"/>
-		FROM cms_education a
-		<include refid="cmsEducationJoins"/>
-		WHERE a.del_flag='0'
-		<if test="dataType != null and dataType !=''">
-			and a.data_type=#{dataType}
+		<include refid="cmsQuestionAnswerColumns"/>
+		FROM cms_question_answer a
+		<include refid="cmsQuestionAnswerJoins"/>
+		WHERE  a.del_flag='0'
+		<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
 		</if>
-		<if test="category1 != null and category1 !=''">
-			AND a.category1=#{category1}
+		order by 1
+		<if test="hits != null and hits != ''">
+			,hits desc
 		</if>
+		<if test="transmit != null and transmit != ''">
+			,transmit desc
+		</if>
+		<if test="discess != null and discess != ''">
+			,discess desc
+		</if>
+		<if test="praise != null and praise != ''">
+			,praise desc
+		</if>
+		<if test="tread != null and tread != ''">
+			,tread desc
+		</if>
+		<if test="collection != null and collection != ''">
+			,collection desc
+		</if>
+		<if test="report != null and report != ''">
+			,report desc
+		</if>
+		<if test="evaluate != null and evaluate != ''">
+			,evaluate desc
+		</if>
+		<if test="tip != null and tip != ''">
+			,tip desc
+		</if>
+		<if test="view != null and view != ''">
+			,view desc
+		</if>
+		, a.update_date DESC
+
 
 	</select>
 	

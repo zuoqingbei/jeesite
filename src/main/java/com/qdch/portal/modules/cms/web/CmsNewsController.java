@@ -100,14 +100,16 @@ public class CmsNewsController extends BaseController {
 	@RequestMapping(value = "${adminPath}/cms/cmsNews/form")
 	public String form(CmsNews cmsNews, Model model) {
 		try {
-			Dict dict = new Dict();
-			dict.setType("tags_type");
-			cmsNews  = cmsNewsService.getContent(cmsNews);
-			if(cmsNews == null){
-				cmsNews = new CmsNews();
-			}
-			List<Dict> dicts = dictService.findByType(dict);
-			cmsNews.setTypeDict(dicts);
+//			Dict dict = new Dict();
+//			dict.setType("tags_type");
+//			cmsNews  = cmsNewsService.getContent(cmsNews);
+//			if(cmsNews == null){
+//				cmsNews = new CmsNews();
+//			}
+//			List<Dict> dicts = dictService.findByType(dict);
+//			cmsNews.setTypeDict(dicts);
+			CmsNewsData newsData = cmsNewsDataDao.getByNewId(cmsNews.getId());
+			cmsNews.setContentHtml(newsData.getContentHtml());
 			model.addAttribute("cmsNews", cmsNews);
 //			model.addAttribute("table","CmsNews");
 		} catch (Exception e) {
@@ -124,6 +126,25 @@ public class CmsNewsController extends BaseController {
 		}
 		try {
 			cmsNews.setDataType("2"); //管理人员发布
+			if(StringUtils.isBlank(cmsNews.getWeight())){
+				cmsNews.setWeight("0");
+			}
+
+			if(StringUtils.isBlank(cmsNews.getRecommend())){
+				cmsNews.setRecommend("0"); //不推荐
+			}
+			if(StringUtils.isBlank(cmsNews.getAllowComment())){
+				cmsNews.setAllowComment("0"); //允许评论
+			}
+			if(StringUtils.isBlank(cmsNews.getUndercarriage())){
+				cmsNews.setUndercarriage("0"); //未下架
+			}
+			if(StringUtils.isBlank(cmsNews.getCommentAudit())){
+				cmsNews.setCommentAudit("1");//评论不需要审核
+			}
+			if(StringUtils.isBlank(cmsNews.getAllowReport())){
+				cmsNews.setAllowReport("0"); //允许举报
+			}
 			cmsNews.setUser(UserUtils.getUser());
 			cmsNewsService.save(cmsNews);
 			CmsNewsData cmsNewsData = cmsNewsDataDao.getByNewId(cmsNews.getId());
@@ -156,21 +177,21 @@ public class CmsNewsController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
-	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-
-		try {
-			CmsNews cmsNews1 = cmsNewsService.getContent(cmsNews);
-			this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
-			return ;
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.resultSuccessData(request,response, "获取数据失败", "false");
-			return ;
-		}
-
-
-	}
+//	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
+//	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
+//
+//		try {
+//			CmsNews cmsNews1 = cmsNewsService.getContent(cmsNews);
+//			this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
+//			return ;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			this.resultSuccessData(request,response, "获取数据失败", "false");
+//			return ;
+//		}
+//
+//
+//	}
 
 	/**
 	 * 强推资讯
@@ -178,15 +199,15 @@ public class CmsNewsController extends BaseController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend")
-	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-
-        Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
-//		mapJson(page,"success","获取数据成功")
-		this.resultSuccessData(request,response, "",mapJson(cmsNewsList,"success","获取数据成功"));
-
-
-	}
+//	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend")
+//	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
+//
+//        Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
+////		mapJson(page,"success","获取数据成功")
+//		this.resultSuccessData(request,response, "",mapJson(cmsNewsList,"success","获取数据成功"));
+//
+//
+//	}
 
 	/**
 	 * 前台获得资讯分页列表
@@ -196,11 +217,11 @@ public class CmsNewsController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist")
-	public void portallist(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews);
-		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
-	}
+//	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist")
+//	public void portallist(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
+//		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews);
+//		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
+//	}
 
 
 	/**
@@ -216,12 +237,7 @@ public class CmsNewsController extends BaseController {
 		try {
 			String tags = cmsNews.getTags();
 			if(tags !=null  && !tags.equals("")){
-				if(tags.startsWith(",")){
-					tags = tags.substring(1);
-				}
-				if(tags.endsWith(",")){
-					tags = tags.substring(0,tags.length()-1);
-				}
+				tags = StringUtils.delFrontAndEndSymbol(tags);
 				cmsNews.setTags(tags);
 			}
 			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
@@ -230,7 +246,7 @@ public class CmsNewsController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultFaliureData(request,response, "获取数据失败",
-					"false");
+					null);
 			return;
 		}
 	}
@@ -272,37 +288,29 @@ public class CmsNewsController extends BaseController {
 		try {
 			String id = request.getParameter("id"); //资讯id
 			String tags = request.getParameter("tags") ; //该条资讯的标签
-			List<CmsNews> results = new ArrayList<CmsNews>();
-			if(tags ==null ||tags.equals("")){
-				String []  tagList = null;
-				CmsNews cmsNews = new CmsNews();
-				if(tags != null &&!tags.equals("")){
-					tagList = tags.split(",");
-					cmsNews.setTagsvalue(tagList);
-
-				}
-				results = cmsNewsDao.getSimilarByTags(cmsNews);
-			}else{
-				CmsNews cmsNews = cmsNewsService.get(id);
-				if(cmsNews == null){
-					this.resultSuccessData(request,response, "操作成功", null);
-					return ;
-				}
-				tags = cmsNews.getTags();
-
-				String []  tagList = null;
-				if(tags != null &&!tags.equals("")){
-					tagList = tags.split(",");
-					cmsNews.setTagsvalue(tagList);
-
-				}
-				results = cmsNewsDao.getSimilarByTags(cmsNews);
+			if(StringUtils.isBlank(id)&&StringUtils.isBlank(tags)){
+				this.resultFaliureData(request,response, "请先输入资讯的id或者标签tags", null);
+				return ;
 			}
+			List<CmsNews> results = new ArrayList<CmsNews>();
+			CmsNews cmsNews  = null;
+			if(StringUtils.isNotBlank(id)){
+				cmsNews= cmsNewsService.get(id);
+				tags = cmsNews.getTags();
+			}else {
+				cmsNews = new CmsNews();
+			}
+			String []  tagList = null;
+			if(StringUtils.isNotBlank(tags)){
+				tagList = tags.split(",");
+				cmsNews.setTagsvalue(tagList);
 
+			}
+			results = cmsNewsDao.getSimilarByTags(cmsNews);
 			this.resultSuccessData(request,response, "操作成功", results);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", "false");
+			this.resultFaliureData(request,response, "操作失败", null);
 			return ;
 		}
 
