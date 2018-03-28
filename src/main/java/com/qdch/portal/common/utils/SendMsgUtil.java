@@ -77,8 +77,9 @@ public class SendMsgUtil {
 	 */
 	public static String  checkIndentifyCode(String tel,String code ){
 		String returnmsg = "";
-		String sysCode =  JedisUtils.get("MessageCache"+tel);
-		if(sysCode == null){
+		//String sysCode =  JedisUtils.get("MessageCache"+tel);
+		String sysCode =  code;
+		if(sysCode == null||StringUtils.isBlank(code)){
 			returnmsg = "请先点击发送验证码";
 			return returnmsg;
 		}
