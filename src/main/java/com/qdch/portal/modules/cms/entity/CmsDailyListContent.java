@@ -20,14 +20,12 @@ public class CmsDailyListContent extends DataEntity<CmsDailyListContent> {
 
 	private String dailyId;
 
-	private String title;
+	private CmsNews cmsNews;
+	private  CmsEducation cmsEducation;
 
-	public String getTitle() {
-		return title;
-	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
 	}
 
 	public String getDailyId() {

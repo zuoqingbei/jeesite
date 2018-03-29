@@ -6,15 +6,9 @@ package com.qdch.portal.modules.cms.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.qdch.portal.modules.cms.dao.CmsActivityDao;
-import com.qdch.portal.modules.cms.dao.CmsDailyListContentDao;
-import com.qdch.portal.modules.cms.dao.CmsNewsDao;
-import com.qdch.portal.modules.cms.entity.CmsActivity;
-import com.qdch.portal.modules.cms.entity.CmsDailyListContent;
-import com.qdch.portal.modules.cms.entity.CmsNews;
-import com.qdch.portal.modules.cms.service.CmsActivityService;
-import com.qdch.portal.modules.cms.service.CmsDailyListContentService;
-import com.qdch.portal.modules.cms.service.CmsNewsService;
+import com.qdch.portal.modules.cms.dao.*;
+import com.qdch.portal.modules.cms.entity.*;
+import com.qdch.portal.modules.cms.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,8 +22,6 @@ import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
-import com.qdch.portal.modules.cms.entity.CmsDailyList;
-import com.qdch.portal.modules.cms.service.CmsDailyListService;
 
 import java.util.List;
 
@@ -44,10 +36,16 @@ public class CmsDailyListController extends BaseController {
 	@Autowired
 	private CmsDailyListService cmsDailyListService;
 
+	private CmsDailyListDao cmsDailyListDao;
 	@Autowired
 	private CmsNewsService cmsNewsService;
 	@Autowired
 	private CmsActivityService cmsActivityService;
+
+	@Autowired
+	private CmsEducationDao cmsEducationDao;
+	@Autowired
+	private CmsEducationService cmsEducationService;
 
 	@Autowired
 	private CmsDailyListContentService cmsDailyListContentService;
@@ -88,12 +86,14 @@ public class CmsDailyListController extends BaseController {
         try {
             List<CmsNews> cmsNewsList = cmsNewsDao.findList(new CmsNews());
             List<CmsActivity> cmsActivityList  = cmsActivityDao.findList(new CmsActivity());
+            List<CmsEducation> educationList = cmsEducationDao.findList(new CmsEducation());
             CmsDailyListContent cmsDailyListContent = new CmsDailyListContent();
             cmsDailyListContent.setDailyId(cmsDailyList.getId());
             model.addAttribute("cmsNewsList",cmsNewsList);
             model.addAttribute("cmsActivityList",cmsActivityList);
-            cmsDailyListContent.setTableName("cms_news");
-            model.addAttribute("news",cmsDailyListContentDao.getDailyList(cmsDailyListContent)); //编辑进入 的时候的资讯列表
+			model.addAttribute("educationList",educationList);
+            model.addAttribute("news",cmsDailyListContentDao.getNewsList(cmsDailyListContent)); //编辑进入 的时候的资讯列表
+			model.addAttribute("educations",cmsDailyListContentDao.getEductionList(cmsDailyListContent)); //编辑进入 的时候的案例列表
 
             model.addAttribute("cmsDailyList", cmsDailyList);
             return "modules/cms/cmsDailyListForm";
@@ -113,11 +113,12 @@ public class CmsDailyListController extends BaseController {
 		}
         cmsDailyListService.save(cmsDailyList);
 		String newsid = cmsDailyList.getNewids();
+		String educationids = cmsDailyList.getEducationids();
 
 		if(StringUtils.isNotBlank(cmsDailyList.getId())){
 			CmsDailyListContent content = new CmsDailyListContent();
 			content.setDailyId(cmsDailyList.getId());
-			cmsDailyListContentDao.delByDaily(content);
+			cmsDailyListContentDao.delByDaily(content); //编辑状态保存的时候先删除之前保存的 资讯和案例
 		}
 		if(StringUtils.isNotBlank(newsid)){
 			String [] newsids = newsid.split(",");
@@ -126,6 +127,17 @@ public class CmsDailyListController extends BaseController {
 				cmsDailyListContent.setDailyId(cmsDailyList.getId());
                 cmsDailyListContent.setTableName("cms_news");
                 cmsDailyListContent.setCmsId(s);
+				cmsDailyListContentService.save(cmsDailyListContent);
+			}
+		}
+
+		if(StringUtils.isNotBlank(educationids)){
+			String [] educationsids = educationids.split(",");
+			for(String s:educationsids){
+				CmsDailyListContent cmsDailyListContent = new CmsDailyListContent();
+				cmsDailyListContent.setDailyId(cmsDailyList.getId());
+				cmsDailyListContent.setTableName("cms_education");
+				cmsDailyListContent.setCmsId(s);
 				cmsDailyListContentService.save(cmsDailyListContent);
 			}
 		}
@@ -139,6 +151,62 @@ public class CmsDailyListController extends BaseController {
 		cmsDailyListService.delete(cmsDailyList);
 		addMessage(redirectAttributes, "删除每日一览成功");
 		return "redirect:"+Global.getAdminPath()+"/cms/cmsDailyList/list?repage";
+	}
+
+	/**
+	 * 每天的每日一览
+	 * @param cmsDailyList
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsDailyList/getDailyListByDay")
+	public void getDailyListByDay(CmsDailyList cmsDailyList,HttpServletRequest request,HttpServletResponse response){
+		try {
+			if(StringUtils.isBlank(request.getParameter("updateDate"))){
+				this.resultFaliureData(request,response, "请先选择时间", null);
+				return ;
+			}
+			CmsDailyListDto result = new CmsDailyListDto();
+			CmsDailyList dailyList = cmsDailyListDao.getDailyByDay(cmsDailyList);
+			result.setCmsDailyList(dailyList);
+
+			List<CmsNews> cmsNewsList =  cmsNewsDao.getDailyNews(cmsDailyList.getId());
+			result.setCmsNewsList(cmsNewsList);
+			result.setCmsEducationList(cmsEducationDao.getDailyEducation(cmsDailyList.getId()));
+			this.resultSuccessData(request,response, "操作成功", result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultFaliureData(request,response, "操作成功", null);
+			return ;
+		}
+
+
+	}
+
+
+	/**
+	 * 每月的每日一览
+	 * @param cmsDailyList
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsDailyList/getDailyListByMonth")
+	public void getDailyListByMonth(CmsDailyList cmsDailyList,HttpServletRequest request,HttpServletResponse response){
+		try {
+			if(StringUtils.isBlank(request.getParameter("updateDate"))){
+				this.resultFaliureData(request,response, "请先选择月份", null);
+				return ;
+			}
+			List<CmsDailyList> cmsDailyLists = cmsDailyListDao.getDailyByMonth(cmsDailyList);
+
+			this.resultSuccessData(request,response, "操作成功", cmsDailyLists);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultFaliureData(request,response, "操作成功", null);
+			return ;
+		}
+
+
 	}
 
 }

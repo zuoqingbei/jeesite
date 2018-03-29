@@ -16,7 +16,9 @@ import java.util.List;
  */
 @MyBatisDao
 public interface CmsDailyListContentDao extends CrudDao<CmsDailyListContent> {
-    public List<CmsDailyListContent>  getDailyList(CmsDailyListContent cmsDailyListContent);
+    public List<CmsDailyListContent>  getNewsList(CmsDailyListContent cmsDailyListContent);
+
+    public List<CmsDailyListContent>  getEductionList(CmsDailyListContent cmsDailyListContent);
 
     public int delByDaily(CmsDailyListContent cmsDailyListContent);
 	

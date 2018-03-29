@@ -18,5 +18,9 @@ import java.util.List;
 public interface CmsEducationDao extends CrudDao<CmsEducation> {
 
     public List<CmsEducation> getList(CmsEducation cmsEducation);
+
+//    public  List<CmsEducation> getDailyList(CmsEducation cmsEducation);
+
+    public List<CmsEducation> getDailyEducation(String dailyId);
 	
 }
