@@ -18,7 +18,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/cms/cmsDailyList/">每日一览列表</a></li>
+		<li class="active"><a href="${ctx}/cms/cmsDailyList/list">每日一览列表</a></li>
 		<shiro:hasPermission name="cms:cmsDailyList:edit"><li><a href="${ctx}/cms/cmsDailyList/form">每日一览添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cmsDailyList" action="${ctx}/cms/cmsDailyList/list" method="post" class="breadcrumb form-search">
@@ -61,7 +61,10 @@
 					${cmsDailyList.title}
 				</a></td>
 				<td>
-					<img src="${cmsDailyList.image}"style="width:80px;height:80px;"/>
+					<c:if test="${not empty cmsDailyList.image}">
+						<img src="${cmsDailyList.image}"style="width:80px;height:80px;"/>
+					</c:if>
+
 
 				</td>
 				<td>

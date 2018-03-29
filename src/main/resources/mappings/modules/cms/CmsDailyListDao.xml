@@ -11,10 +11,13 @@
 		a.update_date AS "updateDate",
 		a.update_by AS "updateBy.id",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		u4.name AS "user.name",
+		u4.photo AS "user.photo"
 	</sql>
 	
 	<sql id="cmsDailyListJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.create_by
 	</sql>
     
 	<select id="get" resultType="CmsDailyList">
@@ -113,5 +116,34 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+
+
+	<select id="getDailyByDay" resultType="CmsDailyListContent">
+		SELECT
+		<include refid="cmsDailyListColumns"/>
+		FROM cms_daily_list a
+		<include refid="cmsDailyListJoins"/>
+		WHERE
+		a.del_flag = '0'
+		AND LEFT (a.update_date, 10) = #{updateDate}
+		ORDER BY
+		a.update_date DESC
+		LIMIT 1
+	</select>
+
+
+	<select id="getDailyByMonth" resultType="CmsDailyListContent">
+		SELECT
+		<include refid="cmsDailyListColumns"/>
+		FROM cms_daily_list a
+		<include refid="cmsDailyListJoins"/>
+		WHERE
+		a.del_flag = '0'
+		AND LEFT (a.update_date, 7) = #{updateDate}
+		ORDER BY
+		a.update_date DESC
+
+	</select>
 	
 </mapper>

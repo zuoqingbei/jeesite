@@ -130,6 +130,12 @@ public class CmsNewsService extends CrudService<CmsNewsDao, CmsNews> {
 		return page;
 	}
 
+	public Page<CmsNews> getDailyNews(Page<CmsNews> page,String dailyId){
+		page.setList(dao.getDailyNews(dailyId));
+		return  page;
+
+	}
+
 
 
 

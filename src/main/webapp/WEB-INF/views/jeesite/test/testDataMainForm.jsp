@@ -40,6 +40,7 @@
 			});
 		}
 		function delRow(obj, prefix){
+		    console.log(obj)
 			var id = $(prefix+"_id");
 			var delFlag = $(prefix+"_delFlag");
 			if (id.val() == ""){

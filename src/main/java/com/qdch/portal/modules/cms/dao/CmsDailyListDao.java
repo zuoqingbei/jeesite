@@ -7,6 +7,8 @@ import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
 import com.qdch.portal.modules.cms.entity.CmsDailyList;
 
+import java.util.List;
+
 /**
  * 每日一览DAO接口
  * @author wangfeng
@@ -14,5 +16,9 @@ import com.qdch.portal.modules.cms.entity.CmsDailyList;
  */
 @MyBatisDao
 public interface CmsDailyListDao extends CrudDao<CmsDailyList> {
-	
+
+    public CmsDailyList  getDailyByDay(CmsDailyList cmsDailyList);
+
+    public List<CmsDailyList>  getDailyByMonth(CmsDailyList cmsDailyList);
+
 }
