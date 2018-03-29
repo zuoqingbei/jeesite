@@ -386,6 +386,8 @@ public class UploadUtils {
 		}
 		if(imgStr.startsWith("data:image/png;base64,")){
 	    	imgStr=imgStr.substring("data:image/png;base64,".length(), imgStr.length());
+	    }else{
+	    	return null;
 	    }
 		Base64Encoder decoder = new Base64Encoder();
 		try {
@@ -417,7 +419,7 @@ public class UploadUtils {
 			out.write(b);
 			out.flush();
 			out.close();
-			return savePath.substring(Global.getUserfilesBaseDir().length(), savePath.length());
+			return "/"+savePath.substring(Global.getUserfilesBaseDir().length(), savePath.length());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -46,8 +46,8 @@ public class PortalIndexController extends BaseController {
 	 * @param  @return
 	 * @return_type   String
 	 */
-	@SecurityAuthorityAnnotation(needLogin=true)
-	@RequestMapping(value = {"${portalPath}","${portalPath}/index"}, method = RequestMethod.GET)
+	//@SecurityAuthorityAnnotation(needLogin=true)
+	@RequestMapping(value = {"${portalPath}","${portalPath}/index","${portalPath}/index/index"}, method = RequestMethod.GET)
 	public String index(Model model,HttpServletRequest request, HttpServletResponse response){
 		//return portalPage+"${pla}/index/index";
 		

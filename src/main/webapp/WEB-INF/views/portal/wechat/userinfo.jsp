@@ -75,16 +75,21 @@
 <script src="${ctxStatic}/${portalPage}/wx/asserts/js/jquery-2.2.4.js"></script>
 <script src="${ctxStatic}/${portalPage}/wx/asserts/js/jquery.validate-1.15.1.js"></script>
 <script>
+	var countdown=120; 
+    var timer;
+	//验证表单
+    var validResult = false;
+	var $regForm = $("#regForm");
     $(function () {
-
-        //验证表单
-        var validResult = false;
-        var $regForm = $("#regForm");
-        $regForm.find(":input").keyup(function () {
+       initPage();
+    });
+	function initPage(){
+		 $regForm.find(":input").keyup(function () {
             validateForm()
         });
         $("#regFormBtn").one("click",submitMethod);
-		function submitMethod(){
+	};
+	function submitMethod(){
 			 validateForm();
 	            if ($regForm.valid()) {
 	            	//先验证验证码正确性
@@ -114,7 +119,7 @@
 	            }else{
 	            	$("#regFormBtn").one("click",submitMethod);
 	            }
-		}
+		};
         function validateForm() {
             $regForm.validate({
                 debug: true,
@@ -141,7 +146,7 @@
                     }
                 }
             })
-        }
+        };
         //发送手机验证码
         
         $("#sendBtn").one("click",sendMobileCode);
@@ -161,8 +166,7 @@
     		 }
 			 
     	};
-    	var countdown=120; 
-    	var timer;
+    	
     	function settime() { 
     		var obj=$("#sendBtn").get(0);
     	    if (countdown == 0) { 
@@ -177,9 +181,7 @@
     	        obj.innerHTML="重新发送(" + countdown + ")"; 
     	        countdown--; 
     	    } 
-    	}
-
-    })
+    	};
 </script>
 <script>
 </script>
