@@ -113,6 +113,12 @@ public class CmsDailyListController extends BaseController {
 		}
         cmsDailyListService.save(cmsDailyList);
 		String newsid = cmsDailyList.getNewids();
+
+		if(StringUtils.isNotBlank(cmsDailyList.getId())){
+			CmsDailyListContent content = new CmsDailyListContent();
+			content.setDailyId(cmsDailyList.getId());
+			cmsDailyListContentDao.delByDaily(content);
+		}
 		if(StringUtils.isNotBlank(newsid)){
 			String [] newsids = newsid.split(",");
 			for(String s:newsids){

@@ -82,7 +82,7 @@
 							<td>
 
 								<form:select  path="newids" value="{{row.id}}"  name="testDataChildList[{{idx}}].name" type="text"   class="input-small " style="width:400px">
-									<form:option value="" label=""/>
+									<form:option value="" label=""/>/
 									<c:forEach items="${cmsNewsList}" var="a">
 										<form:option value="${a.id}" label="${a.title}"/>
 									</c:forEach>
@@ -163,19 +163,24 @@
 		</div>
 	</form:form>
 
-
 <script>
     function addRow(list, idx, tpl, row){
         $(list).append(Mustache.render(tpl, {
             idx: idx, delBtn: true, row: row
         }));
-        $(list+idx).find("select").attr("id",list+idx);
-        $(list+idx).find("select").attr('val',row.id)
         $(list+idx).find("select").each(function(){
-            // $(this).val($(this).attr("data-value"));
+             // $(this).val($(this).attr("data-value"));
+            $(this).find("option").each(function(index,item){
+                if(row != null &&row !='' && row != 'null'){
+                    if($(this).attr("value")==row.cmsId){
+                        $(this).attr("selected","selected");
+                    }
+				}
 
-            console.log($(this).attr("val",row.id))
-
+			});
+            // if($(this).id==row.id){
+             //    // console.log($(this).id)
+			// }
         });
         $(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
             var ss = $(this).attr("data-value").split(',');
@@ -201,6 +206,8 @@
             $(obj).html("&times;").attr("title", "删除");
             $(obj).parent().parent().removeClass("error");
         }
+
+
     }
 </script>
 </body>
