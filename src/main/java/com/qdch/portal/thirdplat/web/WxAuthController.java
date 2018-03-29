@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Constant;
 import com.qdch.portal.common.mapper.JsonMapper;
+import com.qdch.portal.common.utils.SendMsgUtil;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.security.FormAuthenticationFilter;
@@ -189,10 +190,17 @@ public class WxAuthController extends BaseController{
 	public String userinfo(Model model,HttpServletRequest request, HttpServletResponse response){
 		String accountId=request.getParameter("accountId");
 		String to=request.getParameter("to");
-		System.out.println("----userinfo-----"+accountId+"---"+to);
+		if(StringUtils.isBlank(to)){
+			to=portalPath+"/wx/report";
+		}
 		request.setAttribute("accountId", accountId);
 		request.setAttribute("to", to);
-		return render(request, "wechat/userinfo");
+		AccountThirdplat accountThirdplat=accountThirdplatService.get(accountId);
+		if(accountThirdplat!=null&&StringUtils.isNotBlank(accountThirdplat.getUserId())){
+			return "redirect:" +to;
+		}else{
+			return render(request, "wechat/userinfo");
+		}
 	}
 	/**
 	 * 
@@ -202,30 +210,20 @@ public class WxAuthController extends BaseController{
 	 * @return_type   String
 	 */
 	@RequestMapping(value = {"${portalPath}/wx/register"})
-	public String register(RedirectAttributes model,HttpServletRequest request, HttpServletResponse response){
+	@ResponseBody
+	public void register(RedirectAttributes model,HttpServletRequest request, HttpServletResponse response){
 		String accountId=request.getParameter("accountId");
-		String tel=request.getParameter("tel");
-		String userName=request.getParameter("name");
+		String tel=request.getParameter("telephone");
+		String userName=tel;
 		String to=request.getParameter("to");
-		AccountThirdplat accountThirdplat=accountThirdplatService.get(accountId);
-		User user=null;
-		if(accountThirdplat!=null){
-			accountThirdplat.setMobile(tel);
-			if(StringUtils.isBlank(accountThirdplat.getUserId())){
-				//生成新用户
-				user=new User(userName,accountThirdplat);
-				try {
-					systemService.saveUser(user);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				// 清除当前用户缓存
-				if (user.getLoginName().equals(UserUtils.getUser().getLoginName())){
-					UserUtils.clearCache();
-				}
-			}else{
-				user=systemService.getUser(accountThirdplat.getUserId());
-				if(user==null){
+		String validCode=request.getParameter("validCode");
+		String result = SendMsgUtil.checkIndentifyCode(tel,validCode);
+		if("true".equals(result)){
+			AccountThirdplat accountThirdplat=accountThirdplatService.get(accountId);
+			User user=null;
+			if(accountThirdplat!=null){
+				accountThirdplat.setMobile(tel);
+				if(StringUtils.isBlank(accountThirdplat.getUserId())){
 					//生成新用户
 					user=new User(userName,accountThirdplat);
 					try {
@@ -238,28 +236,48 @@ public class WxAuthController extends BaseController{
 						UserUtils.clearCache();
 					}
 				}else{
-					user.setMobile(tel);
-					user.setName(userName);
-					systemService.updateUserInfo(user);
+					user=systemService.getUser(accountThirdplat.getUserId());
+					if(user==null){
+						//生成新用户
+						user=new User(userName,accountThirdplat);
+						try {
+							systemService.saveUser(user);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						// 清除当前用户缓存
+						if (user.getLoginName().equals(UserUtils.getUser().getLoginName())){
+							UserUtils.clearCache();
+						}
+					}else{
+						user.setMobile(tel);
+						user.setName(userName);
+						systemService.updateUserInfo(user);
+					}
+					
 				}
-				
+				//更新第三方账号
+				accountThirdplat.setUser(user);
+				accountThirdplat.setUserId(accountThirdplat.getUserId());
+				accountThirdplat.setMobile(tel);
+				accountThirdplatService.save(accountThirdplat);
+				//用户登录
+				UserUtils.login(request, response, user);
 			}
-			//更新第三方账号
-			accountThirdplat.setUser(user);
-			accountThirdplat.setUserId(accountThirdplat.getUserId());
-			accountThirdplat.setMobile(tel);
-			accountThirdplatService.save(accountThirdplat);
-			//用户登录
-			UserUtils.login(request, response, user);
+			
+			HashMap< String, Object> r=new HashMap<String, Object>();
+			r.put("status", "success");
+			r.put("to", to);
+			if(user!=null){
+				r.put("userId",  user.getId());
+			}
+			this.resultSuccessData(request, response, "注册成功", r);
+			//return "redirect:" +to;
+		}else{
+			//验证码错误
+			//return "redirect:" +portalPath+"/wx/userinfo";
+			this.resultFaliureData(request, response, "验证码错误", null);
 		}
-		model.addAttribute("userId", user.getId());
-		return "redirect:" +to;
-	}
-	@RequestMapping(value = {"${portalPath}/wx/report"})
-	public String report(Model model,HttpServletRequest request, HttpServletResponse response){
-		String userId=request.getParameter("userId");
-		System.out.println("----report-----"+userId);
-		return render(request, "wechat/report");
 	}
 	
 }

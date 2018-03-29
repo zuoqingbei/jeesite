@@ -172,9 +172,9 @@
         $(list+idx).find("select").attr("id",list+idx);
         $(list+idx).find("select").attr('val',row.id)
         $(list+idx).find("select").each(function(){
-            $(this).val($(this).attr("data-value"));
+            // $(this).val($(this).attr("data-value"));
 
-            console.log($(this).attr("data-value"))
+            console.log($(this).attr("val",row.id))
 
         });
         $(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){

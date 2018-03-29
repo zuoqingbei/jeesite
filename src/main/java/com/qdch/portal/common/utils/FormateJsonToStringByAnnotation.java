@@ -18,7 +18,7 @@ public class FormateJsonToStringByAnnotation {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String jsonFromObject(Object status,Object msg,Object list) {
 		if (list == null || "".equals(list)) {
-			return "{\"status\":\""+status+"\",\"msg\":\""+msg+"\",data:[]}";
+			return "{\"status\":\""+status+"\",\"msg\":\""+msg+"\"}";
 		}
 		StringBuffer json = new StringBuffer("{");
 		json.append("{\"status\":\""+status+"\",\"msg\":\""+msg+"\",data:");
@@ -83,7 +83,7 @@ public class FormateJsonToStringByAnnotation {
 						json.append("},");
 					}
 				} catch (Exception e) {
-					return "{\"status\":\"failure\",\"msg\":\""+e.getMessage()+"\",data:[]}";
+					return "{\"status\":\"failure\",\"msg\":\""+e.getMessage()+"\"}";
 					// throw new RuntimeException();
 				}
 			}
@@ -131,7 +131,7 @@ public class FormateJsonToStringByAnnotation {
 								}
 							} catch (Exception e1) {
 								// throw new RuntimeException();
-								return "{\"status\":\"failure\",\"msg\":\""+e1.getMessage()+"\",data:[]}";
+								return "{\"status\":\"failure\",\"msg\":\""+e1.getMessage()+"\"}";
 							}
 						}
 					}
@@ -208,7 +208,7 @@ public class FormateJsonToStringByAnnotation {
 						json.append("},");
 					}
 				} catch (Exception e) {
-					return "{\"status\":\"failure\",\"msg\":\""+e.getMessage()+"\",data:[]}";
+					return "{\"status\":\"failure\",\"msg\":\""+e.getMessage()+"\"}";
 					// throw new RuntimeException();
 				}
 			}
@@ -256,7 +256,7 @@ public class FormateJsonToStringByAnnotation {
 								}
 							} catch (Exception e1) {
 								// throw new RuntimeException();
-								return "{\"status\":\"failure\",\"msg\":\""+e1.getMessage()+"\",data:[]}";
+								return "{\"status\":\"failure\",\"msg\":\""+e1.getMessage()+"\"}";
 							}
 						}
 					}

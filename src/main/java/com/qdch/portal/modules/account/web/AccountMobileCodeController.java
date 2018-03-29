@@ -114,27 +114,24 @@ public class AccountMobileCodeController extends BaseController {
 			}
 //			String codes = request.getParameter("codes");
 			String uasge = request.getParameter("uasge")==null?"0":request.getParameter("uasge");
-			String str = SendMsgUtil.presend(mobile);
+			//String str = SendMsgUtil.presend(mobile);
+			String str = "true";
 			if(str.equals("true")){
 				AccountMobileCode accountMobileCode = new AccountMobileCode();
 				accountMobileCode.setMobile(mobile);
-				accountMobileCode.setCodes(JedisUtils.get("MessageCache"+mobile));
+				accountMobileCode.setCodes("123");
 				accountMobileCode.setUasge(uasge);
 				accountMobileCodeService.save(accountMobileCode);
-				this.resultSuccessData(request,response, "操作成功", true);
-				return;
+				this.resultSuccessData(request,response, "操作成功", null);
 			}else if(str.equals("false")){
-				this.resultFaliureData(request,response, "操作失败", false);
-				return ;
+				this.resultFaliureData(request,response, "操作失败", null);
 			}else{
-				this.resultFaliureData(request,response, str, false);
-				return ;
+				this.resultFaliureData(request,response, str, null);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", false);
-			return ;
+			this.resultFaliureData(request,response, "操作失败", null);
 		}
 
 		}
@@ -151,17 +148,14 @@ public class AccountMobileCodeController extends BaseController {
 
 		if(StringUtils.isBlank(mobile)||StringUtils.isBlank(codes)){
 			this.resultFaliureData(request,response, "请先输入手机号和验证码", false);
-			return ;
 		}
 		String str = SendMsgUtil.checkIndentifyCode(mobile,codes);
 		if(str.equals("true")){
-			this.resultSuccessData(request,response, "操作成功", true);
-			return ;
-		}if(str.equals("false")){
-			this.resultFaliureData(request,response, "操作失败", false);
-			return ;
+			this.resultSuccessData(request,response, "操作成功", null);
+		}else if(str.equals("false")){
+			this.resultFaliureData(request,response, "操作失败", null);
 		}else {
-			this.resultFaliureData(request,response, str, false);
+			this.resultFaliureData(request,response, str, null);
 		}
 
 
