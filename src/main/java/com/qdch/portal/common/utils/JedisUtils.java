@@ -880,6 +880,7 @@ public class JedisUtils {
 	 * @return
 	 */
 	public static boolean exists(String key) {
+
 		boolean result = false;
 		Jedis jedis = null;
 		try {
@@ -921,14 +922,17 @@ public class JedisUtils {
 	 */
 	public static Jedis getResource() throws JedisException {
 		Jedis jedis = null;
-		try {
-			jedis = jedisPool.getResource();
+		if(Global.getOpenRedis().equals("1")){
+			try {
+				jedis = jedisPool.getResource();
 //			logger.debug("getResource.", jedis);
-		} catch (JedisException e) {
-			logger.warn("getResource.", e);
-			returnBrokenResource(jedis);
-			throw e;
+			} catch (JedisException e) {
+				logger.warn("getResource.", e);
+				returnBrokenResource(jedis);
+				throw e;
+			}
 		}
+
 		return jedis;
 	}
 

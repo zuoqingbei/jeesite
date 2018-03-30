@@ -23,6 +23,8 @@ import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,9 +35,12 @@ import java.util.List;
 @Controller
 public class CmsDailyListController extends BaseController {
 
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
 	@Autowired
 	private CmsDailyListService cmsDailyListService;
 
+	@Autowired
 	private CmsDailyListDao cmsDailyListDao;
 	@Autowired
 	private CmsNewsService cmsNewsService;
@@ -86,7 +91,9 @@ public class CmsDailyListController extends BaseController {
         try {
             List<CmsNews> cmsNewsList = cmsNewsDao.findList(new CmsNews());
             List<CmsActivity> cmsActivityList  = cmsActivityDao.findList(new CmsActivity());
-            List<CmsEducation> educationList = cmsEducationDao.findList(new CmsEducation());
+			CmsEducation education = new CmsEducation();
+			education.setCategory1("1");//案例
+            List<CmsEducation> educationList = cmsEducationDao.findList(education);
             CmsDailyListContent cmsDailyListContent = new CmsDailyListContent();
             cmsDailyListContent.setDailyId(cmsDailyList.getId());
             model.addAttribute("cmsNewsList",cmsNewsList);
@@ -162,17 +169,21 @@ public class CmsDailyListController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsDailyList/getDailyListByDay")
 	public void getDailyListByDay(CmsDailyList cmsDailyList,HttpServletRequest request,HttpServletResponse response){
 		try {
-			if(StringUtils.isBlank(request.getParameter("updateDate"))){
+			String updateDate = request.getParameter("updateDate");
+//			String updateDate = "2018-03-30";
+			if(StringUtils.isBlank(updateDate)){
 				this.resultFaliureData(request,response, "请先选择时间", null);
 				return ;
 			}
 			CmsDailyListDto result = new CmsDailyListDto();
 			CmsDailyList dailyList = cmsDailyListDao.getDailyByDay(cmsDailyList);
 			result.setCmsDailyList(dailyList);
+			if(StringUtils.isNotBlank(dailyList.getId())){
+				List<CmsNews> cmsNewsList =  cmsNewsDao.getDailyNews(dailyList.getId());
+				result.setCmsNewsList(cmsNewsList);
+				result.setCmsEducationList(cmsEducationDao.getDailyEducation(dailyList.getId()));
+			}
 
-			List<CmsNews> cmsNewsList =  cmsNewsDao.getDailyNews(cmsDailyList.getId());
-			result.setCmsNewsList(cmsNewsList);
-			result.setCmsEducationList(cmsEducationDao.getDailyEducation(cmsDailyList.getId()));
 			this.resultSuccessData(request,response, "操作成功", result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -193,13 +204,14 @@ public class CmsDailyListController extends BaseController {
 	@RequestMapping(value = "${portalPath}/cms/cmsDailyList/getDailyListByMonth")
 	public void getDailyListByMonth(CmsDailyList cmsDailyList,HttpServletRequest request,HttpServletResponse response){
 		try {
-			if(StringUtils.isBlank(request.getParameter("updateDate"))){
+			String updateDate = request.getParameter("updateDate");
+			if(StringUtils.isBlank(updateDate)){
 				this.resultFaliureData(request,response, "请先选择月份", null);
 				return ;
 			}
-			List<CmsDailyList> cmsDailyLists = cmsDailyListDao.getDailyByMonth(cmsDailyList);
-
-			this.resultSuccessData(request,response, "操作成功", cmsDailyLists);
+			CmsDailyListDto result = new CmsDailyListDto();
+			List<CmsDailyList> dailyList = cmsDailyListDao.getDailyByMonth(cmsDailyList);
+			this.resultSuccessData(request,response, "操作成功", dailyList);
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultFaliureData(request,response, "操作成功", null);

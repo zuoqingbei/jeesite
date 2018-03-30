@@ -14,5 +14,9 @@ import com.qdch.portal.modules.account.entity.AccountMobileCode;
  */
 @MyBatisDao
 public interface AccountMobileCodeDao extends CrudDao<AccountMobileCode> {
+
+    public AccountMobileCode getByTel(AccountMobileCode accountMobileCode);
+
+    public int setUsed(AccountMobileCode code);
 	
 }

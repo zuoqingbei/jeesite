@@ -225,5 +225,12 @@ public class Global {
 		}
 		return projectPath;
 	}
+	/**
+	 * 是否开启redis
+	 */
+	public static String getOpenRedis() {
+		return getConfig("openRedis");
+	}
+
 
 }
