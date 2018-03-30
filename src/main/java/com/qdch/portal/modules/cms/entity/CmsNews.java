@@ -30,16 +30,19 @@ public class CmsNews extends DataEntity<CmsNews> {
 	private String image;		// 文章图片
 	private String keywords;		// 关键字
 
+	@Json
 	private String tags;		// 标签，多个 用&ldquo;，&rdquo;分开并且开头结尾也是逗号,比如 ,1,2,3,
 	private String description;		// 描述、摘要
 	private String weight;		// 权重，越大越靠前
 	private String hits;		// 点击数、阅读数
 	private String transmit;		// 转发数 分享数
 	private String discess;		// 评论数  回复数
+	@Json
 	private String praise;		// 赞数量
 	private String tread;		// 踩数量
 	private String collection;		// 收藏量
 	private String report;		// 举报数量
+	@Json
 	private String evaluate;		// 评价数量
 	private String tip;		// 打赏次数
 	private String view;		// 曝光量

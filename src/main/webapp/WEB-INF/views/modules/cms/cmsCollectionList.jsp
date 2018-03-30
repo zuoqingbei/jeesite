@@ -41,7 +41,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>收藏内容源id</th>
+				<%--<th>收藏内容源id</th>--%>
 				<th>内容来源表</th>
 				<th>用户</th>
 				<th>收藏时间</th>
@@ -51,13 +51,13 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsCollection">
 			<tr>
-				<td>
-					<%--<a href="${ctx}/cms/cmsCollection/form?id=${cmsCollection.id}">--%>
-					<%--${cmsCollection.sourceId}--%>
-				<%--</a>--%>
-							${cmsCollection.sourceId}
+				<%--<td>--%>
+					<%--&lt;%&ndash;<a href="${ctx}/cms/cmsCollection/form?id=${cmsCollection.id}">&ndash;%&gt;--%>
+					<%--&lt;%&ndash;${cmsCollection.sourceId}&ndash;%&gt;--%>
+				<%--&lt;%&ndash;</a>&ndash;%&gt;--%>
+							<%--${cmsCollection.sourceId}--%>
 
-				</td>
+				<%--</td>--%>
 				<td>
 					${cmsCollection.sourceTable}
 				</td>

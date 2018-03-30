@@ -17,8 +17,17 @@ public class CmsDailyList extends DataEntity<CmsDailyList> {
 	private static final long serialVersionUID = 1L;
 	private String title;		// 标题
 	private String image;		// 图片
-	private String newids;
+	private String newids; //资讯
 	private String activityids;
+	private String educationids; //案例
+
+	public String getEducationids() {
+		return educationids;
+	}
+
+	public void setEducationids(String educationids) {
+		this.educationids = educationids;
+	}
 
 	public String getNewids() {
 		return newids;

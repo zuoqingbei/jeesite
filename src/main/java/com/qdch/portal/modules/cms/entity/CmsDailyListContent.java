@@ -17,7 +17,25 @@ public class CmsDailyListContent extends DataEntity<CmsDailyListContent> {
 	private static final long serialVersionUID = 1L;
 	private String tableName;		// 表名
 	private String cmsId;		// id
-	
+
+	private String dailyId;
+
+	private CmsNews cmsNews;
+	private  CmsEducation cmsEducation;
+
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public String getDailyId() {
+		return dailyId;
+	}
+
+	public void setDailyId(String dailyId) {
+		this.dailyId = dailyId;
+	}
+
 	public CmsDailyListContent() {
 		super();
 	}

@@ -121,20 +121,16 @@ public class AccountMobileCodeController extends BaseController {
 				accountMobileCode.setCodes(JedisUtils.get("MessageCache"+mobile));
 				accountMobileCode.setUasge(uasge);
 				accountMobileCodeService.save(accountMobileCode);
-				this.resultSuccessData(request,response, "操作成功", true);
-				return;
+				this.resultSuccessData(request,response, "操作成功", null);
 			}else if(str.equals("false")){
-				this.resultFaliureData(request,response, "操作失败", false);
-				return ;
+				this.resultFaliureData(request,response, "操作失败", null);
 			}else{
-				this.resultFaliureData(request,response, str, false);
-				return ;
+				this.resultFaliureData(request,response, str, null);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", false);
-			return ;
+			this.resultFaliureData(request,response, "操作失败", null);
 		}
 
 		}
@@ -148,19 +144,17 @@ public class AccountMobileCodeController extends BaseController {
 	public void checkIndentifyCode(HttpServletRequest request,HttpServletResponse response){
 		String mobile = request.getParameter("mobile");
 		String codes = request.getParameter("codes");
-		if(mobile==null||mobile.equals("")||codes==null||codes.equals("")){
+
+		if(StringUtils.isBlank(mobile)||StringUtils.isBlank(codes)){
 			this.resultFaliureData(request,response, "请先输入手机号和验证码", false);
-			return ;
 		}
 		String str = SendMsgUtil.checkIndentifyCode(mobile,codes);
 		if(str.equals("true")){
-			this.resultSuccessData(request,response, "操作成功", true);
-			return ;
-		}if(str.equals("false")){
-			this.resultFaliureData(request,response, "操作失败", false);
-			return ;
+			this.resultSuccessData(request,response, "操作成功", null);
+		}else if(str.equals("false")){
+			this.resultFaliureData(request,response, "操作失败", null);
 		}else {
-			this.resultFaliureData(request,response, str, false);
+			this.resultFaliureData(request,response, str, null);
 		}
 
 

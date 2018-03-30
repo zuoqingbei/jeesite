@@ -29,5 +29,5 @@ public class ProcessDefinitionDiagramLayoutResource extends BaseProcessDefinitio
 	public ObjectNode getDiagram(@PathVariable String processDefinitionId) {
 		return getDiagramNode(null, processDefinitionId);
 	}
-	
+
 }

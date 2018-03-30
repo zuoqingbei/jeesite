@@ -33,6 +33,7 @@ import com.qdch.portal.modules.sys.entity.Role;
 import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.security.FormAuthenticationFilter;
 import com.qdch.portal.modules.sys.security.SystemAuthorizingRealm.Principal;
+import com.qdch.portal.modules.sys.security.UsernamePasswordToken;
 
 /**
  * 用户工具类
@@ -364,5 +365,6 @@ public class UserUtils {
 	    } 
 		return isSuccess;
 	}
+	
 	
 }

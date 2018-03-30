@@ -4,6 +4,7 @@
     
 	<sql id="cmsDailyListContentColumns">
 		a.id AS "id",
+		a.daily_id AS "dailyId",
 		a.table_name AS "tableName",
 		a.cms_id AS "cmsId",
 		a.create_date AS "createDate",
@@ -69,6 +70,7 @@
 	<insert id="insert">
 		INSERT INTO cms_daily_list_content(
 			id,
+			daily_id,
 			table_name,
 			cms_id,
 			create_date,
@@ -79,6 +81,7 @@
 			del_flag
 		) VALUES (
 			#{id},
+			#{dailyId},
 			#{tableName},
 			#{cmsId},
 			#{createDate},
@@ -91,7 +94,8 @@
 	</insert>
 	
 	<update id="update">
-		UPDATE cms_daily_list_content SET 	
+		UPDATE cms_daily_list_content SET
+			daily_id=#{dailyId},
 			table_name = #{tableName},
 			cms_id = #{cmsId},
 			update_date = #{updateDate},
@@ -105,5 +109,37 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+
+	<select id="getNewsList" resultType="CmsDailyListContent">
+		SELECT
+		<include refid="cmsDailyListContentColumns"/>,b.title
+		FROM cms_daily_list_content a
+		<include refid="cmsDailyListContentJoins"/>
+		LEFT JOIN cms_news b ON a.cms_id = b.id
+		AND b.del_flag = '0'
+		WHERE
+			a.del_flag = '0'
+		AND a.daily_id = #{dailyId}
+		AND a.table_name = 'cms_news'
+	</select>
+
+    <select id="getEductionList" resultType="CmsDailyListContent">
+        SELECT
+        <include refid="cmsDailyListContentColumns"/>,b.title
+        FROM cms_daily_list_content a
+        <include refid="cmsDailyListContentJoins"/>
+        LEFT JOIN cms_education b ON a.cms_id = b.id
+        AND b.del_flag = '0'
+        WHERE
+        a.del_flag = '0'
+        AND a.daily_id = #{dailyId}
+        AND a.table_name = 'cms_education'
+    </select>
+
+	<update id="delByDaily">
+		UPDATE  cms_daily_list_content set del_flag='1'   WHERE del_flag='0' and daily_id=#{dailyId}
+	</update>
+
 	
 </mapper>

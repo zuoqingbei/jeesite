@@ -33,6 +33,8 @@ public interface CmsNewsDao extends CrudDao<CmsNews> {
 
     public List<CmsNews> getSimilarByTags(CmsNews cmsNews);
 
+    public List<CmsNews> getDailyNews(String dailyId);
+
 
 
 }

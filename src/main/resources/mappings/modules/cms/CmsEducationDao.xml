@@ -41,7 +41,8 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		u4.name AS "user.name"
+		u4.name AS "user.name",
+		u4.photo AS "user.photo"
 	</sql>
 	
 	<sql id="cmsEducationJoins">
@@ -231,5 +232,39 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+	<select id="getList" resultType="CmsEducation">
+		SELECT
+		<include refid="cmsEducationColumns"/>
+		FROM cms_education a
+		<include refid="cmsEducationJoins"/>
+		WHERE a.del_flag='0'
+		<if test="dataType != null and dataType !=''">
+			and a.data_type=#{dataType}
+		</if>
+		<if test="category1 != null and category1 !=''">
+			AND a.category1=#{category1}
+		</if>
+
+	</select>
+
+
+	<select id="getDailyEducation" resultType="CmsEducation">
+		SELECT
+		<include refid="cmsEducationColumns"/>
+		FROM cms_education a
+		<include refid="cmsEducationJoins"/>
+		WHERE a.del_flag='0'
+		a.id IN (
+		SELECT
+		cms_id
+		FROM
+		cms_daily_list_content
+		WHERE
+		del_flag = '0'
+		AND table_name = 'cms_education'
+		AND daily_id=#{dailyId}
+		)
+	</select>
 	
 </mapper>

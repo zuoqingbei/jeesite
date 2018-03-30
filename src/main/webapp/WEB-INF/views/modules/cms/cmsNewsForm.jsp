@@ -110,13 +110,13 @@
 		<div class="control-group">
 			<label class="control-label">描述、摘要：</label>
 			<div class="controls">
-				<form:input path="description" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:textarea path="description" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">权重，越大越靠前：</label>
 			<div class="controls">
-				<form:input path="weight" htmlEscape="false" maxlength="11" class="input-xlarge " value="0"/>
+				<form:input path="weight" htmlEscape="false" maxlength="11" class="input-xlarge "/>
 			</div>
 		</div>
 		<%-- <div class="control-group">
@@ -259,7 +259,7 @@
 			<label class="control-label">正文:</label>
 			<div class="controls">
 				<form:textarea    id="contentHtml" htmlEscape="false" path="contentHtml" rows="4" maxlength="200" class="input-xxlarge"/>
-				<sys:ckeditor replace="contentHtml" uploadPath="/cms/news" />
+				<sys:ckeditor replace="contentHtml" uploadPath="/cms/cmsNews" />
 			</div>
 		</div>
 		<%--<div class="control-group">--%>

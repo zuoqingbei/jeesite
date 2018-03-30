@@ -356,6 +356,9 @@
 		<if test="tags != null and tags != ''">
 			and FIND_IN_SET(#{tags},a.tags)
 		</if>
+		<if test="keywords != null and keywords != ''">
+			AND a.title LIKE 	concat('%',#{keywords},'%')
+		</if>
 		order by 1
 		<if test="hits != null and hits != ''">
 			,hits desc
@@ -444,7 +447,7 @@
 		FROM cms_news a
 		<include refid="cmsNewsJoins"/>
 		where 1=1 and a.id !=#{id}
-		<if test="tagslabel != null and tagsvalue != ''">
+		<if test="tagsvalue != null and tagsvalue != ''">
 			and
 			<foreach collection="tagsvalue" item="e" open="" separator=" or " close="">
 				FIND_IN_SET(#{e},a.tags)
@@ -454,5 +457,24 @@
 
 		order by a.recommend desc,a.update_date desc
 		limit 3
+	</select>
+
+
+	<select id="getDailyNews" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		WHERE a.del_flag='0'
+			a.id IN (
+				SELECT
+					cms_id
+				FROM
+					cms_daily_list_content
+				WHERE
+					del_flag = '0'
+				AND table_name = 'cms_news'
+				AND daily_id=#{dailyId}
+			)
 	</select>
 </mapper>

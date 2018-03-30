@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsQuestionAnswerDao">
+    
+	<sql id="cmsQuestionAnswerColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.link AS "link",
+		a.data_type AS "dataType",
+		a.user_id AS "user.id",
+		a.title AS "title",
+		a.image AS "image",
+		a.keywords AS "keywords",
+		a.tags AS "tags",
+		a.description AS "description",
+		a.content AS "content",
+		a.content_html AS "contentHtml",
+		a.weight AS "weight",
+		a.hits AS "hits",
+		a.transmit AS "transmit",
+		a.discess AS "discess",
+		a.praise AS "praise",
+		a.tread AS "tread",
+		a.collection AS "collection",
+		a.report AS "report",
+		a.evaluate AS "evaluate",
+		a.tip AS "tip",
+		a.answer AS "answer",
+		a.view AS "view",
+		a.recommend AS "recommend",
+		a.allow_comment AS "allowComment",
+		a.comment_audit AS "commentAudit",
+		a.allow_report AS "allowReport",
+		a.undercarriage AS "undercarriage",
+		a.reason AS "reason",
+		a.category1 AS "category1",
+		a.category2 AS "category2",
+		a.category3 AS "category3",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u5.name AS "user.name"
+	</sql>
+	
+	<sql id="cmsQuestionAnswerJoins">
+		LEFT JOIN sys_user u5 ON u5.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CmsQuestionAnswer">
+		SELECT 
+			<include refid="cmsQuestionAnswerColumns"/>
+		FROM cms_question_answer a
+		<include refid="cmsQuestionAnswerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsQuestionAnswer">
+		SELECT 
+			<include refid="cmsQuestionAnswerColumns"/>
+		FROM cms_question_answer a
+		<include refid="cmsQuestionAnswerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="tags != null and tags != ''">
+				AND a.tags = #{tags}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsQuestionAnswer">
+		SELECT 
+			<include refid="cmsQuestionAnswerColumns"/>
+		FROM cms_question_answer a
+		<include refid="cmsQuestionAnswerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_question_answer(
+			id,
+			parent_id,
+			link,
+			data_type,
+			user_id,
+			title,
+			image,
+			keywords,
+			tags,
+			description,
+			content,
+			content_html,
+			weight,
+			hits,
+			transmit,
+			discess,
+			praise,
+			tread,
+			collection,
+			report,
+			evaluate,
+			tip,
+			answer,
+			view,
+			recommend,
+			allow_comment,
+			comment_audit,
+			allow_report,
+			undercarriage,
+			reason,
+			category1,
+			category2,
+			category3,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{link},
+			#{dataType},
+			#{user.id},
+			#{title},
+			#{image},
+			#{keywords},
+			#{tags},
+			#{description},
+			#{content},
+			#{contentHtml},
+			#{weight},
+			#{hits},
+			#{transmit},
+			#{discess},
+			#{praise},
+			#{tread},
+			#{collection},
+			#{report},
+			#{evaluate},
+			#{tip},
+			#{answer},
+			#{view},
+			#{recommend},
+			#{allowComment},
+			#{commentAudit},
+			#{allowReport},
+			#{undercarriage},
+			#{reason},
+			#{category1},
+			#{category2},
+			#{category3},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_question_answer SET 	
+			parent_id = #{parent.id},
+			link = #{link},
+			data_type = #{dataType},
+			user_id = #{user.id},
+			title = #{title},
+			image = #{image},
+			keywords = #{keywords},
+			tags = #{tags},
+			description = #{description},
+			content = #{content},
+			content_html = #{contentHtml},
+			weight = #{weight},
+			hits = #{hits},
+			transmit = #{transmit},
+			discess = #{discess},
+			praise = #{praise},
+			tread = #{tread},
+			collection = #{collection},
+			report = #{report},
+			evaluate = #{evaluate},
+			tip = #{tip},
+			answer = #{answer},
+			view = #{view},
+			recommend = #{recommend},
+			allow_comment = #{allowComment},
+			comment_audit = #{commentAudit},
+			allow_report = #{allowReport},
+			undercarriage = #{undercarriage},
+			reason = #{reason},
+			category1 = #{category1},
+			category2 = #{category2},
+			category3 = #{category3},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_question_answer SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+
+	<!--列表 根据标签和排行-->
+	<select id="getRank" resultType="CmsQuestionAnswer">
+		SELECT
+		<include refid="cmsQuestionAnswerColumns"/>
+		FROM cms_question_answer a
+		<include refid="cmsQuestionAnswerJoins"/>
+		WHERE  a.del_flag='0'
+		<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
+		</if>
+		order by 1
+		<if test="hits != null and hits != ''">
+			,hits desc
+		</if>
+		<if test="transmit != null and transmit != ''">
+			,transmit desc
+		</if>
+		<if test="discess != null and discess != ''">
+			,discess desc
+		</if>
+		<if test="praise != null and praise != ''">
+			,praise desc
+		</if>
+		<if test="tread != null and tread != ''">
+			,tread desc
+		</if>
+		<if test="collection != null and collection != ''">
+			,collection desc
+		</if>
+		<if test="report != null and report != ''">
+			,report desc
+		</if>
+		<if test="evaluate != null and evaluate != ''">
+			,evaluate desc
+		</if>
+		<if test="tip != null and tip != ''">
+			,tip desc
+		</if>
+		<if test="view != null and view != ''">
+			,view desc
+		</if>
+		, a.update_date DESC
+
+
+	</select>
+	
+</mapper>

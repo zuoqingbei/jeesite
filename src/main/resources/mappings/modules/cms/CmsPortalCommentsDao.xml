@@ -147,7 +147,7 @@
 
 	<select id="getPortalCommentsCount" resultType="CmsPortalComments">
 		SELECT
-		count(*)
+		count(*) commentsCount
 		FROM
 		cms_collection a
 		WHERE
@@ -159,7 +159,7 @@
 
 	<select id="getDynamicSelf" resultType="CmsPortalComments">
 		SELECT
-		count(*)
+		count(*) commentsCount
 		FROM
 		cms_collection a
 		WHERE

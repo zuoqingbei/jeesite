@@ -36,7 +36,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>赞踩内容源id</th>
+				<%--<th>赞踩内容源id</th>--%>
 				<th>内容来源表</th>
 				<th>用户</th>
 				<th>分享标题</th>
@@ -48,7 +48,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cmsShare">
 			<tr>
-				<td>${cmsShare.sourceId}</td>
+				<%--<td>${cmsShare.sourceId}</td>--%>
 				<td>
 						${cmsShare.sourceTable}
 				</td>

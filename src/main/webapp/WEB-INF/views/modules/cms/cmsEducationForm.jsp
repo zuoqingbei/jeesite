@@ -33,25 +33,25 @@
 	<form:form id="inputForm" modelAttribute="cmsEducation" action="${ctx}/cms/cmsEducation/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
-		<div class="control-group">
-			<label class="control-label">源链接 如果是用户投稿 该字段保存投稿主键：</label>
-			<div class="controls">
-				<form:input path="link" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">数据来源类型 0-采集 1-用户投稿 2-管理人员发布：</label>
-			<div class="controls">
-				<form:input path="dataType" htmlEscape="false" maxlength="1" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">创建者 用户发布id  采集源也可以当做用户：</label>
-			<div class="controls">
-				<sys:treeselect id="user" name="user.id" value="${cmsEducation.user.id}" labelName="user.name" labelValue="${cmsEducation.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">源链接 如果是用户投稿 该字段保存投稿主键：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="link" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">数据来源类型 0-采集 1-用户投稿 2-管理人员发布：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="dataType" htmlEscape="false" maxlength="1" class="input-xlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">创建者 用户发布id  采集源也可以当做用户：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<sys:treeselect id="user" name="user.id" value="${cmsEducation.user.id}" labelName="user.name" labelValue="${cmsEducation.user.name}"--%>
+					<%--title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="control-group">
 			<label class="control-label">标题：</label>
 			<div class="controls">
@@ -73,27 +73,48 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">标签，多个 用&ldquo;，&rdquo;分开并且开头结尾也是逗号,比如 ,1,2,3,：</label>
+			<label class="control-label">标签：</label>
 			<div class="controls">
-				<form:input path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<%--<form:input path="tags" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
+					<c:choose>
+						<c:when test="${ cmsEducation.id eq null }">
+							<form:checkboxes items="${fns:getDictList('tags_type')}" path="tags" itemLabel="label" itemValue="value" htmlEscape="false"/>
+						</c:when>
+						<c:otherwise>
+							<c:forEach var ="dicts" items="${fns:getDictList('tags_type')}" >
+								<c:choose>
+									<c:when test="${fn:contains(cmsEducation.tags,dicts.value)}">
+										<input type="checkbox" checked="checked" name="tags" value="${dicts.value}">${dicts.label}
+									</c:when>
+									<c:otherwise>
+										<input type="checkbox"  name="tags" value="${dicts.value}">${dicts.label}
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">描述、摘要：</label>
 			<div class="controls">
-				<form:input path="description" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:textarea path="description" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">内容 不包含HTML：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:textarea path="content" htmlEscape="false" rows="4" class="input-xxlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="control-group">
-			<label class="control-label">内容 不包含HTML：</label>
+			<label class="control-label">内容：</label>
+			<%--<div class="controls">--%>
+				<%--<form:input path="contentHtml" htmlEscape="false" class="input-xlarge "/>--%>
+			<%--</div>--%>
 			<div class="controls">
-				<form:textarea path="content" htmlEscape="false" rows="4" class="input-xxlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">内容 包含HTML：</label>
-			<div class="controls">
-				<form:input path="contentHtml" htmlEscape="false" class="input-xlarge "/>
+				<form:textarea    id="contentHtml" htmlEscape="false" path="contentHtml" rows="4" maxlength="200" class="input-xxlarge"/>
+				<sys:ckeditor replace="contentHtml" uploadPath="/cms/education" />
 			</div>
 		</div>
 		<div class="control-group">
@@ -104,104 +125,130 @@
 		</div>
 		<div class="control-group">
 			<label class="control-label">讲师 对应用户表中id：</label>
+			<%--<div class="controls">--%>
+				<%--<form:input path="teacherId" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+			<%--</div>--%>
+
 			<div class="controls">
-				<form:input path="teacherId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<sys:treeselect id="user" name="user.id" value="${cmsEducation.user.id}" labelName="user.name" labelValue="${cmsEducation.user.name}"
+								title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">权重，越大越靠前：</label>
 			<div class="controls">
-				<form:input path="weight" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:input path="weight" htmlEscape="false" maxlength="11" class="input-xlarge " />
+			</div>
+		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">点击数、阅读数：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="hits" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">转发数 分享数：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="transmit" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">评论数  回复数：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="discess" htmlEscape="false" maxlength="11" class="input-xlarge " value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">赞数量：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="praise" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">踩数量：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="tread" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">收藏量：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="collection" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">举报数量：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="report" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">评价数量：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="evaluate" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">打赏次数：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="tip" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">曝光量：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="view" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
+		<div class="control-group">
+			<label class="control-label">是否推荐：</label>
+			<div class="controls">
+				<form:select path="recommend" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:option value="0" label="否"/>
+					<form:option value="1" label="是"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">点击数、阅读数：</label>
+			<label class="control-label">是否允许评论：</label>
 			<div class="controls">
-				<form:input path="hits" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:select path="allowComment" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:option value="0" label="是"/>
+					<form:option value="1" label="否"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">转发数 分享数：</label>
+			<label class="control-label">评论是否需要审核：</label>
 			<div class="controls">
-				<form:input path="transmit" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:select path="commentAudit" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:option value="0" label="是"/>
+					<form:option value="1" label="否"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">评论数  回复数：</label>
+			<label class="control-label">是否允许举报：</label>
 			<div class="controls">
-				<form:input path="discess" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:select path="allowReport" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:option value="0" label="是"/>
+					<form:option value="1" label="否"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">赞数量：</label>
+			<label class="control-label">内容是否下架：</label>
 			<div class="controls">
-				<form:input path="praise" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">踩数量：</label>
-			<div class="controls">
-				<form:input path="tread" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">收藏量：</label>
-			<div class="controls">
-				<form:input path="collection" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">举报数量：</label>
-			<div class="controls">
-				<form:input path="report" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">评价数量：</label>
-			<div class="controls">
-				<form:input path="evaluate" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">打赏次数：</label>
-			<div class="controls">
-				<form:input path="tip" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">曝光量：</label>
-			<div class="controls">
-				<form:input path="view" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">是否推荐 0-普通 1-推荐：</label>
-			<div class="controls">
-				<form:input path="recommend" htmlEscape="false" maxlength="1" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">是否允许评论 0-允许 1-不允许：</label>
-			<div class="controls">
-				<form:input path="allowComment" htmlEscape="false" maxlength="1" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">评论是否需要审核 0-需要 1-不需要：</label>
-			<div class="controls">
-				<form:input path="commentAudit" htmlEscape="false" maxlength="1" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">是否允许举报  0-允许 1-不允许：</label>
-			<div class="controls">
-				<form:input path="allowReport" htmlEscape="false" maxlength="1" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">内容是否下架 0-未下架 1-已下架：</label>
-			<div class="controls">
-				<form:input path="undercarriage" htmlEscape="false" maxlength="1" class="input-xlarge "/>
+
+				<form:select path="undercarriage" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:option value="0" label="否"/>
+					<form:option value="1" label="是"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -211,16 +258,28 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">一级分类0-投资教育 1-案例 2-政策解读 3-攻略：</label>
+			<label class="control-label">一级分类：</label>
 			<div class="controls">
-				<form:input path="category1" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
-				<span class="help-inline"><font color="red">*</font> </span>
+				<form:select path="category1" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:option value="0" label="投资教育"/>
+					<form:option value="1" label="案例"/>
+					<form:option value="2" label="政策解读"/>
+					<form:option value="3" label="攻略"/>
+				</form:select>
+				<%--<form:input path="category1" htmlEscape="false" maxlength="64" class="input-xlarge required"/>--%>
+				<%--<span class="help-inline"><font color="red">*</font> </span>--%>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">二级分类 0-视频 1-图书 2-讲座：</label>
+			<label class="control-label">二级分类：</label>
 			<div class="controls">
-				<form:input path="category2" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:select path="category2" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:option value="0" label="视频"/>
+					<form:option value="1" label="图书"/>
+					<form:option value="2" label="讲座"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -229,12 +288,12 @@
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">备注信息：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="form-actions">
 			<shiro:hasPermission name="cms:cmsEducation:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
