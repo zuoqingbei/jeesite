@@ -180,7 +180,7 @@
 					<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
 					<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
 		</if>
-		如果不是超级管理员，则不显示超级管理员用户
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
 		<if test="!currentUser.admin">
 			AND a.id != '1'
 		</if>
@@ -196,7 +196,7 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
 		</if>
-		数据范围过滤
+		<!-- 数据范围过滤 -->
 		${sqlMap.dsf}
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

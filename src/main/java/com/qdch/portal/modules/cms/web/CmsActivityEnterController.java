@@ -24,8 +24,8 @@ import com.qdch.portal.modules.cms.service.CmsActivityEnterService;
 
 /**
  * 活动报名记录Controller
- * @author wangfeng
- * @version 2018-03-21
+ * @author lianjiming
+ * @version 2018-03-28
  */
 @Controller
 public class CmsActivityEnterController extends BaseController {

@@ -10,14 +10,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.qdch.portal.common.persistence.DataEntity;
 
 /**
- * 活动组织结构Entity
- * @author wangfeng
- * @version 2018-03-21
+ * 活动Entity
+ * @author lianjiming
+ * @version 2018-03-29
  */
 public class CmsActivityOrganization extends DataEntity<CmsActivityOrganization> {
 	
 	private static final long serialVersionUID = 1L;
-	private String activityId;		// 活动ID
+	private CmsActivity activityId;		// 活动ID 父类
 	private String type;		// 类型 0-主办方 1-承办方 2-技术支持/讲师
 	private String logo;		// 图标
 	private Date webUrl;		// 企业网站
@@ -26,7 +26,7 @@ public class CmsActivityOrganization extends DataEntity<CmsActivityOrganization>
 	private String descs;		// 企业简介
 	private String contact;		// 联系人姓名
 	private String contactMobile;		// 联系人手机号
-	private String orderNum;		// 企业排序
+	private Integer orderNum;		// 企业排序
 	
 	public CmsActivityOrganization() {
 		super();
@@ -36,12 +36,16 @@ public class CmsActivityOrganization extends DataEntity<CmsActivityOrganization>
 		super(id);
 	}
 
+	public CmsActivityOrganization(CmsActivity activityId){
+		this.activityId = activityId;
+	}
+
 	@Length(min=1, max=64, message="活动ID长度必须介于 1 和 64 之间")
-	public String getActivityId() {
+	public CmsActivity getActivityId() {
 		return activityId;
 	}
 
-	public void setActivityId(String activityId) {
+	public void setActivityId(CmsActivity activityId) {
 		this.activityId = activityId;
 	}
 	
@@ -116,12 +120,11 @@ public class CmsActivityOrganization extends DataEntity<CmsActivityOrganization>
 		this.contactMobile = contactMobile;
 	}
 	
-	@Length(min=0, max=11, message="企业排序长度必须介于 0 和 11 之间")
-	public String getOrderNum() {
+	public Integer getOrderNum() {
 		return orderNum;
 	}
 
-	public void setOrderNum(String orderNum) {
+	public void setOrderNum(Integer orderNum) {
 		this.orderNum = orderNum;
 	}
 	

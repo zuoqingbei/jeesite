@@ -60,8 +60,6 @@ public class AccountAttentionController extends BaseController {
 			e.printStackTrace();
 		}
 	}
-	
-	
 	/**用户添加关注
 	 * @author lianjiming
 	 * @version 2018-03-13
@@ -220,8 +218,10 @@ public class AccountAttentionController extends BaseController {
 				//我的粉丝
 				String toUser = request.getParameter("toUser");
 				//封装对象
+			if(fromUser != null || toUser != null){
 				accountAttention.setFromUser(fromUser);
 				accountAttention.setToUser(toUser);
+				}
 				//分页查询
 				Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
 				this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));

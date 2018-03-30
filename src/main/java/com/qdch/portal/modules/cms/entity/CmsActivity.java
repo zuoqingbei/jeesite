@@ -7,13 +7,15 @@ import org.hibernate.validator.constraints.Length;
 import com.qdch.portal.modules.sys.entity.User;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
+import com.google.common.collect.Lists;
 
 import com.qdch.portal.common.persistence.DataEntity;
 
 /**
  * 活动Entity
- * @author wangfeng
- * @version 2018-03-21
+ * @author lianjiming
+ * @version 2018-03-29
  */
 public class CmsActivity extends DataEntity<CmsActivity> {
 	
@@ -27,16 +29,16 @@ public class CmsActivity extends DataEntity<CmsActivity> {
 	private String description;		// 描述、摘要
 	private String content;		// 活动内容 不含HTML
 	private String contentHtml;		// 活动内容 含HTML
-	private String weight;		// 权重，越大越靠前
-	private String hits;		// 点击数、阅读数
-	private String transmit;		// 转发数 分享数
-	private String discess;		// 评论数  回复数
-	private String praise;		// 赞数量
-	private String tread;		// 踩数量
-	private String collection;		// 收藏量
-	private String evaluate;		// 评价数量
-	private String enter;		// 报名人数
-	private String view;		// 曝光量
+	private Integer weight;		// 权重，越大越靠前
+	private Integer hits;		// 点击数、阅读数
+	private Integer transmit;		// 转发数 分享数
+	private Integer discess;		// 评论数  回复数
+	private Integer praise;		// 赞数量
+	private Integer tread;		// 踩数量
+	private Integer collection;		// 收藏量
+	private Integer evaluate;		// 评价数量
+	private Integer enter;		// 报名人数
+	private Integer view;		// 曝光量
 	private String recommend;		// 是否推荐 0-普通 1-推荐
 	private String allowComment;		// 是否允许评论 0-允许 1-不允许
 	private String leader;		// 活动主办方
@@ -48,6 +50,8 @@ public class CmsActivity extends DataEntity<CmsActivity> {
 	private String category1;		// 一级分类
 	private String category2;		// 二级分类
 	private String category3;		// 三级分类
+	private List<CmsActivityFlow> cmsActivityFlowList = Lists.newArrayList();		// 子表列表
+	private List<CmsActivityOrganization> cmsActivityOrganizationList = Lists.newArrayList();		// 子表列表
 	
 	public CmsActivity() {
 		super();
@@ -135,93 +139,83 @@ public class CmsActivity extends DataEntity<CmsActivity> {
 		this.contentHtml = contentHtml;
 	}
 	
-	@Length(min=0, max=11, message="权重，越大越靠前长度必须介于 0 和 11 之间")
-	public String getWeight() {
+	public Integer getWeight() {
 		return weight;
 	}
 
-	public void setWeight(String weight) {
+	public void setWeight(Integer weight) {
 		this.weight = weight;
 	}
 	
-	@Length(min=0, max=11, message="点击数、阅读数长度必须介于 0 和 11 之间")
-	public String getHits() {
+	public Integer getHits() {
 		return hits;
 	}
 
-	public void setHits(String hits) {
+	public void setHits(Integer hits) {
 		this.hits = hits;
 	}
 	
-	@Length(min=0, max=11, message="转发数 分享数长度必须介于 0 和 11 之间")
-	public String getTransmit() {
+	public Integer getTransmit() {
 		return transmit;
 	}
 
-	public void setTransmit(String transmit) {
+	public void setTransmit(Integer transmit) {
 		this.transmit = transmit;
 	}
 	
-	@Length(min=0, max=11, message="评论数  回复数长度必须介于 0 和 11 之间")
-	public String getDiscess() {
+	public Integer getDiscess() {
 		return discess;
 	}
 
-	public void setDiscess(String discess) {
+	public void setDiscess(Integer discess) {
 		this.discess = discess;
 	}
 	
-	@Length(min=0, max=11, message="赞数量长度必须介于 0 和 11 之间")
-	public String getPraise() {
+	public Integer getPraise() {
 		return praise;
 	}
 
-	public void setPraise(String praise) {
+	public void setPraise(Integer praise) {
 		this.praise = praise;
 	}
 	
-	@Length(min=0, max=11, message="踩数量长度必须介于 0 和 11 之间")
-	public String getTread() {
+	public Integer getTread() {
 		return tread;
 	}
 
-	public void setTread(String tread) {
+	public void setTread(Integer tread) {
 		this.tread = tread;
 	}
 	
-	@Length(min=0, max=11, message="收藏量长度必须介于 0 和 11 之间")
-	public String getCollection() {
+	public Integer getCollection() {
 		return collection;
 	}
 
-	public void setCollection(String collection) {
+	public void setCollection(Integer collection) {
 		this.collection = collection;
 	}
 	
-	@Length(min=0, max=11, message="评价数量长度必须介于 0 和 11 之间")
-	public String getEvaluate() {
+	public Integer getEvaluate() {
 		return evaluate;
 	}
 
-	public void setEvaluate(String evaluate) {
+	public void setEvaluate(Integer evaluate) {
 		this.evaluate = evaluate;
 	}
 	
-	@Length(min=0, max=11, message="报名人数长度必须介于 0 和 11 之间")
-	public String getEnter() {
+	public Integer getEnter() {
 		return enter;
 	}
 
-	public void setEnter(String enter) {
+	public void setEnter(Integer enter) {
 		this.enter = enter;
 	}
 	
-	@Length(min=0, max=11, message="曝光量长度必须介于 0 和 11 之间")
-	public String getView() {
+	public Integer getView() {
 		return view;
 	}
 
-	public void setView(String view) {
+	public void setView(Integer view) {
 		this.view = view;
 	}
 	
@@ -324,4 +318,18 @@ public class CmsActivity extends DataEntity<CmsActivity> {
 		this.category3 = category3;
 	}
 	
+	public List<CmsActivityFlow> getCmsActivityFlowList() {
+		return cmsActivityFlowList;
+	}
+
+	public void setCmsActivityFlowList(List<CmsActivityFlow> cmsActivityFlowList) {
+		this.cmsActivityFlowList = cmsActivityFlowList;
+	}
+	public List<CmsActivityOrganization> getCmsActivityOrganizationList() {
+		return cmsActivityOrganizationList;
+	}
+
+	public void setCmsActivityOrganizationList(List<CmsActivityOrganization> cmsActivityOrganizationList) {
+		this.cmsActivityOrganizationList = cmsActivityOrganizationList;
+	}
 }

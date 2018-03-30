@@ -67,23 +67,23 @@
 					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
 			</if>
+			<if test="tags != null and tags != ''">
+				AND a.tags LIKE 
+					<if test="dbName == 'oracle'">'%'||#{tags}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tags}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{tags},'%')</if>
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address LIKE 
+					<if test="dbName == 'oracle'">'%'||#{address}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{address}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{address},'%')</if>
+			</if>
 			<if test="startDate != null and startDate != ''">
-				AND a.start_date = #{startDate}
-			</if>
-			<if test="endDate != null and endDate != ''">
-				AND a.end_date = #{endDate}
-			</if>
-			<if test="enterStartDate != null and enterStartDate != ''">
-				AND a.enter_start_date = #{enterStartDate}
-			</if>
-			<if test="enterEndDate != null and enterEndDate != ''">
-				AND a.enter_end_date = #{enterEndDate}
-			</if>
-			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
-			</if>
-			<if test="updateDate != null and updateDate != ''">
-				AND a.update_date = #{updateDate}
+				AND a.start_date LIKE 
+					<if test="dbName == 'oracle'">'%'||#{startDate}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{startDate}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{startDate},'%')</if>
 			</if>
 		</where>
 		<choose>
@@ -235,14 +235,5 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-
-
-	<!--<select id="getByActivity" resultMap="CmsActivity">-->
-		<!--SELECT-->
-		<!--<include refid="cmsActivityColumns"/>-->
-		<!--FROM cms_activity a-->
-		<!--<include refid="cmsActivityJoins"/>-->
-		<!--WHERE a.id = #{activityId}  and del_flag='0'-->
-	<!--</select>-->
-
+	
 </mapper>
