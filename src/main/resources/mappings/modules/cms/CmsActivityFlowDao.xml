@@ -19,6 +19,7 @@
 	</sql>
 	
 	<sql id="cmsActivityFlowJoins">
+		LEFT JOIN cms_activity b ON b.id = a.activity_id
 	</sql>
     
 	<select id="get" resultType="CmsActivityFlow">
@@ -36,20 +37,17 @@
 		<include refid="cmsActivityFlowJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="activityId != null and activityId != ''">
+				AND a.activity_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{activityId}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{activityId}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{activityId},'%')</if>
+			</if>
 			<if test="title != null and title != ''">
 				AND a.title LIKE 
 					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
-			</if>
-			<if test="flowStartTime != null and flowStartTime != ''">
-				AND a.flow_start_time = #{flowStartTime}
-			</if>
-			<if test="flowEndTime != null and flowEndTime != ''">
-				AND a.flow_end_time = #{flowEndTime}
-			</if>
-			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
 			</if>
 		</where>
 		<choose>
@@ -57,6 +55,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -74,6 +73,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -127,16 +127,14 @@
 	<update id="delete">
 		UPDATE cms_activity_flow SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE activity_id = #{activityId}
+			</otherwise>
+		</choose>
 	</update>
-
-
-	<select id="getByActivity" resultType="CmsActivityFlow">
-		SELECT
-		<include refid="cmsActivityFlowColumns"/>
-		FROM cms_activity_flow a
-		<include refid="cmsActivityFlowJoins"/>
-		WHERE a.activity_id=#{activityId} and del_flag='0'
-	</select>
 	
 </mapper>

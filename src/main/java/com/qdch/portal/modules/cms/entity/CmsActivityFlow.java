@@ -10,19 +10,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.qdch.portal.common.persistence.DataEntity;
 
 /**
- * 活动日程Entity
- * @author wangfeng
- * @version 2018-03-21
+ * 活动Entity
+ * @author lianjiming
+ * @version 2018-03-29
  */
 public class CmsActivityFlow extends DataEntity<CmsActivityFlow> {
 	
 	private static final long serialVersionUID = 1L;
-	private String activityId;		// 活动ID
+	private CmsActivity activityId;		// 活动ID 父类
 	private String title;		// 标题
 	private String images;		// 图片
 	private Date flowStartTime;		// 当前流程开始时间
 	private Date flowEndTime;		// 流程结束时间
-	private String orderNum;		// 流程排序
+	private Integer orderNum;		// 流程排序
 	private String address;		// 地址
 	private String descs;		// 当前流程内容介绍 支持HTML
 	
@@ -34,12 +34,16 @@ public class CmsActivityFlow extends DataEntity<CmsActivityFlow> {
 		super(id);
 	}
 
+	public CmsActivityFlow(CmsActivity activityId){
+		this.activityId = activityId;
+	}
+
 	@Length(min=1, max=64, message="活动ID长度必须介于 1 和 64 之间")
-	public String getActivityId() {
+	public CmsActivity getActivityId() {
 		return activityId;
 	}
 
-	public void setActivityId(String activityId) {
+	public void setActivityId(CmsActivity activityId) {
 		this.activityId = activityId;
 	}
 	
@@ -79,12 +83,11 @@ public class CmsActivityFlow extends DataEntity<CmsActivityFlow> {
 		this.flowEndTime = flowEndTime;
 	}
 	
-	@Length(min=0, max=11, message="流程排序长度必须介于 0 和 11 之间")
-	public String getOrderNum() {
+	public Integer getOrderNum() {
 		return orderNum;
 	}
 
-	public void setOrderNum(String orderNum) {
+	public void setOrderNum(Integer orderNum) {
 		this.orderNum = orderNum;
 	}
 	

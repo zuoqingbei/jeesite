@@ -74,23 +74,23 @@ public class WxAuthController extends BaseController{
 		System.out.println(redictUrl);
 		return "redirect:" + redictUrl;
 	}
-/*	@RequestMapping(value = {"${portalPath}/wx/auth2"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"${portalPath}/wx/auth2"}, method = RequestMethod.GET)
 	public String wxAuth2(Model model,HttpServletRequest request, HttpServletResponse response){
 		String to=request.getParameter("to");
-		String url = "http://www.hlsofttech.com/portal/authorize";
+		String url = "http://hujinfu.qdch.com/portal/authorize";
 		String redictUrl=WxpubOAuth.createOauthUrlForCode(url, true);
 		System.out.println(redictUrl);
         String token=HttpClientUtil.sendPostSSLRequest(redictUrl, new HashMap<String,String>());
         System.out.println(token);
 		return "redirect:" + to;
-	}*/
+	}
 	/**
 	 * @todo   处理微信用户验证
 	 * @time   2018年3月21日 上午10:00:16
 	 * @author zuoqb
 	 * @return_type   AccountThirdplat
 	 */
-	public  AccountThirdplat dealAuthorize(HttpServletRequest request){
+	public  AccountThirdplat dealAuthorize(HttpServletRequest request, HttpServletResponse response){
 		String code=request.getParameter("code");
 		AccountThirdplat accountThirdplat=null;
 		if(StringUtils.isNotBlank(code)){
@@ -129,7 +129,7 @@ public class WxAuthController extends BaseController{
 	}
 	@RequestMapping(value = {"${portalPath}/accountReport"})
 	public String accountReport(RedirectAttributes  model,HttpServletRequest request, HttpServletResponse response){
-		AccountThirdplat accountThirdplat=dealAuthorize(request);
+		AccountThirdplat accountThirdplat=dealAuthorize(request,response);
 		if(accountThirdplat!=null){
 			if(accountThirdplat.getUser()==null||StringUtils.isBlank(accountThirdplat.getUser().getId())){
 				//之前进入 但是没有验证手机  跳转验证页面 
@@ -277,6 +277,26 @@ public class WxAuthController extends BaseController{
 			//验证码错误
 			//return "redirect:" +portalPath+"/wx/userinfo";
 			this.resultFaliureData(request, response, "验证码错误", null);
+		}
+	}
+	
+	@RequestMapping(value = {"${portalPath}/wx/accountReport/list"})
+	public String accountReportList(RedirectAttributes  model,HttpServletRequest request, HttpServletResponse response){
+		AccountThirdplat accountThirdplat=dealAuthorize(request,response);
+		if(accountThirdplat!=null){
+			if(accountThirdplat.getUser()==null||StringUtils.isBlank(accountThirdplat.getUser().getId())){
+				//之前进入 但是没有验证手机  跳转验证页面 
+				model.addAttribute("accountId", accountThirdplat.getId());
+				model.addAttribute("to", portalPath+"/cms/cmsComplaint/list");//认证成功 要跳转页面
+				return "redirect:" + portalPath+"/wx/userinfo";
+			}else{
+				//进入列表页面
+				model.addAttribute("userId", accountThirdplat.getUser().getId());
+				return "redirect:" + portalPath+"/cms/cmsComplaint/list";
+			}
+		}else{
+			//code验证失败
+			return "portal/error/noauthority";
 		}
 	}
 	

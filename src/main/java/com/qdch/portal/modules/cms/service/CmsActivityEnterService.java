@@ -15,8 +15,8 @@ import com.qdch.portal.modules.cms.dao.CmsActivityEnterDao;
 
 /**
  * 活动报名记录Service
- * @author wangfeng
- * @version 2018-03-21
+ * @author lianjiming
+ * @version 2018-03-28
  */
 @Service
 @Transactional(readOnly = true)

@@ -32,8 +32,23 @@
 		<include refid="cmsActivityEnterJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
+			<if test="id != null and id != ''">
+				AND a.id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{id},'%')</if>
+			</if>
+			<if test="activityId != null and activityId != ''">
+				AND a.activity_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{activityId}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{activityId}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{activityId},'%')</if>
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{user.id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.id},'%')</if>
 			</if>
 		</where>
 		<choose>

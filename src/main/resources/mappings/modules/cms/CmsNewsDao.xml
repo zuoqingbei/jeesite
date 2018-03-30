@@ -356,6 +356,9 @@
 		<if test="tags != null and tags != ''">
 			and FIND_IN_SET(#{tags},a.tags)
 		</if>
+		<if test="keywords != null and keywords != ''">
+			AND a.title LIKE 	concat('%',#{keywords},'%')
+		</if>
 		order by 1
 		<if test="hits != null and hits != ''">
 			,hits desc

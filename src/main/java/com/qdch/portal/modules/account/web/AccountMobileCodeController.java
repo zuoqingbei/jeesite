@@ -114,12 +114,11 @@ public class AccountMobileCodeController extends BaseController {
 			}
 //			String codes = request.getParameter("codes");
 			String uasge = request.getParameter("uasge")==null?"0":request.getParameter("uasge");
-			//String str = SendMsgUtil.presend(mobile);
-			String str = "true";
+			String str = SendMsgUtil.presend(mobile);
 			if(str.equals("true")){
 				AccountMobileCode accountMobileCode = new AccountMobileCode();
 				accountMobileCode.setMobile(mobile);
-				accountMobileCode.setCodes("123");
+				accountMobileCode.setCodes(JedisUtils.get("MessageCache"+mobile));
 				accountMobileCode.setUasge(uasge);
 				accountMobileCodeService.save(accountMobileCode);
 				this.resultSuccessData(request,response, "操作成功", null);

@@ -9,8 +9,8 @@ import com.qdch.portal.modules.cms.entity.CmsActivityEnter;
 
 /**
  * 活动报名记录DAO接口
- * @author wangfeng
- * @version 2018-03-21
+ * @author lianjiming
+ * @version 2018-03-28
  */
 @MyBatisDao
 public interface CmsActivityEnterDao extends CrudDao<CmsActivityEnter> {

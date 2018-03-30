@@ -10,8 +10,8 @@ import com.qdch.portal.common.persistence.DataEntity;
 
 /**
  * 活动报名记录Entity
- * @author wangfeng
- * @version 2018-03-21
+ * @author lianjiming
+ * @version 2018-03-28
  */
 public class CmsActivityEnter extends DataEntity<CmsActivityEnter> {
 	

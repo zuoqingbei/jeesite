@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsActivityEnter/">活动报名记录列表</a></li>
+		<li><a href="${ctx}/cms/cmsActivityEnter/list">活动报名记录列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsActivityEnter/form?id=${cmsActivityEnter.id}">活动报名记录<shiro:hasPermission name="cms:cmsActivityEnter:edit">${not empty cmsActivityEnter.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsActivityEnter:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsActivityEnter" action="${ctx}/cms/cmsActivityEnter/save" method="post" class="form-horizontal">

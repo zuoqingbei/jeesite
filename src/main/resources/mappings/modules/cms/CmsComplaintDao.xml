@@ -12,6 +12,7 @@
 		a.company_address AS "companyAddress",
 		a.find_date AS "findDate",
 		a.content AS "content",
+		a.status,
 		a.create_date AS "createDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
@@ -38,6 +39,7 @@
 		<include refid="cmsComplaintJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.status in('0','1','2','3')
 			<if test="title != null and title != ''">
 				AND a.title LIKE 
 					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
@@ -46,6 +48,9 @@
 			</if>
 			<if test="companyName != null and companyName != ''">
 				AND a.company_name = #{companyName}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
 			</if>
 		</where>
 		<choose>
@@ -85,6 +90,7 @@
 			company_address,
 			find_date,
 			content,
+			status,
 			create_date,
 			remarks,
 			del_flag
@@ -98,6 +104,7 @@
 			#{companyAddress},
 			#{findDate},
 			#{content},
+			#{status},
 			#{createDate},
 			#{remarks},
 			#{delFlag}
@@ -114,7 +121,8 @@
 			company_address = #{companyAddress},
 			find_date=#{findDate},
 			content = #{content},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			status=#{status}
 		WHERE id = #{id}
 	</update>
 	

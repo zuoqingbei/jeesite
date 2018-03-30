@@ -25,6 +25,7 @@ import com.qdch.portal.common.utils.UploadUtils;
 import com.qdch.portal.modules.cms.entity.CmsComplaint;
 import com.qdch.portal.modules.cms.service.CmsComplaintService;
 import com.qdch.portal.modules.sys.entity.User;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 投诉Controller
@@ -45,6 +46,9 @@ public class CmsComplaintController extends BaseController {
 		}
 		if (entity == null){
 			entity = new CmsComplaint();
+		}
+		if(entity.getFindDate()!=null){
+			entity.setFindDateStr(DateUtils.formatDate(entity.getFindDate(), "yyyy-MM-dd"));
 		}
 		return entity;
 	}
@@ -97,6 +101,12 @@ public class CmsComplaintController extends BaseController {
 		model.addAttribute("userId", userId);
 		return render(request, "wechat/report");
 	}
+	/**
+	 * @todo   微信公众号用户举报
+	 * @time   2018年3月29日 下午1:58:30
+	 * @author zuoqb
+	 * @return_type   void
+	 */
 	@RequestMapping(value = "${portalPath}/wx/saveReport")
 	@ResponseBody
 	public void saveReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
@@ -115,23 +125,68 @@ public class CmsComplaintController extends BaseController {
 		cmsComplaint.setCompanyAddress(address);
 		cmsComplaint.setCompanyName(target);
 		UploadUtils util=new UploadUtils();
-		images=util.GenerateImage(images,request);
-		cmsComplaint.setImage(images);
+		if(StringUtils.isNotBlank(images)&&images.startsWith("data:image/png;base64,")){
+			images=util.GenerateImage(images,request);
+			cmsComplaint.setImage(images);
+		}
 		if(StringUtils.isNotBlank(date)){
 			cmsComplaint.setFindDate(DateUtils.parseDate(date));
 		}
 		cmsComplaint.setCreateBy(new User(userId));
+		cmsComplaint.setUserId(userId);
 		cmsComplaint.setTitle(title);
 		cmsComplaint.setContent(description);
 		cmsComplaint.setSource(source);
+		cmsComplaint.setStatus("0");
 		cmsComplaintService.save(cmsComplaint);
 		this.resultSuccessData(request, response, "举报成功", null);
 	}
-	@RequestMapping(value = {"${portalPath}/cms/cmsComplaint/list"})
+	/**
+	 * @todo   微信公众号举报列表数据
+	 * @time   2018年3月29日 下午1:58:11
+	 * @author zuoqb
+	 * @return_type   void
+	 */
+	@RequestMapping(value = {"${portalPath}/cms/cmsComplaint/listData"})
 	@ResponseBody
-	public void cmsComplaintList(CmsComplaint cmsComplaint, HttpServletRequest request, HttpServletResponse response, Model model) {
+	public void cmsComplaintListData(CmsComplaint cmsComplaint, HttpServletRequest request, HttpServletResponse response, Model model) {
+		cmsComplaint.setUserId(request.getParameter("userId"));
 		Page<CmsComplaint> page = cmsComplaintService.findPage(new Page<CmsComplaint>(request, response), cmsComplaint); 
 		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
 	}
-
+	/**
+	 * @todo  微信公众号举报列表
+	 * @time   2018年3月29日 下午1:57:58
+	 * @author zuoqb
+	 * @return_type   String
+	 */
+	@RequestMapping(value = {"${portalPath}/cms/cmsComplaint/list"})
+	public String cmsComplaintList(CmsComplaint cmsComplaint, HttpServletRequest request, HttpServletResponse response, Model model) {
+		request.setAttribute("userId", request.getParameter("userId"));
+		return "portal/wechat/reportList";
+	}
+	/**
+	 * 
+	 * @todo   TODO
+	 * @time   2018年3月29日 下午1:55:52
+	 * @author zuoqb
+	 * @return_type   撤销举报
+	 */
+	@RequestMapping(value = "${portalPath}/wx/cancleReport")
+	@ResponseBody
+	public void cancleReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
+		/*if (!beanValidator(model, cmsComplaint)){
+			return form(cmsComplaint, model);
+		}
+		cmsComplaintService.save(cmsComplaint);*/
+		//状态 0-未受理 1-已受理 2-驳回 3-处理结束 4-已撤销
+		if(cmsComplaint!=null&&"0".equals(cmsComplaint.getStatus())){
+			cmsComplaint.setStatus("4");
+			cmsComplaintService.save(cmsComplaint);
+			this.resultSuccessData(request, response, "撤销成功", null);
+		}else{
+			this.resultFaliureData(request, response, "已处理，不能撤销！", null);
+		}
+		
+	}
 }

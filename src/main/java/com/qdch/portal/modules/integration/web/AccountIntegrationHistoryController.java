@@ -64,7 +64,7 @@ public class AccountIntegrationHistoryController extends BaseController {
 			if(user!=null){
 				String integration = user.getIntegration();//获取变更前活跃度
 				if(integration==null){
-					integration = "0";//默认用户最初零分
+					integration = "0";//默认用户初始活跃度为零分
 				}
 				if(nums==null){
 					nums = "0";//变更分数为空，默认变更零分
@@ -92,7 +92,6 @@ public class AccountIntegrationHistoryController extends BaseController {
 		}
 	}
 	
-	
 	@ModelAttribute
 	public AccountIntegrationHistory get(@RequestParam(required=false) String id) {
 		AccountIntegrationHistory entity = null;
@@ -105,14 +104,12 @@ public class AccountIntegrationHistoryController extends BaseController {
 		return entity;
 	}
 	
-
 	//@RequiresPermissions("integration:accountIntegrationHistory:view")
 	@RequestMapping(value = "${adminPath}/integration/accountIntegrationHistory/form")
 	public String form(AccountIntegrationHistory accountIntegrationHistory, Model model) {
 		model.addAttribute("accountIntegrationHistory", accountIntegrationHistory);
 		return "modules/integration/accountIntegrationHistoryForm";
 	}
-
 
 	
 //	@RequiresPermissions("integration:accountIntegrationHistory:edit")

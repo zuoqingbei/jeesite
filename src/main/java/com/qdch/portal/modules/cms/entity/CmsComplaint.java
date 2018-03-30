@@ -31,6 +31,16 @@ public class CmsComplaint extends DataEntity<CmsComplaint> {
 	private String companyAddress;		// 被投诉方地址
 	private Date findDate;		// 发现时间
 	private String content;		// 投诉内容描述
+	private String status;	
+	private String findDateStr;
+	public String getFindDateStr() {
+		return findDateStr;
+	}
+
+	public void setFindDateStr(String findDateStr) {
+		this.findDateStr = findDateStr;
+	}
+
 	public CmsComplaint() {
 		super();
 	}
@@ -39,6 +49,14 @@ public class CmsComplaint extends DataEntity<CmsComplaint> {
 		super(id);
 	}
 
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public User getUser() {
 		return user;
@@ -49,7 +67,7 @@ public class CmsComplaint extends DataEntity<CmsComplaint> {
 	}
 	
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy/MM/dd")
 	public Date getFindDate() {
 		return findDate;
 	}
