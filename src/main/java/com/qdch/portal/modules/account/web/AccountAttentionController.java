@@ -75,10 +75,8 @@ public class AccountAttentionController extends BaseController {
 			String fromUser = request.getParameter("fromUser");
 			String toUser = request.getParameter("toUser");
 			//封装对象
-			accountAttention.setId(IdGen.uuid());
 			accountAttention.setFromUser(fromUser);
 			accountAttention.setToUser(toUser);
-			accountAttention.setCreateDate(new Date());
 			//查询是否关注
 			List<AccountAttention> findAccountAttention = accountAttentionService.findAccountAttention(accountAttention);
 			//自己不能关注自己

@@ -1,7 +1,15 @@
 package com.qdch.portal.common.utils;
 
 import com.qdch.portal.common.config.Constant;
+import com.qdch.portal.common.config.Global;
+import com.qdch.portal.modules.account.dao.AccountMobileCodeDao;
+import com.qdch.portal.modules.account.entity.AccountMobileCode;
+import com.qdch.portal.modules.account.service.AccountMobileCodeService;
+import com.qdch.portal.modules.sys.dao.UserDao;
 import com.qdch.portal.thirdplat.utils.HttpClientUtil;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /***
  * 
@@ -11,15 +19,18 @@ import com.qdch.portal.thirdplat.utils.HttpClientUtil;
  */
 public class SendMsgUtil {
 
+	private static AccountMobileCodeService service = SpringContextHolder.getBean(AccountMobileCodeService.class);
+	private static AccountMobileCodeDao dao = SpringContextHolder.getBean(AccountMobileCodeDao.class);
 
-	public static  String presend(String tel){
+
+	public static  String presend(String tel,String uasge){
 		String returnmsg = "";
 		String MessageCache = JedisUtils.get("MessageCache"+tel);
 		if(MessageCache != null){
 			returnmsg = "发送过于频繁";
 			return returnmsg;
 		}
-		return sentMsg(0,tel);
+		return sentMsg(0,tel,uasge);
 
 	}
 	
@@ -27,7 +38,7 @@ public class SendMsgUtil {
 	 * 发送短信
 	 * 发送号码。多个号码请用“,”分隔。最多1000个号码
 	 */
-	public static String sentMsg(int type,String phoneNum){
+	public static String sentMsg(int type,String phoneNum,String uasge){
 		try {
 			String param = "";
 			param += "uid="+Constant.MSG_USER;
@@ -41,7 +52,15 @@ public class SendMsgUtil {
 			param += "&sign="+Constant.MSG_USER_SIGN;
 			String str = HttpClientUtil.sendPostRequest(Constant.MSG_API_URL, param,true);
 			if(str.startsWith("success")){
-                JedisUtils.set("MessageCache"+phoneNum, code, 60*5);
+				if(Global.getOpenRedis().equals("1")){
+					JedisUtils.set("MessageCache"+phoneNum, code, 60*5);
+				}
+				AccountMobileCode accountMobileCode = new AccountMobileCode();
+				accountMobileCode.setMobile(phoneNum);
+				accountMobileCode.setCodes(JedisUtils.get("MessageCache"+phoneNum));
+				accountMobileCode.setUsed("0"); //0--未使用 1--已使用
+				accountMobileCode.setUasge(uasge);
+				service.save(accountMobileCode);
                 return "true";
             }else{
                 return "false";
@@ -67,8 +86,8 @@ public class SendMsgUtil {
 		return String.valueOf(code);
 	}
 	public static void main(String[] args){
-		String result = sentMsg(0,"15805422889");
-		System.out.println(result);
+//		String result = sentMsg(0,"15805422889");
+//		System.out.println(result);
 	}
 
 
@@ -77,17 +96,48 @@ public class SendMsgUtil {
 	 */
 	public static String  checkIndentifyCode(String tel,String code ){
 		String returnmsg = "";
-		String sysCode =  JedisUtils.get("MessageCache"+tel);
-		if(sysCode == null||StringUtils.isBlank(code)){
-			returnmsg = "请先点击发送验证码";
+		if(Global.getOpenRedis().equals("1")){ //从redis取出来验证
+			String sysCode =  JedisUtils.get("MessageCache"+tel);
+			if(sysCode == null||StringUtils.isBlank(code)){
+				returnmsg = "未发送验证码或者验证码已过期";
+				return returnmsg;
+			}
+			if(code.equals(sysCode)){
+				returnmsg = "true";
+			}else{
+				returnmsg = "false";
+			}
 			return returnmsg;
+		}else{ //从数据库取出来验证
+			AccountMobileCode mobileCode = new AccountMobileCode();
+			mobileCode.setMobile(tel);
+			AccountMobileCode code1 = dao.getByTel(mobileCode);
+			if(code1 == null){
+				returnmsg = "请先点击发送验证码";
+				return returnmsg;
+			}else{
+				long oldtime  = code1.getUpdateDate().getTime();
+				long newtime = new Date().getTime();
+				if(newtime-oldtime>5*60*1000) {	//5分钟
+					dao.setUsed(mobileCode);
+					returnmsg = "该验证码已过期";
+					return returnmsg;
+				}
+				mobileCode.setCodes(code);
+				AccountMobileCode code2 = dao.getByTel(mobileCode);
+				if(code2 == null){
+					returnmsg = "验证码错误";
+					return returnmsg;
+				}else{
+					dao.setUsed(mobileCode);
+					returnmsg = "true";
+					return returnmsg;
+				}
+
+			}
+
 		}
-		if(code.equals(sysCode)){
-			returnmsg = "true";
-		}else{
-			returnmsg = "false";
-		}
-		return returnmsg;
+
 
 	}
 
