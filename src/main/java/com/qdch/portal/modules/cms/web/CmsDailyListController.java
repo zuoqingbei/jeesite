@@ -91,7 +91,9 @@ public class CmsDailyListController extends BaseController {
         try {
             List<CmsNews> cmsNewsList = cmsNewsDao.findList(new CmsNews());
             List<CmsActivity> cmsActivityList  = cmsActivityDao.findList(new CmsActivity());
-            List<CmsEducation> educationList = cmsEducationDao.findList(new CmsEducation());
+			CmsEducation education = new CmsEducation();
+			education.setCategory1("1");//案例
+            List<CmsEducation> educationList = cmsEducationDao.findList(education);
             CmsDailyListContent cmsDailyListContent = new CmsDailyListContent();
             cmsDailyListContent.setDailyId(cmsDailyList.getId());
             model.addAttribute("cmsNewsList",cmsNewsList);
