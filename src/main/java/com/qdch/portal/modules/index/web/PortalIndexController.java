@@ -73,12 +73,12 @@ public class PortalIndexController extends BaseController {
 	
 	@RequestMapping(value = {"${portalPath}/toJson",""}, method = RequestMethod.GET)
 	@ResponseBody
-	public void toJson(HttpServletRequest request,HttpServletResponse response){
+	public String toJson(HttpServletRequest request,HttpServletResponse response){
 		/*HashMap< String, Object> r=new HashMap<String, Object>();
 		r.put("status", "value");*/
 		/*Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
-		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));*/
+		return this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));*/
 		User u=UserUtils.get("1");
-		this.resultSuccessData(request,response, "获取数据成功", u);
+		return this.resultSuccessData(request,response, "获取数据成功", u);
 	};
 }

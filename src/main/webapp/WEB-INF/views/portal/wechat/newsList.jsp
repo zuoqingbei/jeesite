@@ -209,7 +209,7 @@ var keywords="";
     function getNewsList(){
 		keywords=$("#searchInput").val();
     	$.ajax({
-    		url:"http://hujinfu.qdch.com:8088/portal/cms/cmsNews/getRank",
+    		url:"${portalPath}/cms/cmsNews/getRank",
     		type:"post",
     		data:{"pageNo":pageNo,"pageSize":"6","userId":"${userId}","tags":tags,"keywords":keywords},
     		dataType:"json",

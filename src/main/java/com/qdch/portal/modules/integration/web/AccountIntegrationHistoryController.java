@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
@@ -53,7 +54,8 @@ public class AccountIntegrationHistoryController extends BaseController {
 	//修改用户活跃度记录（包括加分和减分）
 	//@RequiresPermissions("integration:accountIntegrationHistory:edit")
 	@RequestMapping(value = "${portalPath}/integration/accountIntegrationHistory/saveIntegration")
-	public void saveIntegration(AccountIntegrationHistory accountIntegrationHistory,HttpServletRequest request,HttpServletResponse response) {
+	@ResponseBody
+	public String saveIntegration(AccountIntegrationHistory accountIntegrationHistory,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			//获取请求参数
 			String userId = request.getParameter("userId");//获取变更用户id
@@ -85,10 +87,11 @@ public class AccountIntegrationHistoryController extends BaseController {
 				accountIntegrationHistory.setReason(reason);
 				accountIntegrationHistory.setCreateDate(new Date());
 				accountIntegrationHistoryService.save(accountIntegrationHistory);
-				this.resultSuccessData(request,response, "保存用户活跃度记录成功", null);
 			}
+			return this.resultSuccessData(request,response, "保存用户活跃度记录成功", null);
 		} catch (Exception e) {
 			e.printStackTrace();
+			return this.resultFaliureData(request, response, "操作失败", null);
 		}
 	}
 	

@@ -211,7 +211,7 @@ public class WxAuthController extends BaseController{
 	 */
 	@RequestMapping(value = {"${portalPath}/wx/register"})
 	@ResponseBody
-	public void register(RedirectAttributes model,HttpServletRequest request, HttpServletResponse response){
+	public String register(RedirectAttributes model,HttpServletRequest request, HttpServletResponse response){
 		String accountId=request.getParameter("accountId");
 		String tel=request.getParameter("telephone");
 		String userName=tel;
@@ -271,12 +271,12 @@ public class WxAuthController extends BaseController{
 			if(user!=null){
 				r.put("userId",  user.getId());
 			}
-			this.resultSuccessData(request, response, "注册成功", r);
+			return this.resultSuccessData(request, response, "注册成功", r);
 			//return "redirect:" +to;
 		}else{
 			//验证码错误
 			//return "redirect:" +portalPath+"/wx/userinfo";
-			this.resultFaliureData(request, response, "验证码错误", null);
+			return this.resultFaliureData(request, response, "验证码错误", null);
 		}
 	}
 	/**

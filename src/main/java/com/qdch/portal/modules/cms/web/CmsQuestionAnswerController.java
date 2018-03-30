@@ -6,7 +6,6 @@ package com.qdch.portal.modules.cms.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.qdch.portal.modules.cms.entity.CmsNews;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
+import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.cms.entity.CmsQuestionAnswer;
 import com.qdch.portal.modules.cms.service.CmsQuestionAnswerService;
 
@@ -114,16 +114,16 @@ public class CmsQuestionAnswerController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsQuestionAnswer/getRank")
-	public void getRank(CmsQuestionAnswer questionAnswer,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String getRank(CmsQuestionAnswer questionAnswer,HttpServletRequest request,HttpServletResponse response){
 		try {
 			Page<CmsQuestionAnswer> page = cmsQuestionAnswerService.getRank(new Page<CmsQuestionAnswer>(request, response), questionAnswer);
-			this.resultSuccessData(request,response, "获取数据成功",
+			return this.resultSuccessData(request,response, "获取数据成功",
                     mapJson(page,"success","获取数据成功"));
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", null);
-			return;
+			return this.resultFaliureData(request,response, "操作失败", null);
 		}
 
 	}

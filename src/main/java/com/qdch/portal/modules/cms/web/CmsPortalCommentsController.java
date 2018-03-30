@@ -3,15 +3,14 @@
  */
 package com.qdch.portal.modules.cms.web;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao;
-import com.qdch.portal.modules.cms.entity.*;
-import com.qdch.portal.modules.cms.service.CmsEducationService;
-import com.qdch.portal.modules.cms.service.CmsNewsService;
-import com.qdch.portal.modules.cms.service.CmsQuestionAnswerService;
-import com.qdch.portal.modules.sys.utils.UserUtils;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +24,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
+import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao;
+import com.qdch.portal.modules.cms.entity.CmsEducation;
+import com.qdch.portal.modules.cms.entity.CmsNews;
+import com.qdch.portal.modules.cms.entity.CmsPortalComments;
+import com.qdch.portal.modules.cms.entity.CmsQuestionAnswer;
+import com.qdch.portal.modules.cms.service.CmsEducationService;
+import com.qdch.portal.modules.cms.service.CmsNewsService;
 import com.qdch.portal.modules.cms.service.CmsPortalCommentsService;
-
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
+import com.qdch.portal.modules.cms.service.CmsQuestionAnswerService;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 门户评论Controller
@@ -256,27 +255,25 @@ public class CmsPortalCommentsController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsPortalComments/getHotComments")
-	public void getHotComments(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
+	@ResponseBody
+	public String getHotComments(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
 		List<CmsPortalComments> list = null;
 		try {
 			if (StringUtils.isBlank(cmsPortalComments.getSourceId())) {
-				this.resultSuccessData(request, response, "请输入资讯的id",
+				return this.resultSuccessData(request, response, "请输入资讯的id",
 						"false");
-				return;
 			}
 			if (StringUtils.isBlank(cmsPortalComments.getSourceTable())) {
 				cmsPortalComments.setSourceTable("cms_news");
 			}
 
 			list = cmsPortalCommentsService.getHotComments(cmsPortalComments);
-			this.resultSuccessData(request, response, "操作成功",
+			return this.resultSuccessData(request, response, "操作成功",
 					list);
-			return;
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request, response, "操作失败",
+			return this.resultFaliureData(request, response, "操作失败",
 					null);
-			return;
 		}
 
 	}
