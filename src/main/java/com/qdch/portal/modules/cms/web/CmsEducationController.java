@@ -6,8 +6,6 @@ package com.qdch.portal.modules.cms.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.qdch.portal.modules.sys.entity.Dict;
-import com.qdch.portal.modules.sys.service.DictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,16 +13,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
+import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.cms.entity.CmsEducation;
 import com.qdch.portal.modules.cms.service.CmsEducationService;
-
-import java.util.List;
+import com.qdch.portal.modules.sys.service.DictService;
 
 /**
  * 投资教育Controller
@@ -117,12 +115,14 @@ public class CmsEducationController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsEducation/getList")
-	public void getList(CmsEducation cmsEducation,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String getList(CmsEducation cmsEducation,HttpServletRequest request,HttpServletResponse response){
 		try {
 			Page<CmsEducation> page  = cmsEducationService.getList(new Page<CmsEducation>(request,response),cmsEducation);
-			this.resultSuccessData(request,response, "操作成功", mapJson(page,"success","操作成功"));
+			return this.resultSuccessData(request,response, "操作成功", mapJson(page,"success","操作成功"));
 		} catch (Exception e) {
 			e.printStackTrace();
+			return this.resultFaliureData(request, response, "操作失败", null);
 		}
 
 	}

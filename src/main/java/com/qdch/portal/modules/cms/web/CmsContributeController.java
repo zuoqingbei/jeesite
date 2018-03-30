@@ -3,17 +3,9 @@
  */
 package com.qdch.portal.modules.cms.web;
 
-import java.util.HashMap;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.qdch.portal.common.persistence.DataEntity;
-import com.qdch.portal.modules.cms.dao.CmsPortalCommentsDao;
-import com.qdch.portal.modules.cms.entity.*;
-import com.qdch.portal.modules.cms.service.*;
-import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,12 +15,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
+import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.modules.cms.entity.CmsContribute;
+import com.qdch.portal.modules.cms.entity.CmsEducation;
+import com.qdch.portal.modules.cms.entity.CmsNews;
+import com.qdch.portal.modules.cms.entity.CmsNewsData;
+import com.qdch.portal.modules.cms.entity.CmsQuestionAnswer;
+import com.qdch.portal.modules.cms.service.CmsContributeService;
+import com.qdch.portal.modules.cms.service.CmsEducationService;
+import com.qdch.portal.modules.cms.service.CmsNewsDataService;
+import com.qdch.portal.modules.cms.service.CmsNewsService;
+import com.qdch.portal.modules.cms.service.CmsQuestionAnswerService;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 用户投稿Controller
@@ -192,21 +196,19 @@ public class CmsContributeController extends BaseController {
      * @return
      */
     @RequestMapping(value = "${portalPath}/cms/cmsContribute/getUserContribute",method = RequestMethod.GET)
-
-    public void  getUserContribute(CmsContribute cmsContribute, HttpServletRequest request,  HttpServletResponse response) {
+    @ResponseBody
+    public String  getUserContribute(CmsContribute cmsContribute, HttpServletRequest request,  HttpServletResponse response) {
         try {
         	String userId = request.getParameter("userId");
         	if(userId == null || userId.equals("")){
-				this.resultFaliureData(request,response, "请输入userId", null);
-				return ;
+        		return this.resultFaliureData(request,response, "请输入userId", null);
 			}
 			cmsContribute.setUser(UserUtils.get(userId));
             Page<CmsContribute> cmsContribute1 = cmsContributeService.getUserContribute(new Page<CmsContribute>(request, response),cmsContribute);
-            this.resultSuccessData(request,response, "获取数据成功", cmsContribute1);
+            return this.resultSuccessData(request,response, "获取数据成功", cmsContribute1);
         } catch (Exception e) {
             e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", null);
-			return ;
+            return this.resultFaliureData(request,response, "操作失败", null);
         }
 
     }
@@ -221,15 +223,14 @@ public class CmsContributeController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsContribute/saveData")
-	public void  saveData(CmsContribute cmsContribute, Model model, HttpServletRequest request,HttpServletResponse response) {
+	@ResponseBody
+	public String  saveData(CmsContribute cmsContribute, Model model, HttpServletRequest request,HttpServletResponse response) {
 		try {
 			if(StringUtils.isBlank(cmsContribute.getTitle())){
-				this.resultFaliureData(request,response, "请先输入标题", null);
-				return ;
+				return this.resultFaliureData(request,response, "请先输入标题", null);
 			}
 			if(StringUtils.isBlank(cmsContribute.getDataType())){
-				this.resultFaliureData(request,response, "请先选择投稿类型", null);
-				return ;
+				return this.resultFaliureData(request,response, "请先选择投稿类型", null);
 			}
 			cmsContribute.setContent(cmsContribute.getContentHtml());
 			cmsContribute.setStatus("0"); //保存后默认是草稿状态
@@ -237,10 +238,9 @@ public class CmsContributeController extends BaseController {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "保存数据失败", null);
-			return ;
+			return this.resultFaliureData(request,response, "保存数据失败", null);
 		}
-		this.resultSuccessData(request,response, "保存数据成功", null);
+		return this.resultSuccessData(request,response, "保存数据成功", null);
 
 	}
 
@@ -249,26 +249,24 @@ public class CmsContributeController extends BaseController {
 	 * 前台-投稿
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsContribute/contribute")
-	public void contribute(CmsContribute contribute,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String contribute(CmsContribute contribute,HttpServletRequest request,HttpServletResponse response){
 //		String status = request.getParameter("status");
 		try {
 			if(contribute.getId()==null ||contribute.getId().equals("")){
-                this.resultFaliureData(request,response, "请输入要修改的投稿的id", null);
-                return;
+				return this.resultFaliureData(request,response, "请输入要修改的投稿的id", null);
             }
 			CmsContribute cmsContribute = cmsContributeService.get(contribute.getId());
 			if(!cmsContribute.getStatus().equals("0")){
-                this.resultFaliureData(request,response, "只有草稿状态才可以投稿", null);
-                return;
+				return this.resultFaliureData(request,response, "只有草稿状态才可以投稿", null);
             }
             cmsContribute.setStatus("1");
 			cmsContributeService.changeState(cmsContribute);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", null);
-			return;
+			return this.resultFaliureData(request,response, "操作失败", null);
 		}
-		this.resultSuccessData(request,response, "操作成功", null);
+		return this.resultSuccessData(request,response, "操作成功", null);
 
 	}
 

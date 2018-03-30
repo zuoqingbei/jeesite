@@ -3,12 +3,12 @@
  */
 package com.qdch.portal.modules.cms.web;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.qdch.portal.modules.cms.dao.*;
-import com.qdch.portal.modules.cms.entity.*;
-import com.qdch.portal.modules.cms.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,16 +16,29 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.modules.cms.dao.CmsActivityDao;
+import com.qdch.portal.modules.cms.dao.CmsDailyListContentDao;
+import com.qdch.portal.modules.cms.dao.CmsDailyListDao;
+import com.qdch.portal.modules.cms.dao.CmsEducationDao;
+import com.qdch.portal.modules.cms.dao.CmsNewsDao;
+import com.qdch.portal.modules.cms.entity.CmsActivity;
+import com.qdch.portal.modules.cms.entity.CmsDailyList;
+import com.qdch.portal.modules.cms.entity.CmsDailyListContent;
+import com.qdch.portal.modules.cms.entity.CmsDailyListDto;
+import com.qdch.portal.modules.cms.entity.CmsEducation;
+import com.qdch.portal.modules.cms.entity.CmsNews;
+import com.qdch.portal.modules.cms.service.CmsActivityService;
+import com.qdch.portal.modules.cms.service.CmsDailyListContentService;
+import com.qdch.portal.modules.cms.service.CmsDailyListService;
+import com.qdch.portal.modules.cms.service.CmsEducationService;
+import com.qdch.portal.modules.cms.service.CmsNewsService;
 
 /**
  * 每日一览Controller
@@ -167,13 +180,13 @@ public class CmsDailyListController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsDailyList/getDailyListByDay")
-	public void getDailyListByDay(CmsDailyList cmsDailyList,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String getDailyListByDay(CmsDailyList cmsDailyList,HttpServletRequest request,HttpServletResponse response){
 		try {
 			String updateDate = request.getParameter("updateDate");
 //			String updateDate = "2018-03-30";
 			if(StringUtils.isBlank(updateDate)){
-				this.resultFaliureData(request,response, "请先选择时间", null);
-				return ;
+				return this.resultFaliureData(request,response, "请先选择时间", null);
 			}
 			CmsDailyListDto result = new CmsDailyListDto();
 			CmsDailyList dailyList = cmsDailyListDao.getDailyByDay(cmsDailyList);
@@ -184,11 +197,10 @@ public class CmsDailyListController extends BaseController {
 				result.setCmsEducationList(cmsEducationDao.getDailyEducation(dailyList.getId()));
 			}
 
-			this.resultSuccessData(request,response, "操作成功", result);
+			return this.resultSuccessData(request,response, "操作成功", result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作成功", null);
-			return ;
+			return this.resultFaliureData(request,response, "操作成功", null);
 		}
 
 
@@ -202,20 +214,19 @@ public class CmsDailyListController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsDailyList/getDailyListByMonth")
-	public void getDailyListByMonth(CmsDailyList cmsDailyList,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String getDailyListByMonth(CmsDailyList cmsDailyList,HttpServletRequest request,HttpServletResponse response){
 		try {
 			String updateDate = request.getParameter("updateDate");
 			if(StringUtils.isBlank(updateDate)){
-				this.resultFaliureData(request,response, "请先选择月份", null);
-				return ;
+				return this.resultFaliureData(request,response, "请先选择月份", null);
 			}
 			CmsDailyListDto result = new CmsDailyListDto();
 			List<CmsDailyList> dailyList = cmsDailyListDao.getDailyByMonth(cmsDailyList);
-			this.resultSuccessData(request,response, "操作成功", dailyList);
+			return this.resultSuccessData(request,response, "操作成功", dailyList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作成功", null);
-			return ;
+			return this.resultFaliureData(request,response, "操作成功", null);
 		}
 
 

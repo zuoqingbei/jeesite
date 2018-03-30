@@ -3,19 +3,11 @@
  */
 package com.qdch.portal.modules.cms.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.qdch.portal.common.utils.JedisUtils;
-import com.qdch.portal.modules.cms.dao.CmsNewsDao;
-import com.qdch.portal.modules.cms.dao.CmsNewsDataDao;
-import com.qdch.portal.modules.cms.entity.CmsComplaint;
-import com.qdch.portal.modules.cms.entity.CmsNewsData;
-import com.qdch.portal.modules.cms.service.CmsNewsDataService;
-import com.qdch.portal.modules.cms.utils.RegUtils;
-import com.qdch.portal.modules.sys.entity.Dict;
-import com.qdch.portal.modules.sys.service.DictService;
-import com.qdch.portal.modules.sys.utils.UserUtils;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,22 +15,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
+import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.modules.cms.dao.CmsNewsDao;
+import com.qdch.portal.modules.cms.dao.CmsNewsDataDao;
+import com.qdch.portal.modules.cms.entity.CmsComplaint;
 import com.qdch.portal.modules.cms.entity.CmsNews;
+import com.qdch.portal.modules.cms.entity.CmsNewsData;
+import com.qdch.portal.modules.cms.service.CmsNewsDataService;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
-
-import redis.clients.jedis.Jedis;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.qdch.portal.modules.cms.utils.RegUtils;
+import com.qdch.portal.modules.sys.service.DictService;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 资讯Controller
@@ -236,7 +230,8 @@ public class CmsNewsController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRank")
-	public void getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
+	@ResponseBody
+	public String getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			String tags = cmsNews.getTags();
 			if(tags !=null  && !tags.equals("")){
@@ -244,13 +239,14 @@ public class CmsNewsController extends BaseController {
 				cmsNews.setTags(tags);
 			}
 			Page<CmsNews> page = cmsNewsService.getRank(new Page<CmsNews>(request, response), cmsNews);
-			this.resultSuccessData(request,response, "获取数据成功",
+			//return JsonMapper.toJsonString(page);
+			return this.resultSuccessData(request,response, "获取数据成功",
 					mapJson(page,"success","获取数据成功"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.resultFaliureData(request,response, "获取数据失败",
 					null);
-			return;
+			return null;
 		}
 	}
 
@@ -264,36 +260,35 @@ public class CmsNewsController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/saveData")
-	public void  saveData(CmsNews cmsNews, Model model, HttpServletRequest request,HttpServletResponse response) {
+	@ResponseBody
+	public String  saveData(CmsNews cmsNews, Model model, HttpServletRequest request,HttpServletResponse response) {
 //		if (!beanValidator(model, cmsNews)){
 //			return form(cmsNews, model);
 //		}
 		try {
 			if(cmsNews.getTitle() == null ||cmsNews.getTitle().equals("")){
-				this.resultFaliureData(request,response, "请先输入信息", "false");
-				return ;
+				return this.resultFaliureData(request,response, "请先输入信息", "false");
 			}
 			cmsNews.setUser(UserUtils.getUser());
 			cmsNewsService.save(cmsNews);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "保存数据失败", "false");
-			return ;
+			return this.resultFaliureData(request,response, "保存数据失败", "false");
 		}
-		this.resultSuccessData(request,response, "保存数据成功", "true");
+		return this.resultSuccessData(request,response, "保存数据成功", "true");
 
 	}
 
 	@RequestMapping(value = "${portalPath}/cms/cmsNews/getSimilarByTags")
-	public void getSimilarByTags(HttpServletRequest request, HttpServletResponse response){
+	@ResponseBody
+	public String getSimilarByTags(HttpServletRequest request, HttpServletResponse response){
 
 		try {
 			String id = request.getParameter("id"); //资讯id
 			String tags = request.getParameter("tags") ; //该条资讯的标签
 			if(StringUtils.isBlank(id)&&StringUtils.isBlank(tags)){
-				this.resultFaliureData(request,response, "请先输入资讯的id或者标签tags", null);
-				return ;
+				return this.resultFaliureData(request,response, "请先输入资讯的id或者标签tags", null);
 			}
 			List<CmsNews> results = new ArrayList<CmsNews>();
 			CmsNews cmsNews  = null;
@@ -310,11 +305,10 @@ public class CmsNewsController extends BaseController {
 
 			}
 			results = cmsNewsDao.getSimilarByTags(cmsNews);
-			this.resultSuccessData(request,response, "操作成功", results);
+			return this.resultSuccessData(request,response, "操作成功", results);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", null);
-			return ;
+			return this.resultFaliureData(request,response, "操作失败", null);
 		}
 
 	}

@@ -174,7 +174,7 @@ var keywords="";
 				window.frames[0].window.alert(name);
 				iframe.parentNode.removeChild(iframe);
 			};
-			getUserSub();
+			//getUserSub();
 			getNewsList();
 		};
 	};
@@ -209,7 +209,7 @@ var keywords="";
     function getNewsList(){
 		keywords=$("#searchInput").val();
     	$.ajax({
-    		url:"${portalPath}/cms/cmsNews/getRank",
+    		url:"http://hujinfu.qdch.com:8088/portal/cms/cmsNews/getRank",
     		type:"post",
     		data:{"pageNo":pageNo,"pageSize":"6","userId":"${userId}","tags":tags,"keywords":keywords},
     		dataType:"json",

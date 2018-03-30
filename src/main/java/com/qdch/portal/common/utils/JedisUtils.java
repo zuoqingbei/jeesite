@@ -922,7 +922,7 @@ public class JedisUtils {
 	 */
 	public static Jedis getResource() throws JedisException {
 		Jedis jedis = null;
-		if(Global.getOpenRedis().equals("1")){
+		if(Global.getOpenRedis().equals("true")){
 			try {
 				jedis = jedisPool.getResource();
 //			logger.debug("getResource.", jedis);

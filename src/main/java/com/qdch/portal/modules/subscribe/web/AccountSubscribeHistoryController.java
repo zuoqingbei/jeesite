@@ -56,24 +56,30 @@ public class AccountSubscribeHistoryController extends BaseController {
 	//查询用户订阅
 	@ResponseBody
 	@RequestMapping(value = "${portalPath}/subscribe/accountSubscribeHistory/find")
-	public void find(AccountSubscribeHistory accountSubscribeHistory,HttpServletRequest request,HttpServletResponse response) {
+	public String find(AccountSubscribeHistory accountSubscribeHistory,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			//获取请求参数
 			String userId = request.getParameter("userId");
 			//读取缓存 
 			accountSubscribeHistory.setUser(userId);
-			String key = "accountSubscribeHistoryCache_"+userId;
-			Set<String> set = JedisUtils.getSet(key);
 			List<Dict> list = new ArrayList<Dict>();
-			if(set == null || userId == null){//没有订阅或者没有登录,返回所有订阅标签,tpye=tags_type
-				list = DictUtils.getDictList("tags_type");
-				this.resultSuccessData(request,response, "添加订阅", list);
-			}else{//用户登录并且有订阅
-				list = DictUtils.findByIds(JedisUtils.Set2Array(set));
-				this.resultSuccessData(request,response, "已经订阅", list);
+			if(Global.getOpenRedis().equals("true")){
+				String key = "accountSubscribeHistoryCache_"+userId;
+				Set<String> set = JedisUtils.getSet(key);
+				if(set == null || userId == null){//没有订阅或者没有登录,返回所有订阅标签,tpye=tags_type
+					list = DictUtils.getDictList("tags_type");
+					return this.resultSuccessData(request,response, "添加订阅", list);
+				}else{//用户登录并且有订阅
+					list = DictUtils.findByIds(JedisUtils.Set2Array(set));
+					return this.resultSuccessData(request,response, "已经订阅", list);
+				}
+			}else{
+				list=DictUtils.getSubByUserId(userId);
+				return this.resultSuccessData(request,response, "已经订阅", list);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
 	

@@ -12,6 +12,7 @@ import com.qdch.portal.modules.cms.service.CmsEducationService;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
 import com.qdch.portal.modules.cms.service.CmsQuestionAnswerService;
 import com.qdch.portal.modules.sys.utils.UserUtils;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
@@ -112,16 +114,16 @@ public class CmsPortalCommentsController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsPortalComments/getCount")
-	public void getCount(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
+	@ResponseBody
+	public String getCount(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
 		int count = 0;
 		try {
 			count = cmsPortalCommentsDao.getPortalCommentsCount(cmsPortalComments);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request, response, "操作失败", count);
-			return;
+			return this.resultFaliureData(request, response, "操作失败", count);
 		}
-		this.resultSuccessData(request, response, "操作成功", count);
+		return this.resultSuccessData(request, response, "操作成功", count);
 	}
 
 	/**
@@ -129,16 +131,16 @@ public class CmsPortalCommentsController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsPortalComments/isOperate")
-	public void isOperate(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
+	@ResponseBody
+	public String isOperate(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
 		boolean flag = false;
 		try {
 			flag = cmsPortalCommentsService.getDynamicSelf(cmsPortalComments);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request, response, "操作失败", flag);
-			return;
+			return this.resultFaliureData(request, response, "操作失败", flag);
 		}
-		this.resultSuccessData(request, response, "操作成功", flag);
+		return this.resultSuccessData(request, response, "操作成功", flag);
 	}
 
 	/**
@@ -149,19 +151,18 @@ public class CmsPortalCommentsController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsPortalComments/saveData")
-	public void saveData(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
+	@ResponseBody
+	public String saveData(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
 		try {
 
 			if (StringUtils.isBlank(cmsPortalComments.getSourceId()) ||
 					StringUtils.isBlank(cmsPortalComments.getSourceTable()) ||
 					StringUtils.isBlank(cmsPortalComments.getContent())) {
-				this.resultFaliureData(request, response, "请先输入信息sourceId、sourceTable、content", null);
-				return;
+				return this.resultFaliureData(request, response, "请先输入信息sourceId、sourceTable、content", null);
 			}
 			boolean flag = IsAllowComments(cmsPortalComments);
 			if (flag == false) {
-				this.resultFaliureData(request, response, "该条记录设置了不允许评论", null);
-				return;
+				return this.resultFaliureData(request, response, "该条记录设置了不允许评论", null);
 			}
 			String parentID = cmsPortalComments.getParentId();
 			CmsPortalComments parent = null;
@@ -180,10 +181,9 @@ public class CmsPortalCommentsController extends BaseController {
 			cmsPortalCommentsService.save(cmsPortalComments);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request, response, "操作失败", null);
-			return;
+			return this.resultFaliureData(request, response, "操作失败", null);
 		}
-		this.resultSuccessData(request, response, "操作成功", null);
+		return this.resultSuccessData(request, response, "操作成功", null);
 	}
 
 	/**
@@ -195,18 +195,18 @@ public class CmsPortalCommentsController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsPortalComments/getCommentsBySource")
-	public void getCommentsBySource(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
+	@ResponseBody
+	public String getCommentsBySource(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
 		Page<CmsPortalComments> page = null;
 		try {
 			page = cmsPortalCommentsService.getCommentsBySource(
 					new Page<CmsPortalComments>(request, response), cmsPortalComments);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request, response, "操作失败",
+			return this.resultFaliureData(request, response, "操作失败",
 					null);
-			return;
 		}
-		this.resultSuccessData(request, response, "操作成功",
+		return this.resultSuccessData(request, response, "操作成功",
 				mapJson(page, "success", "获取数据成功"));
 	}
 
@@ -219,13 +219,13 @@ public class CmsPortalCommentsController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsPortalComments/getCommentsAndPraise")
-	public void getCommentsAndPraise(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
+	@ResponseBody
+	public String getCommentsAndPraise(CmsPortalComments cmsPortalComments, HttpServletRequest request, HttpServletResponse response) {
 		Page<CmsPortalComments> page = null;
 		try {
 			if (StringUtils.isBlank(cmsPortalComments.getSourceId())) {
-				this.resultSuccessData(request, response, "请输入资讯的id",
+				return this.resultSuccessData(request, response, "请输入资讯的id",
 						"false");
-				return;
 			}
 			if (StringUtils.isBlank(cmsPortalComments.getSourceTable())) {
 				cmsPortalComments.setSourceTable("cms_news");
@@ -233,19 +233,16 @@ public class CmsPortalCommentsController extends BaseController {
 
 			boolean flag = IsAllowComments(cmsPortalComments);
 			if (flag == false) {
-				this.resultFaliureData(request, response, "该条记录设置了不允许评论", null);
-				return;
+				return this.resultFaliureData(request, response, "该条记录设置了不允许评论", null);
 			}
 			page = cmsPortalCommentsService.getCommentsAndPraise(
 					new Page<CmsPortalComments>(request, response), cmsPortalComments);
-			this.resultSuccessData(request, response, "操作成功",
+			return this.resultSuccessData(request, response, "操作成功",
 					mapJson(page, "success", "获取数据成功"));
-			return;
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request, response, "操作失败",
+			return this.resultFaliureData(request, response, "操作失败",
 					null);
-			return;
 		}
 
 	}
