@@ -119,28 +119,29 @@
 
 
 
-	<select id="getDailyByDay" resultType="CmsDailyListContent">
+	<select id="getDailyByDay" resultType="CmsDailyList">
 		SELECT
 		<include refid="cmsDailyListColumns"/>
 		FROM cms_daily_list a
 		<include refid="cmsDailyListJoins"/>
 		WHERE
 		a.del_flag = '0'
-		AND LEFT (a.update_date, 10) = #{updateDate}
+		and DATE_FORMAT(a.update_date, '%Y-%m-%d')=DATE_FORMAT(#{updateDate}, '%Y-%m-%d')
 		ORDER BY
 		a.update_date DESC
 		LIMIT 1
 	</select>
 
 
-	<select id="getDailyByMonth" resultType="CmsDailyListContent">
+	<select id="getDailyByMonth" resultType="CmsDailyList">
 		SELECT
 		<include refid="cmsDailyListColumns"/>
 		FROM cms_daily_list a
 		<include refid="cmsDailyListJoins"/>
 		WHERE
 		a.del_flag = '0'
-		AND LEFT (a.update_date, 7) = #{updateDate}
+		and DATE_FORMAT(a.update_date, '%Y-%m')=DATE_FORMAT(#{updateDate}, '%Y-%m')
+
 		ORDER BY
 		a.update_date DESC
 
