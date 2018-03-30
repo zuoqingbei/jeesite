@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 import com.qdch.portal.common.utils.JedisUtils;
 import com.qdch.portal.modules.cms.dao.CmsNewsDao;
 import com.qdch.portal.modules.cms.dao.CmsNewsDataDao;
+import com.qdch.portal.modules.cms.entity.CmsComplaint;
 import com.qdch.portal.modules.cms.entity.CmsNewsData;
 import com.qdch.portal.modules.cms.service.CmsNewsDataService;
 import com.qdch.portal.modules.cms.utils.RegUtils;
 import com.qdch.portal.modules.sys.entity.Dict;
 import com.qdch.portal.modules.sys.service.DictService;
 import com.qdch.portal.modules.sys.utils.UserUtils;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,7 @@ import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
+
 import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
@@ -315,7 +318,19 @@ public class CmsNewsController extends BaseController {
 		}
 
 	}
-
+	
+	
+	/**
+	 * @todo  微信公众号资讯列表
+	 * @time   2018年3月29日 下午1:57:58
+	 * @author zuoqb
+	 * @return_type   String
+	 */
+	@RequestMapping(value = {"${portalPath}/cms/cmsNews/list"})
+	public String cmsComplaintList(CmsComplaint cmsComplaint, HttpServletRequest request, HttpServletResponse response, Model model) {
+		request.setAttribute("userId", request.getParameter("userId"));
+		return "portal/wechat/newsList";
+	}
 
 
 }

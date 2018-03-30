@@ -110,5 +110,15 @@ public class DictUtils {
 	public static String getDictListJson(String type){
 		return JsonMapper.toJsonString(getDictList(type));
 	}
+	/**
+	 * @todo   获取用户订阅
+	 * @time   2018年3月30日 下午2:18:35
+	 * @author zuoqb
+	 */
+	public static List<Dict> getSubByUserId(String userId){
+		List<Dict> list = new ArrayList<Dict>();
+		list = dictDao.getSubByUserId(userId);
+		return list;
+	}
 	
 }

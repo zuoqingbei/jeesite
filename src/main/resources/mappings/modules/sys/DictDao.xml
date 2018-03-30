@@ -10,6 +10,14 @@
 	     <foreach collection="array" item="ids" index="index" open="(" separator="," close=")">     
 	        #{ids}  
 	     </foreach>
+	     order by a.sort
+    </select>
+    
+    <select id="getSubByUserId" resultType="Dict">
+    	 select *
+    	 from sys_dict a  
+	     where a.id in      
+	     (select lab_id from account_subscribe_history where user_id=#{userId}   and del_flag=0)
     </select>
 	 
 	

@@ -279,7 +279,13 @@ public class WxAuthController extends BaseController{
 			this.resultFaliureData(request, response, "验证码错误", null);
 		}
 	}
-	
+	/**
+	 * 
+	 * @todo   用户举报列表
+	 * @time   2018年3月30日 上午11:01:54
+	 * @author zuoqb
+	 * @return_type   String
+	 */
 	@RequestMapping(value = {"${portalPath}/wx/accountReport/list"})
 	public String accountReportList(RedirectAttributes  model,HttpServletRequest request, HttpServletResponse response){
 		AccountThirdplat accountThirdplat=dealAuthorize(request,response);
@@ -293,6 +299,33 @@ public class WxAuthController extends BaseController{
 				//进入列表页面
 				model.addAttribute("userId", accountThirdplat.getUser().getId());
 				return "redirect:" + portalPath+"/cms/cmsComplaint/list";
+			}
+		}else{
+			//code验证失败
+			return "portal/error/noauthority";
+		}
+	}
+	
+	/**
+	 * 
+	 * @todo   公众号资讯列表
+	 * @time   2018年3月30日 上午11:01:54
+	 * @author zuoqb
+	 * @return_type   String
+	 */
+	@RequestMapping(value = {"${portalPath}/wx/cmsNews/list"})
+	public String cmsNewsList(RedirectAttributes  model,HttpServletRequest request, HttpServletResponse response){
+		AccountThirdplat accountThirdplat=dealAuthorize(request,response);
+		if(accountThirdplat!=null){
+			if(accountThirdplat.getUser()==null||StringUtils.isBlank(accountThirdplat.getUser().getId())){
+				//之前进入 但是没有验证手机  跳转验证页面 
+				model.addAttribute("accountId", accountThirdplat.getId());
+				model.addAttribute("to", portalPath+"/cms/cmsNews/list");//认证成功 要跳转页面
+				return "redirect:" + portalPath+"/wx/userinfo";
+			}else{
+				//进入列表页面
+				model.addAttribute("userId", accountThirdplat.getUser().getId());
+				return "redirect:" + portalPath+"/cms/cmsNews/list";
 			}
 		}else{
 			//code验证失败
