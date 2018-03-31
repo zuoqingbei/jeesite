@@ -22,7 +22,6 @@ import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.cms.entity.CmsEducation;
 import com.qdch.portal.modules.cms.service.CmsEducationService;
-import com.qdch.portal.modules.sys.service.DictService;
 
 /**
  * 投资教育Controller
@@ -35,7 +34,6 @@ public class CmsEducationController extends BaseController {
 	@Autowired
 	private CmsEducationService cmsEducationService;
 
-	private DictService dictService;
 	
 	@ModelAttribute
 	public CmsEducation get(@RequestParam(required=false) String id) {
@@ -118,13 +116,26 @@ public class CmsEducationController extends BaseController {
 	@ResponseBody
 	public String getList(CmsEducation cmsEducation,HttpServletRequest request,HttpServletResponse response){
 		try {
-			Page<CmsEducation> page  = cmsEducationService.getList(new Page<CmsEducation>(request,response),cmsEducation);
+			Page<CmsEducation> page  = cmsEducationService.findPage(new Page<CmsEducation>(request,response),cmsEducation);
 			return this.resultSuccessData(request,response, "操作成功", mapJson(page,"success","操作成功"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return this.resultFaliureData(request, response, "操作失败", null);
 		}
 
+	}
+	
+	/**
+	 * 
+	 * @todo   获取客户案例明细
+	 * @time   2018年3月31日 下午4:50:20
+	 * @author zuoqb
+	 * @return_type   String
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsEducation/detail")
+	@ResponseBody
+	public String detail(CmsEducation cmsEducation, HttpServletRequest request, HttpServletResponse response, Model model) {
+		return this.resultSuccessData(request, response, "获取明细数据成功", cmsEducation);
 	}
 
 }

@@ -28,6 +28,7 @@ import com.qdch.portal.modules.cms.dao.CmsNewsDataDao;
 import com.qdch.portal.modules.cms.entity.CmsComplaint;
 import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.entity.CmsNewsData;
+import com.qdch.portal.modules.cms.entity.CmsProduct;
 import com.qdch.portal.modules.cms.service.CmsNewsDataService;
 import com.qdch.portal.modules.cms.service.CmsNewsService;
 import com.qdch.portal.modules.cms.utils.RegUtils;
@@ -158,7 +159,7 @@ public class CmsNewsController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRank")
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/getList")
 	@ResponseBody
 	public String getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
@@ -254,6 +255,17 @@ public class CmsNewsController extends BaseController {
 		request.setAttribute("userId", request.getParameter("userId"));
 		return "portal/wechat/newsList";
 	}
-
+	/**
+	 * 
+	 * @todo   获取资讯明细
+	 * @time   2018年3月31日 下午4:50:20
+	 * @author zuoqb
+	 * @return_type   String
+	 */
+	@RequestMapping(value = "${portalPath}/cms/cmsNews/detail")
+	@ResponseBody
+	public String detail(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
+		return this.resultSuccessData(request, response, "获取明细数据成功", cmsNews);
+	}
 
 }

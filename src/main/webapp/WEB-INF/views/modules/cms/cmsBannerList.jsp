@@ -46,7 +46,7 @@
 			<tr>
 				<th>标题</th>
 				<th>图片</th>
-				<th>是否置顶</th>
+				<th>是否推荐</th>
 				<th>排序</th>
 				<th>发布日期</th>
 				<shiro:hasPermission name="cms:cmsBanner:edit"><th>操作</th></shiro:hasPermission>
@@ -62,12 +62,7 @@
 					<img src="${cmsBanner.image}"></img>
 				</td>
 				<td>
-				  <c:choose>
-				    <c:when test="${cmsBanner.isTop==1 }">
-				            推荐
-				    </c:when>
-				    <c:otherwise>不推荐</c:otherwise>
-				  </c:choose>
+				  ${fns:getDictLabel(cmsEducation.isTop, 'top_type', '')}
 					
 				</td>
 				<td>

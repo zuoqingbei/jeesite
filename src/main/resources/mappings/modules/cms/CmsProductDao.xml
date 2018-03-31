@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsProductDao">
+    
+	<sql id="cmsProductColumns">
+		a.id AS "id",
+		a.title AS "title",
+		a.smal_image AS "smalImage",
+		a.image AS "image",
+		a.keywords AS "keywords",
+		a.tags AS "tags",
+		a.description AS "description",
+		a.content AS "content",
+		a.content_html AS "contentHtml",
+		a.recommend AS "recommend",
+		a.order_no AS "orderNo",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cmsProductJoins">
+	</sql>
+    
+	<select id="get" resultType="CmsProduct">
+		SELECT 
+			<include refid="cmsProductColumns"/>
+		FROM cms_product a
+		<include refid="cmsProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsProduct">
+		SELECT 
+			<include refid="cmsProductColumns"/>
+		FROM cms_product a
+		<include refid="cmsProductJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="tags != null and tags != ''">
+				AND a.tags = #{tags}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC,a.recommend
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsProduct">
+		SELECT 
+			<include refid="cmsProductColumns"/>
+		FROM cms_product a
+		<include refid="cmsProductJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC,a.recommend
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_product(
+			id,
+			title,
+			smal_image,
+			image,
+			keywords,
+			tags,
+			description,
+			content,
+			content_html,
+			recommend,
+			order_no,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{title},
+			#{smalImage},
+			#{image},
+			#{keywords},
+			#{tags},
+			#{description},
+			#{content},
+			#{contentHtml},
+			#{recommend},
+			#{orderNo},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_product SET 	
+			title = #{title},
+			smal_image = #{smalImage},
+			image = #{image},
+			keywords = #{keywords},
+			tags = #{tags},
+			description = #{description},
+			content = #{content},
+			content_html = #{contentHtml},
+			recommend = #{recommend},
+			order_no = #{orderNo},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_product SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
