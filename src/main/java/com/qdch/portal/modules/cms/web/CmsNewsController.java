@@ -71,19 +71,6 @@ public class CmsNewsController extends BaseController {
 		}
 		return entity;
 	}
-//
-//	@ModelAttribute
-//
-//	public Dict getDict(@RequestParam(required=false) String id) {
-//		Dict entity = null;
-//		if (StringUtils.isNotBlank(id)){
-//			entity = dictService.get(id);
-//		}
-//		if (entity == null){
-//			entity = new Dict();
-//		}
-//		return entity;
-//	}
 	
 	@RequiresPermissions("cms:cmsNews:view")
 	@RequestMapping(value = {"${adminPath}/cms/cmsNews/list", ""})
@@ -93,22 +80,15 @@ public class CmsNewsController extends BaseController {
 		return "modules/cms/cmsNewsList";
 	}
 
-//	@RequiresPermissions("cms:cmsNews:view")
+	@RequiresPermissions("cms:cmsNews:view")
 	@RequestMapping(value = "${adminPath}/cms/cmsNews/form")
 	public String form(CmsNews cmsNews, Model model) {
 		try {
-//			Dict dict = new Dict();
-//			dict.setType("tags_type");
-//			cmsNews  = cmsNewsService.getContent(cmsNews);
-//			if(cmsNews == null){
-//				cmsNews = new CmsNews();
-//			}
-//			List<Dict> dicts = dictService.findByType(dict);
-//			cmsNews.setTypeDict(dicts);
-			CmsNewsData newsData = cmsNewsDataDao.getByNewId(cmsNews.getId());
-			cmsNews.setContentHtml(newsData.getContentHtml());
+			if(StringUtils.isNotBlank(cmsNews.getId())){
+				CmsNewsData newsData = cmsNewsDataDao.getByNewId(cmsNews.getId());
+				cmsNews.setContentHtml(newsData.getContentHtml());
+			}
 			model.addAttribute("cmsNews", cmsNews);
-//			model.addAttribute("table","CmsNews");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -168,57 +148,6 @@ public class CmsNewsController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/cms/cmsNews/list?repage";
 	}
 
-	/**
-	 * 得到某条资讯详情
-	 * @param cmsNews
-	 * @param request
-	 * @param response
-	 */
-//	@RequestMapping(value = "${portalPath}/cms/cmsNews/getNewsContent")
-//	public void getNewsContent(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-//
-//		try {
-//			CmsNews cmsNews1 = cmsNewsService.getContent(cmsNews);
-//			this.resultSuccessData(request,response, "获取数据成功", cmsNews1);
-//			return ;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			this.resultSuccessData(request,response, "获取数据失败", "false");
-//			return ;
-//		}
-//
-//
-//	}
-
-	/**
-	 * 强推资讯
-	 * @param cmsNews
-	 * @param request
-	 * @param response
-	 */
-//	@RequestMapping(value = "${portalPath}/cms/cmsNews/getRecommend")
-//	public void getRecommend(CmsNews cmsNews, HttpServletRequest request,HttpServletResponse response) {
-//
-//        Page<CmsNews> cmsNewsList = cmsNewsService.getRecommend(new Page<CmsNews>(request, response),cmsNews);
-////		mapJson(page,"success","获取数据成功")
-//		this.resultSuccessData(request,response, "",mapJson(cmsNewsList,"success","获取数据成功"));
-//
-//
-//	}
-
-	/**
-	 * 前台获得资讯分页列表
-	 * @param cmsNews
-	 * @param request
-	 * @param response
-	 * @param model
-	 * @return
-	 */
-//	@RequestMapping(value = "${portalPath}/cms/cmsNews/portallist")
-//	public void portallist(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
-//		Page<CmsNews> page = cmsNewsService.findPage(new Page<CmsNews>(request, response), cmsNews);
-//		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
-//	}
 
 
 	/**

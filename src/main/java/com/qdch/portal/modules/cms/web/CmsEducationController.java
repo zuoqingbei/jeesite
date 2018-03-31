@@ -49,7 +49,7 @@ public class CmsEducationController extends BaseController {
 		return entity;
 	}
 	
-	@RequiresPermissions("cms:cmsEducation:view")
+	/*@RequiresPermissions("cms:cmsEducation:view")*/
 	@RequestMapping(value = {"${adminPath}/cms/cmsEducation/list"})
 	public String list(CmsEducation cmsEducation, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CmsEducation> page = cmsEducationService.findPage(new Page<CmsEducation>(request, response), cmsEducation); 

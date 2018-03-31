@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsBanner/">轮播图管理列表</a></li>
+		<li><a href="${ctx}/cms/cmsBanner/list">轮播图管理列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsBanner/form?id=${cmsBanner.id}">轮播图管理<shiro:hasPermission name="cms:cmsBanner:edit">${not empty cmsBanner.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsBanner:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsBanner" action="${ctx}/cms/cmsBanner/save" method="post" class="form-horizontal">
@@ -39,12 +39,12 @@
 				<form:input path="title" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">介绍：</label>
 			<div class="controls">
 				<form:textarea path="content" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
-		</div>
+		</div> --%>
 		<div class="control-group">
 			<label class="control-label">图片：</label>
 			<div class="controls">
@@ -52,7 +52,7 @@
 				<sys:ckfinder input="image" type="files" uploadPath="/cms/cmsBanner" selectMultiple="false"/>
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">打开地址：</label>
 			<div class="controls">
 				<form:input path="linkUrl" htmlEscape="false" class="input-xlarge "/>
@@ -67,24 +67,21 @@
 					<form:options items="${fns:getDictList('target_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
-		</div>
+		</div> --%>
 		<div class="control-group">
 			<label class="control-label">是否推荐(置顶)：</label>
 			<div class="controls">
-				<form:radiobuttons path="isTop" items="${fns:getDictList('top_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:select path="isTop" class="input-xlarge ">
+					<form:options items="${fns:getDictList('top_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
+			
 		</div>
 		<div class="control-group">
 			<label class="control-label">排序:</label>
 			<div class="controls">
-				<form:input path="orderNo" htmlEscape="false" maxlength="11" class="required digits"/>
+				<form:input path="orderNo" htmlEscape="false" maxlength="11" class="required digits input-small"/>
 				<span class="help-inline">轮播图的排列次序</span>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="form-actions">

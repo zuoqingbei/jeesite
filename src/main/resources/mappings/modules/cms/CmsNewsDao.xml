@@ -78,6 +78,9 @@
 			<if test="user != null and user.id != null and user.id != ''">
 				AND a.user_id = #{user.id}
 			</if>
+			<if test="tags != null  and tags != ''">
+				AND a.tags = #{tags}
+			</if>
 			<if test="title != null and title != ''">
 				AND a.title LIKE 
 					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
@@ -103,7 +106,7 @@
 				AND a.undercarriage = #{undercarriage}
 			</if>
 			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
+				AND date_format(a.create_date,'%Y-%m-%d') = date_format(#{createDate},'%Y-%m-%d') 
 			</if>
 		</where>
 		<choose>
@@ -390,7 +393,7 @@
 		<if test="view != null and view != ''">
 			,view desc
 		</if>
-		, a.update_date DESC
+		, a.update_date DESC,a.recommend
 
 
 	</select>

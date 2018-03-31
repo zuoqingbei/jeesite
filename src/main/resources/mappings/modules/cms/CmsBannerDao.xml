@@ -38,16 +38,11 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="title != null and title != ''">
-				AND (a.title LIKE 
+				AND a.title LIKE 
 					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
-					or 
-					a.content LIKE 
-					<if test="dbName == 'oracle'">'%'||#{content}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{content}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{content},'%')</if>
-					)
+					
 			</if>
 			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
 				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}

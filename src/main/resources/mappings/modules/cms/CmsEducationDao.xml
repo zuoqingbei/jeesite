@@ -70,14 +70,17 @@
 					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
 			</if>
+			<if test="tags != null  and tags != ''">
+				AND a.tags = #{tags}
+			</if>
 			<if test="category1 != null and category1 != ''">
 				AND a.category1 = #{category1}
 			</if>
 			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
+				AND date_format(a.create_date,'%Y-%m-%d') = date_format(#{createDate},'%Y-%m-%d') 
 			</if>
 			<if test="updateDate != null and updateDate != ''">
-				AND a.update_date = #{updateDate}
+				AND date_format(a.update_date,'%Y-%m-%d') = date_format(#{updateDate},'%Y-%m-%d') 
 			</if>
 		</where>
 		<choose>
