@@ -95,12 +95,12 @@ public class CmsBannerController extends BaseController {
 	 * @author zuoqb
 	 * @return_type   String
 	 */
-	@RequestMapping(method=RequestMethod.GET,value = {"${portalPath}/cms/cmsBanner/list"})
+	@RequestMapping(method=RequestMethod.GET,value = {"${portalPath}/cms/cmsBanner/getList"})
 	@ResponseBody
 	public String bannerList(HttpServletRequest request, HttpServletResponse response) {
 		String limit=request.getParameter("limit");
 		if(StringUtils.isBlank(limit)){
-			limit="2";
+			limit="4";
 		};
 		List<CmsBanner> list = cmsBannerService.findBannerList(0,Integer.parseInt(limit));
 		return this.resultSuccessData(request,response, "轮播数据获取成功", list);
