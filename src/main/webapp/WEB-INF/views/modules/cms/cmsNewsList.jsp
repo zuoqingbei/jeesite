@@ -33,6 +33,14 @@
 					<form:option value="2" label="管理人员发布"/>
 				</form:select>
 			</li>
+			
+			<li>
+				<label>标签：</label>
+				<form:select id="type" path="tags" class="input-small">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('tags_type')}" itemValue="value" itemLabel="label" htmlEscape="false"/>
+				</form:select>
+			</li>
 			<%-- <li><label>创建者</label>
 				<sys:treeselect id="user" name="user.id" value="${cmsNews.user.id}" labelName="user.name" labelValue="${cmsNews.user.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
@@ -83,7 +91,7 @@
 			<li><label>创建时间</label>
 				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${cmsNews.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true});"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -98,8 +106,8 @@
 				<!-- <th>创建者 </th> -->
 				<th>标题</th>
 				<th>文章图片</th>
-				<!-- <th>关键字</th>
-				<th>标签</th> -->
+				<th>关键字</th>
+				<th>标签</th>
 <!-- 				<th>描述</th>
  <%---->				<th>权重</th>--%>
 				<!-- <th>点击数</th>
@@ -123,7 +131,7 @@
 				<th>三级分类</th> -->
 				<th>创	建	时	间</th>
 				<!-- <th>更新者</th> -->
-				<th>更	新	时	间</th>
+				<!-- <th>更	新	时	间</th> -->
 <!-- 				<th>备注信息</th>
  --><!-- 				<th>删除标记</th>
  -->				<shiro:hasPermission name="cms:cmsNews:edit"><th>操作</th></shiro:hasPermission>
@@ -152,12 +160,20 @@
 						<img src="${cmsNews.image}" style="width:80px;height:80px;"/>
 					</c:if>
 				</td>
-			<%-- 	<td>
+				<td>
 					${cmsNews.keywords}
 				</td>
 				<td>
-					${cmsNews.tags}
-				</td> --%>
+					${fns:getDictLabel(cmsNews.tags, 'tags_type', '')}
+					<c:forEach var ="dicts" items="${fns:getDictList('tags_type')}" >
+							<c:choose>
+								<c:when test="${fn:contains(cmsNews.tags,dicts.value)}">
+									${dicts.label}
+								</c:when>
+							</c:choose>
+							
+						</c:forEach>
+				</td>
 			<%-- 	<td>
 					${cmsNews.description}
 				</td> --%>
@@ -237,9 +253,9 @@
 			<%-- 	<td>
 					${cmsNews.updateBy.id}
 				</td> --%>
-				<td>
+			<%-- 	<td>
 					<fmt:formatDate value="${cmsNews.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
+				</td> --%>
 			<%-- 	<td>
 					${cmsNews.remarks}
 				</td> --%>

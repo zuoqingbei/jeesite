@@ -88,21 +88,21 @@
 	<div class="top">
 		<div class="header">
 			<input id="searchInput" type="text" placeholder="你想搜索点什么...">
-			<img src="${ctxStatic}/${portalPage}/wx/img/search.png" alt="">
+			<img onclick="freshData('')" src="${ctxStatic}/${portalPage}/wx/img/search.png" alt="">
 		</div>
 		<div class="tab">
-			<span>推荐</span>
+			<!--<span>推荐</span>
 			<span>新闻</span>
 			<span>病例</span>
 			<span>专题</span>
 			<span>考试</span>
-			<span>心内</span>
+			<span>心内</span>-->
 		</div>
 	</div>
   
   <div class="list-item">
-    <ul>
-			<li class="item">
+    <ul id="news_list">
+			<!--<li class="item">
 				<div class="item-top">
 					<span class="title">这里是标题</span>
 					<img src="${ctxStatic}/${portalPage}/wx/img/background2.png" alt="" class="photo">
@@ -120,27 +120,7 @@
 						</li>
 					</ul>
 				</div>
-			</li>
-			<li class="item">
-				<div class="item-top">
-					<span class="title">这里是标题</span>
-					<img src="${ctxStatic}/${portalPage}/wx/img/background2.png" alt="" class="photo">
-				</div>
-				<div class="item-bottom">
-					<span class="second-title">这里是副标题 03-26</span>
-					<ul class="icon">
-						<li>
-							<img src="${ctxStatic}/${portalPage}/wx/img/read.png" alt="">
-							<span>26</span>
-						</li>
-						<li>
-							<img src="${ctxStatic}/${portalPage}/wx/img/link.png" alt="">
-							<span>26</span>
-						</li>
-					</ul>
-				</div>
-			</li>
-			
+			</li>-->
     </ul>
   </div>
 </div>
@@ -174,7 +154,7 @@ var keywords="";
 				window.frames[0].window.alert(name);
 				iframe.parentNode.removeChild(iframe);
 			};
-			//getUserSub();
+			getUserSub();
 			getNewsList();
 		};
 	};
@@ -188,26 +168,30 @@ var keywords="";
     		success:function(data){
     			var htmls="";
     			if(data.status=="success"){
-    				var htmls="";
+    				var htmls="<span onclick=freshData('')>推荐</span>";
 					console.log(data);
     				$.each(data.data,function(index,item){
-    					
-						     
+    					htmls+='<span onclick=freshData("'+item.value+'")>'+item.label+'</span>'; 
     				});
-					
-    				
-    				$(".container-fluid").append(htmls);
-    				
-					
+    				$(".tab").append(htmls);
     			}else{
     				console.log("error",data);
     			}
     		}
     	});
 	}
+	function freshData(tagsVal){
+		tags=tagsVal;
+		totalPage=0;
+		pageNo=1;
+		new_post=1;
+		$("#news_list").empty();
+		getNewsList();
+	}
 	//获取资讯列表
     function getNewsList(){
 		keywords=$("#searchInput").val();
+		console.log(keywords,tags);
     	$.ajax({
     		url:"${portalPath}/cms/cmsNews/getRank",
     		type:"post",
@@ -219,8 +203,19 @@ var keywords="";
     			if(data.status=="success"){
     				var htmls="";
     				$.each(data.data,function(index,item){
-    					
-						     
+						htmls+='<li class="item"><div class="item-top">';
+						htmls+='<span class="title">'+item.title+'</span>';
+						if(item.image!=undefined&&item.image!=""){
+							htmls+='<img src="'+item.image+'" alt="" class="photo">';
+						}
+						
+						htmls+='</div>';
+						htmls+='<div class="item-bottom">';
+						htmls+='<span class="second-title">'+item.description+'</span>';
+						htmls+='<ul class="icon"><li><img src="${ctxStatic}/${portalPage}/wx/img/read.png" alt="">';
+						htmls+='<span>'+(item.hits==undefined?0:item.hits)+'</span></li>';
+						htmls+='<li><img src="${ctxStatic}/${portalPage}/wx/img/link.png" alt=""><span>'+(item.transmit==undefined?0:item.transmit)+'</span></li>';
+						htmls+='</ul></div></li>';     
     				});
 					totalPage=data.totalPage;
     				new_post=1;
@@ -231,7 +226,7 @@ var keywords="";
 						htmls+='<div class="noMore"><h6>没有更多数据</h6></div>';
 					};
     				
-    				$(".container-fluid").append(htmls);
+    				$("#news_list").append(htmls);
     				
 					
     			}else{

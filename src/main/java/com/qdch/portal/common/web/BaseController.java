@@ -223,7 +223,7 @@ public abstract class BaseController  implements Constant{
 				HashMap< String, Object> map=new HashMap<String, Object>();
 				map.put("status", status);
 				map.put("msg", msg);
-				map.put("data", new FormateJsonToStringByAnnotation().jsonFromObject(status, msg,data));
+				map.put("data", data);
 				return JsonMapper.toJsonString(map);
 				//return renderString(response,  new FormateJsonToStringByAnnotation().jsonFromObject(status, msg,data), "application/json");
 			}else{

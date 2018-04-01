@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import org.hibernate.validator.constraints.Length;
 
 import com.qdch.portal.common.persistence.DataEntity;
+import com.qdch.portal.common.utils.Json;
 
 /**
  * 字典Entity
@@ -18,11 +19,14 @@ import com.qdch.portal.common.persistence.DataEntity;
 public class Dict extends DataEntity<Dict> {
 
 	private static final long serialVersionUID = 1L;
+	@Json
 	private String value;	// 数据值
+	@Json
 	private String label;	// 标签名
 	private String type;	// 类型
 	private String description;// 描述
 	private Integer sort;	// 排序
+	@Json
 	private String parentId;//父Id
 
 //	private String tagslabel;

@@ -75,6 +75,9 @@ public class AccountSubscribeHistoryController extends BaseController {
 				}
 			}else{
 				list=DictUtils.getSubByUserId(userId);
+				if(list.size()==0){
+					list = DictUtils.getDictList("tags_type");
+				}
 				return this.resultSuccessData(request,response, "已经订阅", list);
 			}
 		} catch (Exception e) {

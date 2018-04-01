@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.qdch.portal.common.utils.IdGen;
+import com.qdch.portal.common.utils.Json;
 import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.utils.UserUtils;
 
@@ -25,6 +26,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	
 	protected String remarks;	// 备注
 	protected User createBy;	// 创建者
+	@Json
 	protected Date createDate;	// 创建日期
 	protected User updateBy;	// 更新者
 	protected Date updateDate;	// 更新日期

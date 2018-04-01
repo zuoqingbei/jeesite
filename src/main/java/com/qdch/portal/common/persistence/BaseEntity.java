@@ -15,6 +15,7 @@ import com.google.common.collect.Maps;
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.supcan.annotation.treelist.SupTreeList;
 import com.qdch.portal.common.supcan.annotation.treelist.cols.SupCol;
+import com.qdch.portal.common.utils.Json;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.utils.UserUtils;
@@ -32,6 +33,7 @@ public abstract class BaseEntity<T> implements Serializable {
 	/**
 	 * 实体编号（唯一标识）
 	 */
+	@Json
 	protected String id;
 	
 	/**

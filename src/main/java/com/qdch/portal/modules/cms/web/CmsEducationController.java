@@ -118,7 +118,7 @@ public class CmsEducationController extends BaseController {
 	@ResponseBody
 	public String getList(CmsEducation cmsEducation,HttpServletRequest request,HttpServletResponse response){
 		try {
-			Page<CmsEducation> page  = cmsEducationService.getList(new Page<CmsEducation>(request,response),cmsEducation);
+			Page<CmsEducation> page  = cmsEducationService.findPage(new Page<CmsEducation>(request,response),cmsEducation);
 			return this.resultSuccessData(request,response, "操作成功", mapJson(page,"success","操作成功"));
 		} catch (Exception e) {
 			e.printStackTrace();

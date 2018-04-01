@@ -64,6 +64,9 @@
 		<include refid="cmsEducationJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
+			</if>
 			<if test="title != null and title != ''">
 				AND a.title LIKE 
 					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
@@ -78,6 +81,9 @@
 			</if>
 			<if test="updateDate != null and updateDate != ''">
 				AND a.update_date = #{updateDate}
+			</if>
+			<if test="dataType != null and dataType !=''">
+				and a.data_type=#{dataType}
 			</if>
 		</where>
 		<choose>
@@ -97,6 +103,9 @@
 		<include refid="cmsEducationJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="tags != null and tags != ''">
+				and FIND_IN_SET(#{tags},a.tags)
+			</if>
 		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -242,6 +251,9 @@
 		FROM cms_education a
 		<include refid="cmsEducationJoins"/>
 		WHERE a.del_flag='0'
+		<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
+		</if>
 		<if test="dataType != null and dataType !=''">
 			and a.data_type=#{dataType}
 		</if>
