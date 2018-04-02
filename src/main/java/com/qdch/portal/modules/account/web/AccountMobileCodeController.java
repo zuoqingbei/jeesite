@@ -14,10 +14,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
@@ -86,31 +83,32 @@ public class AccountMobileCodeController extends BaseController {
 
 	/**
 	 * 保存手机验证码
-	 * @param accountMobileCode
+	 * @param
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "${portalPath}/account/accountMobileCode/saveCheckCode")
-	public void saveCheckCode(AccountMobileCode accountMobileCode,HttpServletRequest request,HttpServletResponse response){
-		try {
-//			accountMobileCode.setUser(UserUtils.getUser());
-			accountMobileCodeService.save(accountMobileCode);
-		} catch (Exception e) {
-			e.printStackTrace();
-			this.resultFaliureData(request,response, "保存数据失败", false);
-			return ;
-		}
-		this.resultSuccessData(request,response, "保存数据成功", true);
-
-	}
+//	@RequestMapping(value = "${portalPath}/account/accountMobileCode/saveCheckCode")
+//	public void saveCheckCode(AccountMobileCode accountMobileCode,HttpServletRequest request,HttpServletResponse response){
+//		try {
+////			accountMobileCode.setUser(UserUtils.getUser());
+//			accountMobileCodeService.save(accountMobileCode);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			this.resultFaliureData(request,response, "保存数据失败", false);
+//			return ;
+//		}
+//		this.resultSuccessData(request,response, "保存数据成功", true);
+//
+//	}
 
 	@RequestMapping(value = "${portalPath}/account/accountMobileCode/sendCheckCode")
-	public void sendCheckCode(HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String sendCheckCode(HttpServletRequest request,HttpServletResponse response){
 		try{
 			String mobile = request.getParameter("mobile");
 			if(mobile == null ||mobile.equals("")){
-				this.resultFaliureData(request,response, "请先输入手机号", false);
-				return ;
+				return  this.resultFaliureData(request,response, "请先输入手机号", false);
+
 			}
 //			String codes = request.getParameter("codes");
 			String uasge = request.getParameter("uasge")==null?"0":request.getParameter("uasge");
@@ -122,16 +120,16 @@ public class AccountMobileCodeController extends BaseController {
 //				accountMobileCode.setUsed("0"); //0--未使用 1--已使用
 //				accountMobileCode.setUasge(uasge);
 //				accountMobileCodeService.save(accountMobileCode);
-				this.resultSuccessData(request,response, "操作成功", null);
+				return this.resultSuccessData(request,response, "操作成功", null);
 			}else if(str.equals("false")){
-				this.resultFaliureData(request,response, "操作失败", null);
+				return this.resultFaliureData(request,response, "操作失败", null);
 			}else{
-				this.resultFaliureData(request,response, str, null);
+				return this.resultFaliureData(request,response, str, null);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", null);
+			return this.resultFaliureData(request,response, "操作失败", null);
 		}
 
 		}
@@ -142,20 +140,21 @@ public class AccountMobileCodeController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "${portalPath}/account/accountMobileCode/checkIndentifyCode")
-	public void checkIndentifyCode(HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String  checkIndentifyCode(HttpServletRequest request,HttpServletResponse response){
 		String mobile = request.getParameter("mobile");
 		String codes = request.getParameter("codes");
 
 		if(StringUtils.isBlank(mobile)||StringUtils.isBlank(codes)){
-			this.resultFaliureData(request,response, "请先输入手机号和验证码", false);
+			return this.resultFaliureData(request,response, "请先输入手机号和验证码", false);
 		}
 		String str = SendMsgUtil.checkIndentifyCode(mobile,codes);
 		if(str.equals("true")){
-			this.resultSuccessData(request,response, "操作成功", null);
+			return this.resultSuccessData(request,response, "操作成功", null);
 		}else if(str.equals("false")){
-			this.resultFaliureData(request,response, "操作失败", null);
+			return this.resultFaliureData(request,response, "操作失败", null);
 		}else {
-			this.resultFaliureData(request,response, str, null);
+			return this.resultFaliureData(request,response, str, null);
 		}
 
 

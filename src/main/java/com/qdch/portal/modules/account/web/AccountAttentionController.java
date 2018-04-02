@@ -73,24 +73,22 @@ public class AccountAttentionController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/account/accountAttention/addAttention"})
 	@ResponseBody
-	public void addAttention(HttpServletRequest request,HttpServletResponse response,AccountAttention accountAttention){
+	public String  addAttention(HttpServletRequest request,HttpServletResponse response,AccountAttention accountAttention){
 		try {
 			User user= UserUtils.getUser();
 			if(StringUtils.isBlank(user.getId())){
-				this.resultFaliureData(request,response, "请先登录", null);
-				return ;
+				return this.resultFaliureData(request,response, "请先登录", null);
+
 			}
 			//获取请求参数
 //			String fromUser = request.getParameter("fromUser");
 
 			String toUser = request.getParameter("toUser");
 			if(StringUtils.isBlank(toUser)){
-				this.resultFaliureData(request,response, "请先输入要关注的对象", null);
-				return ;
+				return this.resultFaliureData(request,response, "请先输入要关注的对象", null);
 			}
 			if(user.getId().equals(toUser)){
-				this.resultFaliureData(request,response, "自己不能关注自己", null);
-				return ;
+				return this.resultFaliureData(request,response, "自己不能关注自己", null);
 			}
 			AccountAttention attention = new AccountAttention();
 			attention.setFromUser(user.getId());
@@ -117,16 +115,13 @@ public class AccountAttentionController extends BaseController {
 				JedisUtils.setSet("attention"+user.getId(),set,0);
 			}
 			if(i==0){
-				this.resultSuccessData(request,response, "关注成功", null);
+				return this.resultSuccessData(request,response, "关注成功", null);
 			}else{
-				this.resultSuccessData(request,response, "取消关注成功", null);
+				return this.resultSuccessData(request,response, "取消关注成功", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultSuccessData(request,response, "发生异常", null);
-			return;
-		}catch (Error e){
-			e.printStackTrace();
+			return this.resultFaliureData(request,response, "", null);
 		}
 	}
 	/**获取共同关注/好友推荐
@@ -139,7 +134,7 @@ public class AccountAttentionController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/account/accountAttention/commonAttention"})
 	@ResponseBody
-	public void commonAttention(HttpServletRequest request,HttpServletResponse response){
+	public String  commonAttention(HttpServletRequest request,HttpServletResponse response){
 		try {
 			//获取请求参数
 			String fromUser = request.getParameter("fromUser");
@@ -160,7 +155,7 @@ public class AccountAttentionController extends BaseController {
 					//user 查询共同的关注
 					list=UserUtils.findCommonAttention(JedisUtils.Set2Array(sinter));
 				}
-				this.resultSuccessData(request,response, "获取共同关注", list);
+				return this.resultSuccessData(request,response, "获取共同关注", list);
 			//好友推荐
 			}else if("recommend".equals(type)){
 				sinter=JedisUtils.sdiff(keys);//差集
@@ -168,11 +163,15 @@ public class AccountAttentionController extends BaseController {
 					//user 查询不同的关注
 					list=UserUtils.findCommonAttention(JedisUtils.Set2Array(sinter));
 				}
-				this.resultSuccessData(request,response, "好友推荐", list);
+				return this.resultSuccessData(request,response, "好友推荐", list);
+			}else{
+				return this.resultSuccessData(request,response, "", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return this.resultFaliureData(request,response, "", null);
 		}
+
 	}
 	/**用户取消关注
 	 * @author lianjiming
@@ -183,7 +182,7 @@ public class AccountAttentionController extends BaseController {
 	 */
 	@RequestMapping(value = "${portalPath}/account/accountAttention/delete")
 	@ResponseBody
-	public void delete(AccountAttention accountAttention, HttpServletRequest request,HttpServletResponse response) {
+	public String  delete(AccountAttention accountAttention, HttpServletRequest request,HttpServletResponse response) {
 		try {
 			//获取请求参数
 			String fromUser = request.getParameter("fromUser");
@@ -212,12 +211,13 @@ public class AccountAttentionController extends BaseController {
 				accountAttention.setId(id);
 				//从数据库中删除记录 （修改delFlag 值 0：正常；1：删除；2：审核）
 				accountAttentionService.delete(accountAttention);
-				this.resultSuccessData(request,response, "取消关注成功", null);
+				return this.resultSuccessData(request,response, "取消关注成功", null);
 			}else{//未关注
-				this.resultSuccessData(request,response, "未关注", null);
+				return this.resultSuccessData(request,response, "未关注", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return this.resultFaliureData(request,response, "", null);
 		}
 	}
 	/**我的关注/我的粉丝
@@ -229,7 +229,7 @@ public class AccountAttentionController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/account/accountAttention/listMyAttention"})
 	@ResponseBody
-	public void listMyAttention(AccountAttention accountAttention, HttpServletRequest request, HttpServletResponse response) {
+	public String  listMyAttention(AccountAttention accountAttention, HttpServletRequest request, HttpServletResponse response) {
 		
 		try {
 			//获取请求参数 
@@ -248,11 +248,14 @@ public class AccountAttentionController extends BaseController {
 				accountAttention.setToUser(toUser);
 				}
 				//分页查询
-				Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention); 
-				this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
+				Page<AccountAttention> page = accountAttentionService.findPage(new Page<AccountAttention>(pageNo, pageSize), accountAttention);
+				return this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
+			}else{
+				return this.resultFaliureData(request,response, "", null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return this.resultFaliureData(request,response, "", null);
 		}
 	}
 	
@@ -304,12 +307,12 @@ public class AccountAttentionController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = {"${portalPath}/account/accountAttention/myAttentionOrBeAttention"})
-	public void myAttentionOrBeAttention(AccountAttention accountAttention,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String myAttentionOrBeAttention(AccountAttention accountAttention,HttpServletRequest request,HttpServletResponse response){
 		try {
 			User user= UserUtils.getUser();
 			if(StringUtils.isBlank(user.getId())){
-                this.resultFaliureData(request,response, "请先登录", null);
-                return ;
+				return this.resultFaliureData(request,response, "请先登录", null);
             }
 			accountAttention.setFromUser(user.getId());
 			accountAttention.setToUser(user.getId());
@@ -322,10 +325,10 @@ public class AccountAttentionController extends BaseController {
 				page = accountAttentionService.getBeAttentionList(
                 		new Page<AccountAttention>(request,response),accountAttention);
             }
-			this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
+			return this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "发生异常", null);
+			return this.resultFaliureData(request,response, "发生异常", null);
 		}
 
 	}

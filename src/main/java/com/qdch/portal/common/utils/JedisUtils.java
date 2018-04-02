@@ -941,7 +941,7 @@ public class JedisUtils {
 	/**
 	 * 归还资源
 	 * @param jedis
-	 * @param isBroken
+	 * @param
 	 */
 	public static void returnBrokenResource(Jedis jedis) {
 		if (jedis != null) {
