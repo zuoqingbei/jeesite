@@ -121,4 +121,10 @@
 		AND used = '0'
 	</update>
 
+	<update id="deleteByTel">
+		UPDATE account_mobile_code SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE  mobile = #{mobile}
+	</update>
+
 </mapper>

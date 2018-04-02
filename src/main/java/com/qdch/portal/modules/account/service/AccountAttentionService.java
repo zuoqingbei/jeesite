@@ -81,5 +81,16 @@ public class AccountAttentionService extends CrudService<AccountAttentionDao, Ac
 	public void setAccountAttentionDao(AccountAttentionDao accountAttentionDao) {
 		this.accountAttentionDao = accountAttentionDao;
 	}
-	
+
+	public Page<AccountAttention> getAttentionList(Page<AccountAttention> page,AccountAttention accountAttention){
+		accountAttention.setPage(page);
+		page.setList(dao.getAttentionList(accountAttention));
+		return  page;
+	}
+
+	public Page<AccountAttention> getBeAttentionList(Page<AccountAttention> page,AccountAttention accountAttention){
+		accountAttention.setPage(page);
+		page.setList(dao.getBeAttentionList(accountAttention));
+		return  page;
+	}
 }

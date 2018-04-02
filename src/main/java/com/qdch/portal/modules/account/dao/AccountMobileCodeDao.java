@@ -18,5 +18,7 @@ public interface AccountMobileCodeDao extends CrudDao<AccountMobileCode> {
     public AccountMobileCode getByTel(AccountMobileCode accountMobileCode);
 
     public int setUsed(AccountMobileCode code);
+
+    public int deleteByTel(AccountMobileCode code);
 	
 }

@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qdch.portal.modules.account.dao.AccountAttentionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +44,9 @@ public class AccountAttentionController extends BaseController {
 
 	@Autowired
 	private AccountAttentionService accountAttentionService;
+
+	@Autowired
+	private AccountAttentionDao accountAttentionDao;
 	
 	//查询用户信息
 	@RequestMapping(value = {"${portalPath}/account/getUserInfo"})
@@ -71,44 +75,67 @@ public class AccountAttentionController extends BaseController {
 	@ResponseBody
 	public void addAttention(HttpServletRequest request,HttpServletResponse response,AccountAttention accountAttention){
 		try {
-			//获取请求参数
-			String fromUser = request.getParameter("fromUser");
-			String toUser = request.getParameter("toUser");
-			//封装对象
-			accountAttention.setFromUser(fromUser);
-			accountAttention.setToUser(toUser);
-			//查询是否关注
-			List<AccountAttention> findAccountAttention = accountAttentionService.findAccountAttention(accountAttention);
-			//自己不能关注自己
-			if(fromUser.equals(toUser)){
-				this.resultSuccessData(request,response, "不能关注", null);
-				return;
+			User user= UserUtils.getUser();
+			if(StringUtils.isBlank(user.getId())){
+				this.resultFaliureData(request,response, "请先登录", null);
+				return ;
 			}
-			if((findAccountAttention==null||findAccountAttention.size()==0)){//没有关注
-				//读取 redis缓存
-				Set<String> set = JedisUtils.getSet("addAttentionCache_"+accountAttention.getFromUser());
-				if(set==null){
-					set=new HashSet<String>();
+			//获取请求参数
+//			String fromUser = request.getParameter("fromUser");
+
+			String toUser = request.getParameter("toUser");
+			if(StringUtils.isBlank(toUser)){
+				this.resultFaliureData(request,response, "请先输入要关注的对象", null);
+				return ;
+			}
+			if(user.getId().equals(toUser)){
+				this.resultFaliureData(request,response, "自己不能关注自己", null);
+				return ;
+			}
+			AccountAttention attention = new AccountAttention();
+			attention.setFromUser(user.getId());
+			attention.setToUser(toUser);
+			AccountAttention attentions = accountAttentionDao.getAttention(attention);
+			int i = 0;
+			if(attentions == null){
+				accountAttention.setFromUser(user.getId());
+				accountAttention.setToUser(toUser);
+				accountAttentionService.save(accountAttention);
+			}else{
+				i = 1;
+				accountAttentionDao.quitAttention(attention);
+			}
+
+			if(JedisUtils.getResource() !=null){
+				List<AccountAttention> attentionList = accountAttentionDao.getAttentionList(attention);
+				Set set = new HashSet<String>();
+				if(attentionList!=null && (attentionList.size()>0)){
+					for(AccountAttention a:attentionList){
+						set.add(a.getToUser());
+					}
 				}
-				set.add(accountAttention.getToUser());
-				//写入redis缓存
-				JedisUtils.setSet("addAttentionCache_"+accountAttention.getFromUser(), set, 0);
-				accountAttentionService.saveAttention(accountAttention);
+				JedisUtils.setSet("attention"+user.getId(),set,0);
+			}
+			if(i==0){
 				this.resultSuccessData(request,response, "关注成功", null);
-			}else{//已经关注
-				this.resultSuccessData(request,response, "已经关注", null);
+			}else{
+				this.resultSuccessData(request,response, "取消关注成功", null);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultSuccessData(request,response, "发生异常", null);
+			return;
+		}catch (Error e){
 			e.printStackTrace();
 		}
 	}
 	/**获取共同关注/好友推荐
 	 * @author lianjiming
 	 * @version 2018-03-13
-	 * @param accountAttention 用户关注实体
+	 * @param
 	 * @param request type 
 	 * @param response
-	 * @param type type="recommend"为共同关注 ,type="recommend"为好友推荐
+	 * @param  ="recommend"为共同关注 ,type="recommend"为好友推荐
 	 */
 	@RequestMapping(value = {"${portalPath}/account/accountAttention/commonAttention"})
 	@ResponseBody
@@ -268,6 +295,39 @@ public class AccountAttentionController extends BaseController {
 		accountAttentionService.save(accountAttention);
 		addMessage(redirectAttributes, "保存用户关注成功");
 		return "redirect:"+Global.getAdminPath()+"/account/accountAttention/list?repage";
+	}
+
+	/**
+	 * 我的关注/粉丝 wf
+	 * @param accountAttention
+	 * @param request  type=0 我的关注 type=1 我的粉丝  默认为0
+	 * @param response
+	 */
+	@RequestMapping(value = {"${portalPath}/account/accountAttention/myAttentionOrBeAttention"})
+	public void myAttentionOrBeAttention(AccountAttention accountAttention,HttpServletRequest request,HttpServletResponse response){
+		try {
+			User user= UserUtils.getUser();
+			if(StringUtils.isBlank(user.getId())){
+                this.resultFaliureData(request,response, "请先登录", null);
+                return ;
+            }
+			accountAttention.setFromUser(user.getId());
+			accountAttention.setToUser(user.getId());
+			Page<AccountAttention> page = null;
+			String type = StringUtils.isBlank(request.getParameter("type"))==true?"0":request.getParameter("type");
+			if(type.equals(0)){
+				page = accountAttentionService.getAttentionList(
+                		new Page<AccountAttention>(request,response),accountAttention);
+            }else{
+				page = accountAttentionService.getBeAttentionList(
+                		new Page<AccountAttention>(request,response),accountAttention);
+            }
+			this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.resultFaliureData(request,response, "发生异常", null);
+		}
+
 	}
 
 }

@@ -25,10 +25,26 @@ public class SendMsgUtil {
 
 	public static  String presend(String tel,String uasge){
 		String returnmsg = "";
-		String MessageCache = JedisUtils.get("MessageCache"+tel);
-		if(MessageCache != null){
-			returnmsg = "发送过于频繁";
-			return returnmsg;
+		String MessageCache = "";
+		if(JedisUtils.getResource() != null){
+			MessageCache = JedisUtils.get("MessageCache"+tel);
+			if(MessageCache != null){
+				returnmsg = "发送过于频繁";
+				return returnmsg;
+			}
+		}else{
+			AccountMobileCode code  = new AccountMobileCode();
+			code.setMobile(tel);
+			code = dao.getByTel(code);
+			if(code != null){
+				long oldtime  = code.getUpdateDate().getTime();
+				long newtime = new Date().getTime();
+				if(newtime-oldtime<5*60*1000) {	//5分钟
+					returnmsg = "发送过于频繁";
+					return returnmsg;
+				}
+			}
+
 		}
 		return sentMsg(0,tel,uasge);
 
@@ -52,7 +68,7 @@ public class SendMsgUtil {
 			param += "&sign="+Constant.MSG_USER_SIGN;
 			String str = HttpClientUtil.sendPostRequest(Constant.MSG_API_URL, param,true);
 			if(str.startsWith("success")){
-				if(Global.getOpenRedis().equals("1")){
+				if(JedisUtils.getResource()!= null){
 					JedisUtils.set("MessageCache"+phoneNum, code, 60*5);
 				}
 				AccountMobileCode accountMobileCode = new AccountMobileCode();
@@ -96,7 +112,7 @@ public class SendMsgUtil {
 	 */
 	public static String  checkIndentifyCode(String tel,String code ){
 		String returnmsg = "";
-		if(Global.getOpenRedis().equals("1")){ //从redis取出来验证
+		if(JedisUtils.getResource() != null){ //从redis取出来验证
 			String sysCode =  JedisUtils.get("MessageCache"+tel);
 			if(sysCode == null||StringUtils.isBlank(code)){
 				returnmsg = "未发送验证码或者验证码已过期";
@@ -119,7 +135,8 @@ public class SendMsgUtil {
 				long oldtime  = code1.getUpdateDate().getTime();
 				long newtime = new Date().getTime();
 				if(newtime-oldtime>5*60*1000) {	//5分钟
-					dao.setUsed(mobileCode);
+//					dao.setUsed(mobileCode);
+					dao.deleteByTel(mobileCode);
 					returnmsg = "该验证码已过期";
 					return returnmsg;
 				}
@@ -129,7 +146,7 @@ public class SendMsgUtil {
 					returnmsg = "验证码错误";
 					return returnmsg;
 				}else{
-					dao.setUsed(mobileCode);
+//					dao.setUsed(mobileCode);
 					returnmsg = "true";
 					return returnmsg;
 				}
