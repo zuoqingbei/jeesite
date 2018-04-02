@@ -26,7 +26,7 @@ public class SendMsgUtil {
 	public static  String presend(String tel,String uasge){
 		String returnmsg = "";
 		String MessageCache = "";
-		if(JedisUtils.getResource() != null){
+		if(Global.getOpenRedis().equals("true")){
 			MessageCache = JedisUtils.get("MessageCache"+tel);
 			if(MessageCache != null){
 				returnmsg = "发送过于频繁";
@@ -37,7 +37,7 @@ public class SendMsgUtil {
 			code.setMobile(tel);
 			code = dao.getByTel(code);
 			if(code != null){
-				long oldtime  = code.getUpdateDate().getTime();
+				long oldtime  = code.getCreateDate().getTime();
 				long newtime = new Date().getTime();
 				if(newtime-oldtime<5*60*1000) {	//5分钟
 					returnmsg = "发送过于频繁";
@@ -68,12 +68,12 @@ public class SendMsgUtil {
 			param += "&sign="+Constant.MSG_USER_SIGN;
 			String str = HttpClientUtil.sendPostRequest(Constant.MSG_API_URL, param,true);
 			if(str.startsWith("success")){
-				if(JedisUtils.getResource()!= null){
+				if(Global.getOpenRedis().equals("true")){
 					JedisUtils.set("MessageCache"+phoneNum, code, 60*5);
 				}
 				AccountMobileCode accountMobileCode = new AccountMobileCode();
 				accountMobileCode.setMobile(phoneNum);
-				accountMobileCode.setCodes(JedisUtils.get("MessageCache"+phoneNum));
+				accountMobileCode.setCodes(code);
 				accountMobileCode.setUsed("0"); //0--未使用 1--已使用
 				accountMobileCode.setUasge(uasge);
 				service.save(accountMobileCode);
@@ -112,7 +112,7 @@ public class SendMsgUtil {
 	 */
 	public static String  checkIndentifyCode(String tel,String code ){
 		String returnmsg = "";
-		if(JedisUtils.getResource() != null){ //从redis取出来验证
+		if(Global.getOpenRedis().equals("true")){ //从redis取出来验证
 			String sysCode =  JedisUtils.get("MessageCache"+tel);
 			if(sysCode == null||StringUtils.isBlank(code)){
 				returnmsg = "未发送验证码或者验证码已过期";
@@ -132,7 +132,7 @@ public class SendMsgUtil {
 				returnmsg = "请先点击发送验证码";
 				return returnmsg;
 			}else{
-				long oldtime  = code1.getUpdateDate().getTime();
+				long oldtime  = code1.getCreateDate().getTime();
 				long newtime = new Date().getTime();
 				if(newtime-oldtime>5*60*1000) {	//5分钟
 //					dao.setUsed(mobileCode);

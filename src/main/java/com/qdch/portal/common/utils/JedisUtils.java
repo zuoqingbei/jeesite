@@ -922,20 +922,15 @@ public class JedisUtils {
 	 */
 	public static Jedis getResource() {
 		Jedis jedis = null;
-
-		if (Global.getOpenRedis().equals("true")) {
-			try {
-				jedis = jedisPool.getResource();
+		try {
+			jedis = jedisPool.getResource();
 //			logger.debug("getResource.", jedis);
-			} catch (JedisException e) {
-				logger.warn("getResource.", e);
-				returnBrokenResource(jedis);
+		} catch (JedisException e) {
+			logger.warn("getResource.", e);
+			returnBrokenResource(jedis);
 
-			}
-
-
-			return jedis;
 		}
+		return jedis;
 	}
 
 	/**

@@ -104,7 +104,7 @@ public class AccountAttentionController extends BaseController {
 				accountAttentionDao.quitAttention(attention);
 			}
 
-			if(JedisUtils.getResource() !=null){
+			if(Global.getOpenRedis().equals("true")){
 				List<AccountAttention> attentionList = accountAttentionDao.getAttentionList(attention);
 				Set set = new HashSet<String>();
 				if(attentionList!=null && (attentionList.size()>0)){
@@ -317,8 +317,9 @@ public class AccountAttentionController extends BaseController {
 			accountAttention.setFromUser(user.getId());
 			accountAttention.setToUser(user.getId());
 			Page<AccountAttention> page = null;
+			// type=0 我的关注 1-- 我的粉丝
 			String type = StringUtils.isBlank(request.getParameter("type"))==true?"0":request.getParameter("type");
-			if(type.equals(0)){
+			if(type.equals("0")){
 				page = accountAttentionService.getAttentionList(
                 		new Page<AccountAttention>(request,response),accountAttention);
             }else{
