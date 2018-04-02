@@ -136,6 +136,30 @@
 			to_user = #{toUser}
 		WHERE id = #{id}
 	</update>
+
+	<select id="getAttention" resultType="AccountAttention">
+		SELECT * from account_attention WHERE del_flag = '0' and from_user=#{fromUser} and to_user=#{toUser}
+	</select>
+
+	<update id="quitAttention">
+		UPDATE account_attention
+		SET del_flag = '1'
+		WHERE
+			del_flag = '0'
+		AND from_user = #{fromUser}
+		AND to_user = #{toUser}
+	</update>
+
+	<select id="getAttentionList" resultType="AccountAttention">
+		SELECT * from account_attention WHERE del_flag = '0' and from_user=#{fromUser}
+	</select>
+
+
+	<select id="getBeAttentionList" resultType="AccountAttention">
+		SELECT * from account_attention WHERE del_flag = '0' and to_user=#{toUser}
+	</select>
+
+
 	
 
 	

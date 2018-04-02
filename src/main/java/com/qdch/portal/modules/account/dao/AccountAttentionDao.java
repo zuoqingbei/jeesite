@@ -36,5 +36,14 @@ public interface AccountAttentionDao extends CrudDao<AccountAttention> {
 	 * @return
 	 */
 	public List<AccountAttention> findAccountAttention(AccountAttention accountAttention);
+
+	public AccountAttention getAttention(AccountAttention accountAttention);
+
+	public int quitAttention(AccountAttention accountAttention);
+
+	public List<AccountAttention> getAttentionList(AccountAttention accountAttention);
+
+	public List<AccountAttention> getBeAttentionList(AccountAttention accountAttention);
+
 	
 }

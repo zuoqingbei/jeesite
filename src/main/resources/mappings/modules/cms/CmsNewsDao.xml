@@ -366,6 +366,9 @@
 			AND a.title LIKE 	concat('%',#{keywords},'%')
 		</if>
 		order by 1
+		<if test="weight != null and weight != ''">
+			,weight desc
+		</if>
 		<if test="hits != null and hits != ''">
 			,hits desc
 		</if>
