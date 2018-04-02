@@ -18,14 +18,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.DateUtils;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.common.utils.UploadUtils;
+import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.cms.entity.CmsComplaint;
 import com.qdch.portal.modules.cms.service.CmsComplaintService;
 import com.qdch.portal.modules.sys.entity.User;
-import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 投诉Controller
@@ -109,7 +108,7 @@ public class CmsComplaintController extends BaseController {
 	 */
 	@RequestMapping(value = "${portalPath}/wx/saveReport")
 	@ResponseBody
-	public void saveReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
+	public String saveReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
 		String userId=request.getParameter("userId");
 		String title=request.getParameter("title");
 		String description=request.getParameter("description");
@@ -139,7 +138,7 @@ public class CmsComplaintController extends BaseController {
 		cmsComplaint.setSource(source);
 		cmsComplaint.setStatus("0");
 		cmsComplaintService.save(cmsComplaint);
-		this.resultSuccessData(request, response, "举报成功", null);
+		return this.resultSuccessData(request, response, "举报成功", null);
 	}
 	/**
 	 * @todo   微信公众号举报列表数据
@@ -149,10 +148,10 @@ public class CmsComplaintController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/cms/cmsComplaint/listData"})
 	@ResponseBody
-	public void cmsComplaintListData(CmsComplaint cmsComplaint, HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String cmsComplaintListData(CmsComplaint cmsComplaint, HttpServletRequest request, HttpServletResponse response, Model model) {
 		cmsComplaint.setUserId(request.getParameter("userId"));
 		Page<CmsComplaint> page = cmsComplaintService.findPage(new Page<CmsComplaint>(request, response), cmsComplaint); 
-		this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
+		return this.resultSuccessData(request,response, "", mapJson(page,"success","获取数据成功"));
 	}
 	/**
 	 * @todo  微信公众号举报列表
@@ -174,7 +173,7 @@ public class CmsComplaintController extends BaseController {
 	 */
 	@RequestMapping(value = "${portalPath}/wx/cancleReport")
 	@ResponseBody
-	public void cancleReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
+	public String cancleReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
 		/*if (!beanValidator(model, cmsComplaint)){
 			return form(cmsComplaint, model);
 		}
@@ -183,9 +182,9 @@ public class CmsComplaintController extends BaseController {
 		if(cmsComplaint!=null&&"0".equals(cmsComplaint.getStatus())){
 			cmsComplaint.setStatus("4");
 			cmsComplaintService.save(cmsComplaint);
-			this.resultSuccessData(request, response, "撤销成功", null);
+			return this.resultSuccessData(request, response, "撤销成功", null);
 		}else{
-			this.resultFaliureData(request, response, "已处理，不能撤销！", null);
+			return this.resultFaliureData(request, response, "已处理，不能撤销！", null);
 		}
 		
 	}

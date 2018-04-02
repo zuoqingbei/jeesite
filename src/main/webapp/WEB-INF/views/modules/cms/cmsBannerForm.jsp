@@ -27,7 +27,7 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/cms/cmsBanner/">轮播图管理列表</a></li>
+		<li><a href="${ctx}/cms/cmsBanner/list">轮播图管理列表</a></li>
 		<li class="active"><a href="${ctx}/cms/cmsBanner/form?id=${cmsBanner.id}">轮播图管理<shiro:hasPermission name="cms:cmsBanner:edit">${not empty cmsBanner.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:cmsBanner:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cmsBanner" action="${ctx}/cms/cmsBanner/save" method="post" class="form-horizontal">
@@ -52,13 +52,13 @@
 				<sys:ckfinder input="image" type="files" uploadPath="/cms/cmsBanner" selectMultiple="false"/>
 			</div>
 		</div>
-		<div class="control-group">
+	<%-- 	<div class="control-group">
 			<label class="control-label">打开地址：</label>
 			<div class="controls">
 				<form:input path="linkUrl" htmlEscape="false" class="input-xlarge "/>
 			</div>
-		</div>
-		<div class="control-group">
+		</div> --%>
+		<%-- <div class="control-group">
 			<label class="control-label">打开方式：</label>
 			<div class="controls">
 				
@@ -67,11 +67,13 @@
 					<form:options items="${fns:getDictList('target_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
-		</div>
+		</div> --%>
 		<div class="control-group">
 			<label class="control-label">是否推荐(置顶)：</label>
 			<div class="controls">
-				<form:radiobuttons path="isTop" items="${fns:getDictList('top_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:select path="isTop" class="input-xlarge ">
+					<form:options items="${fns:getDictList('top_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -81,12 +83,12 @@
 				<span class="help-inline">轮播图的排列次序</span>
 			</div>
 		</div>
-		<div class="control-group">
+	<%-- 	<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
-		</div>
+		</div> --%>
 		<div class="form-actions">
 			<shiro:hasPermission name="cms:cmsBanner:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

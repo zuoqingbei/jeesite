@@ -3,13 +3,12 @@
  */
 package com.qdch.portal.modules.cms.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.qdch.portal.modules.cms.dao.CmsShareDao;
-import com.qdch.portal.modules.cms.entity.CmsNews;
-import com.qdch.portal.modules.sys.entity.User;
-import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,17 +16,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
+import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.modules.cms.dao.CmsShareDao;
 import com.qdch.portal.modules.cms.entity.CmsShare;
 import com.qdch.portal.modules.cms.service.CmsShareService;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.qdch.portal.modules.sys.entity.User;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 用户分享记录Controller
@@ -97,31 +97,28 @@ public class CmsShareController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsShare/saveShare")
-	public void saveShare(CmsShare cmsShare,Model model, HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String saveShare(CmsShare cmsShare,Model model, HttpServletRequest request,HttpServletResponse response){
 		try {
 			User user = UserUtils.getUser();
 			if(StringUtils.isBlank(user.getId())){
-				this.resultFaliureData(request,response, "请先登录", null);
-				return;
+				return this.resultFaliureData(request,response, "请先登录", null);
 			}
 
 			if(StringUtils.isBlank(cmsShare.getSourceTable())||StringUtils.isBlank(cmsShare.getSourceId())){
-				this.resultFaliureData(request,response, "请先输入sourceId和sourceTable的值", null);
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceId和sourceTable的值", null);
 			}
 
 			if(StringUtils.isBlank(cmsShare.getPlatform())||StringUtils.isBlank(cmsShare.getUrl())){
-				this.resultFaliureData(request,response, "请先输入分享的平台和地址", null);
-				return;
+				return this.resultFaliureData(request,response, "请先输入分享的平台和地址", null);
 			}
 			cmsShare.setUser(UserUtils.getUser());
 			cmsShareService.save(cmsShare);
 		} catch (Exception e) {
 			e.printStackTrace();
-			 this.resultFaliureData(request,response, "保存数据失败", null);
-			 return;
+			return this.resultFaliureData(request,response, "保存数据失败", null);
 		}
-		this.resultSuccessData(request,response, "保存数据成功", null);
+		return this.resultSuccessData(request,response, "保存数据成功", null);
 
 	}
 
@@ -130,30 +127,26 @@ public class CmsShareController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsShare/getCount")
-	public void  getCount(CmsShare cmsShare,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String  getCount(CmsShare cmsShare,HttpServletRequest request,HttpServletResponse response){
 		try {
 			String sourceTable = cmsShare.getSourceTable();
 			String sourceId = cmsShare.getSourceId();
 			if(StringUtils.isBlank(sourceTable)){
-				this.resultFaliureData(request,response, "请先输入sourceTable", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceTable", "");
 			}
 			if(StringUtils.isBlank(sourceId)){
-				this.resultFaliureData(request,response, "请先输入sourceId", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceId", "");
 			}
 			cmsShare  = cmsShareDao.getShareCount(cmsShare);
 			if(cmsShare != null && !cmsShare.equals("")){
-				this.resultSuccessData(request,response, "操作成功", cmsShare.getCount());
-				return ;
+				return this.resultSuccessData(request,response, "操作成功", cmsShare.getCount());
 			}else{
-				this.resultSuccessData(request,response, "操作成功", "0");
-				return ;
+				return this.resultSuccessData(request,response, "操作成功", "0");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", "");
-			return;
+			return this.resultFaliureData(request,response, "操作失败", "");
 		}
 
 	}
@@ -163,7 +156,8 @@ public class CmsShareController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsShare/isOperate")
-	public void  isOperate(CmsShare cmsShare,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String  isOperate(CmsShare cmsShare,HttpServletRequest request,HttpServletResponse response){
 		boolean flag = false;
 		try {
 			String sourceTable = cmsShare.getSourceTable();
@@ -171,25 +165,20 @@ public class CmsShareController extends BaseController {
 			String userid = cmsShare.getUserId();
 			Map<String,Object> res = new HashMap<String, Object>();
 			if(StringUtils.isBlank(sourceTable)){
-				this.resultFaliureData(request,response, "请先输入sourceTable", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceTable", "");
 			}
 			if(StringUtils.isBlank(sourceId)){
-				this.resultFaliureData(request,response, "请先输入sourceId", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceId", "");
 			}
 			if(StringUtils.isBlank(userid)){
-				this.resultFaliureData(request,response, "请先输入userid", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入userid", "");
 			}
 			flag = cmsShareService.getDynamicSelf(cmsShare);
 //			res.put("result",flag);
-			this.resultSuccessData(request,response, "操作成功", flag);
-			return ;
+			return this.resultSuccessData(request,response, "操作成功", flag);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", flag);
-			return;
+			return this.resultFaliureData(request,response, "操作失败", flag);
 		}
 
 	}

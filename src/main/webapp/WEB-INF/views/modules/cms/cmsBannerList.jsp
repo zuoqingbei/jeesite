@@ -31,10 +31,10 @@
 			<li><label>发布日期：</label>
 				<input name="beginCreateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${cmsBanner.beginCreateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> - 
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true});"/> - 
 				<input name="endCreateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${cmsBanner.endCreateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:true});"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -47,13 +47,13 @@
 				<th>标题</th>
 				<th>介绍</th>
 				<th>图片</th>
-				<th>地址</th>
-				<th>打开方式</th>
+				<!-- <th>地址</th>
+				<th>打开方式</th> -->
 				<th>是否置顶</th>
 				<th>排序</th>
 				<th>发布日期</th>
 				<th>创建人</th>
-				<th>备注信息</th>
+				<!-- <th>备注信息</th> -->
 				<shiro:hasPermission name="cms:cmsBanner:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -69,20 +69,14 @@
 				<td style="width:80px;height:80px;">
 					<img src="${cmsBanner.image}"></img>
 				</td>
-				<td>
+				<%-- <td>
 					<a href="${cmsBanner.linkUrl}" target="_blank">${cmsBanner.linkUrl}</a>
 				</td>
 				<td>
 					${cmsBanner.target}
-				</td>
+				</td> --%>
 				<td>
-				  <c:choose>
-				    <c:when test="${cmsBanner.isTop==1 }">
-				            推荐
-				    </c:when>
-				    <c:otherwise>不推荐</c:otherwise>
-				  </c:choose>
-					
+					${fns:getDictLabel(cmsBanner.isTop, 'top_type', '')}
 				</td>
 				<td>
 					${cmsBanner.orderNo}
@@ -93,9 +87,9 @@
 				<td>
 					${cmsBanner.userName}
 				</td>
-				<td>
+				<%-- <td>
 					${cmsBanner.remarks}
-				</td>
+				</td> --%>
 				<shiro:hasPermission name="cms:cmsBanner:edit"><td>
     				<a href="${ctx}/cms/cmsBanner/form?id=${cmsBanner.id}">修改</a>
 					<a href="${ctx}/cms/cmsBanner/delete?id=${cmsBanner.id}" onclick="return confirmx('确认要删除该轮播图管理吗？', this.href)">删除</a>

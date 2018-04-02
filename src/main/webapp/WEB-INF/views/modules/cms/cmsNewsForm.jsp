@@ -108,88 +108,27 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">描述、摘要：</label>
+			<label class="control-label">摘要：</label>
 			<div class="controls">
 				<form:textarea path="description" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">权重，越大越靠前：</label>
+			<label class="control-label">权重：</label>
 			<div class="controls">
-				<form:input path="weight" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:input path="weight" htmlEscape="false" maxlength="11" class="digits input-xlarge "/>
 			</div>
 		</div>
-		<%-- <div class="control-group">
-			<label class="control-label">点击数、阅读数：</label>
-			<div class="controls">
-				<form:input path="hits" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
+		
 		<div class="control-group">
-			<label class="control-label">转发数 分享数：</label>
-			<div class="controls">
-				<form:input path="transmit" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">评论数  回复数：</label>
-			<div class="controls">
-				<form:input path="discess" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">赞数量：</label>
-			<div class="controls">
-				<form:input path="praise" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">踩数量：</label>
-			<div class="controls">
-				<form:input path="tread" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">收藏量：</label>
-			<div class="controls">
-				<form:input path="collection" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">举报数量：</label>
-			<div class="controls">
-				<form:input path="report" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">评价数量：</label>
-			<div class="controls">
-				<form:input path="evaluate" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">打赏次数：</label>
-			<div class="controls">
-				<form:input path="tip" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">曝光量：</label>
-			<div class="controls">
-				<form:input path="view" htmlEscape="false" maxlength="11" class="input-xlarge "  value="0"/>
-			</div>
-		</div> --%>
-		<div class="control-group">
-			<label class="control-label">是否推荐：</label>
+			<label class="control-label">是否推荐(置顶)：</label>
 			<div class="controls">
 				<form:select path="recommend" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:option value="0" label="否"/>
-					<form:option value="1" label="是"/>
+					<form:options items="${fns:getDictList('top_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">是否允许评论：</label>
 			<div class="controls">
 				<form:select path="allowComment" class="input-xlarge ">
@@ -235,7 +174,7 @@
 			<div class="controls">
 				<form:input path="reason" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
-		</div>
+		</div> --%>
 		<%--<div class="control-group">--%>
 			<%--<label class="control-label">一级分类：</label>--%>
 			<%--<div class="controls">--%>

@@ -3,14 +3,12 @@
  */
 package com.qdch.portal.modules.cms.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.qdch.portal.modules.cms.dao.CmsCollectionDao;
-import com.qdch.portal.modules.cms.entity.CmsContribute;
-import com.qdch.portal.modules.cms.entity.CmsShare;
-import com.qdch.portal.modules.sys.entity.User;
-import com.qdch.portal.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,17 +16,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
-import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.common.utils.StringUtils;
+import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.modules.cms.dao.CmsCollectionDao;
 import com.qdch.portal.modules.cms.entity.CmsCollection;
 import com.qdch.portal.modules.cms.service.CmsCollectionService;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.qdch.portal.modules.sys.entity.User;
+import com.qdch.portal.modules.sys.utils.UserUtils;
 
 /**
  * 用户收藏记录Controller
@@ -97,30 +96,26 @@ public class CmsCollectionController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsCollection/getCount")
-	public void  getCount(CmsCollection cmsCollection, HttpServletRequest request, HttpServletResponse response){
+	@ResponseBody
+	public String  getCount(CmsCollection cmsCollection, HttpServletRequest request, HttpServletResponse response){
 		try {
 			String sourceTable = cmsCollection.getSourceTable();
 			String sourceId = cmsCollection.getSourceId();
 			if(StringUtils.isBlank(sourceTable)){
-				this.resultFaliureData(request,response, "请先输入sourceTable", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceTable", "");
 			}
 			if(StringUtils.isBlank(sourceId)){
-				this.resultFaliureData(request,response, "请先输入sourceId", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceId", "");
 			}
 			cmsCollection  = cmsCollectionDao.getCollectionCount(cmsCollection);
 			if(cmsCollection != null && !cmsCollection.equals("")){
-				this.resultSuccessData(request,response, "操作成功", cmsCollection.getCount());
-				return ;
+				return this.resultSuccessData(request,response, "操作成功", cmsCollection.getCount());
 			}else{
-				this.resultSuccessData(request,response, "操作成功", "0");
-				return ;
+				return this.resultSuccessData(request,response, "操作成功", "0");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", "");
-			return;
+			return this.resultFaliureData(request,response, "操作失败", "");
 		}
 
 	}
@@ -130,7 +125,8 @@ public class CmsCollectionController extends BaseController {
 	 */
 
 	@RequestMapping(value = "${portalPath}/cms/cmsCollection/isOperate")
-	public void  isOperate(CmsCollection cmsCollection,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String  isOperate(CmsCollection cmsCollection,HttpServletRequest request,HttpServletResponse response){
 		boolean flag = false;
 		try {
 			String sourceTable = cmsCollection.getSourceTable();
@@ -138,25 +134,20 @@ public class CmsCollectionController extends BaseController {
 			String userid = cmsCollection.getUserId();
 			Map<String,Object> res = new HashMap<String, Object>();
 			if(StringUtils.isBlank(sourceTable)){
-				this.resultFaliureData(request,response, "请先输入sourceTable", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceTable", "");
 			}
 			if(StringUtils.isBlank(sourceId)){
-				this.resultFaliureData(request,response, "请先输入sourceId", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入sourceId", "");
 			}
 			if(StringUtils.isBlank(userid)){
-				this.resultFaliureData(request,response, "请先输入userid", "");
-				return;
+				return this.resultFaliureData(request,response, "请先输入userid", "");
 			}
 			flag = cmsCollectionService.getDynamicSelf(cmsCollection);
 //			res.put("result",flag);
-			this.resultSuccessData(request,response, "操作成功", flag);
-			return ;
+			return this.resultSuccessData(request,response, "操作成功", flag);
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", flag);
-			return;
+			return this.resultFaliureData(request,response, "操作失败", flag);
 		}
 
 	}
@@ -168,22 +159,20 @@ public class CmsCollectionController extends BaseController {
 	 * @param response
 	 */
 	@RequestMapping(value = "${portalPath}/cms/cmsCollection/doCollection")
-	public void doCollection(CmsCollection cmsCollection,HttpServletRequest request,HttpServletResponse response){
+	@ResponseBody
+	public String doCollection(CmsCollection cmsCollection,HttpServletRequest request,HttpServletResponse response){
 		try {
 			User user = UserUtils.getUser();
 			String sourceId = cmsCollection.getSourceId();
 			String sourceTable = cmsCollection.getSourceTable();
 			if(StringUtils.isBlank(user.getId())){
-                this.resultFaliureData(request,response, "请先登录", null);
-                return;
+				return this.resultFaliureData(request,response, "请先登录", null);
             }
 			if(StringUtils.isBlank(sourceTable)){
-                this.resultFaliureData(request,response, "请先输入sourceTable", "");
-                return;
+				return this.resultFaliureData(request,response, "请先输入sourceTable", "");
             }
 			if(StringUtils.isBlank(sourceId)){
-                this.resultFaliureData(request,response, "请先输入sourceId", "");
-                return;
+				return this.resultFaliureData(request,response, "请先输入sourceId", "");
             }
             cmsCollection.setUser(user);
 			CmsCollection collection = cmsCollectionDao.getBySource(cmsCollection);
@@ -193,16 +182,15 @@ public class CmsCollectionController extends BaseController {
 			collection1.setUser(user);
 			if(collection == null){
                 cmsCollectionService.save(collection1);
-                this.resultSuccessData(request,response, "点赞成功", null);
+                return  this.resultSuccessData(request,response, "点赞成功", null);
             }else{
 				collection1.setId(collection.getId());
                 cmsCollectionService.delete(collection1);
-				this.resultSuccessData(request,response, "取消点赞成功", null);
+                return this.resultSuccessData(request,response, "取消点赞成功", null);
             }
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.resultFaliureData(request,response, "操作失败", null);
-			return;
+			return this.resultFaliureData(request,response, "操作失败", null);
 		}
 
 

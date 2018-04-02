@@ -920,19 +920,22 @@ public class JedisUtils {
 	 * @return
 	 * @throws JedisException
 	 */
-	public static Jedis getResource(){
+	public static Jedis getResource() {
 		Jedis jedis = null;
-		try {
-			jedis = jedisPool.getResource();
+
+		if (Global.getOpenRedis().equals("true")) {
+			try {
+				jedis = jedisPool.getResource();
 //			logger.debug("getResource.", jedis);
-		} catch (JedisException e) {
-			logger.warn("getResource.", e);
-			returnBrokenResource(jedis);
+			} catch (JedisException e) {
+				logger.warn("getResource.", e);
+				returnBrokenResource(jedis);
 
+			}
+
+
+			return jedis;
 		}
-
-
-		return jedis;
 	}
 
 	/**

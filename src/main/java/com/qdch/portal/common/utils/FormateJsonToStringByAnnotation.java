@@ -17,7 +17,7 @@ import com.qdch.portal.modules.sys.entity.User;
 public class FormateJsonToStringByAnnotation {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String jsonFromObject(Object status,Object msg,Object list) {
-		if (list == null || "".equals(list)) {
+		if (list == null || "".equals(list)||"[]".equals(list.toString())) {
 			return "{\"status\":\""+status+"\",\"msg\":\""+msg+"\"}";
 		}
 		StringBuffer json = new StringBuffer("{");
@@ -144,7 +144,7 @@ public class FormateJsonToStringByAnnotation {
 	}
 	
 	public String jsonFromObjectNoStatus(Object list) {
-		if (list == null || "".equals(list)) {
+		if (list == null || "".equals(list)||"[]".equals(list.toString())) {
 			return "[]";
 		}
 		StringBuffer json = new StringBuffer("[");

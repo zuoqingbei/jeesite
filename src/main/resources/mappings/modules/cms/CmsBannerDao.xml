@@ -46,7 +46,7 @@
 					a.content LIKE 
 					<if test="dbName == 'oracle'">'%'||#{content}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{content}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{content},'%')</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
 					)
 			</if>
 			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">

@@ -216,16 +216,23 @@ public abstract class BaseController  implements Constant{
 	 */
 	protected String resultData(HttpServletRequest request,HttpServletResponse response,Object status,String msg,String tag,Object data) {
 		if(data instanceof Map){
-			return renderString(response,  JsonMapper.toJsonString(data), "application/json");
+			//return renderString(response,  , "application/json");
+			return JsonMapper.toJsonString(data);
 		}else{
 			if(HttpRequestDeviceUtils.isMobileDevice(request)){
-				return renderString(response,  new FormateJsonToStringByAnnotation().jsonFromObject(status, msg,data), "application/json");
+				HashMap< String, Object> map=new HashMap<String, Object>();
+				map.put("status", status);
+				map.put("msg", msg);
+				map.put("data", data);
+				return JsonMapper.toJsonString(map);
+				//return renderString(response,  new FormateJsonToStringByAnnotation().jsonFromObject(status, msg,data), "application/json");
 			}else{
 				HashMap< String, Object> map=new HashMap<String, Object>();
 				map.put("status", status);
 				map.put("msg", msg);
 				map.put("data", data);
-				return renderString(response,   JsonMapper.toJsonString(map), "application/json");
+				//return renderString(response,   JsonMapper.toJsonString(map), "application/json");
+				return JsonMapper.toJsonString(map);
 			}
 		}
 	}
