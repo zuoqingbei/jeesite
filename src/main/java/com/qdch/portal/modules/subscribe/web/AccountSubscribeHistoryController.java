@@ -103,9 +103,11 @@ public class AccountSubscribeHistoryController extends BaseController {
 			String labelId = request.getParameter("labelId");
 			String[] labelIds = labelId.split(",");
 			accountSubscribeHistory.setUser(userId);
+			Set<String> set =null;
 			String key = "accountSubscribeHistoryCache_"+accountSubscribeHistory.getUser();
-			Set<String> set = JedisUtils.getSet(key);
-			
+			if(Global.getOpenRedis().equals("true")){
+				set = JedisUtils.getSet(key);
+			}
 			if(set!=null && set.size()>0){
 				for (int i = 0; i < labelIds.length; i++) {
 					accountSubscribeHistoryService.delete(accountSubscribeHistory);
@@ -121,12 +123,16 @@ public class AccountSubscribeHistoryController extends BaseController {
 					accountSubscribeHistory.setCreateDate(new Date());
 					accountSubscribeHistory.setLabId(labelIds[i]);
 					set.add(labelIds[i]);
-					JedisUtils.setSet(key, set, 0);
+					if(Global.getOpenRedis().equals("true")){
+						JedisUtils.setSet(key, set, 0);
+					}
 					accountSubscribeHistoryService.save(accountSubscribeHistory);
 					this.resultSuccessData(request,response, "订阅成功", null);
 				}
-			}else{		
-				JedisUtils.del(key);
+			}else{
+				if(Global.getOpenRedis().equals("true")){
+					JedisUtils.del(key);
+				}
 				for (int i = 0; i < labelIds.length; i++) {
 					//封装对象
 					accountSubscribeHistory.setId(IdGen.uuid());
@@ -134,7 +140,9 @@ public class AccountSubscribeHistoryController extends BaseController {
 					accountSubscribeHistory.setCreateDate(new Date());
 					accountSubscribeHistory.setLabId(labelIds[i]);
 					set.add(labelIds[i]);
-					JedisUtils.setSet(key, set, 0);
+					if(Global.getOpenRedis().equals("true")){
+						JedisUtils.setSet(key, set, 0);
+					}
 					accountSubscribeHistoryService.save(accountSubscribeHistory);
 					this.resultSuccessData(request,response, "订阅成功", null);
 				}
