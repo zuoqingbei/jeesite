@@ -130,7 +130,7 @@
 			country
 		) VALUES (
 			#{id},
-			#{user.id},
+			#{userId},
 			#{ptype},
 			#{platkey},
 			#{nickName},
@@ -147,7 +147,7 @@
 	
 	<update id="update">
 		UPDATE account_thirdplat SET 	
-			user_id = #{user.id},
+			user_id = #{userId},
 			ptype = #{ptype},
 			platkey = #{platkey},
 			nick_name = #{nickName},

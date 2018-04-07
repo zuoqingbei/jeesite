@@ -151,6 +151,8 @@ var new_post=1;
     		dataType:"json",
     		success:function(data){
     			var htmls="";
+				//data=eval('('+data+')');
+				console.log(data)
     			if(data.status=="success"){
     				var htmls="";
     				$.each(data.data,function(index,item){

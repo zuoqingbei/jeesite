@@ -96,7 +96,7 @@
 			del_flag
 		) VALUES (
 			#{id},
-			#{user.id},
+			#{userId},
 			#{title},
 			#{image},
 			#{source},
@@ -113,7 +113,7 @@
 	
 	<update id="update">
 		UPDATE cms_complaint SET 	
-			user_id = #{user.id},
+			user_id = #{userId},
 			title = #{title},
 			image = #{image},
 			source = #{source},

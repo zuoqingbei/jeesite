@@ -15,9 +15,10 @@
 		//btn.hide();
 		var upImg = btn.siblings(".upload-img");
 		upImg.addClass("loading");
-
+	
 		fr.onload = function() {
 			img.src = this.result;
+			
 			img.onload = function() {
 				btn.siblings(".upload-img").html(img);
 				var ratio = 1;
@@ -28,7 +29,7 @@
 					upImg.find("img").addClass("mw");
 					ratio = _w / img.width;
 				}
-				upImg.find("img").css({"width":"100%","height":"100%"});
+				upImg.find("img").css({"width":"100%","height":"100%","z-index":"9999"});
 				var scroll = new IScroll(upImg[0], {
 					zoom : true,
 					scrollX : true,
@@ -39,10 +40,12 @@
 				});
 
 				if (btn.hasClass("btn-old")) {
+					//alert(111)
 				//	ajaxFileUpload("image_btn1", "#image1");
 					_old.img = img;
 					_old.scroll = scroll;
 					_old.ratio = ratio;
+					
 				}
 				if (btn.hasClass("btn-new")) {
 					//ajaxFileUpload("image_btn2", "#image2");
@@ -53,52 +56,19 @@
 
 				setTimeout(function() {
 					upImg.removeClass("loading").find("img").css("opacity", 1);
+					
+					
 				}, 1000);
 			}
-		}
+			
+		};
+		/**fr.onloadend =function(){
+				alert(3)
+					
+			};**/
+			
 	});
 
-	$(".submit").on(
-			"click",
-			function() {
-				var jsonResult = {
-					"image1" : $("#image1").val(),
-					"image2" : $("#image2").val(),
-					"text3" : $("#text3").val(),
-					"template_id":$("#template_id").val(),
-					"emp_no":$("#emp_no").val()
-				};
-				
-				$.ajax({
-					  type: 'POST',
-					  url: '/xdb/web/sharing!sharing.do',
-					  data: {"jsonStr" : JSON.stringify(jsonResult)},
-					  success: function(date){
-						  alert(date.msg);
-						  window.location.href="/xdb/web/sharing!sharingDetail.do?sharingId=".concat(date.msg);
-					  },
-					  dataType: "json"
-					});
-				return;
-				if (!_old.img) {
-					alert("请上传以前照片");
-					return false;
-				}
-				if (!_new.img) {
-					alert("请上传现在照片");
-					return false;
-				}
-				if ($.trim(_txt.val()) == "") {
-					alert("请输入描述");
-					return false;
-				}
-
-				var oldImg = imageData(_old);
-				var newImg = imageData(_new);
-
-				alert(oldImg.substring(0, 50));
-				alert(newImg.substring(0, 50));
-			});
 
 	function imageData(obj) {
 		obj.scroll.enabled = false;

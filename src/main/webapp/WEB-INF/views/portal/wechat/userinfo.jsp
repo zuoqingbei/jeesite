@@ -94,6 +94,8 @@
 	            if ($regForm.valid()) {
 	            	//先验证验证码正确性
 	            	 $.post("${portalPath}/account/accountMobileCode/checkIndentifyCode",{"mobile":$("#telephone").val(),"codes":$("#validCode").val()},function(data){
+						console.log(data);
+						data=eval('('+data+')');
 						if(data.status=="success"){
 							//去注册
 						 $.post("${portalPath}/wx/register", {
@@ -103,7 +105,8 @@
 		                    accountId:$("#accountId").val(),
 		                    to:$("#to").val()
 		                }, function (data, textStatus) {
-		                	//console.log(data)
+							data=eval('('+data+')');
+		                	console.log(data)
 		                	if(data.status=="success"){
 		                		window.location.href=data.to+"?userId="+data.userId;
 		                	}else{
@@ -154,10 +157,14 @@
     		 if ($regForm.validate().element($("#telephone"))) {
 				//发送验证码 uasge短信用途 0-注册 1-找回密码 2-重置密码 3-设定支付密码 4-提现 
 				$.post("${portalPath}/account/accountMobileCode/sendCheckCode",{"mobile":$("#telephone").val(),"uasge":"0"},function(data){
+					data=eval('('+data+')');
+					//console.log(data.status)
 					if(data.status=="success"){
+					//alert(data.status=="success")
 						//发送成功
 						 timer=window.setInterval(settime,1000)
 					}else{
+						alert(data.msg);
 						 $("#sendBtn").one("click",sendMobileCode);
 					}
 				});
@@ -169,6 +176,7 @@
     	
     	function settime() { 
     		var obj=$("#sendBtn").get(0);
+    		console.log(countdown)
     	    if (countdown == 0) { 
     	        obj.removeAttribute("disabled");    
     	        obj.innerHTML="获取验证码"; 

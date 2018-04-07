@@ -81,14 +81,16 @@
             height: 5rem;
             padding: 1rem;
             font-size: .875rem;
-            background: url(img/photo.png) 48% 30% no-repeat;
+           /*  background: url(${ctxStatic}/${portalPage}/wx/img/photo2.jpg) 48% 30% no-repeat; */
             background-size: 60% 50%;
-            border: .1rem dashed rgba(0,0,0,.2);
+           /*  border: .1rem dashed rgba(0,0,0,.2); */
+			margin: .5rem;
         }
         .iconBox>.photoNumber{
             position: absolute;
             bottom: .125rem;
             left: 1.75rem;
+			
         }
         /*新css伪类 “:focus-within”，当本身或后代获得焦点时触发，因支持不够宽泛而弃用*/
         .form-group.focus-within > label:not(.error):not([for=title]):not([for=note]) {
@@ -99,8 +101,8 @@
             top: .625rem;
         }
         .form-group.focus-within > input:not(#description):not(#title){
-            margin-top: 1.5rem;
-            margin-bottom: 0;
+            margin-top: 2.5rem;
+            margin-bottom: 0.5rem;
         }
         #description{
             margin-top: 0;
@@ -182,13 +184,19 @@
         </div>
     </div>
     <div class="container">
-        <div class="form-group imageBox">
-             <div class="form-group titleBox album-old">
-            	<div class="upload-btn btn-old" style="display:block;"><input type="file" name="files" id="files"></div>
+        <div class="form-group imageBox iconBox mineimage">
+            	<div class="upload-btn btn-old" style="display:block;background: url(${ctxStatic}/${portalPage}/wx/img/photo2.jpg) 40% 45% no-repeat;"><input type="file" name="files" id="files"></div>
 				<div class="upload-img " ></div>	
-        	</div>
+        
         </div>
     </div>
+<!--	<div class="form-group imageBox">
+            <label for="image">
+                <span class="iconBox"> </span>
+                <input hidden="" class="form-control" name="image" id="image" type="file" multiple="multiple" accept="image/*">
+            </label>
+        </div>
+		-->
     <div class="container">
         <div class="form-group imageBox">
             <label for="target">举报对象：</label>
@@ -202,9 +210,15 @@
         </div>
     </div>
     <div class="container">
-        <div class="form-group dateBox focus-within">
+        <div class="form-group dateBox focus-within imageBox">
             <label for="date">发现时间：</label>
             <input class="form-control" name="date" id="date"  type="date" value="${cmsComplaint.findDateStr }" placeholder="">
+        </div>
+    </div>
+	 <div class="container">
+        <div class="form-group imageBox">
+            <label for="target">联系方式：</label>
+            <input class="form-control" name="tel" value="${cmsComplaint.remarks }" id="tel" placeholder="">
         </div>
     </div>
     <div class="form-group text-center" id="btn1" style="display:none">
@@ -224,7 +238,18 @@
 	<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/script.js"></script>
 <script>
 	
-    $(function () {		
+    $(function () {	
+			/**$(".mineimage").unbind().on("click",function(){
+						console.log(2)
+						$(".upload-btn").trigger("click");
+					})**/
+					
+		// 手机号码验证  
+		jQuery.validator.addMethod("isMobile", function(value, element) {  
+			var length = value.length;  
+			var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;  
+			return this.optional(element) || (length == 11 && mobile.test(value));  
+		}, "请正确填写您的手机号码");  
         judgeForBidPage();
     });
 	function judgeForBidPage(){
@@ -249,6 +274,7 @@
 			initPage();
 		};
 	};
+	 var $form;
 	function initPage(){
 		$(":input:not(#date)").focus(function () {
             $(this).parents(".form-group").addClass("focus-within");
@@ -257,16 +283,20 @@
             $(this).parents(".form-group").removeClass("focus-within");
             }
         });
+		$form = $("#toReport").find("form");
 		initForm();
 		$("#cancleFormBtn").one("click",cancleReport);
         //验证表单
-        var $form = $("#toReport").find("form");
+        
         $form.find(":input").keyup(function () {
-            validateForm()
+            validateForm();
         });
-        $form.find("#submitFormBtn").click(function () {
+        $form.find("#submitFormBtn").one("click",submitMethods);
+	};
+	function  submitMethods() {
             validateForm();
             if ($form.valid()) {
+				$("#submitFormBtn").html("正在提交");
                  $.post("${portalPath}/wx/saveReport", {
 					 id: $("#cmsId").val(),
                 	userId:$("#userId").val(),
@@ -276,23 +306,31 @@
                     target: $("#target").val(),
                     address: $("#address").val(),
                     date: $("#date").val(),
-                    source:"wxpub"
+                    source:"wxpub",
+					tel:$("#tel").val()
                 }, function (data, textStatus) {
+					data=eval('('+data+')');
                     console.log(data);
                     if (data.status === "success") {
                        window.location.href="${portalPath}/cms/cmsComplaint/list?userId="+$("#userId").val();
                     } else {
+						$form.find("#submitFormBtn").one("click",submitMethods);
+						$("#submitFormBtn").html("提  交");
                         console.log(data.msg)
                     }
                 }) 
-            }
-        });
-	};
+            }else{
+				$("#submitFormBtn").html("提  交");
+				 $form.find("#submitFormBtn").one("click",submitMethods);
+			}
+        }
 	function cancleReport(){
 			if(confirm("确定撤销举报吗？")){
 				 $.post("${portalPath}/wx/cancleReport", {
 					 id: $("#cmsId").val()
                 }, function (data, textStatus) {
+					 data=eval('('+data+')');
+					  console.log(data);
                     if (data.status === "success") {
                        window.location.href="${portalPath}/cms/cmsComplaint/list?userId="+$("#userId").val();
                     } else {
@@ -312,13 +350,16 @@
 			if($("#address").val()!=""){
 				$("#address").parents(".form-group").addClass("focus-within");
 			};
+			if($("#tel").val()!=""){
+				$("#tel").parents(".form-group").addClass("focus-within");
+			};
 			if("${cmsComplaint.image}"!=""){
 				//生成图片
 				var img='<img src="${cmsComplaint.image}" class="mw" style="width: 100%; height: 100%; transform-origin: 0px 0px 0px; transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) scale(1) translateZ(0px); opacity: 1;">';
 				$(".upload-img").html(img);
 			};
 			$("#description").val("${cmsComplaint.content}");
-			if("${cmsComplaint.id}"==null){
+			if("${cmsComplaint.id}"==null||"${cmsComplaint.id}"==""){
 				//第一次填报
 				$("#btn1").css("display","block");
 				$("#btn2").remove();
@@ -342,6 +383,7 @@
 					$("#target").attr('disabled','disabled');
 					$("#address").attr('disabled','disabled');
 					$("#date").attr('disabled','disabled');
+					$("#tel").attr('disabled','disabled');
 					if("${cmsComplaint.status}"=="1"){
 						$("#status").val("已受理");
 					}else if("${cmsComplaint.status}"=="2"){
@@ -377,6 +419,13 @@
                     date: {
                         required: true
                     },
+					tel:{
+						 required : true,  
+						minlength : 11,  
+						// 自定义方法：校验手机号在数据库中是否存在  
+						// checkPhoneExist : true,  
+						isMobile : true  
+					},
                 },
                 messages: {
                     title: {
@@ -396,6 +445,11 @@
                     },
                     date: {
                         required: "举报时间不能为空"
+                    },
+					tel: {
+                        required : "请输入手机号",  
+						minlength : "确认手机不能小于11个字符",  
+						isMobile : "请正确填写您的手机号码"  
                     },
                 }
             })

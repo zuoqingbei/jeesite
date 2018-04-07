@@ -135,6 +135,7 @@ public class User extends DataEntity<User> {
 		super();
 		this.loginFlag = Global.YES;
 		this.name=name;
+		this.loginName=name;
 		this.loginName=accountThirdplat.getNickName();
 		this.password=SystemService.entryptPassword(Constant.DEFAULT_PWD);
 		this.photo=accountThirdplat.getImage();

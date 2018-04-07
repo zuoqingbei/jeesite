@@ -117,6 +117,7 @@ public class CmsComplaintController extends BaseController {
 		String address=request.getParameter("address");
 		String date=request.getParameter("date");
 		String source=request.getParameter("source");
+		String tel=request.getParameter("tel");
 		/*if (!beanValidator(model, cmsComplaint)){
 			return form(cmsComplaint, model);
 		}
@@ -137,6 +138,7 @@ public class CmsComplaintController extends BaseController {
 		cmsComplaint.setContent(description);
 		cmsComplaint.setSource(source);
 		cmsComplaint.setStatus("0");
+		cmsComplaint.setRemarks(tel);//存放手机
 		cmsComplaintService.save(cmsComplaint);
 		return this.resultSuccessData(request, response, "举报成功", null);
 	}

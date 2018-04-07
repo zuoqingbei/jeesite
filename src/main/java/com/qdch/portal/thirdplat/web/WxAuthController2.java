@@ -1,6 +1,6 @@
 /**
  * 微信认证
- */
+ *//*
 package com.qdch.portal.thirdplat.web;
 
 import java.util.HashMap;
@@ -9,17 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.ExpiredCredentialsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authz.UnauthorizedException;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,12 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.qdch.portal.common.config.Constant;
 import com.qdch.portal.common.mapper.JsonMapper;
 import com.qdch.portal.common.utils.SendMsgUtil;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.sys.entity.User;
-import com.qdch.portal.modules.sys.security.FormAuthenticationFilter;
 import com.qdch.portal.modules.sys.service.SystemService;
 import com.qdch.portal.modules.sys.utils.UserUtils;
 import com.qdch.portal.thirdplat.entity.AccessToken;
@@ -43,23 +30,23 @@ import com.qdch.portal.thirdplat.service.AccountThirdplatService;
 import com.qdch.portal.thirdplat.utils.HttpClientUtil;
 import com.qdch.portal.thirdplat.utils.WxpubOAuth;
 
-/**
+*//**
  * 登录Controller
  * @author ThinkGem
  * @version 2013-5-31
- */
+ *//*
 @Controller
-public class WxAuthController extends BaseController{
+public class WxAuthController2 extends BaseController{
 	@Autowired
 	private SystemService systemService;
 	@Autowired
 	private AccountThirdplatService accountThirdplatService;
-	/**
+	*//**
 	 * @todo   TODO
 	 * @time   2018年3月21日 上午10:40:12
 	 * @author zuoqb
 	 * @return_type   生成认证请求链接
-	 */
+	 *//*
 	//@SecurityAuthorityAnnotation(needLogin=true)
 	@RequestMapping(value = {"${portalPath}/wx/auth"}, method = RequestMethod.GET)
 	public String wxAuth(Model model,HttpServletRequest request, HttpServletResponse response){
@@ -85,12 +72,12 @@ public class WxAuthController extends BaseController{
         System.out.println(token);
 		return "redirect:" + to;
 	}
-	/**
+	*//**
 	 * @todo   处理微信用户验证
 	 * @time   2018年3月21日 上午10:00:16
 	 * @author zuoqb
 	 * @return_type   AccountThirdplat
-	 */
+	 *//*
 	public  AccountThirdplat dealAuthorize(HttpServletRequest request, HttpServletResponse response){
 		String code=request.getParameter("code");
 		AccountThirdplat accountThirdplat=null;
@@ -133,25 +120,13 @@ public class WxAuthController extends BaseController{
 		AccountThirdplat accountThirdplat=dealAuthorize(request,response);
 		if(accountThirdplat!=null){
 			if(accountThirdplat.getUser()==null||StringUtils.isBlank(accountThirdplat.getUserId())){
-				//生成新用户
-				User user=new User(accountThirdplat.getNickName(),accountThirdplat);
-				try {
-					
-					systemService.saveUser(user);
-					accountThirdplat.setUserId(user.getId());
-					accountThirdplatService.save(accountThirdplat);
-					model.addAttribute("userId", accountThirdplat.getUserId());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				// 清除当前用户缓存
-				if (user.getLoginName().equals(UserUtils.getUser().getLoginName())){
-					UserUtils.clearCache();
-				}
-				return "redirect:" + portalPath+"/wx/report";
+				//之前进入 但是没有验证手机  跳转验证页面 
+				model.addAttribute("accountId", accountThirdplat.getId());
+				model.addAttribute("to", portalPath+"/wx/report");//认证成功 要跳转页面
+				return "redirect:" + portalPath+"/wx/userinfo";
 			}else{
 				//进入填报页面
-				model.addAttribute("userId", accountThirdplat.getUser().getId());
+				model.addAttribute("userId", accountThirdplat.getUserId());
 				return "redirect:" + portalPath+"/wx/report";
 			}
 		}else{
@@ -160,7 +135,7 @@ public class WxAuthController extends BaseController{
 		}
 	}
 	
-	/*@RequestMapping(value = {"${portalPath}/accountReport"})
+	@RequestMapping(value = {"${portalPath}/accountReport"})
 	public String accountReport(RedirectAttributes  model,HttpServletRequest request, HttpServletResponse response){
 		String code=request.getParameter("code");
 		if(StringUtils.isNotBlank(code)){
@@ -190,15 +165,15 @@ public class WxAuthController extends BaseController{
 			//code验证失败
 			return "portal/error/noauthority";
 		}
-	}*/
+	}
 	
-	/**
+	*//**
 	 * 
 	 * @todo   用户完善个人信息页面
 	 * @time   2018年3月20日 下午4:15:34
 	 * @author zuoqb
 	 * @return_type   String
-	 */
+	 *//*
 	@RequestMapping(value = {"${portalPath}/wx/userinfo"})
 	public String userinfo(Model model,HttpServletRequest request, HttpServletResponse response){
 		String accountId=request.getParameter("accountId");
@@ -215,13 +190,13 @@ public class WxAuthController extends BaseController{
 			return render(request, "wechat/userinfo");
 		}
 	}
-	/**
+	*//**
 	 * 
 	 * @todo   微信用户个人信息保存/注册功能
 	 * @time   2018年3月21日 下午4:36:23
 	 * @author zuoqb
 	 * @return_type   String
-	 */
+	 *//*
 	@RequestMapping(value = {"${portalPath}/wx/register"})
 	@ResponseBody
 	public String register(RedirectAttributes model,HttpServletRequest request, HttpServletResponse response){
@@ -241,6 +216,8 @@ public class WxAuthController extends BaseController{
 					user=new User(userName,accountThirdplat);
 					try {
 						systemService.saveUser(user);
+						accountThirdplat.setCreateBy(user);
+						accountThirdplat.setUserId(user.getId());
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -282,7 +259,7 @@ public class WxAuthController extends BaseController{
 			r.put("status", "success");
 			r.put("to", to);
 			if(user!=null){
-				r.put("userId",  user.getId());
+				r.put("userId",  accountThirdplat.getUserId());
 			}
 			return this.resultSuccessData(request, response, "注册成功", r);
 			//return "redirect:" +to;
@@ -292,32 +269,22 @@ public class WxAuthController extends BaseController{
 			return this.resultFaliureData(request, response, "验证码错误", null);
 		}
 	}
-	/**
+	*//**
 	 * 
 	 * @todo   用户举报列表
 	 * @time   2018年3月30日 上午11:01:54
 	 * @author zuoqb
 	 * @return_type   String
-	 */
+	 *//*
 	@RequestMapping(value = {"${portalPath}/wx/accountReport/list"})
 	public String accountReportList(RedirectAttributes  model,HttpServletRequest request, HttpServletResponse response){
 		AccountThirdplat accountThirdplat=dealAuthorize(request,response);
 		if(accountThirdplat!=null){
 			if(accountThirdplat.getUser()==null||StringUtils.isBlank(accountThirdplat.getUser().getId())){
-				User user=new User(accountThirdplat.getNickName(),accountThirdplat);
-				try {
-					systemService.saveUser(user);
-					accountThirdplat.setUserId(user.getId());
-					accountThirdplatService.save(accountThirdplat);
-					model.addAttribute("userId", accountThirdplat.getUserId());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				// 清除当前用户缓存
-				if (user.getLoginName().equals(UserUtils.getUser().getLoginName())){
-					UserUtils.clearCache();
-				}
-				return "redirect:" + portalPath+"/cms/cmsComplaint/list";
+				//之前进入 但是没有验证手机  跳转验证页面 
+				model.addAttribute("accountId", accountThirdplat.getId());
+				model.addAttribute("to", portalPath+"/cms/cmsComplaint/list");//认证成功 要跳转页面
+				return "redirect:" + portalPath+"/wx/userinfo";
 			}else{
 				//进入列表页面
 				model.addAttribute("userId", accountThirdplat.getUser().getId());
@@ -329,14 +296,14 @@ public class WxAuthController extends BaseController{
 		}
 	}
 	
-	/**
+	*//**
 	 * 
 	 * @todo   公众号资讯列表
 	 * @time   2018年3月30日 上午11:01:54
 	 * @author zuoqb
 	 * @return_type   String
-	 */
-	/*@RequestMapping(value = {"${portalPath}/wx/cmsNews/list"})
+	 *//*
+	@RequestMapping(value = {"${portalPath}/wx/cmsNews/list"})
 	public String cmsNewsList(RedirectAttributes  model,HttpServletRequest request, HttpServletResponse response){
 		AccountThirdplat accountThirdplat=dealAuthorize(request,response);
 		if(accountThirdplat!=null){
@@ -355,5 +322,6 @@ public class WxAuthController extends BaseController{
 			return "portal/error/noauthority";
 		}
 	}
-	*/
+	
 }
+*/
