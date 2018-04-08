@@ -101,6 +101,24 @@ public class CmsComplaintController extends BaseController {
 		return render(request, "wechat/report");
 	}
 	/**
+	 * @todo   微信公众号用户举报-图片上传
+	 * @time   2018年3月29日 下午1:58:30
+	 * @author zuoqb
+	 * @return_type   void
+	 */
+	@RequestMapping(value = "${portalPath}/wx/uploadImage")
+	@ResponseBody
+	public String uploadImage(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
+		String images=request.getParameter("images");
+		UploadUtils util=new UploadUtils();
+		if(StringUtils.isNotBlank(images)&&images.indexOf("base64,")!=-1){
+			images=util.GenerateImage(images,request);
+			cmsComplaint.setImage(images);
+		}
+		return this.resultSuccessData(request, response, "上传图片成功", cmsComplaint);
+	}
+	
+	/**
 	 * @todo   微信公众号用户举报
 	 * @time   2018年3月29日 下午1:58:30
 	 * @author zuoqb
@@ -125,7 +143,7 @@ public class CmsComplaintController extends BaseController {
 		cmsComplaint.setCompanyAddress(address);
 		cmsComplaint.setCompanyName(target);
 		UploadUtils util=new UploadUtils();
-		if(StringUtils.isNotBlank(images)&&images.startsWith("data:image/png;base64,")){
+		if(StringUtils.isNotBlank(images)&&images.indexOf("base64,")!=-1){
 			images=util.GenerateImage(images,request);
 			cmsComplaint.setImage(images);
 		}

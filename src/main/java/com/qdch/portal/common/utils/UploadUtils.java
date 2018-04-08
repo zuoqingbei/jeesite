@@ -384,8 +384,8 @@ public class UploadUtils {
 			//图像数据为空  
 			return null;
 		}
-		if(imgStr.startsWith("data:image/png;base64,")){
-	    	imgStr=imgStr.substring("data:image/png;base64,".length(), imgStr.length());
+		if(imgStr.indexOf("base64,")!=-1){
+	    	imgStr=imgStr.substring(imgStr.indexOf("base64,")+7, imgStr.length());
 	    }else{
 	    	return null;
 	    }

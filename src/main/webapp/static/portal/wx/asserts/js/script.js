@@ -41,7 +41,7 @@
 
 				if (btn.hasClass("btn-old")) {
 					//alert(111)
-				//	ajaxFileUpload("image_btn1", "#image1");
+					//ajaxFileUpload("files", "#image1");
 					_old.img = img;
 					_old.scroll = scroll;
 					_old.ratio = ratio;
@@ -56,7 +56,7 @@
 
 				setTimeout(function() {
 					upImg.removeClass("loading").find("img").css("opacity", 1);
-					
+					ajaxFileUpload();
 					
 				}, 1000);
 			}
@@ -86,12 +86,30 @@
 		ctx.drawImage(obj.img, x, y, w, h, 0, 0, _w, _h);
 		return canvas.toDataURL();
 	}
+	
+	function ajaxFileUpload(){
+		$.ajax({
+    		url:portalPath+"/wx/uploadImage",
+    		type:"post",
+    		data:{"images":$(".upload-img>img").attr("src")},
+    		dataType:"json",
+    		success:function(data){
+    			var htmls="";
+				//console.log(data)
+    			if(data.status=="success"){
+    				$("upload-img>img").attr("img",data.data.image);
+    			}else{
+    				console.log("error",data);
+    			}
+    		}
+    	});
+	}
 
-	function ajaxFileUpload(image, image_) {
+	/**function ajaxFileUpload(image, image_) {
 		$.ajaxFileUpload({
-			url : '/xdb/ajax/ajax!upLoad.do',// servlet请求路径
-			secureuri : false,
+			url : '${portalPath}/wx/uploadImage',// servlet请求路径
 			fileElementId : image,// 上传控件的id
+			type: 'post',  
 			dataType : 'json',
 			data : {
 				paramName : image
@@ -106,5 +124,5 @@
 
 		return false;
 
-	}
+	}**/
 });

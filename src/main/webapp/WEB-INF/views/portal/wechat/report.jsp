@@ -229,13 +229,14 @@
 		<button type="button"  id="cancleFormBtn"  class="btn btn-danger center">撤 销</button>
 	</div>
 </form>
-
+<script>
+var portalPath='${portalPath}';
+</script>
 <script src="${ctxStatic}/${portalPage}/wx/asserts/js/jquery-2.2.4.js"></script>
 <script src="${ctxStatic}/${portalPage}/wx/asserts/js/jquery.validate-1.15.1.js"></script>
-
-	<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/zepto.min.js"></script>
-	<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/iscroll-zoom.js"></script>
-	<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/script.js"></script>
+<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/zepto.min.js"></script>
+<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/iscroll-zoom.js"></script>
+<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/script.js"></script>
 <script>
 	
     $(function () {	
