@@ -69,12 +69,12 @@
 				</form:select>
 			</div>
 		</div>
-		<%-- <div class="control-group">
-			<label class="control-label">描述、摘要：</label>
+		<div class="control-group">
+			<label class="control-label">摘要：</label>
 			<div class="controls">
 				<form:textarea path="description" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
-		</div> --%>
+		</div>
 		<div class="control-group">
 			<label class="control-label">产品介绍：</label>
 			<div class="controls">

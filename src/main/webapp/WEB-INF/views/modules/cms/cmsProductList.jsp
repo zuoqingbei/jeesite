@@ -66,7 +66,7 @@
 					${cmsProduct.title}
 				</a></td>
 				<td style="width:80px;height:80px;">
-					<img src="${cmsBanner.image}"></img>
+					<img src="${cmsProduct.image}"></img>
 				</td>
 				<td>
 					${fns:getDictLabel(cmsProduct.tags, 'product_type', '')}
