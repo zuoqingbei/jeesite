@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.thinker.indexs.dao.ThinkerIndexDao">
+    
+	<sql id="thinkerIndexColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.code AS "code",
+		a.screen_no AS "screenNo",
+		a.screen_name AS "screenName",
+		a.screen_url AS "screenUrl",
+		a.show_type AS "showType",
+		a.descs AS "descs",
+		a.show_table AS "showTable",
+		a.use_filed AS "useFiled",
+		a.expression AS "expression",
+		a.category1 AS "category1",
+		a.category2 AS "category2",
+		a.category3 AS "category3",
+		a.tags AS "tags",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="thinkerIndexJoins">
+	</sql>
+    
+	<select id="get" resultType="ThinkerIndex">
+		SELECT 
+			<include refid="thinkerIndexColumns"/>
+		FROM 1169_thinker_index a
+		<include refid="thinkerIndexJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ThinkerIndex">
+		SELECT 
+			<include refid="thinkerIndexColumns"/>
+		FROM 1169_thinker_index a
+		<include refid="thinkerIndexJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="descs != null and descs != ''">
+				AND a.descs LIKE 
+					<if test="dbName == 'oracle'">'%'||#{descs}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{descs}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{descs},'%')</if>
+			</if>
+			<if test="category1 != null and category1 != ''">
+				AND a.category1 LIKE 
+					<if test="dbName == 'oracle'">'%'||#{category1}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{category1}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{category1},'%')</if>
+			</if>
+			<if test="category2 != null and category2 != ''">
+				AND a.category2 LIKE 
+					<if test="dbName == 'oracle'">'%'||#{category2}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{category2}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{category2},'%')</if>
+			</if>
+			<if test="category3 != null and category3 != ''">
+				AND a.category3 LIKE 
+					<if test="dbName == 'oracle'">'%'||#{category3}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{category3}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{category3},'%')</if>
+			</if>
+			<if test="tags != null and tags != ''">
+				AND a.tags LIKE 
+					<if test="dbName == 'oracle'">'%'||#{tags}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tags}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{tags},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ThinkerIndex">
+		SELECT 
+			<include refid="thinkerIndexColumns"/>
+		FROM 1169_thinker_index a
+		<include refid="thinkerIndexJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO 1169_thinker_index(
+			id,
+			name,
+			code,
+			screen_no,
+			screen_name,
+			screen_url,
+			show_type,
+			descs,
+			show_table,
+			use_filed,
+			expression,
+			category1,
+			category2,
+			category3,
+			tags,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{code},
+			#{screenNo},
+			#{screenName},
+			#{screenUrl},
+			#{showType},
+			#{descs},
+			#{showTable},
+			#{useFiled},
+			#{expression},
+			#{category1},
+			#{category2},
+			#{category3},
+			#{tags},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE 1169_thinker_index SET 	
+			name = #{name},
+			code = #{code},
+			screen_no = #{screenNo},
+			screen_name = #{screenName},
+			screen_url = #{screenUrl},
+			show_type = #{showType},
+			descs = #{descs},
+			show_table = #{showTable},
+			use_filed = #{useFiled},
+			expression = #{expression},
+			category1 = #{category1},
+			category2 = #{category2},
+			category3 = #{category3},
+			tags = #{tags},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE 1169_thinker_index SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

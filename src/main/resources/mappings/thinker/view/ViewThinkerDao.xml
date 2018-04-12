@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.thinker.view.dao.ViewThinkerDao">
+    
+	<sql id="viewThinkerColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.descs AS "descs",
+		a.category1 AS "category1",
+		a.category2 AS "category2",
+		a.category3 AS "category3",
+		a.tags AS "tags",
+		a.url AS "url",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="viewThinkerJoins">
+	</sql>
+    
+	<select id="get" resultType="ViewThinker">
+		SELECT 
+			<include refid="viewThinkerColumns"/>
+		FROM view_thinker a
+		<include refid="viewThinkerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ViewThinker">
+		SELECT 
+			<include refid="viewThinkerColumns"/>
+		FROM view_thinker a
+		<include refid="viewThinkerJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="descs != null and descs != ''">
+				AND a.descs LIKE 
+					<if test="dbName == 'oracle'">'%'||#{descs}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{descs}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{descs},'%')</if>
+			</if>
+			<if test="category1 != null and category1 != ''">
+				AND a.category1 = #{category1}
+			</if>
+			<if test="category2 != null and category2 != ''">
+				AND a.category2 = #{category2}
+			</if>
+			<if test="category3 != null and category3 != ''">
+				AND a.category3 = #{category3}
+			</if>
+			<if test="tags != null and tags != ''">
+				AND a.tags LIKE 
+					<if test="dbName == 'oracle'">'%'||#{tags}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tags}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{tags},'%')</if>
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ViewThinker">
+		SELECT 
+			<include refid="viewThinkerColumns"/>
+		FROM view_thinker a
+		<include refid="viewThinkerJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+</mapper>
