@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.qdch.portal.common.config.Global;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import javax.sql.DataSource;
+
 
 /**
  * 连接postgre
@@ -25,12 +30,12 @@ public class PostgreUtils {
     private static final String username = Global.getConfig("postgre.username");  
     private static final String password = Global.getConfig("postgre.password");  
     
-    private CallableStatement callableStatement = null;//创建CallableStatement对象
+    private static CallableStatement callableStatement = null;//创建CallableStatement对象
     
-    private Connection conn = null;  
-    private PreparedStatement pst = null;  
-    private ResultSet rst = null;  
-    private PostgreUtils() {
+    private static Connection conn = null;
+    private static PreparedStatement pst = null;
+    private static ResultSet rst = null;
+    private  PostgreUtils() {
     
     	
     }
@@ -68,7 +73,7 @@ public class PostgreUtils {
      * 建立数据库连接   
      * @return 数据库连接   
      */      
-    public Connection getConnection() {      
+    public static Connection getConnection() {
         try {      
              // 加载数据库驱动程序      
             try {  
@@ -95,7 +100,7 @@ public class PostgreUtils {
      * @param params 参数数组，若没有参数则为null   
      * @return 受影响的行数   
      */      
-    public int executeUpdate(String sql, Object[] params) {      
+    public  int executeUpdate(String sql, Object[] params) {
         // 受影响的行数      
         int affectedLine = 0;      
               
@@ -132,10 +137,10 @@ public class PostgreUtils {
      * @param params 参数数组，若没有参数则为null   
      * @return 结果集   
      */      
-    private ResultSet executeQueryRS(String sql, Object[] params) {      
+    private static ResultSet executeQueryRS(String sql, Object[] params) {
         try {      
             // 获得连接      
-            conn = this.getConnection();      
+            conn = postgreUtils.getConnection();
                   
             // 调用SQL      
             pst = conn.prepareStatement(sql);      
@@ -203,7 +208,7 @@ public class PostgreUtils {
      * @return List   
      *                       结果集   
      */      
-    public List<Object> excuteQuery(String sql, Object[] params) {      
+    public static List<Object> excuteQuery(String sql, Object[] params) {
         // 执行SQL获得结果集      
         ResultSet rs = executeQueryRS(sql, params);      
               
@@ -288,7 +293,7 @@ public class PostgreUtils {
     /**   
      * 关闭所有资源   
      */      
-    private void closeAll() {      
+    private static void closeAll() {
         // 关闭结果集对象      
         if (rst != null) {      
             try {      
@@ -335,5 +340,16 @@ public class PostgreUtils {
 		System.out.println(postgreUtils.executeQuerySingle("select * from test1", null));
 		
 	}
+
+	public static Connection getconn(){
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring-context.xml");
+        DataSource ds = ctx.getBean("dataSourcePostgre",DataSource.class);
+        try {
+            return ds.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
