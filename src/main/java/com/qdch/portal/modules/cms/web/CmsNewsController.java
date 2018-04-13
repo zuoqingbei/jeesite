@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import com.qdch.portal.common.utils.PostgreUtils;
+<<<<<<< HEAD
 import com.qdch.portal.littleproject.dao.TradeModel;
+=======
+>>>>>>> e0b04a2133477841c420d5488810550344f2a2a9
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -355,6 +358,9 @@ public class CmsNewsController extends BaseController {
 
 		return this.resultSuccessData(request,response, "", results);
 	}
+
+
+
 
 
 

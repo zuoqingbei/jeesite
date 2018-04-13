@@ -4,6 +4,11 @@ package com.qdch.portal.littleproject.web;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.littleproject.dao.TradeModel;
+<<<<<<< HEAD
+=======
+import com.qdch.portal.littleproject.entity.LittleProjectDto;
+import com.qdch.portal.littleproject.entity.LittleProjectEntity;
+>>>>>>> e0b04a2133477841c420d5488810550344f2a2a9
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +21,7 @@ import java.util.*;
 public class SummaryController extends BaseController {
 
 
+<<<<<<< HEAD
     /**
      * 交易额
      * @param
@@ -53,6 +59,8 @@ public class SummaryController extends BaseController {
 
         return this.resultSuccessData(request,response, "", results);
     }
+=======
+>>>>>>> e0b04a2133477841c420d5488810550344f2a2a9
 
     public String tradeDay(){
         String sql = "SELECT \n" +
@@ -158,6 +166,7 @@ public class SummaryController extends BaseController {
         return sql;
 
     }
+<<<<<<< HEAD
     /**
      * 交易额统计
      * @time   2018年4月13日
@@ -195,4 +204,58 @@ public class SummaryController extends BaseController {
     	return null;
     }
 
+=======
+
+
+    @RequestMapping(value = {"${portalPath}/littleproject/tradeAmount"})
+    @ResponseBody
+    public String  tradeAmount(HttpServletRequest request, HttpServletResponse response){
+
+        LittleProjectDto dto = new LittleProjectDto();
+
+//        Map<String,Object[]> timeMap = new HashMap<String, Object[]>();
+
+        List<Object> lists = PostgreUtils.excuteQuery(tradeDay(),null);
+        List<String> times = new ArrayList<String>();
+        List<String> lianhe = new ArrayList<String>();
+        List<String> qingjin = new ArrayList<String>();
+        List<String> wenhua = new ArrayList<String>();
+        List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
+        LittleProjectEntity entity ;
+
+        if(lists != null && lists.size()>0) {
+            for (Object o : lists) {
+                Map m = (Map) o;
+                if(m.get("jys").equals("0012")){
+                    times.add(m.get("vday")+"");
+                    lianhe.add(m.get("fvalue")+"");
+                }else  if(m.get("jys").equals("0014")){
+                    qingjin.add(m.get("fvalue")+"");
+                }else  if(m.get("jys").equals("0015")){
+                    wenhua.add(m.get("fvalue")+"");
+                }
+            }
+        }
+//        timeMap.put("times",times.toArray());
+        dto.setTimes(times.toArray());
+        entity = new LittleProjectEntity();
+        entity.setName("联合信用资产");
+        entity.setLists(lianhe);
+        res.add(entity);
+
+        entity = new LittleProjectEntity();
+
+        entity.setName("青金中心");
+        entity.setLists(qingjin);
+        res.add(entity);
+        entity = new LittleProjectEntity();
+        entity.setName("青岛文化产权");
+        entity.setLists(wenhua);
+
+        res.add(entity);
+        dto.setEntities(res);
+
+        return this.resultSuccessData(request,response, "", dto);
+    }
+>>>>>>> e0b04a2133477841c420d5488810550344f2a2a9
 }
