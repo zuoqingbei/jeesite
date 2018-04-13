@@ -4,11 +4,10 @@ package com.qdch.portal.littleproject.web;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.littleproject.dao.TradeModel;
-<<<<<<< HEAD
-=======
+
 import com.qdch.portal.littleproject.entity.LittleProjectDto;
 import com.qdch.portal.littleproject.entity.LittleProjectEntity;
->>>>>>> e0b04a2133477841c420d5488810550344f2a2a9
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +20,7 @@ import java.util.*;
 public class SummaryController extends BaseController {
 
 
-<<<<<<< HEAD
+
     /**
      * 交易额
      * @param
@@ -59,8 +58,7 @@ public class SummaryController extends BaseController {
 
         return this.resultSuccessData(request,response, "", results);
     }
-=======
->>>>>>> e0b04a2133477841c420d5488810550344f2a2a9
+
 
     public String tradeDay(){
         String sql = "SELECT \n" +
@@ -166,7 +164,7 @@ public class SummaryController extends BaseController {
         return sql;
 
     }
-<<<<<<< HEAD
+
     /**
      * 交易额统计
      * @time   2018年4月13日
@@ -175,7 +173,7 @@ public class SummaryController extends BaseController {
      * @param response
      * @return
      */
-    @RequestMapping(value = {"${portalPath}/littleproject/tradeAmount"})
+    @RequestMapping(value = {"${portalPath}/littleproject/summaryController_jiaoYiAmount"})
     @ResponseBody
     public String  summaryController_jiaoYiAmount(HttpServletRequest request, HttpServletResponse response){
     	 Map<String,Object> results = new HashMap<String,Object>();
@@ -204,7 +202,7 @@ public class SummaryController extends BaseController {
     	return null;
     }
 
-=======
+
 
 
     @RequestMapping(value = {"${portalPath}/littleproject/tradeAmount"})
@@ -257,5 +255,5 @@ public class SummaryController extends BaseController {
 
         return this.resultSuccessData(request,response, "", dto);
     }
->>>>>>> e0b04a2133477841c420d5488810550344f2a2a9
+
 }
