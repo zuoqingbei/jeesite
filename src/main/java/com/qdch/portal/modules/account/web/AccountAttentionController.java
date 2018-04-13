@@ -303,7 +303,7 @@ public class AccountAttentionController extends BaseController {
 	/**
 	 * 我的关注/粉丝 wf
 	 * @param accountAttention
-	 * @param request  type=0 我的关注 type=1 我的粉丝  默认为0
+	 * @param request  type=0 我的关注 type=1 我的粉丝
 	 * @param response
 	 */
 	@RequestMapping(value = {"${portalPath}/account/accountAttention/myAttentionOrBeAttention"})

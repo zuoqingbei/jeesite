@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsDailyListContentDao">
+    
+	<sql id="cmsDailyListContentColumns">
+		a.id AS "id",
+		a.daily_id AS "dailyId",
+		a.table_name AS "tableName",
+		a.cms_id AS "cmsId",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cmsDailyListContentJoins">
+		LEFT JOIN sys_area a2 ON a2.id = a.table_name
+		LEFT JOIN sys_area a5 ON a5.id = a.create_by
+	</sql>
+    
+	<select id="get" resultType="CmsDailyListContent">
+		SELECT 
+			<include refid="cmsDailyListContentColumns"/>
+		FROM cms_daily_list_content a
+		<include refid="cmsDailyListContentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsDailyListContent">
+		SELECT 
+			<include refid="cmsDailyListContentColumns"/>
+		FROM cms_daily_list_content a
+		<include refid="cmsDailyListContentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsDailyListContent">
+		SELECT 
+			<include refid="cmsDailyListContentColumns"/>
+		FROM cms_daily_list_content a
+		<include refid="cmsDailyListContentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_daily_list_content(
+			id,
+			daily_id,
+			table_name,
+			cms_id,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{dailyId},
+			#{tableName},
+			#{cmsId},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_daily_list_content SET
+			daily_id=#{dailyId},
+			table_name = #{tableName},
+			cms_id = #{cmsId},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_daily_list_content SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="getNewsList" resultType="CmsDailyListContent">
+		SELECT
+		<include refid="cmsDailyListContentColumns"/>,b.title
+		FROM cms_daily_list_content a
+		<include refid="cmsDailyListContentJoins"/>
+		LEFT JOIN cms_news b ON a.cms_id = b.id
+		AND b.del_flag = '0'
+		WHERE
+			a.del_flag = '0'
+		AND a.daily_id = #{dailyId}
+		AND a.table_name = 'cms_news'
+	</select>
+
+    <select id="getEductionList" resultType="CmsDailyListContent">
+        SELECT
+        <include refid="cmsDailyListContentColumns"/>,b.title
+        FROM cms_daily_list_content a
+        <include refid="cmsDailyListContentJoins"/>
+        LEFT JOIN cms_education b ON a.cms_id = b.id
+        AND b.del_flag = '0'
+        WHERE
+        a.del_flag = '0'
+        AND a.daily_id = #{dailyId}
+        AND a.table_name = 'cms_education'
+    </select>
+
+	<update id="delByDaily">
+		UPDATE  cms_daily_list_content set del_flag='1'   WHERE del_flag='0' and daily_id=#{dailyId}
+	</update>
+
+	
+</mapper>

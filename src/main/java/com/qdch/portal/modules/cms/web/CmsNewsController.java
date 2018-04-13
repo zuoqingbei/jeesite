@@ -3,12 +3,13 @@
  */
 package com.qdch.portal.modules.cms.web;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+import com.qdch.portal.common.utils.PostgreUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -325,6 +326,9 @@ public class CmsNewsController extends BaseController {
 		request.setAttribute("userId", request.getParameter("userId"));
 		return "portal/wechat/newsList";
 	}
+
+
+
 
 
 }

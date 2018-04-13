@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsContributeDao">
+    
+	<sql id="cmsContributeColumns">
+		a.id AS "id",
+		a.link AS "link",
+		a.data_type AS "dataType",
+		a.user_id AS "user.id",
+		a.title AS "title",
+		a.content_html AS "contentHtml",
+		a.content AS "content",
+		a.image AS "image",
+		a.keywords AS "keywords",
+		a.tags AS "tags",
+		a.description AS "description",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.status AS "status",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u4.name AS "user.name",
+		u4.photo AS "user.photo"
+	</sql>
+	
+	<sql id="cmsContributeJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CmsContribute">
+		SELECT 
+			<include refid="cmsContributeColumns"/>
+		FROM cms_contribute a
+		<include refid="cmsContributeJoins"/>
+		WHERE a.id = #{id} and a.del_flag='0'
+	</select>
+	
+	<select id="findList" resultType="CmsContribute">
+		SELECT 
+			<include refid="cmsContributeColumns"/>
+		FROM cms_contribute a
+		<include refid="cmsContributeJoins"/>
+		<where>
+			a.del_flag = '0' and a.status !='0'
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="link != null and link != ''">
+				AND a.link = #{link}
+			</if>
+			<if test="dataType != null and dataType != ''">
+				AND a.data_type = #{dataType}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="contentHtml != null and contentHtml != ''">
+				AND a.content_html = #{contentHtml}
+			</if>
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+			<if test="image != null and image != ''">
+				AND a.image = #{image}
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND a.keywords = #{keywords}
+			</if>
+			<if test="tags != null and tags != ''">
+				AND a.tags = #{tags}
+			</if>
+			<if test="description != null and description != ''">
+				AND a.description = #{description}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="updateBy != null and updateBy.id != null and updateBy.id != ''">
+				AND a.update_by = #{updateBy.id}
+			</if>
+			<if test="updateDate != null and updateDate != ''">
+				AND a.update_date = #{updateDate}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks = #{remarks}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsContribute">
+		SELECT 
+			<include refid="cmsContributeColumns"/>
+		FROM cms_contribute a
+		<include refid="cmsContributeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_contribute(
+			id,
+			link,
+			data_type,
+			user_id,
+			title,
+			content_html,
+			content,
+			image,
+			keywords,
+			tags,
+			description,
+			create_date,
+			update_by,
+			update_date,
+			status,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{link},
+			#{dataType},
+			#{user.id},
+			#{title},
+			#{contentHtml},
+			#{content},
+			#{image},
+			#{keywords},
+			#{tags},
+			#{description},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{status},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_contribute SET 	
+			link = #{link},
+			data_type = #{dataType},
+			user_id = #{user.id},
+			title = #{title},
+			content_html = #{contentHtml},
+			content = #{content},
+			image = #{image},
+			keywords = #{keywords},
+			tags = #{tags},
+			description = #{description},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			status = #{status},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_contribute SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<update id="changeState">
+		UPDATE cms_contribute SET 
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--用户投稿  如果status为空，则筛选除了草稿状态的投稿，否则根据状态来筛选投稿表-->
+	<select id="getUserContribute" resultType="CmsContribute">
+		SELECT
+		<include refid="cmsContributeColumns"/>
+		FROM cms_contribute a
+		<include refid="cmsContributeJoins"/>
+		WHERE a.user_id = #{user.id} and a.del_flag='0'
+		<if test="status != null and status != ''">
+			and a.status =#{status}
+		</if>
+		<!--<choose>-->
+			<!--<when test="status != null and status != ''">-->
+				<!--and a.status =#{status}-->
+			<!--</when>-->
+			<!--<otherwise>-->
+				<!--and a.status !='0'-->
+			<!--</otherwise>-->
+		<!--</choose>-->
+
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+</mapper>
