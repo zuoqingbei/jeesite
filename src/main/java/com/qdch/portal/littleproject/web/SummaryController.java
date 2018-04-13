@@ -4,6 +4,8 @@ package com.qdch.portal.littleproject.web;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.littleproject.dao.TradeModel;
+import com.qdch.portal.littleproject.entity.LittleProjectDto;
+import com.qdch.portal.littleproject.entity.LittleProjectEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,45 +18,6 @@ import java.util.*;
 public class SummaryController extends BaseController {
 
 
-    /**
-     * 交易额
-     * @param
-     * @param request
-     * @param response
-     * @return
-     */
-
-    @RequestMapping(value = {"${portalPath}/littleproject/tradeAmount"})
-    @ResponseBody
-    public String  tradeAmount(HttpServletRequest request, HttpServletResponse response){
-
-        Map<String,Object> results = new HashMap<String,Object>();
-
-        List<Object> lists = PostgreUtils.excuteQuery(tradeDay(),null);
-//        Set<String> times = new HashSet<String>();
-        List<String> times = new ArrayList<String>();
-        List<String> lianhe = new ArrayList<String>();
-        List<String> qingjin = new ArrayList<String>();
-        List<String> wenhua = new ArrayList<String>();
-        for(Object o:lists){
-            Map m = (Map) o;
-
-            if(m.get("jys").equals("0012")){
-                times.add(m.get("vday")+"");
-                lianhe.add(m.get("fvalue")+"");
-            }else  if(m.get("jys").equals("0014")){
-                qingjin.add(m.get("fvalue")+"");
-            }else  if(m.get("jys").equals("0015")){
-                wenhua.add(m.get("fvalue")+"");
-            }
-        }
-        results.put("times",times);
-        results.put("lianhe",lianhe);
-        results.put("qingjin",qingjin);
-        results.put("wenhua",wenhua);
-
-        return this.resultSuccessData(request,response, "", results);
-    }
 
     public String tradeDay(){
         String sql = "SELECT \n" +
@@ -159,5 +122,57 @@ public class SummaryController extends BaseController {
                 "\tHRJ.jysinfo";
         return sql;
 
+    }
+
+
+    @RequestMapping(value = {"${portalPath}/littleproject/tradeAmount"})
+    @ResponseBody
+    public String  tradeAmount(HttpServletRequest request, HttpServletResponse response){
+
+        LittleProjectDto dto = new LittleProjectDto();
+
+//        Map<String,Object[]> timeMap = new HashMap<String, Object[]>();
+
+        List<Object> lists = PostgreUtils.excuteQuery(tradeDay(),null);
+        List<String> times = new ArrayList<String>();
+        List<String> lianhe = new ArrayList<String>();
+        List<String> qingjin = new ArrayList<String>();
+        List<String> wenhua = new ArrayList<String>();
+        List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
+        LittleProjectEntity entity ;
+
+        if(lists != null && lists.size()>0) {
+            for (Object o : lists) {
+                Map m = (Map) o;
+                if(m.get("jys").equals("0012")){
+                    times.add(m.get("vday")+"");
+                    lianhe.add(m.get("fvalue")+"");
+                }else  if(m.get("jys").equals("0014")){
+                    qingjin.add(m.get("fvalue")+"");
+                }else  if(m.get("jys").equals("0015")){
+                    wenhua.add(m.get("fvalue")+"");
+                }
+            }
+        }
+//        timeMap.put("times",times.toArray());
+        dto.setTimes(times.toArray());
+        entity = new LittleProjectEntity();
+        entity.setName("联合信用资产");
+        entity.setLists(lianhe);
+        res.add(entity);
+
+        entity = new LittleProjectEntity();
+
+        entity.setName("青金中心");
+        entity.setLists(qingjin);
+        res.add(entity);
+        entity = new LittleProjectEntity();
+        entity.setName("青岛文化产权");
+        entity.setLists(wenhua);
+
+        res.add(entity);
+        dto.setEntities(res);
+
+        return this.resultSuccessData(request,response, "", dto);
     }
 }
