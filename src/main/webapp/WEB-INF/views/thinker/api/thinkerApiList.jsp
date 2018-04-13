@@ -28,13 +28,13 @@
 			<li><label>名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>分类：</label>
+			<li><label>一级分类：</label>
 				<form:input path="category1" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>category2：</label>
+			<li><label>二级分类：</label>
 				<form:input path="category2" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>category3：</label>
+			<li><label>三级分类：</label>
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -46,21 +46,24 @@
 		<thead>
 			<tr>
 				<th>名称</th>
-				<th>是否支持https  0-不支持 1-支持</th>
+				<th>支持https</th>
 				<th>描述</th>
 				<th>数据ID</th>
 				<th>应用数</th>
-				<th>接口状态 0-正常 1-故障</th>
-				<th>分类</th>
-				<th>category2</th>
-				<th>category3</th>
+				<th>接口状态</th>
+				<th>一级分类</th>
+				<th>二级分类</th>
+				<th>三级分类</th>
 				<th>标签</th>
 				<th>接口地址</th>
+				<th>浏览量</th>
+				<th>点赞量</th>
 				<th>请求类型</th>
-				<th>数据类型 json xml其实可以支持多种</th>
+				<th>分享数</th>
+				<th>数据类型 json/xml其实可以支持多种</th>
 				<th>样例地址</th>
-				<th>json返回样例 html格式</th>
-				<th>xml返回样例 html格式</th>
+				<th>json返回样例</th>
+				<th>xml返回样例</th>
 				<th>创建人</th>
 				<th>创建时间</th>
 				<th>更新时间</th>
@@ -105,7 +108,16 @@
 					${thinkerApi.url}
 				</td>
 				<td>
+					${thinkerApi.viewNum}
+				</td>
+				<td>
+					${thinkerApi.zanNum}
+				</td>
+				<td>
 					${thinkerApi.requestType}
+				</td>
+				<td>
+					${thinkerApi.shareNum}
 				</td>
 				<td>
 					${thinkerApi.dataType}

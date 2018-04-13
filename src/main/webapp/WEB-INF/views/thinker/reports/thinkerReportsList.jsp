@@ -28,13 +28,13 @@
 			<li><label>名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>category1：</label>
+			<li><label>一级分类：</label>
 				<form:input path="category1" htmlEscape="false" maxlength="400" class="input-medium"/>
 			</li>
-			<li><label>category2：</label>
+			<li><label>二级分类：</label>
 				<form:input path="category2" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>category3：</label>
+			<li><label>三级分类：</label>
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li><label>维度：</label>
@@ -52,17 +52,21 @@
 		<thead>
 			<tr>
 				<th>显示系统</th>
-				<th>显示系统连接地址</th>
-				<th>打开类型 _balnk _target</th>
+				<th>系统连接地址</th>
+				<th>打开类型</th>
 				<th>名称</th>
-				<th>报表类型 字典表</th>
+				<th>报表类型</th>
 				<th>报表路径</th>
 				<th>报表地址</th>
-				<th>category1</th>
-				<th>category2</th>
-				<th>category3</th>
+				<th>使用部门</th>
+				<th>一级分类</th>
+				<th>二级分类</th>
+				<th>三级分类</th>
 				<th>维度</th>
 				<th>标签</th>
+				<th>浏览量</th>
+				<th>点赞量</th>
+				<th>分享数</th>
 				<th>更新时间</th>
 				<th>备注</th>
 				<shiro:hasPermission name="reports:thinkerReports:edit"><th>操作</th></shiro:hasPermission>
@@ -93,6 +97,9 @@
 					${thinkerReports.url}
 				</td>
 				<td>
+					${thinkerReports.useDept}
+				</td>
+				<td>
 					${thinkerReports.category1}
 				</td>
 				<td>
@@ -106,6 +113,15 @@
 				</td>
 				<td>
 					${thinkerReports.tags}
+				</td>
+				<td>
+					${thinkerReports.viewNum}
+				</td>
+				<td>
+					${thinkerReports.zanNum}
+				</td>
+				<td>
+					${thinkerReports.shareNum}
 				</td>
 				<td>
 					<fmt:formatDate value="${thinkerReports.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

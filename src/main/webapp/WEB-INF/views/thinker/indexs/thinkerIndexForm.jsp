@@ -98,22 +98,19 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">category1：</label>
+			<label class="control-label">一级分类：</label>
 			<div class="controls">
-				<form:select path="category1" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				<form:input path="category1" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">category2：</label>
+			<label class="control-label">二级分类：</label>
 			<div class="controls">
 				<form:input path="category2" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">category3：</label>
+			<label class="control-label">三级分类：</label>
 			<div class="controls">
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
@@ -122,6 +119,24 @@
 			<label class="control-label">标签：</label>
 			<div class="controls">
 				<form:input path="tags" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">浏览量：</label>
+			<div class="controls">
+				<form:input path="viewNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">点赞量：</label>
+			<div class="controls">
+				<form:input path="zanNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">分享数：</label>
+			<div class="controls">
+				<form:input path="shareNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
 			</div>
 		</div>
 		<div class="control-group">

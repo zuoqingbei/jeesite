@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.thinker.search.dao.ThinkerHotSearchDao">
+    
+	<sql id="thinkerHotSearchColumns">
+		a.id AS "id",
+		a.keyword AS "keyword",
+		a.nums AS "nums",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="thinkerHotSearchJoins">
+	</sql>
+    
+	<select id="get" resultType="ThinkerHotSearch">
+		SELECT 
+			<include refid="thinkerHotSearchColumns"/>
+		FROM 1169_thinker_hot_search a
+		<include refid="thinkerHotSearchJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ThinkerHotSearch">
+		SELECT 
+			<include refid="thinkerHotSearchColumns"/>
+		FROM 1169_thinker_hot_search a
+		<include refid="thinkerHotSearchJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="keyword != null and keyword != ''">
+				AND a.keyword LIKE 
+					<if test="dbName == 'oracle'">'%'||#{keyword}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{keyword}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{keyword},'%')</if>
+			</if>
+			<if test="nums != null and nums != ''">
+				AND a.nums &gt;= #{nums}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ThinkerHotSearch">
+		SELECT 
+			<include refid="thinkerHotSearchColumns"/>
+		FROM 1169_thinker_hot_search a
+		<include refid="thinkerHotSearchJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO 1169_thinker_hot_search(
+			id,
+			keyword,
+			nums,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{keyword},
+			#{nums},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE 1169_thinker_hot_search SET 	
+			keyword = #{keyword},
+			nums = #{nums},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE 1169_thinker_hot_search SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

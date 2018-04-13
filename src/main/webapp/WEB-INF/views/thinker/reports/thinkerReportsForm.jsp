@@ -41,14 +41,14 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">显示系统连接地址：</label>
+			<label class="control-label">系统连接地址：</label>
 			<div class="controls">
 				<form:input path="link" htmlEscape="false" maxlength="400" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">打开类型 _balnk _target：</label>
+			<label class="control-label">打开类型：</label>
 			<div class="controls">
 				<form:input path="openType" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
@@ -61,7 +61,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">报表类型 字典表：</label>
+			<label class="control-label">报表类型：</label>
 			<div class="controls">
 				<form:input path="types" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
@@ -80,19 +80,25 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">category1：</label>
+			<label class="control-label">使用部门：</label>
+			<div class="controls">
+				<form:input path="useDept" htmlEscape="false" maxlength="400" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">一级分类：</label>
 			<div class="controls">
 				<form:input path="category1" htmlEscape="false" maxlength="400" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">category2：</label>
+			<label class="control-label">二级分类：</label>
 			<div class="controls">
 				<form:input path="category2" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">category3：</label>
+			<label class="control-label">三级分类：</label>
 			<div class="controls">
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
@@ -107,6 +113,24 @@
 			<label class="control-label">标签：</label>
 			<div class="controls">
 				<form:input path="tags" htmlEscape="false" maxlength="400" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">浏览量：</label>
+			<div class="controls">
+				<form:input path="viewNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">点赞量：</label>
+			<div class="controls">
+				<form:input path="zanNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">分享数：</label>
+			<div class="controls">
+				<form:input path="shareNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
 			</div>
 		</div>
 		<div class="control-group">

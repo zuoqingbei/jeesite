@@ -19,8 +19,11 @@
 		a.category3 AS "category3",
 		a.tags AS "tags",
 		a.create_by AS "createBy.id",
+		a.view_num AS "viewNum",
 		a.create_date AS "createDate",
+		a.zan_num AS "zanNum",
 		a.update_by AS "updateBy.id",
+		a.share_num AS "shareNum",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag"
@@ -127,8 +130,11 @@
 			category3,
 			tags,
 			create_by,
+			view_num,
 			create_date,
+			zan_num,
 			update_by,
+			share_num,
 			update_date,
 			remarks,
 			del_flag
@@ -149,8 +155,11 @@
 			#{category3},
 			#{tags},
 			#{createBy.id},
+			#{viewNum},
 			#{createDate},
+			#{zanNum},
 			#{updateBy.id},
+			#{shareNum},
 			#{updateDate},
 			#{remarks},
 			#{delFlag}
@@ -173,7 +182,10 @@
 			category2 = #{category2},
 			category3 = #{category3},
 			tags = #{tags},
+			view_num = #{viewNum},
+			zan_num = #{zanNum},
 			update_by = #{updateBy.id},
+			share_num = #{shareNum},
 			update_date = #{updateDate},
 			remarks = #{remarks}
 		WHERE id = #{id}

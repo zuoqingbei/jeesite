@@ -11,6 +11,9 @@
 		a.category3 AS "category3",
 		a.tags AS "tags",
 		a.url AS "url",
+		a.view_num AS "viewNum",
+		a.zan_num AS "zanNum",
+		a.share_num AS "shareNum",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.remarks AS "remarks"

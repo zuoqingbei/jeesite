@@ -12,27 +12,30 @@ import com.qdch.portal.common.persistence.DataEntity;
 /**
  * api管理Entity
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 public class ThinkerApi extends DataEntity<ThinkerApi> {
 	
 	private static final long serialVersionUID = 1L;
 	private String name;		// 名称
-	private String https;		// 是否支持https  0-不支持 1-支持
+	private String https;		// 支持https
 	private String descs;		// 描述
 	private String dataId;		// 数据ID
-	private String appNum;		// 应用数
-	private String status;		// 接口状态 0-正常 1-故障
-	private String category1;		// 分类
-	private String category2;		// category2
-	private String category3;		// category3
+	private Integer appNum;		// 应用数
+	private String status;		// 接口状态
+	private String category1;		// 一级分类
+	private String category2;		// 二级分类
+	private String category3;		// 三级分类
 	private String tags;		// 标签
 	private String url;		// 接口地址
+	private Integer viewNum;		// 浏览量
+	private Integer zanNum;		// 点赞量
 	private String requestType;		// 请求类型
-	private String dataType;		// 数据类型 json xml其实可以支持多种
+	private Integer shareNum;		// 分享数
+	private String dataType;		// 数据类型 json/xml其实可以支持多种
 	private String demoUrl;		// 样例地址
-	private String jsonDemo;		// json返回样例 html格式
-	private String xmlDemo;		// xml返回样例 html格式
+	private String jsonDemo;		// json返回样例
+	private String xmlDemo;		// xml返回样例
 	private List<ThinkerApiErrorcode> thinkerApiErrorcodeList = Lists.newArrayList();		// 子表列表
 	private List<ThinkerApiParam> thinkerApiParamList = Lists.newArrayList();		// 子表列表
 	private List<ThinkerApiSuccess> thinkerApiSuccessList = Lists.newArrayList();		// 子表列表
@@ -54,7 +57,7 @@ public class ThinkerApi extends DataEntity<ThinkerApi> {
 		this.name = name;
 	}
 	
-	@Length(min=1, max=1, message="是否支持https  0-不支持 1-支持长度必须介于 1 和 1 之间")
+	@Length(min=1, max=1, message="支持https长度必须介于 1 和 1 之间")
 	public String getHttps() {
 		return https;
 	}
@@ -81,16 +84,15 @@ public class ThinkerApi extends DataEntity<ThinkerApi> {
 		this.dataId = dataId;
 	}
 	
-	@Length(min=0, max=10, message="应用数长度必须介于 0 和 10 之间")
-	public String getAppNum() {
+	public Integer getAppNum() {
 		return appNum;
 	}
 
-	public void setAppNum(String appNum) {
+	public void setAppNum(Integer appNum) {
 		this.appNum = appNum;
 	}
 	
-	@Length(min=1, max=1, message="接口状态 0-正常 1-故障长度必须介于 1 和 1 之间")
+	@Length(min=1, max=1, message="接口状态长度必须介于 1 和 1 之间")
 	public String getStatus() {
 		return status;
 	}
@@ -99,7 +101,7 @@ public class ThinkerApi extends DataEntity<ThinkerApi> {
 		this.status = status;
 	}
 	
-	@Length(min=0, max=64, message="分类长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="一级分类长度必须介于 0 和 64 之间")
 	public String getCategory1() {
 		return category1;
 	}
@@ -108,7 +110,7 @@ public class ThinkerApi extends DataEntity<ThinkerApi> {
 		this.category1 = category1;
 	}
 	
-	@Length(min=0, max=64, message="category2长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="二级分类长度必须介于 0 和 64 之间")
 	public String getCategory2() {
 		return category2;
 	}
@@ -117,7 +119,7 @@ public class ThinkerApi extends DataEntity<ThinkerApi> {
 		this.category2 = category2;
 	}
 	
-	@Length(min=0, max=64, message="category3长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="三级分类长度必须介于 0 和 64 之间")
 	public String getCategory3() {
 		return category3;
 	}
@@ -144,6 +146,22 @@ public class ThinkerApi extends DataEntity<ThinkerApi> {
 		this.url = url;
 	}
 	
+	public Integer getViewNum() {
+		return viewNum;
+	}
+
+	public void setViewNum(Integer viewNum) {
+		this.viewNum = viewNum;
+	}
+	
+	public Integer getZanNum() {
+		return zanNum;
+	}
+
+	public void setZanNum(Integer zanNum) {
+		this.zanNum = zanNum;
+	}
+	
 	@Length(min=0, max=20, message="请求类型长度必须介于 0 和 20 之间")
 	public String getRequestType() {
 		return requestType;
@@ -153,7 +171,15 @@ public class ThinkerApi extends DataEntity<ThinkerApi> {
 		this.requestType = requestType;
 	}
 	
-	@Length(min=0, max=20, message="数据类型 json xml其实可以支持多种长度必须介于 0 和 20 之间")
+	public Integer getShareNum() {
+		return shareNum;
+	}
+
+	public void setShareNum(Integer shareNum) {
+		this.shareNum = shareNum;
+	}
+	
+	@Length(min=0, max=20, message="数据类型 json/xml其实可以支持多种长度必须介于 0 和 20 之间")
 	public String getDataType() {
 		return dataType;
 	}

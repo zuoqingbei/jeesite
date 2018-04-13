@@ -10,7 +10,7 @@ import com.qdch.portal.thinker.indexs.entity.ThinkerIndex;
 /**
  * 指标管理DAO接口
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 @MyBatisDao
 public interface ThinkerIndexDao extends CrudDao<ThinkerIndex> {

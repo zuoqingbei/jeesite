@@ -1,18 +1,18 @@
 /**
  * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.qdch.portal.thinker.api.dao;
+package com.qdch.portal.thinker.search.dao;
 
 import com.qdch.portal.common.persistence.CrudDao;
 import com.qdch.portal.common.persistence.annotation.MyBatisDao;
-import com.qdch.portal.thinker.api.entity.ThinkerApiParam;
+import com.qdch.portal.thinker.search.entity.ThinkerHotSearch;
 
 /**
- * api管理DAO接口
+ * 热搜DAO接口
  * @author zuoqb
  * @version 2018-04-13
  */
 @MyBatisDao
-public interface ThinkerApiParamDao extends CrudDao<ThinkerApiParam> {
+public interface ThinkerHotSearchDao extends CrudDao<ThinkerHotSearch> {
 	
 }

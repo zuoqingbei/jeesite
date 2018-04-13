@@ -24,7 +24,7 @@ import com.qdch.portal.thinker.api.dao.ThinkerApiSuccessDao;
 /**
  * api管理Service
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 @Service
 @Transactional(readOnly = true)
@@ -56,61 +56,56 @@ public class ThinkerApiService extends CrudService<ThinkerApiDao, ThinkerApi> {
 	@Transactional(readOnly = false)
 	public void save(ThinkerApi thinkerApi) {
 		super.save(thinkerApi);
-		try {
-			for (ThinkerApiErrorcode thinkerApiErrorcode : thinkerApi.getThinkerApiErrorcodeList()){
-				if (thinkerApiErrorcode.getId() == null){
-					continue;
-				}
-				if (ThinkerApiErrorcode.DEL_FLAG_NORMAL.equals(thinkerApiErrorcode.getDelFlag())){
-					if (StringUtils.isBlank(thinkerApiErrorcode.getId())){
-						thinkerApiErrorcode.setApiId(thinkerApi.getId());
-						thinkerApiErrorcode.preInsert();
-						thinkerApiErrorcodeDao.insert(thinkerApiErrorcode);
-					}else{
-						thinkerApiErrorcode.preUpdate();
-						thinkerApiErrorcodeDao.update(thinkerApiErrorcode);
-					}
-				}else{
-					thinkerApiErrorcodeDao.delete(thinkerApiErrorcode);
-				}
+		for (ThinkerApiErrorcode thinkerApiErrorcode : thinkerApi.getThinkerApiErrorcodeList()){
+			if (thinkerApiErrorcode.getId() == null){
+				continue;
 			}
-			for (ThinkerApiParam thinkerApiParam : thinkerApi.getThinkerApiParamList()){
-				if (thinkerApiParam.getId() == null){
-					continue;
-				}
-				if (ThinkerApiParam.DEL_FLAG_NORMAL.equals(thinkerApiParam.getDelFlag())){
-					if (StringUtils.isBlank(thinkerApiParam.getId())){
-						thinkerApiParam.setApiId(thinkerApi);
-						thinkerApiParam.preInsert();
-						thinkerApiParamDao.insert(thinkerApiParam);
-					}else{
-						thinkerApiParam.preUpdate();
-						thinkerApiParamDao.update(thinkerApiParam);
-					}
+			if (ThinkerApiErrorcode.DEL_FLAG_NORMAL.equals(thinkerApiErrorcode.getDelFlag())){
+				if (StringUtils.isBlank(thinkerApiErrorcode.getId())){
+					thinkerApiErrorcode.setApiId(thinkerApi.getId());
+					thinkerApiErrorcode.preInsert();
+					thinkerApiErrorcodeDao.insert(thinkerApiErrorcode);
 				}else{
-					thinkerApiParamDao.delete(thinkerApiParam);
+					thinkerApiErrorcode.preUpdate();
+					thinkerApiErrorcodeDao.update(thinkerApiErrorcode);
 				}
+			}else{
+				thinkerApiErrorcodeDao.delete(thinkerApiErrorcode);
 			}
-			for (ThinkerApiSuccess thinkerApiSuccess : thinkerApi.getThinkerApiSuccessList()){
-				if (thinkerApiSuccess.getId() == null){
-					continue;
-				}
-				if (ThinkerApiSuccess.DEL_FLAG_NORMAL.equals(thinkerApiSuccess.getDelFlag())){
-					if (StringUtils.isBlank(thinkerApiSuccess.getId())){
-						thinkerApiSuccess.setApiId(thinkerApi.getId());
-						thinkerApiSuccess.preInsert();
-						thinkerApiSuccessDao.insert(thinkerApiSuccess);
-					}else{
-						thinkerApiSuccess.preUpdate();
-						thinkerApiSuccessDao.update(thinkerApiSuccess);
-					}
+		}
+		for (ThinkerApiParam thinkerApiParam : thinkerApi.getThinkerApiParamList()){
+			if (thinkerApiParam.getId() == null){
+				continue;
+			}
+			if (ThinkerApiParam.DEL_FLAG_NORMAL.equals(thinkerApiParam.getDelFlag())){
+				if (StringUtils.isBlank(thinkerApiParam.getId())){
+					thinkerApiParam.setApiId(thinkerApi);
+					thinkerApiParam.preInsert();
+					thinkerApiParamDao.insert(thinkerApiParam);
 				}else{
-					thinkerApiSuccessDao.delete(thinkerApiSuccess);
+					thinkerApiParam.preUpdate();
+					thinkerApiParamDao.update(thinkerApiParam);
 				}
+			}else{
+				thinkerApiParamDao.delete(thinkerApiParam);
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
+		}
+		for (ThinkerApiSuccess thinkerApiSuccess : thinkerApi.getThinkerApiSuccessList()){
+			if (thinkerApiSuccess.getId() == null){
+				continue;
+			}
+			if (ThinkerApiSuccess.DEL_FLAG_NORMAL.equals(thinkerApiSuccess.getDelFlag())){
+				if (StringUtils.isBlank(thinkerApiSuccess.getId())){
+					thinkerApiSuccess.setApiId(thinkerApi.getId());
+					thinkerApiSuccess.preInsert();
+					thinkerApiSuccessDao.insert(thinkerApiSuccess);
+				}else{
+					thinkerApiSuccess.preUpdate();
+					thinkerApiSuccessDao.update(thinkerApiSuccess);
+				}
+			}else{
+				thinkerApiSuccessDao.delete(thinkerApiSuccess);
+			}
 		}
 	}
 	

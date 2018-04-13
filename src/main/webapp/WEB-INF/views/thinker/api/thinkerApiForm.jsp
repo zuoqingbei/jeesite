@@ -72,7 +72,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">是否支持https  0-不支持 1-支持：</label>
+			<label class="control-label">支持https：</label>
 			<div class="controls">
 				<form:input path="https" htmlEscape="false" maxlength="1" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
@@ -94,30 +94,30 @@
 		<div class="control-group">
 			<label class="control-label">应用数：</label>
 			<div class="controls">
-				<form:input path="appNum" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+				<form:input path="appNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">接口状态 0-正常 1-故障：</label>
+			<label class="control-label">接口状态：</label>
 			<div class="controls">
 				<form:input path="status" htmlEscape="false" maxlength="1" class="input-xlarge required"/>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">分类：</label>
+			<label class="control-label">一级分类：</label>
 			<div class="controls">
 				<form:input path="category1" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">category2：</label>
+			<label class="control-label">二级分类：</label>
 			<div class="controls">
 				<form:input path="category2" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">category3：</label>
+			<label class="control-label">三级分类：</label>
 			<div class="controls">
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
@@ -136,13 +136,31 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">浏览量：</label>
+			<div class="controls">
+				<form:input path="viewNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">点赞量：</label>
+			<div class="controls">
+				<form:input path="zanNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">请求类型：</label>
 			<div class="controls">
 				<form:input path="requestType" htmlEscape="false" maxlength="20" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">数据类型 json xml其实可以支持多种：</label>
+			<label class="control-label">分享数：</label>
+			<div class="controls">
+				<form:input path="shareNum" htmlEscape="false" maxlength="10" class="input-xlarge  digits"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">数据类型 json/xml其实可以支持多种：</label>
 			<div class="controls">
 				<form:input path="dataType" htmlEscape="false" maxlength="20" class="input-xlarge "/>
 			</div>
@@ -155,13 +173,13 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">json返回样例 html格式：</label>
+			<label class="control-label">json返回样例：</label>
 			<div class="controls">
 				<form:input path="jsonDemo" htmlEscape="false" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">xml返回样例 html格式：</label>
+			<label class="control-label">xml返回样例：</label>
 			<div class="controls">
 				<form:input path="xmlDemo" htmlEscape="false" class="input-xlarge "/>
 			</div>

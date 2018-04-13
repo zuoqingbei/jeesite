@@ -31,16 +31,13 @@
 			<li><label>指标描述：</label>
 				<form:input path="descs" htmlEscape="false" maxlength="1000" class="input-medium"/>
 			</li>
-			<li><label>category1：</label>
-				<form:select path="category1" class="input-medium">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+			<li><label>一级分类：</label>
+				<form:input path="category1" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>category2：</label>
+			<li><label>二级分类：</label>
 				<form:input path="category2" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>category3：</label>
+			<li><label>三级分类：</label>
 				<form:input path="category3" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li><label>标签：</label>
@@ -64,13 +61,16 @@
 				<th>显示表</th>
 				<th>使用字段</th>
 				<th>计算公式</th>
-				<th>category1</th>
-				<th>category2</th>
-				<th>category3</th>
+				<th>一级分类</th>
+				<th>二级分类</th>
+				<th>三级分类</th>
 				<th>标签</th>
 				<th>创建人</th>
+				<th>浏览量</th>
 				<th>创建时间</th>
+				<th>点赞量</th>
 				<th>更新人</th>
+				<th>分享数</th>
 				<th>更新时间</th>
 				<th>备注</th>
 				<shiro:hasPermission name="indexs:thinkerIndex:edit"><th>操作</th></shiro:hasPermission>
@@ -110,7 +110,7 @@
 					${thinkerIndex.expression}
 				</td>
 				<td>
-					${fns:getDictLabel(thinkerIndex.category1, '', '')}
+					${thinkerIndex.category1}
 				</td>
 				<td>
 					${thinkerIndex.category2}
@@ -125,10 +125,19 @@
 					${thinkerIndex.createBy.id}
 				</td>
 				<td>
+					${thinkerIndex.viewNum}
+				</td>
+				<td>
 					<fmt:formatDate value="${thinkerIndex.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
+					${thinkerIndex.zanNum}
+				</td>
+				<td>
 					${thinkerIndex.updateBy.id}
+				</td>
+				<td>
+					${thinkerIndex.shareNum}
 				</td>
 				<td>
 					<fmt:formatDate value="${thinkerIndex.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

@@ -10,7 +10,7 @@ import com.qdch.portal.thinker.api.entity.ThinkerApi;
 /**
  * api管理DAO接口
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 @MyBatisDao
 public interface ThinkerApiDao extends CrudDao<ThinkerApi> {

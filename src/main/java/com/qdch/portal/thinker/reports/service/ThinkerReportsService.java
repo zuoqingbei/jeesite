@@ -16,7 +16,7 @@ import com.qdch.portal.thinker.reports.dao.ThinkerReportsDao;
 /**
  * 报表管理Service
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 @Service
 @Transactional(readOnly = true)

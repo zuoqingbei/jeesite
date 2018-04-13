@@ -4,6 +4,7 @@
 package com.qdch.portal.thinker.view.entity;
 
 import org.hibernate.validator.constraints.Length;
+
 import java.util.Date;
 
 import com.qdch.portal.common.persistence.DataEntity;
@@ -25,7 +26,9 @@ public class ViewThinker extends DataEntity<ViewThinker> {
 	private String url;		// 接口地址
 	private Date beginCreateDate;		// 开始 创建时间
 	private Date endCreateDate;		// 结束 创建时间
-	
+	private Integer viewNum;		// 浏览量
+	private Integer zanNum;		// 点赞量
+	private Integer shareNum;		// 分享数
 	public ViewThinker() {
 		super();
 	}
@@ -111,6 +114,30 @@ public class ViewThinker extends DataEntity<ViewThinker> {
 
 	public void setEndCreateDate(Date endCreateDate) {
 		this.endCreateDate = endCreateDate;
+	}
+
+	public Integer getViewNum() {
+		return viewNum;
+	}
+
+	public void setViewNum(Integer viewNum) {
+		this.viewNum = viewNum;
+	}
+
+	public Integer getZanNum() {
+		return zanNum;
+	}
+
+	public void setZanNum(Integer zanNum) {
+		this.zanNum = zanNum;
+	}
+
+	public Integer getShareNum() {
+		return shareNum;
+	}
+
+	public void setShareNum(Integer shareNum) {
+		this.shareNum = shareNum;
 	}
 		
 }

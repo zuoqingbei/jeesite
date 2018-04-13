@@ -10,7 +10,7 @@ import com.qdch.portal.thinker.reports.entity.ThinkerReports;
 /**
  * 报表管理DAO接口
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 @MyBatisDao
 public interface ThinkerReportsDao extends CrudDao<ThinkerReports> {

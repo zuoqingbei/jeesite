@@ -25,7 +25,7 @@ import com.qdch.portal.thinker.indexs.service.ThinkerIndexService;
 /**
  * 指标管理Controller
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 @Controller
 public class ThinkerIndexController extends BaseController {

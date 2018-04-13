@@ -16,7 +16,7 @@ import com.qdch.portal.thinker.indexs.dao.ThinkerIndexDao;
 /**
  * 指标管理Service
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 @Service
 @Transactional(readOnly = true)

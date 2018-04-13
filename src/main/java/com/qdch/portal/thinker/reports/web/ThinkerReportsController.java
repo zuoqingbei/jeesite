@@ -25,7 +25,7 @@ import com.qdch.portal.thinker.reports.service.ThinkerReportsService;
 /**
  * 报表管理Controller
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 @Controller
 public class ThinkerReportsController extends BaseController {

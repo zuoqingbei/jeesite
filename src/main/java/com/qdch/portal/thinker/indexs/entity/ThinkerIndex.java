@@ -10,7 +10,7 @@ import com.qdch.portal.common.persistence.DataEntity;
 /**
  * 指标管理Entity
  * @author zuoqb
- * @version 2018-04-12
+ * @version 2018-04-13
  */
 public class ThinkerIndex extends DataEntity<ThinkerIndex> {
 	
@@ -25,10 +25,13 @@ public class ThinkerIndex extends DataEntity<ThinkerIndex> {
 	private String showTable;		// 显示表
 	private String useFiled;		// 使用字段
 	private String expression;		// 计算公式
-	private String category1;		// category1
-	private String category2;		// category2
-	private String category3;		// category3
+	private String category1;		// 一级分类
+	private String category2;		// 二级分类
+	private String category3;		// 三级分类
 	private String tags;		// 标签
+	private Integer viewNum;		// 浏览量
+	private Integer zanNum;		// 点赞量
+	private Integer shareNum;		// 分享数
 	
 	public ThinkerIndex() {
 		super();
@@ -128,7 +131,7 @@ public class ThinkerIndex extends DataEntity<ThinkerIndex> {
 		this.expression = expression;
 	}
 	
-	@Length(min=0, max=64, message="category1长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="一级分类长度必须介于 0 和 64 之间")
 	public String getCategory1() {
 		return category1;
 	}
@@ -137,7 +140,7 @@ public class ThinkerIndex extends DataEntity<ThinkerIndex> {
 		this.category1 = category1;
 	}
 	
-	@Length(min=0, max=64, message="category2长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="二级分类长度必须介于 0 和 64 之间")
 	public String getCategory2() {
 		return category2;
 	}
@@ -146,7 +149,7 @@ public class ThinkerIndex extends DataEntity<ThinkerIndex> {
 		this.category2 = category2;
 	}
 	
-	@Length(min=0, max=64, message="category3长度必须介于 0 和 64 之间")
+	@Length(min=0, max=64, message="三级分类长度必须介于 0 和 64 之间")
 	public String getCategory3() {
 		return category3;
 	}
@@ -162,6 +165,30 @@ public class ThinkerIndex extends DataEntity<ThinkerIndex> {
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+	
+	public Integer getViewNum() {
+		return viewNum;
+	}
+
+	public void setViewNum(Integer viewNum) {
+		this.viewNum = viewNum;
+	}
+	
+	public Integer getZanNum() {
+		return zanNum;
+	}
+
+	public void setZanNum(Integer zanNum) {
+		this.zanNum = zanNum;
+	}
+	
+	public Integer getShareNum() {
+		return shareNum;
+	}
+
+	public void setShareNum(Integer shareNum) {
+		this.shareNum = shareNum;
 	}
 	
 }

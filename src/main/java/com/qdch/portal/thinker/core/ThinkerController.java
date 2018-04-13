@@ -27,6 +27,8 @@ import com.qdch.portal.thinker.indexs.entity.ThinkerIndex;
 import com.qdch.portal.thinker.indexs.service.ThinkerIndexService;
 import com.qdch.portal.thinker.reports.entity.ThinkerReports;
 import com.qdch.portal.thinker.reports.service.ThinkerReportsService;
+import com.qdch.portal.thinker.search.entity.ThinkerHotSearch;
+import com.qdch.portal.thinker.search.service.ThinkerHotSearchService;
 import com.qdch.portal.thinker.view.entity.ViewThinker;
 import com.qdch.portal.thinker.view.service.ViewThinkerService;
 
@@ -46,6 +48,8 @@ public class ThinkerController extends BaseController {
 	private ThinkerApiService thinkerApiService;//API
 	@Autowired
 	private ThinkerReportsService thinkerReportsService;//报表
+	@Autowired
+	private ThinkerHotSearchService thinkerHotSearchService;//热搜
 	
 	@Autowired
 	private ViewThinkerService viewThinkerService;//视图
@@ -101,8 +105,24 @@ public class ThinkerController extends BaseController {
 		}
 		return mapList;
 	}
-	
-	
+	/**
+	 * @todo   热搜
+	 * @time   2018年4月13日 下午9:51:12
+	 * @author zuoqb
+	 * @return_type   Page<ViewThinker>
+	 */
+	@RequestMapping(value = {"${portalPath}/hot/search/list"})
+	@ResponseBody
+	public Page<ThinkerHotSearch> hotSearch(ThinkerHotSearch thinkerHotSearch, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<ThinkerHotSearch> page = thinkerHotSearchService.findPage(new Page<ThinkerHotSearch>(request, response), thinkerHotSearch); 
+		return page;
+	}
+	/**
+	 * @todo   报表 API 指标列表
+	 * @time   2018年4月13日 下午9:52:13
+	 * @author zuoqb
+	 * @return_type   Page<ViewThinker>
+	 */
 	@RequestMapping(value = {"${portalPath}/view/viewThinker/list"})
 	@ResponseBody
 	public Page<ViewThinker> list(ViewThinker viewThinker, HttpServletRequest request, HttpServletResponse response, Model model) {
