@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsNewsDataDao">
+    
+	<sql id="cmsNewsDataColumns">
+		a.id AS "id",
+		a.news_id AS "newsId",
+		a.content AS "content",
+		a.content_html AS "contentHtml",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cmsNewsDataJoins">
+	</sql>
+    
+	<select id="get" resultType="CmsNewsData">
+		SELECT 
+			<include refid="cmsNewsDataColumns"/>
+		FROM cms_news_data a
+		<include refid="cmsNewsDataJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsNewsData">
+		SELECT 
+			<!-- <include refid="cmsNewsDataColumns"/> -->a.id ,a.news_id,a.content,a.content_html,a.del_flag,b.id  titleid, b.title
+				from cms_news b LEFT JOIN  (select * from cms_news_data where del_flag !='1') a on a.news_id=b.id
+		
+		<include refid="cmsNewsDataJoins"/>
+		<where>
+			b.del_flag='0' <!-- and a.del_flag = #{DEL_FLAG_NORMAL} -->
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="newsId != null and newsId != ''">
+				AND a.news_id = #{newsId}
+			</if>
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+			<if test="contentHtml != null and contentHtml != ''">
+				AND a.content_html = #{contentHtml}
+			</if>
+			<!-- <if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if> -->
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsNewsData">
+		SELECT 
+			<include refid="cmsNewsDataColumns"/>
+		FROM cms_news_data a
+		<include refid="cmsNewsDataJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_news_data(
+			id,
+			news_id,
+			content,
+			content_html,
+			del_flag
+		) VALUES (
+			#{id},
+			#{newsId},
+			#{content},
+			#{contentHtml},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_news_data SET 	
+			news_id = #{newsId},
+			content = #{content},
+			content_html = #{contentHtml},
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_news_data SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="getByNewId" resultType="CmsNewsData">
+		select * from cms_news_data a where a.del_flag='0' and a.news_id=#{newsId} limit 1
+	</select>
+	
+</mapper>
