@@ -13,7 +13,7 @@ result
     var url = document.location.toString();
     var arrUrl = url.split("?");
     var para = arrUrl[1].split("=")[1];
-    alert(para);
+    //alert(para);
     console.log(para);
 
 </script>

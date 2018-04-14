@@ -87,6 +87,10 @@
 			$('.lable span').click(function () {
 				$('.lable span').css({'border':'1px solid #8e8e8e','color':'#8e8e8e'})
 				$(this).css({'border':'1px solid #2774b6','color':'#2774b6'})
+				var value = $(this)[0].innerHTML;
+				console.log(value);
+				window.location.href = 'http://'+location.hostname+':'+location.port+'/portal/thinker/search?content='+value;
+				//alert(value);
 			})
 			
     })
