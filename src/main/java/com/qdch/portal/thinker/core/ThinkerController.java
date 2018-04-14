@@ -82,6 +82,54 @@ public class ThinkerController extends BaseController {
 	}
 	
 	/**
+	 * 结果查询页面
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = {"${portalPath}/thinker/search"})
+	public String search(Model model,HttpServletRequest request, HttpServletResponse response){
+		return render(request, "thinker/search");
+	}
+	
+	/**
+	 * api详细页面
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = {"${portalPath}/thinker/api"})
+	public String apiResult(Model model,HttpServletRequest request, HttpServletResponse response){
+		return render(request, "thinker/api");
+	}
+	
+	/**
+	 * 指标详细页面
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = {"${portalPath}/thinker/index"})
+	public String indexResult(Model model,HttpServletRequest request, HttpServletResponse response){
+		return render(request, "thinker/index");
+	}
+	
+	/**
+	 * 报表详细页面
+	 * @param model
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = {"${portalPath}/thinker/reports"})
+	public String reportsResult(Model model,HttpServletRequest request, HttpServletResponse response){
+		return render(request, "thinker/reports");
+	}
+	
+	/**
 	 * 
 	 * @todo   分类
 	 * @time   2018年4月12日 下午9:46:32
