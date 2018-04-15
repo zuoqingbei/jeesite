@@ -5,21 +5,48 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/bootstrap-4.0.0.css">
 		<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/reset.css" />
 		<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.css" />
 		<link rel="stylesheet" type="text/css" href="${ctxStatic}/${portalPage}/thinker/css/detailApi.css"/>
-		
+		<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/style.css">
+		<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/report.css">
 	</head>
 	<body>
+			<header class="navbar navbar-expand flex-column flex-md-row bd-navbar">
+					<a class="navbar-brand mr-0 mr-md-2" href="#">
+						<div class="logoBg"></div>
+						<h1 class="icon-pre">1169数据立方体</h1>
+					</a>
+					<ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+						<li class="nav-item">
+							<a class="nav-link p-2" href="#" rel="noopener" aria-label="reg">注册</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link p-2" href="#" rel="noopener" aria-label="login">登录</a>
+						</li>
+					</ul>
+				</header>
 		<div id="bottom">
 			<div class="bottomCon con">
 				<div class="crumb">
-					<span>当前位置：搜索页面 ><span class="bl">竞争力形式检测API</span></span>
+					<span>当前位置：搜索页面 ><span class="bl">${entity.name}</span></span>
 				</div>
 				
 				<div class="apiInfo">
 					<div class="topTitle">
-						<h2>竞争力形式检测API</h2>
+						<div class="header">
+							<h2>${entity.name}</h2>
+							<c:choose>
+								<c:when test="${item.https==是}">
+									<span class="support">支持HTTPS</span>
+								</c:when>
+								<c:otherwise>
+									<span class="support">不支持HTTPS</span>
+								</c:otherwise>
+							</c:choose>
+						</div>
+						
 						<div class="interact">
 							<span>
 								<i class="iconfont icon-shoucang"></i>
@@ -35,20 +62,20 @@
 							</span>
 						</div>
 					</div>
-					<div class="info">根据全国竞争力形式，做出精细化的服务分析</div>
+					<div class="info">${entity.descs}</div>
 					
 					<div class="zb_box">
 						<li>
 							<span>数据ID：</span>
-							<span>20</span>
+							<span>${entity.dataId}</span>
 						</li>
 						<li>
 							<span>连接应用数：</span>
-							<span>20</span>
+							<span>${entity.appNum}</span>
 						</li>
 						<li>
 							<span>接口状态：</span>
-							<span>正常</span>
+							<span>${entity.status}</span>
 						</li>
 					</div>
 				</div>
@@ -70,10 +97,12 @@
 								<td>错误码</td>
 								<td>说明</td>
 							</tr>
-							<tr>
-								<td>是</td>
-								<td>是否存在问题</td>
-							</tr>
+							<c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
+								<tr>
+									<c:if test="${item.types==2}"><td>${item.errorCode}</td></c:if>
+									<c:if test="${item.types==2}"><td>${item.descs}</td></c:if>
+								</tr>
+							</c:forEach>
 						</table>
 						<div class="part-title">系统级错误码参照</div>
 						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
@@ -82,24 +111,28 @@
 								<td>说明</td>
 								<td>旧版本</td>
 							</tr>
-							<tr>
-								<td>lkjfljl</td>
-								<td>string</td>
-								<td>是否存在问题</td>
-							</tr>
+							<c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
+								<tr>
+									<c:if test="${item.types==0}"><td>${item.errorCode}</td></c:if>
+									<c:if test="${item.types==0}"><td>${item.descs}</td></c:if>
+									<c:if test="${item.types==0}"><td>${item.descs}</td></c:if>
+								</tr>
+							</c:forEach>
 						</table>
 						<div class="part-title">错误码格式说明</div>
 						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
 							<tr class="th">
-								<td>2</td>
-								<td>002</td>
-								<td>01</td>
+								<td>错误码</td>
+								<td>说明</td>
+								<td>旧版本</td>
 							</tr>
-							<tr>
-								<td>lkjfljl</td>
-								<td>string</td>
-								<td>是否存在问题</td>
-							</tr>
+							<c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
+								<tr>
+									<c:if test="${item.types==1}"><td>${item.errorCode}</td></c:if>
+									<c:if test="${item.types==1}"><td>${item.descs}</td></c:if>
+									<c:if test="${item.types==1}"><td>${item.descs}</td></c:if>
+								</tr>
+							</c:forEach>
 						</table>
 					</div>
 					
@@ -107,12 +140,14 @@
 						<div class="part-title ts">联系我们</div>
 						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
 							<tr class="th">
-								<td>内容</td>
-								<td>详细</td>
+								<td>姓名</td>
+								<td>邮箱</td>
+								<td>联系电话</td>
 							</tr>
 							<tr>
-								<td>是</td>
-								<td>是否存在问题</td>
+								<td>张三</td>
+								<td>1169@haier.com</td>
+								<td>1334455667788</td>
 							</tr>
 						</table>
 						
@@ -131,10 +166,10 @@
 								<td>时间</td>
 							</tr>
 							<tr>
-								<td>是</td>
-								<td>是否存在问题</td>
-								<td>是否存在问题</td>
-								<td>是否存在问题</td>
+								<td>JAVA</td>
+								<td>Dubbo示例代码</td>
+								<td>1169</td>
+								<td>2018年4月15日</td>
 							</tr>
 						</table>
 						<div class="part-title">常见问题</div>
@@ -144,8 +179,8 @@
 								<td>详细</td>
 							</tr>
 							<tr>
-								<td>lkjfljl</td>
-								<td>是否存在问题</td>
+								<td>注册中心</td>
+								<td>注册中心的配置问题</td>
 							</tr>
 						</table>
 						
@@ -153,11 +188,11 @@
 					
 					
 					<div class="docCon">
-						<p>接口地址：<span>http://v.juhe.cn/xiangji_weather/real_time_weather.php</span></p>
-						<p>返回格式：<span>json</span></p>
-						<p>请求方式：<span>get</span></p>
-						<p>请求示例：<span>http://v.juhe.cn/xiangji_weather/real_time_weather.php?areaid=101010100&key=YOURKEY</span></p>
-						<p>接口备注：<span>根据竞争力形式分析数据</span></p>
+						<p>接口地址：<span>${entity.url}</span></p>
+						<p>返回格式：<span>${entity.dataType}</span></p>
+						<p>请求方式：<span>${entity.requestType}</span></p>
+						<p>请求示例：<span>${entity.demoUrl}</span></p>
+						<p>接口备注：<span>${entity.remarks}</span></p>
 						<div class="blueBtn">API测试工具</div>
 						
 						<div class="part-title">请求参数说明</div>
@@ -168,12 +203,15 @@
 								<td>必填</td>
 								<td>说明</td>
 							</tr>
-							<tr>
-								<td>lkjfljl</td>
-								<td>string</td>
-								<td>是</td>
-								<td>是否存在问题</td>
-							</tr>
+							<c:forEach items="${entity.thinkerApiParamList}" var="item">
+								<tr>
+									<td>${item.name}</td>
+									<td>${item.dataType}</td>
+									<c:if test="${item.required==0}"><td>非必填</td></c:if>
+									<c:if test="${item.required==1}"><td>必填</td></c:if>
+									<td>${item.remarks}</td>
+								</tr>
+							</c:forEach>
 						</table>
 						<div class="part-title">返回参数说明</div>
 						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
@@ -182,11 +220,13 @@
 								<td>类型</td>
 								<td>说明</td>
 							</tr>
-							<tr>
-								<td>lkjfljl</td>
-								<td>string</td>
-								<td>是否存在问题</td>
-							</tr>
+							<c:forEach items="${entity.thinkerApiSuccessList}" var="item">
+								<tr>
+									<td>${item.name}</td>
+									<td>${item.dataType}</td>
+									<td>${item.remarks}</td>
+								</tr>
+							</c:forEach>
 						</table>
 						<div class="part-title">JSON返回示例：</div>
 						<pre class="jsontxt">
@@ -213,5 +253,16 @@
 		
 		<script src="${ctxStatic}/${portalPage}/thinker/asserts/js/jquery-2.2.4.js" type="text/javascript" charset="utf-8"></script>
 		<script src="${ctxStatic}/${portalPage}/thinker/js/detailApi.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+				//console.log('${entity.id}');
+				console.log('${entity.thinkerApiParamList}');
+				$.post("/portal/api/detail", { id: '${entity.id}' }, function (data, status) {
+					console.log(data);
+					console.log("Data: " + data + "\nStatus: " + status);
+					$('.jsontxt').html(data.jsonDemo);
+					//$('.jsontxt').html('<h1>aaaaaa</h1>');
+				});
+
+		</script>
 	</body>
 </html>
