@@ -40,8 +40,8 @@
                </div>
                <div class="serch_head_content_right">
                    <div class="serch_head_input">
-                       <div class="serch_input"><input id="keyword" type="text" placeholder="请输入热搜词"></div>
-                       <div class="serch_button"><button onclick="search()">搜索</button></div>
+                       <div class="serch_input"><input id="keyword" type="text" placeholder="请输入热搜词" value="${keyWord}"></div>
+                       <div class="serch_button"><button id="searchBtn" onclick="search()">搜索</button></div>
                    <div class="serch_head_checkbox">
                        <span class="fl">热搜：</span>
                        <!--<label class="demo&#45;&#45;label"><input class="demo&#45;&#45;radio" type="checkbox" name="demo-checkbox1">
@@ -56,11 +56,11 @@
                            <span class="demo&#45;&#45;checkbox demo&#45;&#45;radioInput"></span>接口
                        </label>-->
                        <div class="hot_words fl">
-                           <ul>
+                          <!-- <ul>
                                <li class="active">指标</li>
                                <li>财务运营</li>
                                <li>接口</li>
-                           </ul>
+                           </ul>-->
                        </div>
                    </div>
                </div>
@@ -83,7 +83,7 @@
                     <ul class="menus_head">全部分类<i class="iconfont icon-plus-select-down"></i></ul>
                     <ul class="menus_box">
                     	 <c:forEach items="${category}" var="ca">
-                    	 	<li data="${ca.id }" pid="${ca.parent.id }">${ca.name }<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
+                    	 	<li onclick=changeCategory('${ca.name}','','') data="${ca.id }" pid="${ca.parent.id }">${ca.name }<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
 	                    </c:forEach>
                     </ul>
 
@@ -94,11 +94,11 @@
                     	<c:if test="${fn:length(first.children) gt 0}">
 		                    <ul class="menus_two">
 			                    	<c:forEach items="${first.children}" var="second">
-				                           <li><span class="fl">${second.name }</span>
+				                           <li ><span onclick=changeCategory('','${second.name}','') class="fl">${second.name }</span>
 				                           <%-- <c:if test="${fn:length(second.children) gt 0}"> --%>
 					                            <ul class="menus_three fl">
 					                            	<c:forEach items="${second.children}" var="third">
-						                                <li>${third.name }</li>
+						                                <li onclick=changeCategory('','','${third.name}')>${third.name }</li>
 					                            	</c:forEach>
 					                            </ul>
 		                    				<%-- </c:if> --%>
@@ -120,7 +120,7 @@
                         
                         <div id="content"></div>
                         
-                        <ul class="page" maxshowpageitem="5" pagelistcount="1"  id="page"></ul>
+                        <ul class="page" maxshowpageitem="5" pagelistcount="10"  id="page"></ul>
                     </div>
                 </div>
             </div>
@@ -133,6 +133,13 @@
 <script src="${ctxStatic}/${portalPage}/thinker/asserts/js/page.js"></script>
 <script src="${ctxStatic}/${portalPage}/thinker/js/search.js"></script>
 <script>
+	var category1;//一级分类
+	var category2;//二级分类
+	var category3;//三级分类
+	var tags;//标签
+	var pageNo=1;//当前页面
+	var pageSize=$(".page").attr("pagelistcount");//每页条数
+	var keyword;
     $(function () {
 
         $(".serch_head_checkbox .hot_words ul").on("click","li",function () {
@@ -147,9 +154,9 @@
                 $("#menus_two_box_"+$(this).attr("data")).css('display','block');
                $(this).find('i').css('color','white').parents('li').siblings('li').find('i').css('color','#333')
             }
-        }).on('mouseleave',function () {
+        })/**.on('mouseleave',function () {
                 $('.menus_two_box').css('display','none');
-        })
+        })**/
         $('.menus_two_box').on('mouseenter',function () {
             $(this).css('display','block')
         }).on('mouseleave',function () {
@@ -157,7 +164,12 @@
         });
         $('.box_right .news_more ul li i').on('click',function () {
             $(this).toggleClass('blue')
-        })
+        });
+		$('#keyword').bind('keyup', function(event) {
+					if (event.keyCode == "13") {
+						$('#searchBtn').click();
+					}
+				});
         //分页
         var GG = {
             "kk":function(mm){
@@ -167,14 +179,10 @@
 
        
 		loadData();
+		hotSearch();
     });
-	var category1;//一级分类
-	var category2;//二级分类
-	var category3;//三级分类
-	var tags;//标签
-	var pageNo=1;//当前页面
-	var pageSize=$(".page").attr("pagelistcount");//每页条数
-	var keyword;
+	
+	//页码切换
 	function changeData(mm){
 		//alert(mm)
 		if(mm!=pageNo){
@@ -182,8 +190,10 @@
 			loadData();
 		}
 	};
+	//加载列表数据
 	function loadData(){
 		keyword=$("#keyword").val();
+		$('.menus_two_box').css('display','none');
 		$.post("${portalPath}/view/viewThinker/list",{"category1":category1,"category2":category2,"category3":category3,
 		"tags":tags,"pageNo":pageNo,"pageSize":pageSize,"name":keyword},function(data){
 			console.log(data);
@@ -192,10 +202,20 @@
 			$("#page").initPage(data.count,data.pageNo,changeData);	
 		});
 	};
+	//搜索
 	function search(){
 		pageNo=1;
 		loadData();
 	};
+	//切换分类
+	function changeCategory(cate1,cate2,cate3){
+		category1=cate1;
+		category2=cate2;
+		category3=cate3;
+		pageNo=1;
+		loadData();
+	}
+	//拼接内容
 	function joinHtml(data){
 		var htmls='';
 		$.each(data,function(index,item){
@@ -220,16 +240,11 @@
 			htmls+='<li><span><i class="iconfont icon-dianzan"></i><span>'+(item.zanNum==undefined?0:item.zanNum)+'</span></span></li>';
 			htmls+='<li><span><i class="iconfont icon-fenxiang2"></i><span>'+(item.shareNum==undefined?0:item.shareNum)+'</span></span></li>';
 			htmls+='</ul></div></div></div>';
-			htmls+='';
-			htmls+='';
-			htmls+='';
-			htmls+='';
-			htmls+='';
 		});
 		$("#content").html(htmls);  
 			
 	};
-	
+	//跳转明细
 	function inetent(type,id){
 		var url="";
 		if(type==1){
@@ -240,6 +255,29 @@
 			url="${portalPath}/thinker/reports?id="+id;
 		};
 		window.open(url);
+	}
+	//热搜
+	function hotSearch(){
+		
+		$.post("${portalPath}/hot/search/list",{"pageNo":1,"pageSize":7},function(data){
+			var htmls='<ul>';
+			  
+			$.each(data.list,function(index,item){
+				htmls+='<li onclick="clickHot(this)">'+item.keyword+'</li>';
+			});
+			htmls+='</ul>';
+			$(".hot_words").html(htmls);
+		});
+	};
+	function clickHot(obj){
+		if($(obj).hasClass("active")){
+			$("#keyword").val('');
+		}else{
+			$("#keyword").val($(obj).html());
+		}
+		
+		$(obj).toggleClass("active").siblings().removeClass("active");
+		search();
 	}
 </script>
 </html>

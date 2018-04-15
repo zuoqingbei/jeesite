@@ -14,6 +14,7 @@
 <body>
   <div class="home-index">
 		<div class="wrapper">
+			
 			<div class="banner">
 				<div class="header">
 					<div class="left"><img src="${ctxStatic}/${portalPage}/thinker/images/lifang.png" alt="icon" width="32" height="32"><h5>1169数据立方体</h5></div>
@@ -25,11 +26,14 @@
 				<div class="title">
 					<img src="${ctxStatic}/${portalPage}/thinker/images/lifang.png" alt=""><h2>1169数据立方体</h2>
 				</div>
+				<form id="searchForm" action="${portalPath}/thinker/search" type="post">
 				<div class="search">
-					<input type="text" placeholder="请输入关键词...">
-					<button type="button" onclick="search()">搜索</button>
+					<input type="text" id="keyword" name="keyWord" placeholder="请输入关键词...">
+					<button type="button" id="searchBtn" onclick="search()">搜索</button>
 				</div>
+				</form>
 			</div>
+			
 			<div class="container-as">
 				<div class="hot-key">
 					<p class="markt"><i class="iconfont icon-remen1"></i><span>热搜</span></p>
@@ -91,13 +95,19 @@
 				console.log(value);
 				window.location.href = 'http://'+location.hostname+':'+location.port+'/portal/thinker/search?content='+value;
 				//alert(value);
-			})
+			});
+			$('#keyword').bind('keyup', function(event) {
+					if (event.keyCode == "13") {
+						$('#searchBtn').click();
+					}
+				});
 			
     })
 	function search() {
-		var content = $('.search input').val();
+		$("#searchForm").submit();
+		//var content = $('.search input').val();
 		//alert(m);
-		window.location.href = 'http://'+location.hostname+':'+location.port+'/portal/thinker/search?content='+content;
+		//window.location.href = '${portalPath}/thinker/search?keyWord='+content;
 	};
 
 </script>
