@@ -93,7 +93,8 @@
 				$(this).css({'border':'1px solid #2774b6','color':'#2774b6'})
 				var value = $(this)[0].innerHTML;
 				console.log(value);
-				window.location.href = 'http://'+location.hostname+':'+location.port+'/portal/thinker/search?content='+value;
+				$("#searchForm").submit();
+				//window.location.href = 'http://'+location.hostname+':'+location.port+'/portal/thinker/search?content='+value;
 				//alert(value);
 			});
 			$('#keyword').bind('keyup', function(event) {

@@ -27,9 +27,10 @@ body {
 	color: #2764b6;
 }
 .apiInfo {
-	height: 11em;
+	/* height: 11em; */
 	background: #fff;
 	overflow: hidden;
+	padding: 1rem 2rem 1rem 0;
 }
 
 .topTitle {
