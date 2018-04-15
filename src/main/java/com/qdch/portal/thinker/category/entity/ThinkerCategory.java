@@ -3,6 +3,7 @@
  */
 package com.qdch.portal.thinker.category.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -82,5 +83,21 @@ public class ThinkerCategory extends TreeEntity<ThinkerCategory> {
 	
 	public String getParentId() {
 		return parent != null && parent.getId() != null ? parent.getId() : "0";
+	}
+	
+	public static List<ThinkerCategory> getChildrenByPid(String pid,List<ThinkerCategory> list,boolean needNext){
+		List<ThinkerCategory> children=new ArrayList<ThinkerCategory>();
+		for(ThinkerCategory t:list){
+			if(pid.equals(t.getParentId())){
+				if(needNext){
+					List<ThinkerCategory> l=getChildrenByPid(t.getId(), list,false);
+					if(l!=null&&l.size()>0){
+						t.setChildren(l);
+					}
+				}
+				children.add(t);
+			}
+		}
+		return children;
 	}
 }

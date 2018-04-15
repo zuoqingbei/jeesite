@@ -1,6 +1,7 @@
 package com.qdch.portal.thinker.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +92,17 @@ public class ThinkerController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/thinker/search"})
 	public String search(Model model,HttpServletRequest request, HttpServletResponse response){
+		String keyWord=request.getParameter("keyWord");
+		List<ThinkerCategory> category=new ArrayList<ThinkerCategory>();
+		List<ThinkerCategory> list = thinkerCategoryService.findList(new ThinkerCategory());
+		for(ThinkerCategory t:list){
+			if("0".equals(t.getParentId())){
+				t.setChildren(ThinkerCategory.getChildrenByPid(t.getId(), list,true));
+				category.add(t);
+			}
+		}
+		model.addAttribute("keyWord", keyWord);
+		model.addAttribute("category", category);
 		return render(request, "thinker/search");
 	}
 	
@@ -115,7 +127,17 @@ public class ThinkerController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/thinker/indexDetail"})
 	public String indexResult(Model model,HttpServletRequest request, HttpServletResponse response){
-		return render(request, "thinker/index");
+		String id=request.getParameter("id");
+		ThinkerIndex entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = thinkerIndexService.get(id);
+		}
+		if (entity == null){
+			entity = new ThinkerIndex();
+		}
+		model.addAttribute("id", id);
+		model.addAttribute("entity", entity);
+		return render(request, "thinker/indexDetail");
 	}
 	
 	/**
@@ -127,6 +149,24 @@ public class ThinkerController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/thinker/reports"})
 	public String reportsResult(Model model,HttpServletRequest request, HttpServletResponse response){
+		String id=request.getParameter("id");
+		ThinkerReports entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = thinkerReportsService.get(id);
+			if(StringUtils.isNotBlank(entity.getUseDept())){
+				entity.setDeptStr(Arrays.asList(entity.getUseDept().split(",")));
+			}
+			if(StringUtils.isNotBlank(entity.getDimension())){
+				entity.setDimensionStr(Arrays.asList(entity.getDimension().split(",")));
+			}
+			if(StringUtils.isNotBlank(entity.getTags())){
+				entity.setTagsStr(Arrays.asList(entity.getTags().split(",")));
+			}
+		}
+		if (entity == null){
+			entity = new ThinkerReports();
+		}
+		model.addAttribute("entity", entity);
 		return render(request, "thinker/reports");
 	}
 	
@@ -139,18 +179,19 @@ public class ThinkerController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "${portalPath}/thinkerCategory/listData")
-	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
+	public List<ThinkerCategory> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<ThinkerCategory> r=new ArrayList<ThinkerCategory>();
 		List<ThinkerCategory> list = thinkerCategoryService.findList(new ThinkerCategory());
 		for(ThinkerCategory t:list){
 			if("0".equals(t.getParentId())){
+				t.setChildren(ThinkerCategory.getChildrenByPid(t.getId(), list,true));
 				r.add(t);
 			}
 		}
 		
 		
-		for (int i=0; i<list.size(); i++){
+	/*	for (int i=0; i<list.size(); i++){
 			ThinkerCategory e = list.get(i);
 			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
 				Map<String, Object> map = Maps.newHashMap();
@@ -160,8 +201,11 @@ public class ThinkerController extends BaseController {
 				mapList.add(map);
 			}
 		}
-		return mapList;
+		return mapList;*/
+		return r;
 	}
+	
+	
 	/**
 	 * @todo   热搜
 	 * @time   2018年4月13日 下午9:51:12

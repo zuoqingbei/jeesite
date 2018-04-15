@@ -17,6 +17,7 @@ import com.qdch.portal.common.persistence.DataEntity;
 public class ViewThinker extends DataEntity<ViewThinker> {
 	
 	private static final long serialVersionUID = 1L;
+	private String type;		// 名称
 	private String name;		// 名称
 	private String descs;		// 描述
 	private String category1;		// 分类
@@ -29,12 +30,29 @@ public class ViewThinker extends DataEntity<ViewThinker> {
 	private Integer viewNum;		// 浏览量
 	private Integer zanNum;		// 点赞量
 	private Integer shareNum;		// 分享数
+	private String screenUrl;		// 屏幕地址
 	public ViewThinker() {
 		super();
 	}
 
+	public String getScreenUrl() {
+		return screenUrl;
+	}
+
+	public void setScreenUrl(String screenUrl) {
+		this.screenUrl = screenUrl;
+	}
+
 	public ViewThinker(String id){
 		super(id);
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Length(min=1, max=100, message="名称长度必须介于 1 和 100 之间")

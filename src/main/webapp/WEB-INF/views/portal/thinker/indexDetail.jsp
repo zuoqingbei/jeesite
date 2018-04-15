@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/swiper-4.2.2.min.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/style.css">
-    <link rel="stylesheet" href=".${ctxStatic}/${portalPage}/thinker/css/report.css">
+    <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/report.css">
     <style>
         .main header{
             width: 100%;
@@ -64,9 +64,9 @@
             <h2>物流柜<a href="">收入</a></h2>
             <table class="table table-bordered table-hover">
                 <tbody>
-                <tr><td>指标编号</td><td class="indicatorNumber">1169-DGTY-006</td><td>指标名称</td><td class="indicatorName">物流柜<a href="">收入</a></td></tr>
-                <tr><td>屏幕编号</td><td class="screenNumber">1169Y11</td><td>屏幕名称</td><td class="screenName">交互营销</td></tr>
-                <tr><td>屏幕URL</td><td colspan="3" class="screenNumber">http://code.z01.com/v4/content/tables.html</td></tr>
+                <tr><td>指标编号</td><td class="indicatorNumber">${entity.code }</td><td>指标名称</td><td class="indicatorName">${entity.name }<a href="javascript:void();"></a></td></tr>
+                <tr><td>屏幕编号</td><td class="screenNumber">${entity.screenNo }</td><td>屏幕名称</td><td class="screenName">${entity.screenName }</td></tr>
+                <tr><td>屏幕URL</td><td colspan="3" class="screenNumber">${entity.screenUrl }</td></tr>
                 </tbody>
             </table>
         </header>
@@ -89,28 +89,24 @@
         <div class="col-12 list">
             <ul>
                 <li class="system">
-                    <h4>显示系统</h4>
-                    <p><a href="#">1169系统平台</a></p>
+                    <h4>指标描述</h4>
+                    <p>${entity.descs }<a href="#"></a></p>
                 </li>
                 <li class="type">
-                    <h4>报表类型</h4>
-                    <p>线下</p>
+                    <h4>显示形式</h4>
+                    <p>${entity.showType }</p>
                 </li>
                 <li class="dimension">
-                    <h4>显示维度</h4>
-                    <p><span>小薇编码</span><span>客户门店</span><span>物料</span><span>管理客户</span></p>
+                    <h4>显示表</h4>
+                    <p>${entity.showTable }</p>
                 </li>
                 <li class="departmentName">
-                    <h4>使用部门名称</h4>
-                    <p><span>小薇，</span><span>平台，</span><span>产业</span></p>
+                    <h4>使用字段</h4>
+                    <p>${entity.useFiled }</p>
                 </li>
                 <li class="reportPath">
-                    <h4>报表路径</h4>
-                    <p>【零售报表分析】</p>
-                </li>
-                <li class="reportURL">
-                    <h4>报表URL</h4>
-                    <p>http://fanyi.youdao.com/</p>
+                    <h4>计算公式</h4>
+                     <p>${entity.useFiled }</p>
                 </li>
             </ul>
         </div>

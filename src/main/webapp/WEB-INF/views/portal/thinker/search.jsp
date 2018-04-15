@@ -16,7 +16,20 @@
 </head>
 
 <body>
-<header></header>
+<header class="navbar navbar-expand flex-column flex-md-row bd-navbar">
+    <a class="navbar-brand mr-0 mr-md-2" href="#">
+        <div class="logoBg"></div>
+        <h1 class="icon-pre">1169数据立方体</h1>
+    </a>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+        <li class="nav-item">
+            <a class="nav-link p-2" href="#" rel="noopener" aria-label="reg">注册</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link p-2" href="#" rel="noopener" aria-label="login">登录</a>
+        </li>
+    </ul>
+</header>
 <div class="search_box clearfix">
     <!--头部收缩框-->
     <div class="serch_head clearfix">
@@ -27,8 +40,8 @@
                </div>
                <div class="serch_head_content_right">
                    <div class="serch_head_input">
-                       <div class="serch_input"><input type="text" placeholder="请输入热搜词"></div>
-                       <div class="serch_button"><button>搜索</button></div>
+                       <div class="serch_input"><input id="keyword" type="text" placeholder="请输入热搜词"></div>
+                       <div class="serch_button"><button onclick="search()">搜索</button></div>
                    <div class="serch_head_checkbox">
                        <span class="fl">热搜：</span>
                        <!--<label class="demo&#45;&#45;label"><input class="demo&#45;&#45;radio" type="checkbox" name="demo-checkbox1">
@@ -43,7 +56,11 @@
                            <span class="demo&#45;&#45;checkbox demo&#45;&#45;radioInput"></span>接口
                        </label>-->
                        <div class="hot_words fl">
-                           <span>指标</span><span>指标</span><span>指标</span>
+                           <ul>
+                               <li class="active">指标</li>
+                               <li>财务运营</li>
+                               <li>接口</li>
+                           </ul>
                        </div>
                    </div>
                </div>
@@ -65,236 +82,45 @@
                 <div class="search_content_box_left fl">
                     <ul class="menus_head">全部分类<i class="iconfont icon-plus-select-down"></i></ul>
                     <ul class="menus_box">
-                        <li>报表1<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
-                        <li>报表2<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
-                        <li>报表3<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
-                        <li>报表4<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
-                        <li>报表5<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
-                        <li>报表6<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
+                    	 <c:forEach items="${category}" var="ca">
+                    	 	<li data="${ca.id }" pid="${ca.parent.id }">${ca.name }<span class="fr"><i class="iconfont icon-youzhankai"></i></span></li>
+	                    </c:forEach>
                     </ul>
 
                 </div>
                 <!--触发后的二三级菜单-->
-                <div class="menus_two_box">
-                    <ul class="menus_two">
-                        <li><span class="fl">接口</span>
-                            <ul class="menus_three fl">
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                            </ul>
-                        </li>
-                        <li><span class="fl">接口</span>
-                            <ul class="menus_three fl">
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                            </ul>
-                        </li>
-                        <li><span class="fl">接口</span>
-                            <ul class="menus_three fl">
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                            </ul>
-                        </li>
-                        <li><span class="fl">接口</span>
-                            <ul class="menus_three fl">
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                            </ul>
-                        </li>
-                    </ul>
+               	<c:forEach items="${category}" var="first">
+               		<div class="menus_two_box" id="menus_two_box_${first.id }">
+                    	<c:if test="${fn:length(first.children) gt 0}">
+		                    <ul class="menus_two">
+			                    	<c:forEach items="${first.children}" var="second">
+				                           <li><span class="fl">${second.name }</span>
+				                           <%-- <c:if test="${fn:length(second.children) gt 0}"> --%>
+					                            <ul class="menus_three fl">
+					                            	<c:forEach items="${second.children}" var="third">
+						                                <li>${third.name }</li>
+					                            	</c:forEach>
+					                            </ul>
+		                    				<%-- </c:if> --%>
+				                        </li>
+			                    	</c:forEach>
+		                    </ul>
+                    	</c:if>
                 </div>
+               	
+               	</c:forEach>
+                
                 <!--信息列表-->
                 <div class="search_content_box_right fl clearfix">
-                    <div class="serch_content_main">
-                        <div class="news_box">
-                            <div class="box_left fl">
-                                <div class="box_left_img"></div>
-                            </div>
-                            <div class="box_right fl">
-                                <div class="news_title clearfix">
-                                    <span class="fl news_mark">API</span>
-                                    <b class="fl"><a href="">国内收入</a></b>
-                                    <span>
-                                        <span class="news_time fr">2018-04-14</span>
-                                        <i class="iconfont icon-shijian fr"></i>
-							        </span>
-                                </div>
-                                <div class="news_contents">
-                                    如果我们对一个li的文章列表设置宽度，因文章标题过长文章标题而自动换行，
-                                </div>
-                                <div class="news_more">
-                                    <ul>
-                                        <li>
-                                            <span>
-                                                <i class="iconfont icon-find"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                        <li>
-                                          <span>
-                                                <i class="iconfont icon-dianzan"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                        <li>
-                                           <span>
-                                                <i class="iconfont icon-fenxiang2"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                    <div class="search_content_main">
+                        <div class="search_result">
+                           	 搜索结果：<span>共搜索到<span class="search_result_number"></span>条结果 </span>
                         </div>
-                        <div class="news_box">
-                            <div class="box_left fl">
-                                <div class="box_left_img"></div>
-                            </div>
-                            <div class="box_right fl">
-                                <div class="news_title clearfix">
-                                    <span class="fl news_mark">API</span>
-                                    <b class="fl"><a href="">国内收入</a></b>
-                                    <span>
-                                        <span class="news_time fr">2018-04-14</span>
-                                        <i class="iconfont icon-shijian fr"></i>
-							        </span>
-                                </div>
-                                <div class="news_contents">
-                                    如果我们对一个li的文章列表设置宽度，因文章标题过长文章标题而自动换行，
-                                </div>
-                                <div class="news_more">
-                                    <ul>
-                                        <li>
-                                            <span>
-                                                <i class="iconfont icon-find"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                        <li>
-                                          <span>
-                                                <i class="iconfont icon-dianzan"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                        <li>
-                                           <span>
-                                                <i class="iconfont icon-fenxiang2"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="news_box">
-                            <div class="box_left fl">
-                                <div class="box_left_img"></div>
-                            </div>
-                            <div class="box_right fl">
-                                <div class="news_title clearfix">
-                                    <span class="fl news_mark">API</span>
-                                    <b class="fl"><a href="">国内收入</a></b>
-                                    <span>
-                                        <span class="news_time fr">2018-04-14</span>
-                                        <i class="iconfont icon-shijian fr"></i>
-							        </span>
-                                </div>
-                                <div class="news_contents">
-                                    如果我们对一个li的文章列表设置宽度，因文章标题过长文章标题而自动换行，
-                                </div>
-                                <div class="news_more">
-                                    <ul>
-                                        <li>
-                                            <span>
-                                                <i class="iconfont icon-find"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                        <li>
-                                          <span>
-                                                <i class="iconfont icon-dianzan"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                        <li>
-                                           <span>
-                                                <i class="iconfont icon-fenxiang2"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="news_box">
-                            <div class="box_left fl">
-                                <div class="box_left_img"></div>
-                            </div>
-                            <div class="box_right fl">
-                                <div class="news_title clearfix">
-                                    <span class="fl news_mark">API</span>
-                                    <b class="fl"><a href="">国内收入</a></b>
-                                    <span>
-                                        <span class="news_time fr">2018-04-14</span>
-                                        <i class="iconfont icon-shijian fr"></i>
-							        </span>
-                                </div>
-                                <div class="news_contents">
-                                    如果我们对一个li的文章列表设置宽度，因文章标题过长文章标题而自动换行，
-                                </div>
-                                <div class="news_more">
-                                    <ul>
-                                        <li>
-                                            <span>
-                                                <i class="iconfont icon-find"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                        <li>
-                                          <span>
-                                                <i class="iconfont icon-dianzan"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                        <li>
-                                           <span>
-                                                <i class="iconfont icon-fenxiang2"></i>
-                                                <span>13455</span>
-							                </span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <ul class="page" maxshowpageitem="5" pagelistcount="10"  id="page"></ul>
+                        
+                        
+                        <div id="content"></div>
+                        
+                        <ul class="page" maxshowpageitem="5" pagelistcount="1"  id="page"></ul>
                     </div>
                 </div>
             </div>
@@ -308,34 +134,113 @@
 <script src="${ctxStatic}/${portalPage}/thinker/js/search.js"></script>
 <script>
     $(function () {
+
+        $(".serch_head_checkbox .hot_words ul").on("click","li",function () {
+            $(this).addClass("active").siblings().removeClass()
+        })
+
         var menus_lis=$('.menus_box li');
         menus_lis.on('mouseenter',function () {
             for(var i=0;i<=menus_lis.length;i++) {
                 $(this).addClass('menus_li_active').siblings('li').removeClass('menus_li_active')
-                $('.menus_two_box').css('display','block')
+                $('.menus_two_box').css('display','none');
+                $("#menus_two_box_"+$(this).attr("data")).css('display','block');
                $(this).find('i').css('color','white').parents('li').siblings('li').find('i').css('color','#333')
             }
-        })
-        menus_lis.on('mouseleave',function () {
-                $('.menus_two_box').css('display','none')
+        }).on('mouseleave',function () {
+                $('.menus_two_box').css('display','none');
         })
         $('.menus_two_box').on('mouseenter',function () {
             $(this).css('display','block')
-        })
-        $('.menus_two_box').on('mouseleave',function () {
+        }).on('mouseleave',function () {
             $(this).css('display','none')
-        })
+        });
         $('.box_right .news_more ul li i').on('click',function () {
             $(this).toggleClass('blue')
         })
         //分页
         var GG = {
             "kk":function(mm){
-                // alert(mm);
+                 alert(mm);
             }
         }
 
-        $("#page").initPage(71,1,GG.kk);
-    })
+       
+		loadData();
+    });
+	var category1;//一级分类
+	var category2;//二级分类
+	var category3;//三级分类
+	var tags;//标签
+	var pageNo=1;//当前页面
+	var pageSize=$(".page").attr("pagelistcount");//每页条数
+	var keyword;
+	function changeData(mm){
+		//alert(mm)
+		if(mm!=pageNo){
+			pageNo=mm;
+			loadData();
+		}
+	};
+	function loadData(){
+		keyword=$("#keyword").val();
+		$.post("${portalPath}/view/viewThinker/list",{"category1":category1,"category2":category2,"category3":category3,
+		"tags":tags,"pageNo":pageNo,"pageSize":pageSize,"name":keyword},function(data){
+			console.log(data);
+			joinHtml(data.list);
+			$(".search_result_number").html(data.count);
+			$("#page").initPage(data.count,data.pageNo,changeData);	
+		});
+	};
+	function search(){
+		pageNo=1;
+		loadData();
+	};
+	function joinHtml(data){
+		var htmls='';
+		$.each(data,function(index,item){
+			if(item.type=="API"){
+				htmls+=" <div class='news_box' onclick='inetent(1,\""+item.id+"\")' >";
+			}else if(item.type=="指标"){
+				htmls+=" <div class='news_box' onclick='inetent(2,\""+item.id+"\")' >";
+			}else if(item.type=="报表"){
+				htmls+=" <div class='news_box' onclick='inetent(3,\""+item.id+"\")' >";
+			}
+			htmls+='<div class="box_left fl"><div class="box_left_img" style="background:url('+item.screenUrl+') 50% 50% no-repeat;background-size: contain;"></div></div>';//图片
+			htmls+='<div class="box_right fl"><div class="news_title clearfix"><span class="fl news_mark">'+item.type+'</span>';
+			htmls+='<b class="fl"><a href="">'+item.name+'</a></b>';
+			htmls+='<span><span class="news_time fr">'+item.createDate+'</span><i class="iconfont icon-shijian fr"></i></span></div>';
+			if(item.descs!=''&&item.descs.length>80){
+				htmls+='<div class="news_contents">'+item.descs.substr(0,80)+'...</div>';
+			}else{
+				htmls+='<div class="news_contents">'+item.descs+'</div>';
+			};
+			htmls+='<div class="news_more">';
+			htmls+='<ul><li><span><i class="iconfont icon-find"></i><span>'+(item.viewNum==undefined?0:item.viewNum)+'</span></span></li>';
+			htmls+='<li><span><i class="iconfont icon-dianzan"></i><span>'+(item.zanNum==undefined?0:item.zanNum)+'</span></span></li>';
+			htmls+='<li><span><i class="iconfont icon-fenxiang2"></i><span>'+(item.shareNum==undefined?0:item.shareNum)+'</span></span></li>';
+			htmls+='</ul></div></div></div>';
+			htmls+='';
+			htmls+='';
+			htmls+='';
+			htmls+='';
+			htmls+='';
+		});
+		$("#content").html(htmls);  
+			
+	};
+	
+	function inetent(type,id){
+		var url="";
+		if(type==1){
+			url="${portalPath}/thinker/api?id="+id;
+		}else if(type==2){
+			url="${portalPath}/thinker/indexDetail?id="+id;
+		}else if(type==3){
+			url="${portalPath}/thinker/reports?id="+id;
+		};
+		window.open(url);
+	}
 </script>
 </html>
+

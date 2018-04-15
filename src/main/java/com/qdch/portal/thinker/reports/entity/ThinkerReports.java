@@ -3,6 +3,9 @@
  */
 package com.qdch.portal.thinker.reports.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.qdch.portal.common.persistence.DataEntity;
@@ -31,7 +34,34 @@ public class ThinkerReports extends DataEntity<ThinkerReports> {
 	private Integer viewNum;		// 浏览量
 	private Integer zanNum;		// 点赞量
 	private Integer shareNum;		// 分享数
+	private List<String> deptStr=new ArrayList<String>();
+	private List<String> tagsStr=new ArrayList<String>();
+	private List<String> dimensionStr=new ArrayList<String>();
 	
+	public List<String> getDeptStr() {
+		return deptStr;
+	}
+
+	public void setDeptStr(List<String> deptStr) {
+		this.deptStr = deptStr;
+	}
+
+	public List<String> getTagsStr() {
+		return tagsStr;
+	}
+
+	public void setTagsStr(List<String> tagsStr) {
+		this.tagsStr = tagsStr;
+	}
+
+	public List<String> getDimensionStr() {
+		return dimensionStr;
+	}
+
+	public void setDimensionStr(List<String> dimensionStr) {
+		this.dimensionStr = dimensionStr;
+	}
+
 	public ThinkerReports() {
 		super();
 	}

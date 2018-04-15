@@ -34,7 +34,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="">当前位置：&emsp;</li>
-                    <li class="breadcrumb-item"><a href="#">搜索页面</a></li>
+                    <li class="breadcrumb-item"><a href="${portalPath}/thinker/search">搜索页面</a></li>
                     <li class="breadcrumb-item active" aria-current="page">报表</li>
                 </ol>
             </nav>
@@ -45,27 +45,44 @@
             <ul>
                 <li class="system">
                     <h4>显示系统</h4>
-                    <p><a href="#">1169系统平台</a></p>
+                    <p>
+                    <c:choose>
+                    	<c:when test="${entity.link!=''}">
+                    	 <a href="${entity.link }" target="${entity.openType }">${entity.systemName }</a>
+                    	</c:when>
+                    	<c:otherwise>
+                    	 <a href="#">${entity.systemName }</a>
+                    	</c:otherwise>
+                    </c:choose>
+                    </p>
                 </li>
                 <li class="type">
                     <h4>报表类型</h4>
-                    <p>线下</p>
+                    <p>${entity.types }</p>
                 </li>
                 <li class="dimension">
                     <h4>显示维度</h4>
-                    <p><span>小薇编码</span><span>客户门店</span><span>物料</span><span>管理客户</span></p>
+                    <p>
+	                    <c:forEach items="${entity.dimensionStr}" var="li">
+		                     <span>${li}</span>
+	                    </c:forEach>
+                    </p>
                 </li>
                 <li class="departmentName">
                     <h4>使用部门名称</h4>
-                    <p><span>小薇，</span><span>平台，</span><span>产业</span></p>
+                    <p>
+                    	<c:forEach items="${entity.deptStr}" var="li">
+		                     <span>${li}</span>
+	                    </c:forEach>
+                    </p>
                 </li>
                 <li class="reportPath">
                     <h4>报表路径</h4>
-                    <p>【零售报表分析】</p>
+                    <p>${entity.path }</p>
                 </li>
                 <li class="reportURL">
                     <h4>报表URL</h4>
-                    <p>http://fanyi.youdao.com/</p>
+                    <p>${entity.url }</p>
                 </li>
             </ul>
         </div>

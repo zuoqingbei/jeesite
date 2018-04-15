@@ -4,6 +4,7 @@
     
 	<sql id="viewThinkerColumns">
 		a.id AS "id",
+		a.type AS "type",
 		a.name AS "name",
 		a.descs AS "descs",
 		a.category1 AS "category1",
@@ -16,6 +17,7 @@
 		a.share_num AS "shareNum",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
+		a.screen_url AS "screenUrl",
 		a.remarks AS "remarks"
 	</sql>
 	
@@ -36,19 +38,22 @@
 		FROM view_thinker a
 		<include refid="viewThinkerJoins"/>
 		<where>
-			
-			<if test="name != null and name != ''">
-				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			<if test="type != null and type != ''">
+				AND a.type LIKE 
+					<if test="dbName == 'oracle'">'%'||#{type}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{type}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{type},'%')</if>
 			</if>
-			<if test="descs != null and descs != ''">
+			<if test="name != null and name != ''">
+				AND (a.name LIKE concat('%',#{name},'%') or a.descs LIKE  concat('%',#{name},'%') )
+					
+			</if>
+			<!-- <if test="descs != null and descs != ''">
 				AND a.descs LIKE 
 					<if test="dbName == 'oracle'">'%'||#{descs}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{descs}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{descs},'%')</if>
-			</if>
+			</if> -->
 			<if test="category1 != null and category1 != ''">
 				AND a.category1 = #{category1}
 			</if>
