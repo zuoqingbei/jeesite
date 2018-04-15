@@ -104,7 +104,8 @@ public class ThinkerController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/thinker/api"})
 	public String apiResult(Model model,HttpServletRequest request, HttpServletResponse response){
-		String id = "730c07a2c34440418f1ec4c96c3da5c3";
+		String id = request.getParameter("id");
+		//String id = "730c07a2c34440418f1ec4c96c3da5c3";
 		ThinkerApi entity = null;
 		if (StringUtils.isNotBlank(id)){
 			entity = thinkerApiService.get(id);
