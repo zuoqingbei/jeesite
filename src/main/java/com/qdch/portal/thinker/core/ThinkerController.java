@@ -21,6 +21,7 @@ import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.thinker.api.entity.ThinkerApi;
+import com.qdch.portal.thinker.api.entity.ThinkerApiParam;
 import com.qdch.portal.thinker.api.service.ThinkerApiService;
 import com.qdch.portal.thinker.category.entity.ThinkerCategory;
 import com.qdch.portal.thinker.category.service.ThinkerCategoryService;
@@ -103,6 +104,15 @@ public class ThinkerController extends BaseController {
 	 */
 	@RequestMapping(value = {"${portalPath}/thinker/api"})
 	public String apiResult(Model model,HttpServletRequest request, HttpServletResponse response){
+		String id = "730c07a2c34440418f1ec4c96c3da5c3";
+		ThinkerApi entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = thinkerApiService.get(id);
+		}
+		if (entity == null){
+			entity = new ThinkerApi();
+		}
+		model.addAttribute("entity", entity);
 		return render(request, "thinker/api");
 	}
 	
