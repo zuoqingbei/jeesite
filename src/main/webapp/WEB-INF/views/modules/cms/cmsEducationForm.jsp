@@ -42,6 +42,12 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">摘要：</label>
+			<div class="controls">
+				<form:textarea path="description" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">案例图片：</label>
 			<div class="controls">
 				<form:hidden id="image" path="image" htmlEscape="false" maxlength="255" class="input-xlarge"/>

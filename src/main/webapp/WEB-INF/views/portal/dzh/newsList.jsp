@@ -27,10 +27,16 @@
 		<section class="met_aside">
 			<h2>新闻资讯</h2>
 			<div class="met_aside_list">
-				<dl class="list-none navnow"><dt id='part2_4' class="on" ><a href="#" title='公司动态' class="zm"><span>公司动态</span></a></dt></dl>
-<!--
-				<dl class="list-none navnow"><dt id='part2_5' ><a href="news.php-lang=cn&class2=5.htm" tppabs="http://www.xgxmkj.com/news/news.php?lang=cn&class2=5"  title='业界资讯' class="zm"><span>业界资讯</span></a></dt></dl>
--->
+				<c:forEach items="${dicts}" var="dict" varStatus="stat">
+				 <c:choose>
+					<c:when test="${stat.index eq 0}">
+					 <dl onclick="changeData(this)" class="list-none navnow"><dt class='on' data="${dict.value}"><a href="javascript:void();" title='${dict.label}' class="zm"><span>${dict.label}</span></a></dt></dl>
+					</c:when>
+					<c:otherwise>
+					 <dl onclick="changeData(this)" class="list-none navnow"><dt class='' data="${dict.value}"><a href="javascript:void();" title='${dict.label}' class="zm"><span>${dict.label}</span></a></dt></dl>
+					</c:otherwise>
+					</c:choose>
+				</c:forEach>
 				<div class="met_clear"></div>
 			</div>
 		</section>
@@ -42,80 +48,31 @@
 		<div class="met_article">
 
 		<section class="met_article_head">
-			<h1>新闻资讯</h1>
+			<h1>
+			<h1 id="mine_tip">
+			<c:forEach items="${dicts}" var="dict" varStatus="stat">
+					<c:if test="${stat.index eq 0}">
+					${dict.label}
+					</c:if>
+			</c:forEach>
 			<div class="met_position">
-				<a href="${portalPath}/company/home" title="网站首页">网站首页</a> &gt; <a href="${portalPath}/company/newsList" >新闻资讯</a>
+				<a href="${portalPath}/company/home"  title="网站首页">网站首页</a> &gt;
+				<a href="${portalPath}/company/newsList" >新闻资讯</a> > 
+				<c:forEach items="${dicts}" var="dict" varStatus="stat">
+					<c:if test="${stat.index eq 0}">
+					<a href="javascript:void(0);" id="menu_name">${dict.label}</a>
+					</c:if>
+				</c:forEach>
 			</div>
 		</section>
 
 		<div class="met_clear"></div>
 
-        <div class="met_module2_list">
-			<ul>
-
-				<li class="list_1">
-					
-					<h2><a href="../pages/news_details.html" title="" target='_self'><i class="fa fa-caret-right"></i>大中恒橡胶2017年度总结报告会——砥砺前行，再创辉煌！</a></h2>
-					
-					<span class='time'>2018-01-31</span>
-				</li>
-
-				<li class="list_1">
-
-					<h2><a href="../pages/news_details.html" title="" target='_self'><i class="fa fa-caret-right"></i>大中恒橡胶2017年度总结报告会——砥砺前行，再创辉煌！</a></h2>
-
-					<span class='time'>2018-01-31</span>
-				</li>
-
-				<li class="list_1">
-
-					<h2><a href="../pages/news_details.html" title="" target='_self'><i class="fa fa-caret-right"></i>大中恒橡胶2017年度总结报告会——砥砺前行，再创辉煌！</a></h2>
-
-					<span class='time'>2018-01-31</span>
-				</li>
-
-				<li class="list_1">
-
-					<h2><a href="../pages/news_details.html" title="" target='_self'><i class="fa fa-caret-right"></i>大中恒橡胶2017年度总结报告会——砥砺前行，再创辉煌！</a></h2>
-
-					<span class='time'>2018-01-31</span>
-				</li>
-
-				<li class="list_1">
-
-					<h2><a href="../pages/news_details.html" title="" target='_self'><i class="fa fa-caret-right"></i>大中恒橡胶2017年度总结报告会——砥砺前行，再创辉煌！</a></h2>
-
-					<span class='time'>2018-01-31</span>
-				</li>
-
-				<li class="list_1">
-
-					<h2><a href="../pages/news_details.html" title="" target='_self'><i class="fa fa-caret-right"></i>大中恒橡胶2017年度总结报告会——砥砺前行，再创辉煌！</a></h2>
-
-					<span class='time'>2018-01-31</span>
-				</li>
-
-				<li class="list_1">
-
-					<h2><a href="../pages/news_details.html" title="" target='_self'><i class="fa fa-caret-right"></i>大中恒橡胶2017年度总结报告会——砥砺前行，再创辉煌！</a></h2>
-
-					<span class='time'>2018-01-31</span>
-				</li>
-
-				<li class="list_1">
-
-					<h2><a href="../pages/news_details.html" title="" target='_self'><i class="fa fa-caret-right"></i>大中恒橡胶2017年度总结报告会——砥砺前行，再创辉煌！</a></h2>
-
-					<span class='time'>2018-01-31</span>
-				</li>
- 
+        <div class="met_module2_list" >
+			<ul class="list_1">
 			</ul>
 			
 		    <div class='met_pager'>
-			<span class='PreSpan'>上一页</span><a href=%22index-1.htm%22 tppabs="http://www.xgxmkj.com/news/" class='Ahover'>1</a><a href=%22javascript:if(confirm(%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=2  \n\nThis file was not retrieved by Teleport Pro, because it was unavailable, or its retrieval was aborted, or the project was stopped too soon.  \n\nDo you want to open it from the server?%27))window.location=%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=2%27%22 tppabs="http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=2" >2</a><a href=%22javascript:if(confirm(%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=3  \n\nThis file was not retrieved by Teleport Pro, because it was unavailable, or its retrieval was aborted, or the project was stopped too soon.  \n\nDo you want to open it from the server?%27))window.location=%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=3%27%22 tppabs="http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=3" >3</a><a href=%22javascript:if(confirm(%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=4  \n\nThis file was not retrieved by Teleport Pro, because it was unavailable, or its retrieval was aborted, or the project was stopped too soon.  \n\nDo you want to open it from the server?%27))window.location=%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=4%27%22 tppabs="http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=4" >4</a><a href=%22javascript:if(confirm(%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=5  \n\nThis file was not retrieved by Teleport Pro, because it was unavailable, or its retrieval was aborted, or the project was stopped too soon.  \n\nDo you want to open it from the server?%27))window.location=%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=5%27%22 tppabs="http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=5" >5</a><a href=%22javascript:if(confirm(%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=2  \n\nThis file was not retrieved by Teleport Pro, because it was unavailable, or its retrieval was aborted, or the project was stopped too soon.  \n\nDo you want to open it from the server?%27))window.location=%27http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=2%27%22 tppabs="http://www.xgxmkj.com/news/news.php?lang=cn&class1=2&page=2" class='NextA'>下一页</a>
-			    <span class='PageText'>转至第</span>
-			    <input type='text' id='metPageT' data-pageurl='news.php?lang=cn&class1=2&page=||5' value='1' />
-			    <input type='button' id='metPageB' value='页' />
 		    </div>
 		
 		</div>
@@ -124,6 +81,68 @@
     </article>
     <div class="met_clear"></div>
 </section>
+<script>
+var tags;
+var pageNo=1;
+var pageSize=8;
+  $(function () {
+        initData(1);
+    });
+	function changeData(obj){
+		$("#mine_tip").html($(obj).find("span").html());
+		$("#menu_name").html($(obj).find("span").html());
+		$(".on").removeClass("on");
+		$(obj).find("dt").addClass("on");
+		$(".list_1").html('');
+		initData(1);
+	}
+	function initData(nums){
+		pageNo=nums;
+		tags=$(".on").attr("data");
+		getNesData();
+	}
+	function getNesData(){
+		 $.post("${portalPath}/cms/cmsNews/getList", {
+			 tags:tags,pageNo:pageNo,pageSize:pageSize
+		}, function (data) {
+			var htmls='';
+			data=eval("("+data+")");
+			if (data.status === "success") {
+				createPager(parseInt(data.totalPage));
+				$.each(data.data,function(index,item){
+					htmls+='<li>';
+					htmls+='<h2><a href="${portalPath}/company/newsDetail?id='+item.id+'" target="_blank" title="" >';
+					htmls+='<i class="fa fa-caret-right"></i>'+item.title+'</a></h2>';
+					htmls+='<span class="time">'+item.createDate+'</span></li>';
+					$(".list_1").html(htmls);
+				});
+			} 
+		}) ;
+	}
+	function createPager(totalPage){
+		//<span class='PreSpan'>上一页</span><a class='Ahover'>1</a><a>2</a><a class='NextA'>下一页</a>	
+		var htmls='';
+		if(pageNo==1||totalPage==1){
+			htmls+='<span class="PreSpan">上一页</span>';
+		}else{
+			htmls+='<span class="PreSpan" onclick=initData('+(pageNo-1)+')>上一页</span>';
+		}
+		for(var x=1;x<totalPage+1;x++){
+			if(x==pageNo){
+				htmls+='<a class="Ahover" onclick=initData('+x+')>'+x+'</a>';
+			}else{
+				htmls+='<a  onclick=initData('+x+')>'+x+'</a>';
+			}
+		}
+		if(pageNo==totalPage){
+			htmls+='<a class="NextA">下一页</a>';
+		}else{
+			htmls+='<a class="NextA" onclick=initData('+(pageNo+1)+')>下一页</a>';
+		}
+		$(".met_pager").html(htmls);
+			   
+	}
+</script>
 </body>
 </html>
 <script src="${ctxStatic}/${portalPage}/dzh/asserts/sea.js" tppabs="http://www.xgxmkj.com/public/ui/v1/js/sea.js" type="text/javascript"></script>

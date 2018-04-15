@@ -60,12 +60,21 @@ public class CmsNewsController extends BaseController {
 	@Autowired
 	private CmsNewsDataDao cmsNewsDataDao;
 	
+	
 	@ModelAttribute
 	
 	public CmsNews get(@RequestParam(required=false) String id) {
 		CmsNews entity = null;
 		if (StringUtils.isNotBlank(id)){
 			entity = cmsNewsService.get(id);
+			CmsNewsData data=new CmsNewsData();
+			data.setNewsId(id);
+			List<CmsNewsData> list=cmsNewsDataService.findList(data);
+			if(list!=null&&list.size()>0){
+				entity.setContentHtml(list.get(0).getContentHtml());
+				entity.setContent(list.get(0).getContent());
+			}
+			
 		}
 		if (entity == null){
 			entity = new CmsNews();

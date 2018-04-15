@@ -25,7 +25,7 @@
 <section class="met_section met_section_asidenone met_section_sehed">
 
     <section class="met_section_head">
-   <!--     <a href="index.htm" tppabs="http://www.xgxmkj.com/" title="网站首页">网站首页</a> &gt; <a href=%22index-2.htm%22
+      <!--  <a href="index.htm" tppabs="http://www.xgxmkj.com/" title="网站首页">网站首页</a> &gt; <a href=%22index-2.htm%22
                                                                                           tppabs="http://www.xgxmkj.com/product/">产品展示</a>
         > <a href=%22product.php-lang=cn&class2=6.htm%22
              tppabs="http://www.xgxmkj.com/product/product.php?lang=cn&class2=6">养牛设备</a>-->
@@ -47,25 +47,23 @@
                     <dd>
                         <div class="met_box">
                             <h1 class='met_title' id="title">${detail.title }</h1>
+                   
                             <p class="desc" id="description">${detail.description }</p>
                         </div>
                     </dd>
                 </dl>
                 <div class="met_clear"></div>
+                <h1 class='met_title' style="margin-left: 1em">详细信息</h1>
+                <!--<ol class="met_nav">
 
-                <ol class="met_nav">
+                    <li class="met_now"><a href="#">详细信息</a></li>
 
-                    <li class="met_now"><a href="#mettab1">详细信息</a></li>
-
-                </ol>
+                </ol>-->
                 <div class="met_nav_contbox">
 
                     <div class="met_editor " id="content">
-                    </div>
-
-                </div>
-
-            </div>
+               	    </div>
+            	</div>
             </div>
         </div>
     </article>
@@ -73,10 +71,10 @@
 </section>
 <script>
   $(function () {
-	  getProductDetail();
+	  getCaseDetail();
     });
-	function getProductDetail(){
-		 $.post("${portalPath}/cms/cmsProduct/detail", { id:'${detail.id}'}, function (data) {
+	function getCaseDetail(){
+		 $.post("${portalPath}/cms/cmsEducation/detail", { id:'${detail.id}'}, function (data) {
 			var htmls='';
 			data=eval("("+data+")");
 			console.log(data)

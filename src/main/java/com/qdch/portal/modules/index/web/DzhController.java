@@ -25,6 +25,8 @@ import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.modules.account.entity.AccountAttention;
 import com.qdch.portal.modules.cms.entity.CmsBanner;
+import com.qdch.portal.modules.cms.entity.CmsEducation;
+import com.qdch.portal.modules.cms.entity.CmsNews;
 import com.qdch.portal.modules.cms.entity.CmsProduct;
 import com.qdch.portal.modules.cms.service.CmsBannerService;
 import com.qdch.portal.modules.cms.service.CmsProductService;
@@ -106,12 +108,23 @@ public class DzhController extends BaseController {
 		setDict(model, "customer_type");
 		return render(request, "dzh/caseList");
 	}
-
+	@RequestMapping(value = {"${portalPath}/company/caseDetail"})
+	public String caseDetail(CmsEducation cmsEducation,Model model,HttpServletRequest request, HttpServletResponse response){
+		setBanner(model,2);
+		model.addAttribute("detail", cmsEducation);
+		return render(request, "dzh/caseDetail");
+	}
 	@RequestMapping(value = {"${portalPath}/company/newsList"})
 	public String newsList(Model model,HttpServletRequest request, HttpServletResponse response){
 		setBanner(model,3);
 		setDict(model, "news_type");
 		return render(request, "dzh/newsList");
+	}
+	@RequestMapping(value = {"${portalPath}/company/newsDetail"})
+	public String newsDetail(CmsNews cmsNews,Model model,HttpServletRequest request, HttpServletResponse response){
+		setBanner(model,3);
+		model.addAttribute("detail", cmsNews);
+		return render(request, "dzh/newsDetail");
 	}
 	/**
 	 * type：product_type 表示产品大类

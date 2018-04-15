@@ -25,47 +25,36 @@
 <section class="met_section met_section_asidenone met_section_sehed">
 
     <section class="met_section_head">
-   <!--     <a href="index.htm" tppabs="http://www.xgxmkj.com/" title="网站首页">网站首页</a> &gt; <a href=%22index-2.htm%22
+      <!--  <a href="index.htm" tppabs="http://www.xgxmkj.com/" title="网站首页">网站首页</a> &gt; <a href=%22index-2.htm%22
                                                                                           tppabs="http://www.xgxmkj.com/product/">产品展示</a>
         > <a href=%22product.php-lang=cn&class2=6.htm%22
              tppabs="http://www.xgxmkj.com/product/product.php?lang=cn&class2=6">养牛设备</a>-->
     </section>
 
-
-    <article>
+ <article>
         <div class="met_article">
-
             <div class="met_clear"></div>
-
             <div id="showproduct">
                 <dl >
                     <dt data-product_x="400">
                     <div class="met_box" id="product_img">
-                    <img id="image" src="${detail.image }" alt="" width="100%" height="100%">
+                         <img id="image" src="${detail.image }" alt="" width="100%" height="100%">
                     </div>
                     </dt>
                     <dd>
                         <div class="met_box">
-                            <h1 class='met_title' id="title">${detail.title }</h1>
-                            <p class="desc" id="description">${detail.description }</p>
+                           <h1 class='met_title' id="title">${detail.title }</h1>
+						     <p class="news_subtitle"><span  id="createDate">${detail.createDate }</span></p>
+                             <p class="desc" id="description">${detail.description }</p>
                         </div>
+                         <div class="met_nav_contbox">
+		
+		                    <div class="met_editor " id="content">
+		               	    </div>
+		            	</div>
                     </dd>
                 </dl>
                 <div class="met_clear"></div>
-
-                <ol class="met_nav">
-
-                    <li class="met_now"><a href="#mettab1">详细信息</a></li>
-
-                </ol>
-                <div class="met_nav_contbox">
-
-                    <div class="met_editor " id="content">
-                    </div>
-
-                </div>
-
-            </div>
             </div>
         </div>
     </article>
@@ -73,15 +62,16 @@
 </section>
 <script>
   $(function () {
-	  getProductDetail();
+	  getNewsDetail();
     });
-	function getProductDetail(){
-		 $.post("${portalPath}/cms/cmsProduct/detail", { id:'${detail.id}'}, function (data) {
+	function getNewsDetail(){
+		 $.post("${portalPath}/cms/cmsNews/detail", { id:'${detail.id}'}, function (data) {
 			var htmls='';
 			data=eval("("+data+")");
 			console.log(data)
 			if (data.status === "success") {
 				$("#title").html(data.data.title);
+				$("#createDate").html(data.data.createDate);
 				$("#description").html(data.data.description);
 				$("#image").attr("src",data.data.image);
 				$("#content").html(data.data.contentHtml);

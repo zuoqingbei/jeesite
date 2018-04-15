@@ -103,14 +103,15 @@ var pageSize=8;
 		$("#menu_name").html($(obj).find("span").html());
 		$(".on").removeClass("on");
 		$(obj).find("dt").addClass("on");
+		$(".list_1").html('');
 		initData(1);
 	}
 	function initData(nums){
 		pageNo=nums;
 		tags=$(".on").attr("data");
-		getProductDate();
+		getProductData();
 	}
-	function getProductDate(){
+	function getProductData(){
 		 $.post("${portalPath}/cms/cmsProduct/getList", {
 			 tags:tags,pageNo:pageNo,pageSize:pageSize
 		}, function (data) {
