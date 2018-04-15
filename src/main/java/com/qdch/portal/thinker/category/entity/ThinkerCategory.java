@@ -3,8 +3,12 @@
  */
 package com.qdch.portal.thinker.category.entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.qdch.portal.common.persistence.TreeEntity;
@@ -21,7 +25,16 @@ public class ThinkerCategory extends TreeEntity<ThinkerCategory> {
 	private String parentIds;		// 全部父键
 	private String name;		// 名称
 	private Integer sort;		// 排序
+	private List<ThinkerCategory> children;
 	
+	public List<ThinkerCategory> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<ThinkerCategory> children) {
+		this.children = children;
+	}
+
 	public ThinkerCategory() {
 		super();
 	}

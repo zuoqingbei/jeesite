@@ -1,5 +1,6 @@
 package com.qdch.portal.thinker.core;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -140,7 +141,15 @@ public class ThinkerController extends BaseController {
 	@RequestMapping(value = "${portalPath}/thinkerCategory/listData")
 	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
+		List<ThinkerCategory> r=new ArrayList<ThinkerCategory>();
 		List<ThinkerCategory> list = thinkerCategoryService.findList(new ThinkerCategory());
+		for(ThinkerCategory t:list){
+			if("0".equals(t.getParentId())){
+				r.add(t);
+			}
+		}
+		
+		
 		for (int i=0; i<list.size(); i++){
 			ThinkerCategory e = list.get(i);
 			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){

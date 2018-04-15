@@ -1,0 +1,36 @@
+html,body,ul,li,ol,dl,dd,dt,p,h1,h2,h3,h4,h5,h6,form,fieldset,legend,img{ margin:0; padding:0; }
+ul,ol,li{list-style:none;}
+a,u{text-decoration:none;}
+img{display:block;border:0;}
+i,em{font-style:normal;}
+b,strong{font-weight:100;}
+h1,h2,h3,h4,h5,h6{font-size:16px;font-weight:100;}
+.clearfix:after{content:".";clear:both;display:block;height:0;overflow:hidden;visibility: hidden;}
+
+
+html,body{
+	height:100%;
+	font-family: "Microsoft yahei", "微软雅黑", "Source Sans Pro", "Helvetica Neue", 'Helvetica', 'Arial', sans-serif;
+	min-width: 1000px;
+}
+@media screen and (min-width: 1025px) {
+	html {
+		font-size: 18px;
+	}
+}
+
+@media screen and (min-width: 1367px) {
+	html {
+		font-size: 20px;
+	}
+}
+
+@media screen and (min-width: 1601px) {
+	html {
+		font-size: 24px;
+	}
+
+	.container {
+		max-width: 85%;
+	}
+}
