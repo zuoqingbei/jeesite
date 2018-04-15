@@ -112,7 +112,7 @@ public class ThinkerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = {"${portalPath}/thinker/index"})
+	@RequestMapping(value = {"${portalPath}/thinker/indexDetail"})
 	public String indexResult(Model model,HttpServletRequest request, HttpServletResponse response){
 		return render(request, "thinker/index");
 	}
