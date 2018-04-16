@@ -378,5 +378,9 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+	<select id="getUserByMobile" resultType="User">
+		select id from sys_user a WHERE a.del_flag='0' AND a.mobile=#{mobile}
+	</select>
 	
 </mapper>
