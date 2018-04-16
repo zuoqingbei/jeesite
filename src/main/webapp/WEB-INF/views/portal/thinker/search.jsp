@@ -154,9 +154,9 @@
                 $("#menus_two_box_"+$(this).attr("data")).css('display','block');
                $(this).find('i').css('color','white').parents('li').siblings('li').find('i').css('color','#333')
             }
-        })/**.on('mouseleave',function () {
+        }).on('mouseleave',function () {
                 $('.menus_two_box').css('display','none');
-        })**/
+        })
         $('.menus_two_box').on('mouseenter',function () {
             $(this).css('display','block')
         }).on('mouseleave',function () {

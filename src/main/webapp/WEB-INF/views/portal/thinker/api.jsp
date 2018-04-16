@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>1169数据立方体</title>
 		<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/bootstrap-4.0.0.css">
 		<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/reset.css" />
 		<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.css" />
@@ -30,7 +30,7 @@
 		<div id="bottom">
 			<div class="bottomCon con">
 				<div class="crumb">
-					<span>当前位置：搜索页面 ><span class="bl">${entity.name}</span></span>
+					<span>当前位置：<a href="${portalPath}/thinker/search">搜索页面</a> ><span class="bl">${entity.name}</span></span>
 				</div>
 				
 				<div class="apiInfo">
@@ -75,7 +75,14 @@
 						</li>
 						<li>
 							<span>接口状态：</span>
-							<span>${entity.status}</span>
+							<c:choose>
+								<c:when test="${entity.status==0}">
+										<span>正常</span>
+								</c:when>
+								<c:otherwise>
+										<span>故障</span>
+								</c:otherwise>
+							</c:choose>
 						</li>
 					</div>
 				</div>
@@ -91,7 +98,8 @@
 					<div class="defaultCodeCon">
 						
 						
-						<div class="part-title ts">服务级错误码参照(err_code)</div>
+						<div class="part-title ts">服务级错误码参照</div>
+						<!-- (err_code) -->
 						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
 							<tr class="th">
 								<td>错误码</td>
@@ -230,19 +238,19 @@
 						</table>
 						<div class="part-title">JSON返回示例：</div>
 						<pre class="jsontxt">
-							{
-							    "reason": "成功",
-							    "result": {
-							        "jobid": "2015120913503797592",/*本次查询流水号*/
-							        "realname": "商世界",/*姓名*/
-							        "bankcard": "6259656360701234",/*银行卡卡号*/
-							        "idcard": "310329198103050011",/*身份证号码*/
-							        "mobile": "18912341234",/*预留手机号码*/
-							        "res": "2",/*验证结果，1:匹配 2:不匹配*/
-							        "message": "认证信息不匹配"/*描述*/
-							    },
-							    "error_code": 0
-							}
+	{
+		"reason": "成功",
+		"result": {
+			"jobid": "2015120913503797592",/*本次查询流水号*/
+			"realname": "商世界",/*姓名*/
+			"bankcard": "6259656360701234",/*银行卡卡号*/
+			"idcard": "310329198103050011",/*身份证号码*/
+			"mobile": "18912341234",/*预留手机号码*/
+			"res": "2",/*验证结果，1:匹配 2:不匹配*/
+			"message": "认证信息不匹配"/*描述*/
+		},
+		"error_code": 0
+	}
 						</pre>
 					</div>
 					
@@ -259,7 +267,7 @@
 				$.post("/portal/api/detail", { id: '${entity.id}' }, function (data, status) {
 					console.log(data);
 					console.log("Data: " + data + "\nStatus: " + status);
-					$('.jsontxt').html(data.jsonDemo);
+					//$('.jsontxt').html(data.jsonDemo);
 					//$('.jsontxt').html('<h1>aaaaaa</h1>');
 				});
 
