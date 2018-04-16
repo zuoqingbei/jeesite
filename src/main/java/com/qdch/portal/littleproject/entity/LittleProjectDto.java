@@ -7,8 +7,7 @@ public class LittleProjectDto {
     private Object[] times;
     private Map<String,Object[]> timesMap ;
     private List<LittleProjectEntity> entities;
-
-
+   
     public Object[] getTimes() {
         return times;
     }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import com.qdch.portal.common.utils.PostgreUtils;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -326,6 +327,37 @@ public class CmsNewsController extends BaseController {
 		request.setAttribute("userId", request.getParameter("userId"));
 		return "portal/wechat/newsList";
 	}
+
+	@RequestMapping(value = {"${portalPath}/littleproject/aa"})
+	@ResponseBody
+	public String  tradeAmount(HttpServletRequest request, HttpServletResponse response){
+
+		Map<String,Object> results = new HashMap<String,Object>();
+
+		List<Object> lists = PostgreUtils.excuteQuery("select * from insight_transaction_amount limit 1",null);
+		Set<String> times = new HashSet<String>();
+		List<String> lianhe = new ArrayList<String>();
+		List<String> qingjin = new ArrayList<String>();
+		List<String> wenhua = new ArrayList<String>();
+
+		results.put("times",times);
+		results.put("lianhe",lianhe);
+		results.put("qingjin",qingjin);
+		results.put("wenhua",wenhua);
+
+		for(Object o:lists){
+			Map m = (Map) o;
+			System.out.println("222");
+
+
+
+		}
+
+		return this.resultSuccessData(request,response, "", results);
+	}
+
+
+
 
 
 
