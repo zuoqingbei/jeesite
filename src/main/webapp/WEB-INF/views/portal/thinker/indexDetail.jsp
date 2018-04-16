@@ -67,7 +67,7 @@
         <div class="col-">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="">当前位置：&emsp;</li>
+                    <li class="">当前位置：</li>
                     <li class="breadcrumb-item"><a href="#">搜索页面</a></li>
                     <li class="breadcrumb-item active" aria-current="page">指标</li>
                 </ol>
