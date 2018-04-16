@@ -78,7 +78,7 @@ public class WxAuthController extends BaseController{
 	public String wxAuth2(Model model,HttpServletRequest request, HttpServletResponse response){
 		String to=request.getParameter("to");
 		//String url = "http://hujinfu.qdch.com/portal/authorize";
-		String url = "http://www.hlsofttech.com/portal/authorize";
+		String url = "http://hujinfu.qdch.com/portal/authorize";
 		String redictUrl=WxpubOAuth.createOauthUrlForCode(url, true);
 		System.out.println(redictUrl);
         String token=HttpClientUtil.sendPostSSLRequest(redictUrl, new HashMap<String,String>());
