@@ -1,10 +1,9 @@
 package com.qdch.portal.littleproject.web;
 
-
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
-import com.qdch.portal.littleproject.dao.TradeModel;
-
+import com.qdch.portal.littleproject.entity.KeHuAge;
+import com.qdch.portal.littleproject.entity.KeHuFenLei;
 import com.qdch.portal.littleproject.entity.LittleProjectDto;
 import com.qdch.portal.littleproject.entity.LittleProjectEntity;
 
@@ -14,246 +13,407 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.*;
 
+/**
+ * 总况——总量——交易额
+ * 
+ * @author gaozhao
+ * @time 2018年4月13日
+ */
 @Controller
 public class SummaryController extends BaseController {
 
+	sqlYuJu sql = new sqlYuJu();
 
-
-    /**
-     * 交易额
-     * @param
-     * @param request
-     * @param response
-     * @return
-     */
-
-    @RequestMapping(value = {"${portalPath}/littleproject/summaryController_tradeAmount"})
-    @ResponseBody
-    public String  summaryController_tradeAmount(HttpServletRequest request, HttpServletResponse response){
-
-        Map<String,Object> results = new HashMap<String,Object>();
-
-        List<Object> lists = PostgreUtils.excuteQuery(tradeDay(),null);
-        Set<String> times = new HashSet<String>();
-        List<String> lianhe = new ArrayList<String>();
-        List<String> qingjin = new ArrayList<String>();
-        List<String> wenhua = new ArrayList<String>();
-        for(Object o:lists){
-            TradeModel tradeModel = (TradeModel)o;
-            times.add(((TradeModel) o).getVday());
-            if(((TradeModel) o).getJys().equals("0012")){
-                lianhe.add(((TradeModel) o).getFvalue());
-            }else if(((TradeModel) o).getJys().equals("0014")){
-                qingjin.add(((TradeModel) o).getFvalue());
-            }else if(((TradeModel) o).getJys().equals("0015")){
-                wenhua.add(((TradeModel) o).getFvalue());
-            }
-        }
-        results.put("times",times);
-        results.put("lianhe",lianhe);
-        results.put("qingjin",qingjin);
-        results.put("wenhua",wenhua);
-
-        return this.resultSuccessData(request,response, "", results);
-    }
-
-
-    public String tradeDay(){
-        String sql = "SELECT \n" +
-                "\thdp.\"PERIOD_DATE\" vday,\n" +
-                "\tHDTJ.jys,\n" +
-                "\tHDTJ.jysmc,\n" +
-                "\tHRJ.jysinfo,\n" +
-                "\tcoalesce((SELECT\n" +
-                "\t\tsum(IFA.fvalue) 成交金额\n" +
-                "\t\tFROM insight_transaction_amount IFA\n" +
-                "\t\twhere IFA.JYS = HDTJ.jys and to_date(vday,'yyyymmdd') = hdp.\"PERIOD_DATE\"\n" +
-                "\t),0) FVALUE\n" +
-                "FROM HUB_DD_TQS_JYS HDTJ\n" +
-                "LEFT JOIN HUB_REF_JYSINFO HRJ\n" +
-                "ON HDTJ.JYS = HRJ.JYS\n" +
-                "CROSS JOIN hub_d_period hdp\n" +
-                "where HDTJ.jys in ('0015') and hdp.\"PERIOD_DATE\" >= now() - interval'15 d' AND hdp.\"PERIOD_DATE\" < NOW()\n" +
-                "GROUP BY\n" +
-                "\t\thdp.\"PERIOD_DATE\",\n" +
-                "\t\tHDTJ.jys,\n" +
-                "\t\tHDTJ.jysmc,\n" +
-                "\t\tHRJ.jysinfo\n" +
-                "UNION ALL\n" +
-                "SELECT \n" +
-                "\thdp.\"PERIOD_DATE\" vday,\n" +
-                "\tHDTJ.jys,\n" +
-                "\tHDTJ.jysmc,\n" +
-                "\tHRJ.jysinfo,\n" +
-                "\tcoalesce((SELECT\n" +
-                "\t\tsum(IFA.fvalue/10000) 成交金额\n" +
-                "\t\tFROM insight_finance_amount IFA\n" +
-                "\t\twhere IFA.JYS = HDTJ.jys and to_date(vday,'yyyymmdd') = hdp.\"PERIOD_DATE\"\n" +
-                "\t),0) FVALUE\n" +
-                "FROM HUB_DD_TQS_JYS HDTJ\n" +
-                "LEFT JOIN HUB_REF_JYSINFO HRJ\n" +
-                "ON HDTJ.JYS = HRJ.JYS\n" +
-                "CROSS JOIN hub_d_period hdp\n" +
-                "where jysfl = '2' and hdp.\"PERIOD_DATE\" >= now() - interval'15 d' AND hdp.\"PERIOD_DATE\" < NOW()\n" +
-                "GROUP BY\n" +
-                "\t\thdp.\"PERIOD_DATE\",\n" +
-                "\t\tHDTJ.jys,\n" +
-                "\t\tHDTJ.jysmc,\n" +
-                "\t\tHRJ.jysinfo" +
-                " order by vday";
-        return sql;
-
-    }
-
-    public String tradeWeek(){
-        String sql = "SELECT\n" +
-                "\tCASE WHEN extract(week from CURRENT_DATE) > hdp.\"WEEK_IN_YEAR\" THEN\n" +
-                "\t\t\tCURRENT_DATE-CAST((extract(week from CURRENT_DATE) - hdp.\"WEEK_IN_YEAR\")*7||' DAY' AS INTERVAL)\n" +
-                "\t\tELSE CURRENT_DATE-CAST((extract(week from CURRENT_DATE) - 0)*7||' DAY' AS INTERVAL)\n" +
-                "\t\t\t- CAST(extract(week from TO_DATE(EXTRACT(YEAR FROM CURRENT_DATE) - 1||'1231','YYYYMMDD')) - hdp.\"WEEK_IN_YEAR\"||' DAY' AS INTERVAL)\n" +
-                "\tEND vday,\n" +
-                "\thdp.\"WEEK_IN_YEAR\",\n" +
-                "\tHDTJ.jys,\n" +
-                "\tHDTJ.jysmc,\n" +
-                "\tHRJ.jysinfo,\n" +
-                "\tcoalesce((SELECT\n" +
-                "\t\tsum(IFA.fvalue) 成交金额\n" +
-                "\t\tFROM insight_transaction_amount IFA\n" +
-                "\t\twhere IFA.JYS = HDTJ.jys and hdp.\"WEEK_IN_YEAR\" = extract(week from to_date(ifa.vday,'yyyymmdd'))\n" +
-                "\t),0) FVALUE\n" +
-                "FROM HUB_DD_TQS_JYS HDTJ\n" +
-                "LEFT JOIN HUB_REF_JYSINFO HRJ\n" +
-                "ON HDTJ.JYS = HRJ.JYS\n" +
-                "CROSS JOIN hub_d_period hdp\n" +
-                "where HDTJ.jys IN ('0015') and hdp.\"PERIOD_DATE\" >= CURRENT_DATE - cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')) ||' days' as interval) - interval'75 day'\n" +
-                "\tAND hdp.\"PERIOD_DATE\" < CURRENT_DATE\n" +
-                "GROUP BY\n" +
-                "\thdp.\"WEEK_IN_YEAR\",\n" +
-                "\tHDTJ.jys,\n" +
-                "\tHDTJ.jysmc,\n" +
-                "\tHRJ.jysinfo\n" +
-                "UNION ALL\n" +
-                "SELECT\n" +
-                "\tCASE WHEN extract(week from CURRENT_DATE) > hdp.\"WEEK_IN_YEAR\" THEN\n" +
-                "\t\t\tCURRENT_DATE-CAST((extract(week from CURRENT_DATE) - hdp.\"WEEK_IN_YEAR\")*7||' DAY' AS INTERVAL)\n" +
-                "\t\tELSE CURRENT_DATE-CAST((extract(week from CURRENT_DATE) - 0)*7||' DAY' AS INTERVAL)\n" +
-                "\t\t\t- CAST(extract(week from TO_DATE(EXTRACT(YEAR FROM CURRENT_DATE) - 1||'1231','YYYYMMDD')) - hdp.\"WEEK_IN_YEAR\"||' DAY' AS INTERVAL)\n" +
-                "\tEND vday,\n" +
-                "\thdp.\"WEEK_IN_YEAR\",\n" +
-                "\tHDTJ.jys,\n" +
-                "\tHDTJ.jysmc,\n" +
-                "\tHRJ.jysinfo,\n" +
-                "\tcoalesce((SELECT\n" +
-                "\t\tsum(IFA.fvalue/10000) 成交金额\n" +
-                "\t\tFROM insight_finance_amount IFA\n" +
-                "\t\twhere IFA.JYS = HDTJ.jys and hdp.\"WEEK_IN_YEAR\" = extract(week from to_date(ifa.vday,'yyyymmdd'))\n" +
-                "\t),0) FVALUE\n" +
-                "FROM HUB_DD_TQS_JYS HDTJ\n" +
-                "LEFT JOIN HUB_REF_JYSINFO HRJ\n" +
-                "ON HDTJ.JYS = HRJ.JYS\n" +
-                "CROSS JOIN hub_d_period hdp\n" +
-                "where jysfl = '2' and hdp.\"PERIOD_DATE\" >= CURRENT_DATE - cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')) ||' days' as interval) - interval'75 day'\n" +
-                "\tAND hdp.\"PERIOD_DATE\" < CURRENT_DATE\n" +
-                "GROUP BY\n" +
-                "\thdp.\"WEEK_IN_YEAR\",\n" +
-                "\tHDTJ.jys,\n" +
-                "\tHDTJ.jysmc,\n" +
-                "\tHRJ.jysinfo";
-        return sql;
-
-    }
-
-    /**
-     * 交易额统计
-     * @time   2018年4月13日
+	/**
+	 * 交易额
+	 * 
+	 * @time 2018年4月13日
 	 * @author 高照
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping(value = {"${portalPath}/littleproject/summaryController_jiaoYiAmount"})
-    @ResponseBody
-    public String  summaryController_jiaoYiAmount(HttpServletRequest request, HttpServletResponse response){
-    	 Map<String,Object> results = new HashMap<String,Object>();
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 
-         List<Object> lists = PostgreUtils.excuteQuery(jiaoyie(),null);
-         
-         List<String> lianhe = new ArrayList<String>();
-         List<String> qingjin = new ArrayList<String>();
-         List<String> wenhua = new ArrayList<String>();
-         for(Object o:lists){
-             
-         }
-        
-         results.put("lianhe",lianhe);
-         results.put("qingjin",qingjin);
-         results.put("wenhua",wenhua);
-         try {
-        	 return this.resultSuccessData(request,response, "", results);
+	@RequestMapping(value = { "${portalPath}/littleproject/tradeAmount" })
+	@ResponseBody
+	public String tradeAmount(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			String type = request.getParameter("type");
+			List<Object> lists = null;
+			if ("day".equals(type)) {
+				 lists = PostgreUtils.excuteQuery(sql.tradeDay(),
+						null);
+			} else if ("week".equals(type)) {
+				 lists = PostgreUtils.excuteQuery(sql.tradeWeek(),
+						null);
+			} else if ("month".equals(type)) {
+				 lists = PostgreUtils.excuteQuery(sql.tradeMonth(),
+						null);
+			}
+
+			LittleProjectDto dto = new LittleProjectDto();
+			//List<Object> lists = PostgreUtils.excuteQuery(sql.tradeDay(), null);
+			List<Object> tradelist = PostgreUtils.excuteQuery(sql.shichan(),
+					null);
+			// 时间集合
+			List<String> times = new ArrayList<String>();
+			// 交易市场集合
+			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
+			int a = 1;
+
+			if (tradelist != null && tradelist.size() > 0) {
+				for (Object o : tradelist) {
+					Map m = (Map) o;
+					LittleProjectEntity aa = new LittleProjectEntity();
+					aa.setName(m.get("jysinfo") + "");
+					res.add(aa);
+				}
+			}
+
+			// 获取市场
+
+			if (res != null && res.size() > 0) {
+				for (LittleProjectEntity s : res) {
+
+					List<String> shiChan = new ArrayList<String>();
+					if (lists != null && lists.size() > 0) {
+
+						for (Object o : lists) {
+
+							Map m = (Map) o;
+
+							if (m.get("jysinfo").equals(s.getName())) {
+								
+								shiChan.add(m.get("fvalue") + "");
+								
+
+							}
+						}
+
+					}
+					s.setLists(shiChan);
+				}
+			}
+
+			// 获取时间
+			if (res != null && res.size() > 0) {
+			for (LittleProjectEntity s : res) {
+
+				if (lists != null && lists.size() > 0) {
+
+					for (Object o : lists) {
+						Map m = (Map) o;
+
+						if (m.get("jysinfo").equals(s.getName()) && a == 1) {
+							times.add(m.get("vday") + "");
+
+						}
+
+					}
+				}
+				a = 2;
+			}
+			}
+			dto.setTimes(times.toArray());
+
+			dto.setEntities(res);
+			if(lists==null){
+				return this.resultSuccessData(request, response, "", null);
+			}else{
+				return this.resultSuccessData(request, response, "", dto);
+			}
+			
 		} catch (Exception e) {
-			 return this.resultFaliureData(request, response, "", results);
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
 		}
-   	
-    }
-    public String jiaoyie(){
-    
-    	return null;
-    }
 
+	}
 
+	/**
+	 * 交易额统计
+	 * 
+	 * @time 2018年4月13日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/jiaoYiAmount" })
+	@ResponseBody
+	public String jiaoYiAmount(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			LittleProjectDto dto = new LittleProjectDto();
+			List<Object> jiaoyiList = PostgreUtils.excuteQuery(sql.jiaoyi(),
+					null);
+			List<Object> tradelist = PostgreUtils.excuteQuery(sql.shichan(),
+					null);
+			// 交易市场集合
+			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
+			if (tradelist != null && tradelist.size() > 0) {
+				for (Object o : tradelist) {
+					Map m = (Map) o;
+					LittleProjectEntity aa = new LittleProjectEntity();
+					aa.setName(m.get("jysinfo") + "");
+					res.add(aa);
+				}
+			}
+			if (res != null && res.size() > 0) {
+				for (LittleProjectEntity s : res) {
 
+					List<String> shiChan = new ArrayList<String>();
+					if (jiaoyiList != null && jiaoyiList.size() > 0) {
 
-    @RequestMapping(value = {"${portalPath}/littleproject/tradeAmount"})
-    @ResponseBody
-    public String  tradeAmount(HttpServletRequest request, HttpServletResponse response){
+						for (Object o : jiaoyiList) {
 
-        LittleProjectDto dto = new LittleProjectDto();
+							Map m = (Map) o;
 
-//        Map<String,Object[]> timeMap = new HashMap<String, Object[]>();
+							if (m.get("jysinfo").equals(s.getName())) {
+								
+								shiChan.add(m.get("bz") + "");
+								shiChan.add(m.get("by") + "");
+								shiChan.add(m.get("bn") + "");
+								shiChan.add(m.get("lj") + "");
 
-        List<Object> lists = PostgreUtils.excuteQuery(tradeDay(),null);
-        List<String> times = new ArrayList<String>();
-        List<String> lianhe = new ArrayList<String>();
-        List<String> qingjin = new ArrayList<String>();
-        List<String> wenhua = new ArrayList<String>();
-        List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
-        LittleProjectEntity entity ;
+							}
+						}
 
-        if(lists != null && lists.size()>0) {
-            for (Object o : lists) {
-                Map m = (Map) o;
-                if(m.get("jys").equals("0012")){
-                    times.add(m.get("vday")+"");
-                    lianhe.add(m.get("fvalue")+"");
-                }else  if(m.get("jys").equals("0014")){
-                    qingjin.add(m.get("fvalue")+"");
-                }else  if(m.get("jys").equals("0015")){
-                    wenhua.add(m.get("fvalue")+"");
-                }
-            }
-        }
-//        timeMap.put("times",times.toArray());
-        dto.setTimes(times.toArray());
-        entity = new LittleProjectEntity();
-        entity.setName("联合信用资产");
-        entity.setLists(lianhe);
-        res.add(entity);
+					}
+					s.setLists(shiChan);
+				}
+			}
 
-        entity = new LittleProjectEntity();
+			dto.setEntities(res);
+			if(jiaoyiList==null){
+				return this.resultSuccessData(request, response, "", null);
+			}else{
+				return this.resultSuccessData(request, response, "", dto);
+			}
+			
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
 
-        entity.setName("青金中心");
-        entity.setLists(qingjin);
-        res.add(entity);
-        entity = new LittleProjectEntity();
-        entity.setName("青岛文化产权");
-        entity.setLists(wenhua);
+	
+	/**
+	 * 总况——总量——用户
+	 * 客户数
+	 * @author gaozhao
+	 * @time 2018年4月16日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/yongHuShu" })
+	@ResponseBody
+	public String yongHuShu(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			String type = request.getParameter("type");
 
-        res.add(entity);
-        dto.setEntities(res);
+			if ("day".equals(type)) {
+				List<Object> lists = PostgreUtils.excuteQuery(sql.yongHuDay(),
+						null);
+			} else if ("week".equals(type)) {
+				List<Object> lists = PostgreUtils.excuteQuery(sql.yongHuWeek(),
+						null);
+			} else if ("month".equals(type)) {
+				List<Object> lists = PostgreUtils.excuteQuery(sql.yongHuMonth(),
+						null);
+			}
 
-        return this.resultSuccessData(request,response, "", dto);
-    }
+			LittleProjectDto dto = new LittleProjectDto();
+			List<Object> lists = PostgreUtils.excuteQuery(sql.yongHuDay(), null);
+			List<Object> tradelist = PostgreUtils.excuteQuery(sql.shichan(),
+					null);
+			// 时间集合
+			List<String> times = new ArrayList<String>();
+			// 交易市场集合
+			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
+			int a = 1;
+
+			if (tradelist != null && tradelist.size() > 0) {
+				for (Object o : tradelist) {
+					Map m = (Map) o;
+					LittleProjectEntity aa = new LittleProjectEntity();
+					aa.setName(m.get("jysinfo") + "");
+					res.add(aa);
+				}
+			}
+
+			// 获取市场
+
+			if (res != null && res.size() > 0) {
+				for (LittleProjectEntity s : res) {
+
+					List<String> shiChan = new ArrayList<String>();
+					if (lists != null && lists.size() > 0) {
+
+						for (Object o : lists) {
+
+							Map m = (Map) o;
+
+							if (m.get("jysinfo").equals(s.getName())) {
+								
+								shiChan.add(m.get("fvalue") + "");
+								
+
+							}
+						}
+
+					}
+					s.setLists(shiChan);
+				}
+			}
+
+			// 获取时间
+			if (res != null && res.size() > 0) {
+			for (LittleProjectEntity s : res) {
+
+				if (lists != null && lists.size() > 0) {
+
+					for (Object o : lists) {
+						Map m = (Map) o;
+
+						if (m.get("jysinfo").equals(s.getName()) && a == 1) {
+							times.add(m.get("vday") + "");
+
+						}
+
+					}
+				}
+				a = 2;
+			}
+			}
+			dto.setTimes(times.toArray());
+
+			dto.setEntities(res);
+
+			return this.resultSuccessData(request, response, "", dto);
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+
+	}
+	/**
+	 * 总况——总量——用户——金融资产类-客户分类
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月16日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/keHuFenLei" })
+	@ResponseBody
+	public String keHuFenLei(HttpServletRequest request,HttpServletResponse response){
+		try {
+			KeHuFenLei kh=new KeHuFenLei();			
+			List<Object>  khfl=PostgreUtils.excuteQuery(sql.keHuFenLei(),null);
+			if(khfl!=null&&khfl.size()>0){
+				for(Object o:khfl){
+					Map m=(Map)o;
+					kh.setGrs(m.get("grkhs")+"");
+					kh.setJgs(m.get("jgkhs")+"");
+				}
+			}
+			
+			return this.resultSuccessData(request, response, "", kh);
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+		
+	}
+	/**
+	 * 总况——总量——用户——客户统计
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月16日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/keHuTongJi" })
+	@ResponseBody
+	public String keHuTongJi(HttpServletRequest request,HttpServletResponse response){
+		try {
+			LittleProjectDto dto=new LittleProjectDto();
+			List<Object> tongji=PostgreUtils.excuteQuery(sql.keHuTongJi(),null);
+			List<Object> tradelist = PostgreUtils.excuteQuery(sql.shichan(),null);
+			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
+			if(tradelist!=null&&tradelist.size()>0){
+				for(Object t:tradelist){
+					Map m=(Map) t;
+					LittleProjectEntity aa=new LittleProjectEntity();
+					aa.setName(m.get("jysinfo")+"");
+					res.add(aa);
+				}
+				
+			}
+			if(res!=null&&res.size()>0){
+				for(LittleProjectEntity s:res){
+					List<String> shichan=new ArrayList<String>();
+					if(tongji!=null&&tongji.size()>0){
+						for(Object o: tongji){
+							Map m=(Map) o;
+							if(m.get("jysinfo").equals(s.getName())){
+								shichan.add(m.get("rzrkhs")+"");
+								shichan.add(m.get("tzrkhs")+"");
+								shichan.add(m.get("count")+"");
+							}
+						}
+					}
+					s.setLists(shichan);
+				}
+			}
+			dto.setEntities(res);
+			return this.resultSuccessData(request, response, "", dto);
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 总况——总量——用户——客户年龄
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月16日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/kehuAge" })
+	@ResponseBody
+	public String kehuAge(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			KeHuAge res = new KeHuAge();
+			List<Object> tongji = PostgreUtils.excuteQuery(sql.keHuAge(), null);
+			List<String> age = new ArrayList<String>();
+			List<String> sum = new ArrayList<String>();
+			if (tongji != null && tongji.size() > 0) {
+				for (Object o : tongji) {
+					Map m = (Map) o;
+
+					res.setName(m.get("jysinfo") + "");
+
+				}
+
+			}
+			if (tongji != null && tongji.size() > 0) {
+				for (Object o : tongji) {
+					Map m = (Map) o;
+					age.add(m.get("coalesce") + "");
+					sum.add(m.get("sum") + "");
+
+				}
+
+			}
+
+			res.setAge(age);
+			res.setSum(sum);
+			return this.resultSuccessData(request, response, "", res);
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
 
 }

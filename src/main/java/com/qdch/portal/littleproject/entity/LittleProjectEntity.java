@@ -5,6 +5,7 @@ import java.util.List;
 public class LittleProjectEntity {
 
     private String name;
+   
     private List<String> lists;
 
 
@@ -23,4 +24,7 @@ public class LittleProjectEntity {
     public void setLists(List<String> lists) {
         this.lists = lists;
     }
+
+	
+    
 }
