@@ -113,8 +113,15 @@ h5 {
     padding-right: 0.5em;
     width: 9rem;
     border-radius: .25rem;
+    transition: all 200ms;
 }
+.search button:hover {
+    background: #29b7bb;
+}
+.search button:active {
+    background: #24a0a4;
 
+}
 .container-as {
     background: #fff;
     padding: 1em 0;

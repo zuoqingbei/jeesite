@@ -40,27 +40,4 @@
     }
 }
 
-/*自定义class*/
-.icon-pre{
-    position: relative;
-}
-.icon-pre:before{
-    content: "";
-    display: block;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 1rem;
-    height: 1rem;
-    transform: translate(-50%,-50%);
-    text-indent: 1.5rem;
-    background-position: 50% 50%;
-    background-size: contain;
 
-}
-
-.btn-default{
-    color: #999;
-    background-color: #fff;
-    border-color: #999;
-}

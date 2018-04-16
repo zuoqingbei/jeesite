@@ -9,26 +9,39 @@
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/bootstrap-4.0.0.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/swiper-4.2.2.min.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.css">
-    <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/style.css">
+    <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/comm.css">
+    <!--<link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/style.css">-->
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/report.css">
     <style>
-        .main header{
+        .main header {
             width: 100%;
         }
-         .main header h2{
+
+        .main header h2 {
+            color: var(--textBlue);
             font-size: 1.25rem;
-            font-weight: bold;
+            /*font-weight: bold;*/
             margin: 1.25rem auto 1.25rem 2rem;
         }
-         .main header table{
-             font-size: .75rem;
-             margin-bottom: 0;
-         }
-        .main header table tr td:nth-of-type(odd){
-            color:var(--textBlue)
+
+        .main header table {
+            font-size: .75rem;
+            margin-bottom: 0;
         }
-        .main header table td{
+
+        .main header table td {
+            color: #666;
+            font-size: .9375rem;
             padding: .5rem 2rem;
+        }
+
+        .main header table tr td:nth-of-type(odd) {
+            width: 8rem;
+            color: #999;
+        }
+
+        .main header table td.screenUrl {
+            word-break: break-all;
         }
     </style>
 </head>
@@ -40,13 +53,15 @@
     </a>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         <li class="nav-item">
-            <a class="nav-link p-2" href="#" rel="noopener" aria-label="reg">注册</a>
+            <a class="nav-link py-0 px-2 my-2 mx-2" href="#" rel="noopener" aria-label="reg">注册</a>
         </li>
+        <li class="split py-1 my-1">|</li>
         <li class="nav-item">
-            <a class="nav-link p-2" href="#" rel="noopener" aria-label="login">登录</a>
+            <a class="nav-link py-0 px-2 my-2 mx-2" href="#" rel="noopener" aria-label="login">登录</a>
         </li>
     </ul>
 </header>
+
 <div class="container">
     <section class="row">
         <div class="col-">
@@ -61,28 +76,46 @@
     </section>
     <section class="row main">
         <header>
-            <h2>物流柜<a href="">收入</a></h2>
+            <h2>物流柜收入</h2>
             <table class="table table-bordered table-hover">
                 <tbody>
-                <tr><td>指标编号</td><td class="indicatorNumber">${entity.code }</td><td>指标名称</td><td class="indicatorName">${entity.name }<a href="javascript:void();"></a></td></tr>
-                <tr><td>屏幕编号</td><td class="screenNumber">${entity.screenNo }</td><td>屏幕名称</td><td class="screenName">${entity.screenName }</td></tr>
-                <tr><td>屏幕URL</td><td colspan="3" class="screenNumber">${entity.screenUrl }</td></tr>
+                <tr>
+                    <td>指标编号</td>
+                    <td class="indicatorNumber">${entity.code }</td>
+                    <td>指标名称</td>
+                    <td class="indicatorName">${entity.name }<a href="javascript:void();"></a></td>
+                </tr>
+                <tr>
+                    <td>屏幕编号</td>
+                    <td class="screenNumber">${entity.screenNo }</td>
+                    <td>屏幕名称</td>
+                    <td class="screenName">${entity.screenName }</td>
+                </tr>
+                <tr>
+                    <td>屏幕URL</td>
+                    <td colspan="3" class="screenUrl">${entity.screenUrl }</td>
+                </tr>
                 </tbody>
             </table>
         </header>
         <div class="handle">
-            <span>
-                <i class="iconfont icon-shoucang"></i>
-                <span>收藏</span>
-            </span>
-            <span>
-                <i class="iconfont icon-dianzan"></i>
-                <span>点赞</span>
-            </span>
-            <span>
-                <i class="iconfont icon-fenxiang"></i>
-                <span>分享</span>
-            </span>
+            <ul>
+                <li class="favorite">
+                    <i class="iconfont icon-shoucang"></i>
+                    <span>收藏</span>
+                </li>
+                <li class="split">|</li>
+                <li class="good">
+                    <i class="iconfont icon-dianzan"></i>
+                    <span>点赞</span>
+                </li>
+                <li class="split">|</li>
+                <li class="share">
+                    <i class="iconfont icon-fenxiang"></i>
+                    <span>分享</span>
+                </li>
+            </ul>
+
         </div>
     </section>
     <section class="row main">
@@ -106,7 +139,7 @@
                 </li>
                 <li class="reportPath">
                     <h4>计算公式</h4>
-                     <p>${entity.useFiled }</p>
+                    <p>${entity.useFiled }</p>
                 </li>
             </ul>
         </div>
@@ -116,10 +149,9 @@
 <script src="${ctxStatic}/${portalPage}/thinker/asserts/js/jquery-3.3.1.min.js"></script>
 <script src="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.js"></script>
 <script>
-
     $(function () {
-        $('.handle span i').on('click',function () {
-            $(this).toggleClass('blue')
+        $('.handle li').on('click', function () {
+            $(this).toggleClass('active')
         })
     })
 
