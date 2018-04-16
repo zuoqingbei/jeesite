@@ -20,7 +20,7 @@ h2 {
 
 .crumb {
     height: 3.4%;
-	font-size: .8em;
+	font-size: .875em;
 	color: #626262;
 	margin-top: 1.5%;
 	margin-bottom: 1em;
@@ -31,6 +31,7 @@ h2 {
 }
 .apiInfo {
 	/* height: 11em; */
+	position: relative;
 	background: #fff;
 	overflow: hidden;
 	padding: 1rem 2rem 1rem 0;
@@ -267,6 +268,16 @@ table {
 }
 
 
+@media (min-width: 992px){
+	.con {
+		max-width: 860px;
+	}
+}
+@media (min-width: 1367px){
+	.con {
+		max-width: 1200px;
+	}
+}
 
 
 

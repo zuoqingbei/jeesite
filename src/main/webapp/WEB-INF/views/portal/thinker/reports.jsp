@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/bootstrap-4.0.0.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/swiper-4.2.2.min.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.css">
-    <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/style.css">
+    <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/comm.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/report.css">
 
 </head>
@@ -21,10 +21,11 @@
     </a>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         <li class="nav-item">
-            <a class="nav-link p-2" href="#" rel="noopener" aria-label="reg">注册</a>
+            <a class="nav-link py-0 px-2 my-2 mx-2" href="#" rel="noopener" aria-label="reg">注册</a>
         </li>
+        <li class="split py-1 my-1">|</li>
         <li class="nav-item">
-            <a class="nav-link p-2" href="#" rel="noopener" aria-label="login">登录</a>
+            <a class="nav-link py-0 px-2 my-2 mx-2" href="#" rel="noopener" aria-label="login">登录</a>
         </li>
     </ul>
 </header>
@@ -33,7 +34,7 @@
         <div class="col-">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="">当前位置：&emsp;</li>
+                    <li class="">当前位置：</li>
                     <li class="breadcrumb-item"><a href="${portalPath}/thinker/search">搜索页面</a></li>
                     <li class="breadcrumb-item active" aria-current="page">报表</li>
                 </ol>
@@ -46,14 +47,14 @@
                 <li class="system">
                     <h4>显示系统</h4>
                     <p>
-                    <c:choose>
-                    	<c:when test="${entity.link!=''}">
-                    	 <a href="${entity.link }" target="${entity.openType }">${entity.systemName }</a>
-                    	</c:when>
-                    	<c:otherwise>
-                    	 <a href="#">${entity.systemName }</a>
-                    	</c:otherwise>
-                    </c:choose>
+                        <c:choose>
+                            <c:when test="${entity.link!=''}">
+                                <a href="${entity.link }" target="${entity.openType }">${entity.systemName }</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="#">${entity.systemName }</a>
+                            </c:otherwise>
+                        </c:choose>
                     </p>
                 </li>
                 <li class="type">
@@ -63,17 +64,17 @@
                 <li class="dimension">
                     <h4>显示维度</h4>
                     <p>
-	                    <c:forEach items="${entity.dimensionStr}" var="li">
-		                     <span>${li}</span>
-	                    </c:forEach>
+                        <c:forEach items="${entity.dimensionStr}" var="li">
+                            <span>${li}</span>
+                        </c:forEach>
                     </p>
                 </li>
                 <li class="departmentName">
                     <h4>使用部门名称</h4>
                     <p>
-                    	<c:forEach items="${entity.deptStr}" var="li">
-		                     <span>${li}</span>
-	                    </c:forEach>
+                        <c:forEach items="${entity.deptStr}" var="li">
+                            <span>${li}</span>
+                        </c:forEach>
                     </p>
                 </li>
                 <li class="reportPath">
@@ -87,18 +88,23 @@
             </ul>
         </div>
         <div class="handle">
-            <span>
-                <i class="iconfont icon-shoucang"></i>
-                <span>收藏</span>
-            </span>
-            <span>
-                <i class="iconfont icon-dianzan"></i>
-                <span>点赞</span>
-            </span>
-            <span>
-                <i class="iconfont icon-fenxiang"></i>
-                <span>分享</span>
-            </span>
+            <ul>
+                <li class="favorite">
+                    <i class="iconfont icon-shoucang"></i>
+                    <span>收藏</span>
+                </li>
+                <li class="split">|</li>
+                <li class="good">
+                    <i class="iconfont icon-dianzan"></i>
+                    <span>点赞</span>
+                </li>
+                <li class="split">|</li>
+                <li class="share">
+                    <i class="iconfont icon-fenxiang"></i>
+                    <span>分享</span>
+                </li>
+            </ul>
+
         </div>
     </section>
 
@@ -107,10 +113,9 @@
 <script src="${ctxStatic}/${portalPage}/thinker/asserts/js/jquery-3.3.1.min.js"></script>
 <script src="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.js"></script>
 <script>
-
     $(function () {
-        $('.handle span i').on('click',function () {
-            $(this).toggleClass('blue')
+        $('.handle li').on('click', function () {
+            $(this).toggleClass('active')
         })
     })
 

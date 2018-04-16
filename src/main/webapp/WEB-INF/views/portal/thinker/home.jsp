@@ -108,7 +108,7 @@
     $(function () {
         var swiper = new Swiper('.swiper-container', {
             slidesPerView: 4,
-            spaceBetween: 30,
+            spaceBetween: 15,
             slidesPerGroup: 4,
             loop: true,
             loopFillGroupWithBlank: true,
