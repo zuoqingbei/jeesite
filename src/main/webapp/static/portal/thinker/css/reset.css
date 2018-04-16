@@ -13,7 +13,7 @@ html,body{
 	font-family: "Microsoft yahei", "微软雅黑", "Source Sans Pro", "Helvetica Neue", 'Helvetica', 'Arial', sans-serif;
 	min-width: 1000px;
 }
-@media screen and (min-width: 1025px) {
+/* @media screen and (min-width: 1025px) {
 	html {
 		font-size: 18px;
 	}
@@ -34,3 +34,4 @@ html,body{
 		max-width: 85%;
 	}
 }
+ */

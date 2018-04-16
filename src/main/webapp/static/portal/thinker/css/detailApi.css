@@ -2,13 +2,16 @@
 	width: 80%;
 	margin: 0 auto;
 	height: 100%;
-	/*overflow: hidden;*/
+	overflow: hidden;
 }
 
 body {
 	overflow: auto;
+	color:#333;
 }
-
+h2 {
+	color:#000;
+}
 #bottom {
 	min-height: 92.8%;
 	/* padding-top: 3.2%; */
@@ -18,13 +21,13 @@ body {
 .crumb {
     height: 3.4%;
 	font-size: .8em;
-	color: #666;
+	color: #626262;
 	margin-top: 1.5%;
 	margin-bottom: 1em;
 }
 
 .bl {
-	color: #2764b6;
+	color: #2774b6;
 }
 .apiInfo {
 	/* height: 11em; */
@@ -51,16 +54,17 @@ h2 {
 h2 ~ .support{
 	position: relative;
     top: -.1875rem;
-    color: #999;
+    color: #929292;
     border: .0625rem solid #ccc;
     border-radius: .25rem;
     padding: .125rem .375rem;
     font-size: .75rem;
 }
 .interact {
-	float: right;
+	/* float: right; */
 	width: 35%;
     height: 100%;
+    margin-top: 1em;
 }
 
 .interact>span {
@@ -77,26 +81,40 @@ h2 ~ .support{
 	padding-left:6%;
 }
 .iconblue {
-	color: #2764b6;
+	color: #2774b6;
 }
 .info {
 	padding-left: 2em;
 	margin-top: 0.6em;
 	font-size: .9em;
+	color:#999;
 }
 
 .zb_box {
     margin-top: 1.8%;
     margin-left: 2em;
     font-size: .9em;
-    height: 14%;
+    height: 4em;
+    border-top: dashed 2px #e6e6e6;
+    padding-top: 2em;
 }
 .zb_box li {
 	float: left;
 	margin-right: 7%;
 }
 
+.zb_box li:first-child {
+	margin-right:7.3em;
+}
 
+
+.zb_box li span:first-child{
+	color:#999;
+}
+.zb_box .mart {
+	margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
 .tabBox {
 	min-height: 26em;
 	margin-top: 1%;
@@ -130,8 +148,8 @@ h2 ~ .support{
 }
 
 .tabBox ul .liActive {
-	color: #2764b6;
-	border-bottom: solid 2px #2764b6;
+	color: #2774b6;
+	border-bottom: solid 2px #2774b6;
 }
 
 
@@ -146,19 +164,24 @@ h2 ~ .support{
     margin: 2% 0;
     font-size: .9em;
     padding-left: 2em;
+    color:#171717;
 	
 }
+.docCon p span {
+	color:#535353;
+}
+
 .docCon p:first-child {
 	padding-top: 1.8em;
 }
 
 .blueBtn {
     height: 5%;
-    width: 15%;
+    width: 11%;
     text-align: center;
     cursor: pointer;
     line-height: 1.9em;
-    background: #2764b6;;
+    background: #2774b6;;
     color: #fff;
     font-size: .9em;
     margin-left: 2em;
@@ -168,7 +191,7 @@ h2 ~ .support{
 	width:15%;
     height: 2%;
     text-align: center;
-    border-left: solid 2px #2764b6;
+    border-left: solid 2px #2774b6;
     font-size: .9em;
     margin: 1em 0;
     margin-left: 2em;
@@ -181,7 +204,7 @@ table {
 	table-layout: fixed;
 	margin-left: 1.8em;
     font-size: .9em;
-    color: #666;
+    color: #7b7b7b;
 }
 table tr {
 	
@@ -230,12 +253,19 @@ table .th {
 
 }
 
+pre {
+	color:#171717;
+}
 
-
-
-
-
-
+table {
+	width:70%!important;
+}
+.table th, .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border:none!important;
+    border-top: 1px solid #dee2e6!important;
+}
 
 
 

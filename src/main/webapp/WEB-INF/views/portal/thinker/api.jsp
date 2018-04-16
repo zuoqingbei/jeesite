@@ -30,7 +30,7 @@
 		<div id="bottom">
 			<div class="bottomCon con">
 				<div class="crumb">
-					<span>当前位置：<a href="${portalPath}/thinker/search">搜索页面</a> ><span class="bl">${entity.name}</span></span>
+					<span>当前位置：<a href="${portalPath}/thinker/search" class="bl">搜索页面</a> ><span class="bl">${entity.name}</span></span>
 				</div>
 				
 				<div class="apiInfo">
@@ -47,23 +47,23 @@
 							</c:choose>
 						</div>
 						
-						<div class="interact">
-							<span>
-								<i class="iconfont icon-shoucang"></i>
-								<span>收藏</span>
-							</span>
-							<span>
-								<i class="iconfont icon-dianzan"></i>
-								<span>点赞</span>
-							</span>
-							<span>
-								<i class="iconfont icon-fenxiang"></i>
-								<span>分享</span>
-							</span>
-						</div>
+						
 					</div>
 					<div class="info">${entity.descs}</div>
-					
+					<div class="interact">
+						<span>
+							<i class="iconfont icon-shoucang"></i>
+							<span>收藏</span>
+						</span>
+						<span>
+							<i class="iconfont icon-dianzan"></i>
+							<span>点赞</span>
+						</span>
+						<span>
+							<i class="iconfont icon-fenxiang"></i>
+							<span>分享</span>
+						</span>
+					</div>
 					<div class="zb_box">
 						<li>
 							<span>数据ID：</span>
@@ -73,7 +73,8 @@
 							<span>连接应用数：</span>
 							<span>${entity.appNum}</span>
 						</li>
-						<li>
+						<br />
+						<li class="mart">
 							<span>接口状态：</span>
 							<c:choose>
 								<c:when test="${entity.status==0}">
@@ -83,6 +84,10 @@
 										<span>故障</span>
 								</c:otherwise>
 							</c:choose>
+						</li>
+						<li class="mart">
+							<span>接入服务商：</span>
+							<span>1169数据立方体</span>
 						</li>
 					</div>
 				</div>
@@ -100,7 +105,7 @@
 						
 						<div class="part-title ts">服务级错误码参照</div>
 						<!-- (err_code) -->
-						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
+						<table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
 							<tr class="th">
 								<td>错误码</td>
 								<td>说明</td>
@@ -113,7 +118,7 @@
 							</c:forEach>
 						</table>
 						<div class="part-title">系统级错误码参照</div>
-						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
+						<table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
 							<tr class="th">
 								<td>错误码</td>
 								<td>说明</td>
@@ -128,7 +133,7 @@
 							</c:forEach>
 						</table>
 						<div class="part-title">错误码格式说明</div>
-						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
+						<table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
 							<tr class="th">
 								<td>错误码</td>
 								<td>说明</td>
@@ -146,7 +151,7 @@
 					
 					<div class="callUsCon">
 						<div class="part-title ts">联系我们</div>
-						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
+						<table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
 							<tr class="th">
 								<td>姓名</td>
 								<td>邮箱</td>
@@ -166,7 +171,7 @@
 						
 						
 						<div class="part-title ts">完整教学代码示例</div>
-						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
+						<table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
 							<tr class="th">
 								<td>语言</td>
 								<td>标题</td>
@@ -181,7 +186,7 @@
 							</tr>
 						</table>
 						<div class="part-title">常见问题</div>
-						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
+						<table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
 							<tr class="th">
 								<td>内容</td>
 								<td>详细</td>
@@ -204,7 +209,7 @@
 						<div class="blueBtn">API测试工具</div>
 						
 						<div class="part-title">请求参数说明</div>
-						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
+						<table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
 							<tr class="th">
 								<td>名称</td>
 								<td>类型</td>
@@ -222,7 +227,7 @@
 							</c:forEach>
 						</table>
 						<div class="part-title">返回参数说明</div>
-						<table border="0" cellspacing="0" cellpadding="0" rules="rows">
+						<table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
 							<tr class="th">
 								<td>名称</td>
 								<td>类型</td>
