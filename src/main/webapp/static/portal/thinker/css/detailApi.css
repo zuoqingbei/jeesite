@@ -1,5 +1,5 @@
 .con {
-	width: 80%;
+	width: 62.5%;
 	margin: 0 auto;
 	height: 100%;
 	overflow: hidden;
@@ -64,7 +64,7 @@ h2 ~ .support{
 	/* float: right; */
 	width: 35%;
     height: 100%;
-    margin-top: 1em;
+    margin-top: 1.5em;
 }
 
 .interact>span {
@@ -85,7 +85,7 @@ h2 ~ .support{
 }
 .info {
 	padding-left: 2em;
-	margin-top: 0.6em;
+	margin-top: 1.5em;
 	font-size: .9em;
 	color:#999;
 }
@@ -104,7 +104,7 @@ h2 ~ .support{
 }
 
 .zb_box li:first-child {
-	margin-right:7.3em;
+	margin-right:6.2em;
 }
 
 
@@ -123,7 +123,7 @@ h2 ~ .support{
 }
 
 .tabBox ul {
-	height: 8%;
+	height: 2.8em;
 	border-bottom: 1px solid #eee;
 }
 .tabBox .ulfixed {
@@ -133,15 +133,14 @@ h2 ~ .support{
 	box-shadow:0px 1px 0px 0px #ccc;
 	left:0;
 	width: 100%;
-	padding-left: 10%;
+	padding-left: 18%;
 	height: 2.8em;
-	padding-top: .5em;
 }
 
 
 .tabBox ul li{
 	float: left;
-    line-height: 2.2em;
+    line-height: 2.8em;
     padding: 0 1em;
     margin: 0 2em;
     cursor: pointer;
@@ -172,7 +171,7 @@ h2 ~ .support{
 }
 
 .docCon p:first-child {
-	padding-top: 1.8em;
+	padding-top: 1em;
 }
 
 .blueBtn {
@@ -188,14 +187,14 @@ h2 ~ .support{
 }
 
 .part-title {
-	width:15%;
     height: 2%;
-    text-align: center;
     border-left: solid 2px #2774b6;
     font-size: .9em;
     margin: 1em 0;
     margin-left: 2em;
     line-height: 1;
+      margin-top: 3em;
+      padding-left:2em;
 }
 
 table {
@@ -223,13 +222,16 @@ table .th {
 
 
 .jsontxt {
-    min-height: 14em;
-    background: #f5f5f5;
-    margin: 0 auto;
-    border: solid 1px #f5f5f5;
+      min-height: 19em;
+    /* background: #f5f5f5; */
+    /* margin: 0 auto; */
+    border: solid 1px #dee2e6;
     border-radius: 4px;
     margin-bottom: 2em;
-    padding:2em 0;
+    padding: 2em 0;
+    width: 70%;
+    margin-left: 1.8em;
+    overflow: hidden;
 }
 
 .defaultCodeCon,.demoCodeCon,.callUsCon {
@@ -241,15 +243,12 @@ table .th {
 }
 .demoCodeCon .part-title {
 	margin-top: 4%;
-	width: 12%;
 }
 .demoCodeCon .part-title:last-of-type {
-	width: 8%;	
 }
 
 .callUsCon .part-title {
 	margin-top: 4%;
-    width: 8%;
 
 }
 
