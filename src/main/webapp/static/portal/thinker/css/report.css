@@ -1,91 +1,11 @@
-/*全局变量*/
-:root{
-    /*--themeBlue: #00adef;*/
-    --textBlue: #2764b6;
-    --btnBgBlue:#2bcfd3;
-}
-
-/*全局设置-----start*/
-@media all {
-    * {
-        font-family: PingFang SC, microsoft yahei, sans-serif;
-    }
-
-    a {
-        cursor: pointer;
-        color: var(--textBlue);
-    }
-
-    a,
-    a:hover,
-    a:focus,
-    a:visited {
-        text-decoration: none;
-    }
-
-    ul {
-        list-style: none;
-    }
-}
-
-/*自定义class*/
-.icon-pre{
-    position: relative;
-    text-indent: 1.5rem;
-}
-.icon-pre:before{
-    content: "";
-    display: block;
-    position: absolute;
-    /*left: 50%;*/
-    top: 50%;
-    width: 1rem;
-    height: 1rem;
-    transform: translateY(-50%);
-    background-position: 50% 50%;
-    background-size: contain;
-    background-repeat: no-repeat;
-
-}
-
-.btn-default{
-    color: #999;
-    background-color: #fff;
-    border-color: #999;
-}
-
-body {
-    background-color: #f6f6f6;
-}
 
 body > .container > .main {
     position: relative;
     margin-bottom: 1rem;
-    box-shadow: 0 0 .5rem rgba(0,0,0,.2);
+    box-shadow: 0 0 .5rem rgba(0, 0, 0, .2);
     border-radius: 0.125rem;
     overflow: hidden;
     background-color: #fff;
-}
-
-body>header.navbar {
-    padding: 0 1rem;
-    background: radial-gradient(circle farthest-corner, #43aaeb, #246eb0);
-}
-
-body>header * {
-    color: #fff;
-}
-
-body>header h1.icon-pre {
-    font-size: 1.125rem;
-    margin-bottom: 0;
-    text-indent: 2rem;
-}
-
-body>header h1.icon-pre:before {
-    width: 1.5rem;
-    height: 1.5rem;
-    background-image: url("../img/cube.png");
 }
 
 .breadcrumb {
@@ -155,16 +75,20 @@ body>header h1.icon-pre:before {
     font-size: .875rem;
     cursor: pointer;
 }
-.handle ul > li:before{
-    filter:grayscale(1);
+
+.handle ul > li:before {
+    filter: grayscale(1);
 }
+
 .handle ul > li:active:before,
 .handle ul > li.active:before {
-    filter:grayscale(0);
+    filter: grayscale(0);
 }
-.handle span i{
+
+.handle span i {
     cursor: pointer;
 }
-.blue{
+
+.blue {
     color: #2764b6;
 }
