@@ -47,7 +47,7 @@
 </head>
 <body>
 <header class="navbar navbar-expand flex-column flex-md-row bd-navbar">
-    <a class="navbar-brand mr-0 mr-md-2" href="#">
+    <a class="navbar-brand mr-0 mr-md-2" href="/portal/thinker/home">
         <div class="logoBg"></div>
         <h1 class="icon-pre">数据立方体</h1>
     </a>

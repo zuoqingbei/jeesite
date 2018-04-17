@@ -52,6 +52,7 @@
                 <div class="search">
                     <input type="text" id="keyword" name="keyWord" placeholder="请输入关键词...">
                     <button type="button" id="searchBtn" onclick="search()">搜索</button>
+                    <input style="display: none;" type="text" /> 
                 </div>
             </form>
         </div>
@@ -130,13 +131,25 @@
         });
         $('#keyword').bind('keyup', function (event) {
             if (event.keyCode == "13") {
-                $('#searchBtn').click();
+            	if($("#keyword").val() == ""){
+					alert("搜索的内容不能为空");
+					return;
+				}else{
+					$('#searchBtn').click();
+				}
+                
             }
         });
 
     })
 
     function search() {
+    	
+    	if($("#keyword").val() == ""){
+			alert("搜索的内容不能为空");
+			return false;
+		}
+    	
         $("#searchForm").submit();
         //var content = $('.search input').val();
         //alert(m);

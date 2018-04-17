@@ -18,7 +18,7 @@
 
 <body>
 <header class="navbar navbar-expand flex-column flex-md-row bd-navbar">
-    <a class="navbar-brand mr-0 mr-md-2" href="#">
+    <a class="navbar-brand mr-0 mr-md-2" href="/portal/thinker/home">
         <div class="logoBg"></div>
         <h1 class="icon-pre">数据立方体</h1>
     </a>
@@ -76,6 +76,9 @@
             <!--头部导航-->
             <div class="serch_content_header">
                 <!-- <span>当前位置：</span><span class="blue">搜索条件</span> -->
+                <span class="label label0"><span class="txt"></span><span class="close_label">×</span></span>
+                 <span class="label label1"><span class="txt1"></span><span class="close_label">×</span></span>
+                 <span class="label label2"><span class="txt2"></span><span class="close_label">×</span></span>
             </div>
             <!--内容部分-->
             <div class="search_content_box clearfix">
@@ -168,7 +171,12 @@
         });
 		$('#keyword').bind('keyup', function(event) {
 					if (event.keyCode == "13") {
+						if($("#keyword").val() == ""){
+							alert("搜索的内容不能为空");
+							return;
+						}
 						$('#searchBtn').click();
+						
 					}
 				});
         //分页
