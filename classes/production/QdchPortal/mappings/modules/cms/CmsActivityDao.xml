@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsActivityDao">
+    
+	<sql id="cmsActivityColumns">
+		a.id AS "id",
+		a.data_type AS "dataType",
+		a.user_id AS "user.id",
+		a.title AS "title",
+		a.image AS "image",
+		a.keywords AS "keywords",
+		a.tags AS "tags",
+		a.description AS "description",
+		a.content AS "content",
+		a.content_html AS "contentHtml",
+		a.weight AS "weight",
+		a.hits AS "hits",
+		a.transmit AS "transmit",
+		a.discess AS "discess",
+		a.praise AS "praise",
+		a.tread AS "tread",
+		a.collection AS "collection",
+		a.evaluate AS "evaluate",
+		a.enter AS "enter",
+		a.view AS "view",
+		a.recommend AS "recommend",
+		a.allow_comment AS "allowComment",
+		a.leader AS "leader",
+		a.address AS "address",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.enter_start_date AS "enterStartDate",
+		a.enter_end_date AS "enterEndDate",
+		a.category1 AS "category1",
+		a.category2 AS "category2",
+		a.category3 AS "category3",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="cmsActivityJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CmsActivity">
+		SELECT 
+			<include refid="cmsActivityColumns"/>
+		FROM cms_activity a
+		<include refid="cmsActivityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsActivity">
+		SELECT 
+			<include refid="cmsActivityColumns"/>
+		FROM cms_activity a
+		<include refid="cmsActivityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="tags != null and tags != ''">
+				AND a.tags LIKE 
+					<if test="dbName == 'oracle'">'%'||#{tags}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tags}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{tags},'%')</if>
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address LIKE 
+					<if test="dbName == 'oracle'">'%'||#{address}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{address}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{address},'%')</if>
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date LIKE 
+					<if test="dbName == 'oracle'">'%'||#{startDate}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{startDate}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{startDate},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsActivity">
+		SELECT 
+			<include refid="cmsActivityColumns"/>
+		FROM cms_activity a
+		<include refid="cmsActivityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_activity(
+			id,
+			data_type,
+			user_id,
+			title,
+			image,
+			keywords,
+			tags,
+			description,
+			content,
+			content_html,
+			weight,
+			hits,
+			transmit,
+			discess,
+			praise,
+			tread,
+			collection,
+			evaluate,
+			enter,
+			view,
+			recommend,
+			allow_comment,
+			leader,
+			address,
+			start_date,
+			end_date,
+			enter_start_date,
+			enter_end_date,
+			category1,
+			category2,
+			category3,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{dataType},
+			#{user.id},
+			#{title},
+			#{image},
+			#{keywords},
+			#{tags},
+			#{description},
+			#{content},
+			#{contentHtml},
+			#{weight},
+			#{hits},
+			#{transmit},
+			#{discess},
+			#{praise},
+			#{tread},
+			#{collection},
+			#{evaluate},
+			#{enter},
+			#{view},
+			#{recommend},
+			#{allowComment},
+			#{leader},
+			#{address},
+			#{startDate},
+			#{endDate},
+			#{enterStartDate},
+			#{enterEndDate},
+			#{category1},
+			#{category2},
+			#{category3},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_activity SET 	
+			data_type = #{dataType},
+			user_id = #{user.id},
+			title = #{title},
+			image = #{image},
+			keywords = #{keywords},
+			tags = #{tags},
+			description = #{description},
+			content = #{content},
+			content_html = #{contentHtml},
+			weight = #{weight},
+			hits = #{hits},
+			transmit = #{transmit},
+			discess = #{discess},
+			praise = #{praise},
+			tread = #{tread},
+			collection = #{collection},
+			evaluate = #{evaluate},
+			enter = #{enter},
+			view = #{view},
+			recommend = #{recommend},
+			allow_comment = #{allowComment},
+			leader = #{leader},
+			address = #{address},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			enter_start_date = #{enterStartDate},
+			enter_end_date = #{enterEndDate},
+			category1 = #{category1},
+			category2 = #{category2},
+			category3 = #{category3},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_activity SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

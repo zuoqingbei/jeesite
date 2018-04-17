@@ -140,28 +140,9 @@ public class PostgreUtils {
      * @return 结果集   
      */      
 
-    private  ResultSet executeQueryRS(String sql, Object[] params) {
-        try {      
-            // 获得连接      
-            conn = postgreUtils.getConnection();
-            // 调用SQL      
-            pst = conn.prepareStatement(sql);      
-                  
-            // 参数赋值      
-            if (params != null) {      
-                for (int i = 0; i < params.length; i++) {      
-                    pst.setObject(i + 1, params[i]);      
-                }      
-            }      
-                  
-            // 执行   
-            rst = pst.executeQuery();      
-        } catch (SQLException e) {      
-            System.out.println(e.getMessage());      
-        }       
+
       
-        return rst;      
-    }      
+
 
     /**   
      * SQL 查询将查询结果：一行一列   
@@ -247,6 +228,7 @@ public class PostgreUtils {
         }
 
         return list;
+
     }
 
 //    private  ResultSet executeQueryRS(String sql, Object[] params) {
@@ -276,10 +258,41 @@ public class PostgreUtils {
 //    }
 
 
+//    }
+
+    private  ResultSet executeQueryRS(String sql, Object[] params) {
+        try {
+            // 获得连接
+            conn = PostgreUtils.getConnection();
+
+            // 调用SQL
+            pst = conn.prepareStatement(sql);
+
+            // 参数赋值
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    pst.setObject(i + 1, params[i]);
+                }
+            }
+
+            // 执行
+            rst = pst.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+
+        return rst;
+    }
+
+
+
 
     /**   
      * 关闭所有资源   
      */      
+
 
     private  void closeAll() {
 

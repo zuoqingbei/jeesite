@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsEducationDao">
+    
+	<sql id="cmsEducationColumns">
+		a.id AS "id",
+		a.link AS "link",
+		a.data_type AS "dataType",
+		a.user_id AS "user.id",
+		a.title AS "title",
+		a.image AS "image",
+		a.keywords AS "keywords",
+		a.tags AS "tags",
+		a.description AS "description",
+		a.content AS "content",
+		a.content_html AS "contentHtml",
+		a.video_url AS "videoUrl",
+		a.teacher_id AS "teacherId",
+		a.weight AS "weight",
+		a.hits AS "hits",
+		a.transmit AS "transmit",
+		a.discess AS "discess",
+		a.praise AS "praise",
+		a.tread AS "tread",
+		a.collection AS "collection",
+		a.report AS "report",
+		a.evaluate AS "evaluate",
+		a.tip AS "tip",
+		a.view AS "view",
+		a.recommend AS "recommend",
+		a.allow_comment AS "allowComment",
+		a.comment_audit AS "commentAudit",
+		a.allow_report AS "allowReport",
+		a.undercarriage AS "undercarriage",
+		a.reason AS "reason",
+		a.category1 AS "category1",
+		a.category2 AS "category2",
+		a.category3 AS "category3",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u4.name AS "user.name",
+		u4.photo AS "user.photo"
+	</sql>
+	
+	<sql id="cmsEducationJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CmsEducation">
+		SELECT 
+			<include refid="cmsEducationColumns"/>
+		FROM cms_education a
+		<include refid="cmsEducationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsEducation">
+		SELECT 
+			<include refid="cmsEducationColumns"/>
+		FROM cms_education a
+		<include refid="cmsEducationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="category1 != null and category1 != ''">
+				AND a.category1 = #{category1}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="updateDate != null and updateDate != ''">
+				AND a.update_date = #{updateDate}
+			</if>
+			<if test="dataType != null and dataType !=''">
+				and a.data_type=#{dataType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsEducation">
+		SELECT 
+			<include refid="cmsEducationColumns"/>
+		FROM cms_education a
+		<include refid="cmsEducationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="tags != null and tags != ''">
+				and FIND_IN_SET(#{tags},a.tags)
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_education(
+			id,
+			link,
+			data_type,
+			user_id,
+			title,
+			image,
+			keywords,
+			tags,
+			description,
+			content,
+			content_html,
+			video_url,
+			teacher_id,
+			weight,
+			hits,
+			transmit,
+			discess,
+			praise,
+			tread,
+			collection,
+			report,
+			evaluate,
+			tip,
+			view,
+			recommend,
+			allow_comment,
+			comment_audit,
+			allow_report,
+			undercarriage,
+			reason,
+			category1,
+			category2,
+			category3,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{link},
+			#{dataType},
+			#{user.id},
+			#{title},
+			#{image},
+			#{keywords},
+			#{tags},
+			#{description},
+			#{content},
+			#{contentHtml},
+			#{videoUrl},
+			#{teacherId},
+			#{weight},
+			#{hits},
+			#{transmit},
+			#{discess},
+			#{praise},
+			#{tread},
+			#{collection},
+			#{report},
+			#{evaluate},
+			#{tip},
+			#{view},
+			#{recommend},
+			#{allowComment},
+			#{commentAudit},
+			#{allowReport},
+			#{undercarriage},
+			#{reason},
+			#{category1},
+			#{category2},
+			#{category3},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_education SET 	
+			link = #{link},
+			data_type = #{dataType},
+			user_id = #{user.id},
+			title = #{title},
+			image = #{image},
+			keywords = #{keywords},
+			tags = #{tags},
+			description = #{description},
+			content = #{content},
+			content_html = #{contentHtml},
+			video_url = #{videoUrl},
+			teacher_id = #{teacherId},
+			weight = #{weight},
+			hits = #{hits},
+			transmit = #{transmit},
+			discess = #{discess},
+			praise = #{praise},
+			tread = #{tread},
+			collection = #{collection},
+			report = #{report},
+			evaluate = #{evaluate},
+			tip = #{tip},
+			view = #{view},
+			recommend = #{recommend},
+			allow_comment = #{allowComment},
+			comment_audit = #{commentAudit},
+			allow_report = #{allowReport},
+			undercarriage = #{undercarriage},
+			reason = #{reason},
+			category1 = #{category1},
+			category2 = #{category2},
+			category3 = #{category3},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_education SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="getList" resultType="CmsEducation">
+		SELECT
+		<include refid="cmsEducationColumns"/>
+		FROM cms_education a
+		<include refid="cmsEducationJoins"/>
+		WHERE a.del_flag='0'
+		<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
+		</if>
+		<if test="dataType != null and dataType !=''">
+			and a.data_type=#{dataType}
+		</if>
+		<if test="category1 != null and category1 !=''">
+			AND a.category1=#{category1}
+		</if>
+
+	</select>
+
+
+	<select id="getDailyEducation" resultType="CmsEducation">
+		SELECT
+		<include refid="cmsEducationColumns"/>
+		FROM cms_education a
+		<include refid="cmsEducationJoins"/>
+		WHERE a.del_flag='0' and
+		a.id IN (
+		SELECT
+		cms_id
+		FROM
+		cms_daily_list_content
+		WHERE
+		del_flag = '0'
+		AND table_name = 'cms_education'
+		AND daily_id=#{dailyId}
+		)
+	</select>
+	
+</mapper>

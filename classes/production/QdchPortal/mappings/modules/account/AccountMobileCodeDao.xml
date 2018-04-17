@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.account.dao.AccountMobileCodeDao">
+    
+	<sql id="accountMobileCodeColumns">
+		a.id AS "id",
+		a.mobile AS "mobile",
+		a.codes AS "codes",
+		a.create_date AS "createDate",
+		a.used AS "used",
+		a.uasge AS "uasge",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="accountMobileCodeJoins">
+	</sql>
+    
+	<select id="get" resultType="AccountMobileCode">
+		SELECT 
+			<include refid="accountMobileCodeColumns"/>
+		FROM account_mobile_code a
+		<include refid="accountMobileCodeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="AccountMobileCode">
+		SELECT 
+			<include refid="accountMobileCodeColumns"/>
+		FROM account_mobile_code a
+		<include refid="accountMobileCodeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="AccountMobileCode">
+		SELECT 
+			<include refid="accountMobileCodeColumns"/>
+		FROM account_mobile_code a
+		<include refid="accountMobileCodeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO account_mobile_code(
+			id,
+			mobile,
+			codes,
+			create_date,
+			used,
+			uasge,
+			del_flag
+		) VALUES (
+			#{id},
+			#{mobile},
+			#{codes},
+			#{createDate},
+			#{used},
+			#{uasge},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE account_mobile_code SET 	
+			mobile = #{mobile},
+			codes = #{codes},
+			used = #{used},
+			uasge = #{uasge}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE account_mobile_code SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="getByTel" resultType="AccountMobileCode">
+			SELECT
+				*
+			FROM
+				account_mobile_code a
+			WHERE
+				a.del_flag = '0' and a.used='0'
+		<if test="mobile != null and mobile != ''">
+			AND a.mobile = #{mobile}
+		</if>
+		<if test="codes != null and codes != ''">
+			and a.codes=#{codes}
+		</if>
+		ORDER BY create_date desc limit 1
+
+	</select>
+
+	<update id="setUsed">
+		UPDATE account_mobile_code
+		SET used = '1'
+		WHERE
+			del_flag = '0'
+		AND mobile = #{mobile}
+		AND used = '0'
+	</update>
+
+	<update id="deleteByTel">
+		UPDATE account_mobile_code SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE  mobile = #{mobile}
+	</update>
+
+</mapper>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsComplaintDao">
+    
+	<sql id="cmsComplaintColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.title AS "title",
+		a.image AS "image",
+		a.source AS "source",
+		a.company_name AS "companyName",
+		a.company_address AS "companyAddress",
+		a.find_date AS "findDate",
+		a.content AS "content",
+		a.status,
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u2.name AS "user.name",
+		u2.mobile AS "user.mobile"
+	</sql>
+	
+	<sql id="cmsComplaintJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CmsComplaint">
+		SELECT 
+			<include refid="cmsComplaintColumns"/>
+		FROM cms_complaint a
+		<include refid="cmsComplaintJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsComplaint">
+		SELECT 
+			<include refid="cmsComplaintColumns"/>
+		FROM cms_complaint a
+		<include refid="cmsComplaintJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.status in('0','1','2','3')
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="companyName != null and companyName != ''">
+				AND a.company_name = #{companyName}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsComplaint">
+		SELECT 
+			<include refid="cmsComplaintColumns"/>
+		FROM cms_complaint a
+		<include refid="cmsComplaintJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_complaint(
+			id,
+			user_id,
+			title,
+			image,
+			source,
+			company_name,
+			company_address,
+			find_date,
+			content,
+			status,
+			create_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{userId},
+			#{title},
+			#{image},
+			#{source},
+			#{companyName},
+			#{companyAddress},
+			#{findDate},
+			#{content},
+			#{status},
+			#{createDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_complaint SET 	
+			user_id = #{userId},
+			title = #{title},
+			image = #{image},
+			source = #{source},
+			company_name = #{companyName},
+			company_address = #{companyAddress},
+			find_date=#{findDate},
+			content = #{content},
+			remarks = #{remarks},
+			status=#{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_complaint SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

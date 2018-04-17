@@ -47,6 +47,7 @@ public class SummaryController extends BaseController {
 			List<Object> lists = null;
 			if ("day".equals(type)) {
 
+
 				lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(),
 						null);
 			} else if ("week".equals(type)) {
@@ -62,7 +63,6 @@ public class SummaryController extends BaseController {
 			 null);
 			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
 					sql.shichan(), null);
-
 
 			// 时间集合
 			List<String> times = new ArrayList<String>();
@@ -155,6 +155,7 @@ public class SummaryController extends BaseController {
 		try {
 			LittleProjectDto dto = new LittleProjectDto();
 
+
 			List<Object> jiaoyiList = PostgreUtils.getInstance().excuteQuery(
 					sql.jiaoyi(), null);
 			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
@@ -224,6 +225,7 @@ public class SummaryController extends BaseController {
 			String type = request.getParameter("type");
 			List<Object> lists = null;
 			if ("day".equals(type)) {
+
 
 				lists = PostgreUtils.getInstance().excuteQuery(sql.yongHuDay(),
 						null);
@@ -328,6 +330,7 @@ public class SummaryController extends BaseController {
 			HttpServletResponse response) {
 		try {
 
+
 			KeHuFenLei kh = new KeHuFenLei();
 			List<Object> khfl = PostgreUtils.getInstance().excuteQuery(
 					sql.keHuFenLei(), null);
@@ -343,6 +346,7 @@ public class SummaryController extends BaseController {
 			} else {
 				return this.resultSuccessData(request, response, "", kh);
 			}
+
 
 
 		} catch (Exception e) {
@@ -421,6 +425,7 @@ public class SummaryController extends BaseController {
 			HttpServletResponse response) {
 		try {
 			KeHuAge res = new KeHuAge();
+
 
 			List<Object> ages = PostgreUtils.getInstance().excuteQuery(
 					sql.keHuAge(), null);
