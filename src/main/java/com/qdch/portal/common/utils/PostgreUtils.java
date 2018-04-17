@@ -39,7 +39,6 @@ public class PostgreUtils {
     
     	
     }
-    
 
 	/**
 	 * 当前对象实例
@@ -84,8 +83,7 @@ public class PostgreUtils {
                 System.out.println(e.getMessage());    
                 e.printStackTrace();  
             }   
-            // 获取连接   
-            if(conn==null)
+            // 获取连接      
             conn = DriverManager.getConnection(url, username,      
                     password);      
         } catch (SQLException e) {      
@@ -140,10 +138,7 @@ public class PostgreUtils {
      * @return 结果集   
      */      
 
-
-      
-
-
+          
     /**   
      * SQL 查询将查询结果：一行一列   
      * @param sql SQL语句   
@@ -228,37 +223,7 @@ public class PostgreUtils {
         }
 
         return list;
-
     }
-
-//    private  ResultSet executeQueryRS(String sql, Object[] params) {
-//        try {
-//            // 获得连接
-//            conn = PostgreUtils.getConnection();
-//
-//            // 调用SQL
-//            pst = conn.prepareStatement(sql);
-//
-//            // 参数赋值
-//            if (params != null) {
-//                for (int i = 0; i < params.length; i++) {
-//                    pst.setObject(i + 1, params[i]);
-//                }
-//            }
-//
-//            // 执行
-//            rst = pst.executeQuery();
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            System.out.println(e.getMessage());
-//        }
-//
-//        return rst;
-//    }
-
-
-//    }
 
     private  ResultSet executeQueryRS(String sql, Object[] params) {
         try {
@@ -288,14 +253,10 @@ public class PostgreUtils {
 
 
 
-
     /**   
      * 关闭所有资源   
      */      
-
-
-    private  void closeAll() {
-
+    private static   void closeAll() {
         // 关闭结果集对象      
 ////        if (rst != null) {
 //            try {

@@ -59,8 +59,8 @@ public class SummaryController extends BaseController {
 			}
 
 			LittleProjectDto dto = new LittleProjectDto();
-			lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(),
-			 null);
+			/*lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(),
+			 null);*/
 			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
 					sql.shichan(), null);
 
@@ -477,18 +477,30 @@ public class SummaryController extends BaseController {
 		try {
 			List<Object> lists = PostgreUtils.getInstance().excuteQuery(
 					sql.chanpinfenbu(), null);
+			List<Object> sy=PostgreUtils.getInstance().excuteQuery(sql.suoyouchanpin(),null);
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
-			if (lists != null && lists.size() > 0) {
-				for (Object o : lists) {
-					Map m = (Map) o;
+			if(sy!=null&&sy.size()>0){
+				for(Object s:sy){
 					List<String> jihe = new ArrayList<String>();
 					LittleProjectEntity re = new LittleProjectEntity();
-					re.setName(m.get("cplb") + "");
-					jihe.add(m.get("cpsl") + "");
-					jihe.add(m.get("jys") + "");
+					Map w = (Map) s;
+					if (lists != null && lists.size() > 0) {
+						for (Object o : lists) {
+							Map m = (Map) o;
+							if(m.get("cplb").equals(w.get("cplb"))){
+								re.setName(m.get("cplb") + "");
+								jihe.add(m.get("cpsl") + "");
+								jihe.add(m.get("jys") + "");
+							}
+							
+							
+						}
+					}
+					re.setLists(jihe);
 					res.add(re);
 				}
 			}
+			
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
@@ -513,18 +525,44 @@ public class SummaryController extends BaseController {
 		try {
 			List<Object> lists=null;
 			lists=PostgreUtils.getInstance().excuteQuery(sql.chanpinqushi(),null);
+			List<Object> sy=PostgreUtils.getInstance().excuteQuery(sql.suoyouchanpin(),null);
 			List<String> times = new ArrayList<String>();
 			LittleProjectDto dto=new LittleProjectDto();
 			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
-			if(lists!=null&&lists.size()>0){
-				for(Object o:lists){
-					List<String> jihe=new ArrayList<String>();
-					LittleProjectEntity re=new LittleProjectEntity();
+			int b=1;
+			if(sy!=null&&sy.size()>0){
+				for(Object o:sy){
 					Map m=(Map)o;
+					LittleProjectEntity re=new LittleProjectEntity();
 					re.setName(m.get("cplb")+"");
-					jihe.add(m.get("cpsl")+"");
-					re.setLists(jihe);
 					res.add(re);
+				}
+			}
+			if(res!=null&&res.size()>0){
+				for(LittleProjectEntity s:res){
+					List<String> jihe=new ArrayList<String>();
+					if(lists!=null&&lists.size()>0){
+						for(Object o:lists){
+							Map m=(Map)o;
+							if(m.get("cplb").equals(s.getName())){
+								jihe.add(m.get("cpsl")+"");
+							}
+						}
+					}
+					s.setLists(jihe);
+				}
+			}
+			if(res!=null&&res.size()>0){
+				for(LittleProjectEntity s:res){
+					if(lists!=null&&lists.size()>0){
+						for(Object o:lists){
+							Map m=(Map)o;
+							if(m.get("cplb").equals(s.getName())&&b==1){
+								times.add(m.get("vday")+"");
+							}
+						}
+					}
+					b=2;
 				}
 			}
 			dto.setTimes(times.toArray());
@@ -540,15 +578,91 @@ public class SummaryController extends BaseController {
 		}
 		
 	}
+	/**
+	 * 总况——金融资产类-平均年化利率
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月17日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/nianhualilv"})
+	@ResponseBody
 	public String nianhualilv(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
 			List<Object> lists=null;
-			lists=PostgreUtils.getInstance().excuteQuery(sql.chanpinqushi(),null);
+			lists=PostgreUtils.getInstance().excuteQuery(sql.nianhualilv(),null);
+			List<Object> sy=PostgreUtils.getInstance().excuteQuery(sql.suoyouchanpin(),null);
+			List<KeHuFenLei> res=new  ArrayList<KeHuFenLei>();
+			if(sy!=null&&sy.size()>0){
+			for(Object s:sy){
+					Map w=(Map)s;
+					if(lists!=null&&lists.size()>0){
+						for(Object o:lists){
+							Map m=(Map)o;
+							KeHuFenLei re=new KeHuFenLei();
+							if(m.get("cplb").equals(w.get("cplb"))){
+								re.setGrs(m.get("cplb")+"");
+								re.setJgs(m.get("cpsl")+"");
+							}
+							if(re.getGrs()!=null&&re.getGrs().length()>0){
+								res.add(re);
+							}
+							
+						}
+					}
+				}
+			}
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
+				return this.resultSuccessData(request, response, "", res);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 总况——金融资产类-产品统计
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月17日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/chanpintongji"})
+	@ResponseBody
+	public String chanpintongji(HttpServletRequest request,HttpServletResponse response){
+		try {
+			List<Object> lists=null;
+			lists=PostgreUtils.getInstance().excuteQuery(sql.chanpintongji(),null);
+			List<Object> sy=PostgreUtils.getInstance().excuteQuery(sql.suoyouchanpin(),null);
+			List<LittleProjectEntity> res=new  ArrayList<LittleProjectEntity>();
+			if(sy!=null&&sy.size()>0){
+				for(Object s:sy){
+					LittleProjectEntity re=new LittleProjectEntity();
+					List<String> jihe=new ArrayList<String>();
+						Map w=(Map)s;
+						if(lists!=null&&lists.size()>0){
+							for(Object o:lists){
+								Map m=(Map)o;
+								
+								if(m.get("cplb").equals(w.get("cplb"))){
+									re.setName(m.get("cplb")+"");
+									jihe.add(m.get("pjll")+"");
+									jihe.add(m.get("jsyzz")+"");
+								}
+								
+								
+							}
+						}
+						re.setLists(jihe);
+						res.add(re);
+					}
+				}
+		
+			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", res);
 			}
 		} catch (Exception e) {
 			e.getStackTrace();
