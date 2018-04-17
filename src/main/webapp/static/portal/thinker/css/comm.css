@@ -1,0 +1,132 @@
+/*全局变量*/
+:root{
+    /*--themeBlue: #00adef;*/
+    --textBlue: #2774b6;
+    --btnBgBlue:#2bcfd3;
+}
+/*全局设置-----start*/
+@media all {
+    * {
+        font-family: PingFang SC, microsoft yahei, sans-serif;
+    }
+
+    a {
+        cursor: pointer;
+        color: var(--textBlue);
+    }
+
+    a,
+    a:hover,
+    a:focus,
+    a:visited {
+        text-decoration: none;
+    }
+
+    ul {
+        list-style: none;
+    }
+}
+@media all {
+    /*自定义class*/
+    .icon-pre{
+        position: relative;
+    }
+    .icon-pre:before{
+        content: "";
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 1rem;
+        height: 1rem;
+        transform: translate(-50%,-50%);
+        text-indent: 1.5rem;
+        background-position: 50% 50%;
+        background-size: contain;
+
+    }
+    .btn-default{
+        color: #999;
+        background-color: #fff;
+        border-color: #999;
+    }
+}
+body{
+    background-color:#f6f6f6;
+}
+body > header.bd-navbar {
+    padding: 0 1rem;
+    background: radial-gradient(circle farthest-corner, #43aaeb 20%, #246eb0);
+    box-shadow: 0 0.125rem 0.125rem 0 rgba(0,0,0,.15);
+}
+
+body > header.bd-navbar * {
+    color: #fff;
+}
+
+body > header.bd-navbar h1.icon-pre {
+    margin-left: 2rem;
+    font-size: 1.125rem;
+    margin-bottom: 0;
+    text-indent: 2rem;
+}
+
+body > header.bd-navbar h1.icon-pre:before {
+    left: .5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-image: url(../images/cube.png);
+}
+body > header.bd-navbar li.split{
+    position: relative;
+    top: -.125rem;
+}
+body > header.bd-navbar li>a{
+    /*border-radius: .25rem;*/
+}
+body > header.bd-navbar li>a:hover {
+    color: #2bcfd3;
+}
+body > header.bd-navbar li>a:active {
+    color: #fff;
+    background-color: #2bcfd3;
+}
+.handle {
+    position: absolute;
+    top: .875rem;
+    right: 1rem;
+    color: #333;
+}
+
+.handle ul > li {
+    display: inline-block;
+    margin: 0 .375rem;
+    color: #999;
+    cursor: pointer;
+}
+.handle ul > li.active {
+    color: var(--textBlue);
+}
+
+.handle ul > li>i{
+    margin-right: .25rem;
+}
+
+/*@media (min-width: 1200px){
+    .container {
+        max-width: 860px;
+    }
+}*/
+@media (min-width: 992px){
+    .container {
+        max-width: 860px;
+    }
+}
+@media (min-width: 1367px){
+    .container {
+        max-width: 1200px;
+    }
+}
+
+
+
