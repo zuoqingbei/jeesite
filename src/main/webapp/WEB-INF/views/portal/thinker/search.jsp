@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/page.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/style.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/reset.css">
+    <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/comm.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.css" />
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/Search.css">
 
@@ -41,10 +42,10 @@
                <div class="serch_head_content_right">
                    <div class="serch_head_input">
                        <div class="serch_input"><input id="keyword" type="text" placeholder="请输入热搜词" value="${keyWord}"></div>
-                       <div class="serch_button"><button id="searchBtn" onclick="search()">搜索</button></div>
+                       <div class="serch_button"><button id="searchBtn" onclick="search()">搜 索</button></div>
                    <div class="serch_head_checkbox">
-                       <span class="fl">热搜：</span>
-                       <!--<label class="demo&#45;&#45;label"><input class="demo&#45;&#45;radio" type="checkbox" name="demo-checkbox1">
+                     <!-- <span class="fl">热搜：</span>
+                       <label class="demo&#45;&#45;label"><input class="demo&#45;&#45;radio" type="checkbox" name="demo-checkbox1">
                            <span class="demo&#45;&#45;checkbox demo&#45;&#45;radioInput"></span>指标
                        </label>
                        <label class="demo&#45;&#45;label">
@@ -54,14 +55,14 @@
                        <label class="demo&#45;&#45;label">
                            <input class="demo&#45;&#45;radio" type="checkbox" name="demo-checkbox3">
                            <span class="demo&#45;&#45;checkbox demo&#45;&#45;radioInput"></span>接口
-                       </label>-->
+                       </label>
                        <div class="hot_words fl">
-                          <!-- <ul>
+                          <ul>
                                <li class="active">指标</li>
                                <li>财务运营</li>
                                <li>接口</li>
-                           </ul>-->
-                       </div>
+                           </ul>
+                       </div> -->
                    </div>
                </div>
            </div>
@@ -74,7 +75,7 @@
         <div class="search_content clearfix">
             <!--头部导航-->
             <div class="serch_content_header">
-                <span>当前位置：</span><span class="blue">搜索条件</span>
+                <!-- <span>当前位置：</span><span class="blue">搜索条件</span> -->
             </div>
             <!--内容部分-->
             <div class="search_content_box clearfix">
@@ -179,7 +180,7 @@
 
        
 		loadData();
-		hotSearch();
+		//hotSearch();
     });
 	
 	//页码切换
