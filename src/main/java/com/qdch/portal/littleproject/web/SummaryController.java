@@ -45,19 +45,19 @@ public class SummaryController extends BaseController {
 			String type = request.getParameter("type");
 			List<Object> lists = null;
 			if ("day".equals(type)) {
-				 lists = PostgreUtils.excuteQuery(sql.tradeDay(),
+				 lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(),
 						null);
 			} else if ("week".equals(type)) {
-				 lists = PostgreUtils.excuteQuery(sql.tradeWeek(),
+				 lists = PostgreUtils.getInstance().excuteQuery(sql.tradeWeek(),
 						null);
 			} else if ("month".equals(type)) {
-				 lists = PostgreUtils.excuteQuery(sql.tradeMonth(),
+				 lists = PostgreUtils.getInstance().excuteQuery(sql.tradeMonth(),
 						null);
 			}
 
 			LittleProjectDto dto = new LittleProjectDto();
-			//List<Object> lists = PostgreUtils.excuteQuery(sql.tradeDay(), null);
-			List<Object> tradelist = PostgreUtils.excuteQuery(sql.shichan(),
+			//List<Object> lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(), null);
+			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(sql.shichan(),
 					null);
 			// 时间集合
 			List<String> times = new ArrayList<String>();
@@ -87,9 +87,9 @@ public class SummaryController extends BaseController {
 							Map m = (Map) o;
 
 							if (m.get("jysinfo").equals(s.getName())) {
-								
+
 								shiChan.add(m.get("fvalue") + "");
-								
+
 
 							}
 						}
@@ -126,7 +126,7 @@ public class SummaryController extends BaseController {
 			}else{
 				return this.resultSuccessData(request, response, "", dto);
 			}
-			
+
 		} catch (Exception e) {
 			e.getStackTrace();
 			return this.resultFaliureData(request, response, "", null);
@@ -136,7 +136,7 @@ public class SummaryController extends BaseController {
 
 	/**
 	 * 交易额统计
-	 * 
+	 *
 	 * @time 2018年4月13日
 	 * @author 高照
 	 * @param request
@@ -149,9 +149,9 @@ public class SummaryController extends BaseController {
 			HttpServletResponse response) {
 		try {
 			LittleProjectDto dto = new LittleProjectDto();
-			List<Object> jiaoyiList = PostgreUtils.excuteQuery(sql.jiaoyi(),
+			List<Object> jiaoyiList = PostgreUtils.getInstance().excuteQuery(sql.jiaoyi(),
 					null);
-			List<Object> tradelist = PostgreUtils.excuteQuery(sql.shichan(),
+			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(sql.shichan(),
 					null);
 			// 交易市场集合
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
@@ -174,7 +174,7 @@ public class SummaryController extends BaseController {
 							Map m = (Map) o;
 
 							if (m.get("jysinfo").equals(s.getName())) {
-								
+
 								shiChan.add(m.get("bz") + "");
 								shiChan.add(m.get("by") + "");
 								shiChan.add(m.get("bn") + "");
@@ -194,14 +194,14 @@ public class SummaryController extends BaseController {
 			}else{
 				return this.resultSuccessData(request, response, "", dto);
 			}
-			
+
 		} catch (Exception e) {
 			e.getStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
 
-	
+
 	/**
 	 * 总况——总量——用户
 	 * 客户数
@@ -216,19 +216,19 @@ public class SummaryController extends BaseController {
 			String type = request.getParameter("type");
 
 			if ("day".equals(type)) {
-				List<Object> lists = PostgreUtils.excuteQuery(sql.yongHuDay(),
+				List<Object> lists = PostgreUtils.getInstance().excuteQuery(sql.yongHuDay(),
 						null);
 			} else if ("week".equals(type)) {
-				List<Object> lists = PostgreUtils.excuteQuery(sql.yongHuWeek(),
+				List<Object> lists = PostgreUtils.getInstance().excuteQuery(sql.yongHuWeek(),
 						null);
 			} else if ("month".equals(type)) {
-				List<Object> lists = PostgreUtils.excuteQuery(sql.yongHuMonth(),
+				List<Object> lists = PostgreUtils.getInstance().excuteQuery(sql.yongHuMonth(),
 						null);
 			}
 
 			LittleProjectDto dto = new LittleProjectDto();
-			List<Object> lists = PostgreUtils.excuteQuery(sql.yongHuDay(), null);
-			List<Object> tradelist = PostgreUtils.excuteQuery(sql.shichan(),
+			List<Object> lists = PostgreUtils.getInstance().excuteQuery(sql.yongHuDay(), null);
+			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(sql.shichan(),
 					null);
 			// 时间集合
 			List<String> times = new ArrayList<String>();
@@ -258,9 +258,9 @@ public class SummaryController extends BaseController {
 							Map m = (Map) o;
 
 							if (m.get("jysinfo").equals(s.getName())) {
-								
+
 								shiChan.add(m.get("fvalue") + "");
-								
+
 
 							}
 						}
@@ -302,7 +302,7 @@ public class SummaryController extends BaseController {
 	}
 	/**
 	 * 总况——总量——用户——金融资产类-客户分类
-	 * 
+	 *
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
@@ -310,8 +310,8 @@ public class SummaryController extends BaseController {
 	@ResponseBody
 	public String keHuFenLei(HttpServletRequest request,HttpServletResponse response){
 		try {
-			KeHuFenLei kh=new KeHuFenLei();			
-			List<Object>  khfl=PostgreUtils.excuteQuery(sql.keHuFenLei(),null);
+			KeHuFenLei kh=new KeHuFenLei();
+			List<Object>  khfl=PostgreUtils.getInstance().excuteQuery(sql.keHuFenLei(),null);
 			if(khfl!=null&&khfl.size()>0){
 				for(Object o:khfl){
 					Map m=(Map)o;
@@ -319,17 +319,17 @@ public class SummaryController extends BaseController {
 					kh.setJgs(m.get("jgkhs")+"");
 				}
 			}
-			
+
 			return this.resultSuccessData(request, response, "", kh);
 		} catch (Exception e) {
 			e.getStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
-		
+
 	}
 	/**
 	 * 总况——总量——用户——客户统计
-	 * 
+	 *
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
@@ -338,8 +338,8 @@ public class SummaryController extends BaseController {
 	public String keHuTongJi(HttpServletRequest request,HttpServletResponse response){
 		try {
 			LittleProjectDto dto=new LittleProjectDto();
-			List<Object> tongji=PostgreUtils.excuteQuery(sql.keHuTongJi(),null);
-			List<Object> tradelist = PostgreUtils.excuteQuery(sql.shichan(),null);
+			List<Object> tongji=PostgreUtils.getInstance().excuteQuery(sql.keHuTongJi(),null);
+			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(sql.shichan(),null);
 			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
 			if(tradelist!=null&&tradelist.size()>0){
 				for(Object t:tradelist){
@@ -348,7 +348,7 @@ public class SummaryController extends BaseController {
 					aa.setName(m.get("jysinfo")+"");
 					res.add(aa);
 				}
-				
+
 			}
 			if(res!=null&&res.size()>0){
 				for(LittleProjectEntity s:res){
@@ -375,7 +375,7 @@ public class SummaryController extends BaseController {
 	}
 	/**
 	 * 总况——总量——用户——客户年龄
-	 * 
+	 *
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
@@ -385,7 +385,7 @@ public class SummaryController extends BaseController {
 			HttpServletResponse response) {
 		try {
 			KeHuAge res = new KeHuAge();
-			List<Object> tongji = PostgreUtils.excuteQuery(sql.keHuAge(), null);
+			List<Object> tongji = PostgreUtils.getInstance().excuteQuery(sql.keHuAge(), null);
 			List<String> age = new ArrayList<String>();
 			List<String> sum = new ArrayList<String>();
 			if (tongji != null && tongji.size() > 0) {

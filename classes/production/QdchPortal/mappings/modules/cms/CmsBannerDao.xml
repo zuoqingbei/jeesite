@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsBannerDao">
+    
+	<sql id="cmsBannerColumns">
+		a.id AS "id",
+		a.content AS "content",
+		a.title AS "title",
+		a.image AS "image",
+		a.link_url AS "linkUrl",
+		a.target AS "target",
+		a.is_top AS "isTop",
+		a.order_no AS "orderNo",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u.login_name AS "userName"
+	</sql>
+	
+	<sql id="cmsBannerJoins">
+	  left join sys_user u on u.id=a.create_by
+	</sql>
+    
+	<select id="get" resultType="CmsBanner">
+		SELECT 
+			<include refid="cmsBannerColumns"/>
+		FROM cms_banner a
+		<include refid="cmsBannerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsBanner">
+		SELECT 
+			<include refid="cmsBannerColumns"/>
+		FROM cms_banner a
+		<include refid="cmsBannerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND (a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+					or 
+					a.content LIKE 
+					<if test="dbName == 'oracle'">'%'||#{content}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{content}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+					)
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsBanner">
+		SELECT 
+			<include refid="cmsBannerColumns"/>
+		FROM cms_banner a
+		<include refid="cmsBannerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_banner(
+			id,
+			title,
+			content,
+			image,
+			link_url,
+			target,
+			is_top,
+			order_no,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{title},
+			#{content},
+			#{image},
+			#{linkUrl},
+			#{target},
+			#{isTop},
+			#{orderNo},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_banner SET 	
+			title = #{title},
+			content = #{content},
+			image = #{image},
+			link_url = #{linkUrl},
+			target = #{target},
+			is_top = #{isTop},
+			order_no = #{orderNo},
+			create_date = #{createDate},
+			create_by = #{createBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_banner SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<select id="findBannerList" resultType="CmsBanner">
+		SELECT 
+			<include refid="cmsBannerColumns"/>
+		FROM cms_banner a
+		<include refid="cmsBannerJoins"/>
+		<where>
+			a.del_flag =0
+		</where>
+		ORDER BY a.is_top desc,a.order_no 
+		limit  #{offset},#{limit}
+	</select>
+</mapper>

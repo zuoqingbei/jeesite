@@ -334,7 +334,7 @@ public class CmsNewsController extends BaseController {
 
 		Map<String,Object> results = new HashMap<String,Object>();
 
-		List<Object> lists = PostgreUtils.excuteQuery("select * from insight_transaction_amount limit 1",null);
+		List<Object> lists = PostgreUtils.getInstance().excuteQuery("select * from insight_transaction_amount limit 1",null);
 		Set<String> times = new HashSet<String>();
 		List<String> lianhe = new ArrayList<String>();
 		List<String> qingjin = new ArrayList<String>();
