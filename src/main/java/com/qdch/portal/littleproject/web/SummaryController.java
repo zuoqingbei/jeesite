@@ -489,7 +489,34 @@ public class SummaryController extends BaseController {
 	@RequestMapping(value = { "${portalPath}/littleproject/chanpinqushi"})
 	@ResponseBody
 	public String chanpinqushi(HttpServletRequest request,HttpServletResponse response){
-		List<Object> lists=PostgreUtils.getInstance().excuteQuery(sql.chanpinqushi(),null);
-		return null;
+		try {
+			List<Object> lists=null;
+			lists=PostgreUtils.getInstance().excuteQuery(sql.chanpinqushi(),null);
+			List<String> times = new ArrayList<String>();
+			LittleProjectDto dto=new LittleProjectDto();
+			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
+			if(lists!=null&&lists.size()>0){
+				for(Object o:lists){
+					List<String> jihe=new ArrayList<String>();
+					LittleProjectEntity re=new LittleProjectEntity();
+					Map m=(Map)o;
+					re.setName(m.get("cplb")+"");
+					jihe.add(m.get("cpsl")+"");
+					re.setLists(jihe);
+					res.add(re);
+				}
+			}
+			dto.setTimes(times.toArray());
+			dto.setEntities(res);
+			if (lists == null && lists.size() < 0) {
+				return null;
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+		
 	}
 }
