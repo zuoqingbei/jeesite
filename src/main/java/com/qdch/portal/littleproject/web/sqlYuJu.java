@@ -550,8 +550,18 @@ public class sqlYuJu {
 		return sql;
 	}
 	//产品分布
-	public String chanpinfenbu(){
-		String sql="";
+	public String chanpinfenbu() {
+		String sql = "SELECT"
+				+ " HQC1.CPLB,"
+				+ " COALESCE(COUNT(HTYCG.CPBM),0) CPSL,"
+				+ " COALESCE(ROUND(SUM(HTYCG.FVALUE)/10000,4),0) JYS"
+				+ " FROM HUB_QY_CPFL HQC1"
+				+ " LEFT JOIN HUB_QY_CPLB HQC2"
+				+ " ON HQC1.CPLB = HQC2.CPLB"
+				+ " LEFT JOIN INSIGHT_PRODUCT_FINANCE_AMOUNT HTYCG"
+				+ " ON HQC2.CPDM = HTYCG.CPBM"
+				+ " AND TO_DATE(HTYCG.VDAY,'YYYYMMDD') <= CURRENT_DATE - INTERVAL'1 DAY'"
+				+ " GROUP BY HQC1.CPLB" + "ORDER BY HQC1.CPLB";
 		return sql;
 	}
 	//产品趋势

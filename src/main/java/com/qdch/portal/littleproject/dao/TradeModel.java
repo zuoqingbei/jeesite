@@ -1,6 +1,9 @@
 package com.qdch.portal.littleproject.dao;
 
-public class TradeModel {
+import com.qdch.portal.common.persistence.DataEntity;
+import com.qdch.portal.modules.cms.entity.CmsNews;
+
+public class TradeModel extends DataEntity<TradeModel> {
 
     private String vday;
     private String jys;

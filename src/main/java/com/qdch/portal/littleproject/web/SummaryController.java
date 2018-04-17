@@ -46,6 +46,7 @@ public class SummaryController extends BaseController {
 			String type = request.getParameter("type");
 			List<Object> lists = null;
 			if ("day".equals(type)) {
+
 				lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(),
 						null);
 			} else if ("week".equals(type)) {
@@ -57,10 +58,11 @@ public class SummaryController extends BaseController {
 			}
 
 			LittleProjectDto dto = new LittleProjectDto();
-			// List<Object> lists = PostgreUtils.excuteQuery(sql.tradeDay(),
-			// null);
+			lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(),
+			 null);
 			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
 					sql.shichan(), null);
+
 
 			// 时间集合
 			List<String> times = new ArrayList<String>();
@@ -93,6 +95,7 @@ public class SummaryController extends BaseController {
 
 								shiChan.add(m.get("fvalue") + "");
 
+
 							}
 						}
 
@@ -124,7 +127,7 @@ public class SummaryController extends BaseController {
 
 			dto.setEntities(res);
 			if (lists == null && lists.size() < 0) {
-				return null;
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
 			}
@@ -138,7 +141,7 @@ public class SummaryController extends BaseController {
 
 	/**
 	 * 交易额统计
-	 * 
+	 *
 	 * @time 2018年4月13日
 	 * @author 高照
 	 * @param request
@@ -151,10 +154,12 @@ public class SummaryController extends BaseController {
 			HttpServletResponse response) {
 		try {
 			LittleProjectDto dto = new LittleProjectDto();
+
 			List<Object> jiaoyiList = PostgreUtils.getInstance().excuteQuery(
 					sql.jiaoyi(), null);
 			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
 					sql.shichan(), null);
+
 			// 交易市场集合
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
 			if (tradelist != null && tradelist.size() > 0) {
@@ -191,8 +196,9 @@ public class SummaryController extends BaseController {
 			}
 
 			dto.setEntities(res);
-			if (jiaoyiList == null && jiaoyiList.size() < 0) {
-				return null;
+			if (jiaoyiList == null && jiaoyiList.size() < 0||tradelist==null&&tradelist.size()<0) {
+				System.out.println("dddddddddd");
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
 			}
@@ -202,6 +208,7 @@ public class SummaryController extends BaseController {
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
+
 
 	/**
 	 * 总况——总量——用户 客户数
@@ -217,6 +224,7 @@ public class SummaryController extends BaseController {
 			String type = request.getParameter("type");
 			List<Object> lists = null;
 			if ("day".equals(type)) {
+
 				lists = PostgreUtils.getInstance().excuteQuery(sql.yongHuDay(),
 						null);
 			} else if ("week".equals(type)) {
@@ -232,6 +240,7 @@ public class SummaryController extends BaseController {
 			// PostgreUtils.getInstance().excuteQuery(sql.yongHuDay(), null);
 			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
 					sql.shichan(), null);
+
 			// 时间集合
 			List<String> times = new ArrayList<String>();
 			// 交易市场集合
@@ -262,6 +271,7 @@ public class SummaryController extends BaseController {
 							if (m.get("jysinfo").equals(s.getName())) {
 
 								shiChan.add(m.get("fvalue") + "");
+
 
 							}
 						}
@@ -294,7 +304,7 @@ public class SummaryController extends BaseController {
 
 			dto.setEntities(res);
 			if (lists == null && lists.size() < 0) {
-				return null;
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
 			}
@@ -308,7 +318,7 @@ public class SummaryController extends BaseController {
 
 	/**
 	 * 总况——总量——用户——金融资产类-客户分类
-	 * 
+	 *
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
@@ -317,6 +327,7 @@ public class SummaryController extends BaseController {
 	public String keHuFenLei(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
+
 			KeHuFenLei kh = new KeHuFenLei();
 			List<Object> khfl = PostgreUtils.getInstance().excuteQuery(
 					sql.keHuFenLei(), null);
@@ -328,10 +339,11 @@ public class SummaryController extends BaseController {
 				}
 			}
 			if (khfl == null && khfl.size() < 0) {
-				return null;
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", kh);
 			}
+
 
 		} catch (Exception e) {
 			e.getStackTrace();
@@ -342,7 +354,7 @@ public class SummaryController extends BaseController {
 
 	/**
 	 * 总况——总量——用户——客户统计
-	 * 
+	 *
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
@@ -351,6 +363,7 @@ public class SummaryController extends BaseController {
 	public String keHuTongJi(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
+
 			LittleProjectDto dto = new LittleProjectDto();
 			List<Object> tongji = PostgreUtils.getInstance().excuteQuery(
 					sql.keHuTongJi(), null);
@@ -362,6 +375,7 @@ public class SummaryController extends BaseController {
 					Map m = (Map) t;
 					LittleProjectEntity aa = new LittleProjectEntity();
 					aa.setName(m.get("jysinfo") + "");
+
 					res.add(aa);
 				}
 
@@ -384,7 +398,7 @@ public class SummaryController extends BaseController {
 			}
 			dto.setEntities(res);
 			if (tongji == null && tongji.size() < 0) {
-				return null;
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
 			}
@@ -397,7 +411,7 @@ public class SummaryController extends BaseController {
 
 	/**
 	 * 总况——总量——用户——客户年龄
-	 * 
+	 *
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
@@ -407,8 +421,10 @@ public class SummaryController extends BaseController {
 			HttpServletResponse response) {
 		try {
 			KeHuAge res = new KeHuAge();
+
 			List<Object> ages = PostgreUtils.getInstance().excuteQuery(
 					sql.keHuAge(), null);
+
 			List<String> age = new ArrayList<String>();
 			List<String> sum = new ArrayList<String>();
 			if (ages != null && ages.size() > 0) {
@@ -433,7 +449,7 @@ public class SummaryController extends BaseController {
 			res.setAge(age);
 			res.setSum(sum);
 			if (ages == null && ages.size() < 0) {
-				return null;
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
 			}
@@ -462,14 +478,14 @@ public class SummaryController extends BaseController {
 					Map m = (Map) o;
 					List<String> jihe = new ArrayList<String>();
 					LittleProjectEntity re = new LittleProjectEntity();
-					re.setName(m.get("") + "");
-					jihe.add(m.get("") + "");
-					jihe.add(m.get("") + "");
+					re.setName(m.get("cplb") + "");
+					jihe.add(m.get("cpsl") + "");
+					jihe.add(m.get("jys") + "");
 					res.add(re);
 				}
 			}
 			if (lists == null && lists.size() < 0) {
-				return null;
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
 			}
@@ -509,7 +525,7 @@ public class SummaryController extends BaseController {
 			dto.setTimes(times.toArray());
 			dto.setEntities(res);
 			if (lists == null && lists.size() < 0) {
-				return null;
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
 			}
@@ -518,5 +534,20 @@ public class SummaryController extends BaseController {
 			return this.resultFaliureData(request, response, "", null);
 		}
 		
+	}
+	public String nianhualilv(HttpServletRequest request,HttpServletResponse response){
+		
+		try {
+			List<Object> lists=null;
+			lists=PostgreUtils.getInstance().excuteQuery(sql.chanpinqushi(),null);
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", null);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
 	}
 }
