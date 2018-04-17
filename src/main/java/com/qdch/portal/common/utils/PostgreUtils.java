@@ -34,11 +34,12 @@ public class PostgreUtils {
     
     private static Connection conn = null;
     private static PreparedStatement pst = null;
-    private static ResultSet rst = null;
+    private  ResultSet rst = null;
     private  PostgreUtils() {
     
     	
     }
+    
 
 	/**
 	 * 当前对象实例
@@ -83,7 +84,8 @@ public class PostgreUtils {
                 System.out.println(e.getMessage());    
                 e.printStackTrace();  
             }   
-            // 获取连接      
+            // 获取连接   
+            if(conn==null)
             conn = DriverManager.getConnection(url, username,      
                     password);      
         } catch (SQLException e) {      
@@ -137,11 +139,10 @@ public class PostgreUtils {
      * @param params 参数数组，若没有参数则为null   
      * @return 结果集   
      */      
-    private static ResultSet executeQueryRS(String sql, Object[] params) {
+    private  ResultSet executeQueryRS(String sql, Object[] params) {
         try {      
             // 获得连接      
             conn = postgreUtils.getConnection();
-                  
             // 调用SQL      
             pst = conn.prepareStatement(sql);      
                   
@@ -152,9 +153,8 @@ public class PostgreUtils {
                 }      
             }      
                   
-            // 执行      
+            // 执行   
             rst = pst.executeQuery();      
-      
         } catch (SQLException e) {      
             System.out.println(e.getMessage());      
         }       
@@ -208,7 +208,7 @@ public class PostgreUtils {
      * @return List   
      *                       结果集   
      */      
-    public static List<Object> excuteQuery(String sql, Object[] params) {
+    public  List<Object> excuteQuery(String sql, Object[] params) {
         // 执行SQL获得结果集      
         ResultSet rs = executeQueryRS(sql, params);      
               
@@ -293,7 +293,7 @@ public class PostgreUtils {
     /**   
      * 关闭所有资源   
      */      
-    private static void closeAll() {
+    private  void closeAll() {
         // 关闭结果集对象      
         if (rst != null) {      
             try {      
