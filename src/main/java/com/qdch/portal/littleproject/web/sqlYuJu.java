@@ -549,4 +549,14 @@ public class sqlYuJu {
 
 		return sql;
 	}
+	//产品分布
+	public String chanpinfenbu(){
+		String sql="";
+		return sql;
+	}
+	//产品趋势
+	public String chanpinqushi(){
+		String sql="";
+		return sql;
+	}
 }
