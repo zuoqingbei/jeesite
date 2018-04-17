@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>1169数据立方体</title>
+    <title>数据立方体</title>
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/bootstrap-4.0.0.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/swiper-4.2.2.min.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/iconfont.css">
@@ -17,7 +17,7 @@
 <header class="navbar navbar-expand flex-column flex-md-row bd-navbar">
     <a class="navbar-brand mr-0 mr-md-2" href="#">
         <div class="logoBg"></div>
-        <h1 class="icon-pre">1169数据立方体</h1>
+        <h1 class="icon-pre">数据立方体</h1>
     </a>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         <li class="nav-item">
@@ -46,7 +46,7 @@
             -->
             <div class="title">
                 <img src="${ctxStatic}/${portalPage}/thinker/images/cube.png" alt="">
-                <h2>1169数据立方体</h2>
+                <h2>数据立方体</h2>
             </div>
             <form id="searchForm" action="${portalPath}/thinker/search" type="post">
                 <div class="search">
@@ -123,7 +123,8 @@
             $(this).css({'border': '1px solid #2774b6', 'color': '#2774b6'})
             var value = $(this)[0].innerHTML;
             console.log(value);
-            $("#searchForm").submit();
+            $("#keyword").val(value);
+            //$("#searchForm").submit();
             //window.location.href = 'http://'+location.hostname+':'+location.port+'/portal/thinker/search?content='+value;
             //alert(value);
         });

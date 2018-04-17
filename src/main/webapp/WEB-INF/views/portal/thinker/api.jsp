@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>1169数据立方体</title>
+    <title>数据立方体</title>
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/bootstrap-4.0.0.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/css/reset.css"/>
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.css"/>
@@ -16,7 +16,7 @@
 <header class="navbar navbar-expand flex-column flex-md-row bd-navbar">
     <a class="navbar-brand mr-0 mr-md-2" href="#">
         <div class="logoBg"></div>
-        <h1 class="icon-pre">1169数据立方体</h1>
+        <h1 class="icon-pre">数据立方体</h1>
     </a>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         <li class="nav-item">
