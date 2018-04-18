@@ -6,6 +6,7 @@ import com.qdch.portal.littleproject.entity.KeHuAge;
 import com.qdch.portal.littleproject.entity.KeHuFenLei;
 import com.qdch.portal.littleproject.entity.LittleProjectDto;
 import com.qdch.portal.littleproject.entity.LittleProjectEntity;
+import com.qdch.portal.littleproject.entity.ZiJin;
 
 import org.dozer.Mapping;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
- * 总况——总量——交易额
+ * 总况
  * 
  * @author gaozhao
  * @time 2018年4月13日
@@ -197,8 +198,8 @@ public class SummaryController extends BaseController {
 			}
 
 			dto.setEntities(res);
-			if (jiaoyiList == null && jiaoyiList.size() < 0||tradelist==null&&tradelist.size()<0) {
-				System.out.println("dddddddddd");
+			if (jiaoyiList == null && jiaoyiList.size() < 0) {
+				
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
@@ -225,8 +226,6 @@ public class SummaryController extends BaseController {
 			String type = request.getParameter("type");
 			List<Object> lists = null;
 			if ("day".equals(type)) {
-
-
 				lists = PostgreUtils.getInstance().excuteQuery(sql.yongHuDay(),
 						null);
 			} else if ("week".equals(type)) {
@@ -669,4 +668,118 @@ public class SummaryController extends BaseController {
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
+	
+	/**
+	 * 总况——商品类-资金-沉淀资金
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月18日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/chendianzijin" })
+	@ResponseBody
+	public String chendianzijin(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			String type = request.getParameter("type");
+			List<Object> lists = null;
+			if ("day".equals(type)) {
+
+				lists = PostgreUtils.getInstance().excuteQuery(sql.jinDay(),
+						null);
+			} else if ("week".equals(type)) {
+				lists = PostgreUtils.getInstance().excuteQuery(sql.jinWeek(),
+						null);
+			} else if ("month".equals(type)) {
+				lists = PostgreUtils.getInstance().excuteQuery(sql.jinMonth(),
+						null);
+			}
+			ZiJin z=new ZiJin();
+			List<String> jihe1=new ArrayList<String>();
+			List<String> jihe2=new ArrayList<String>();
+			if(lists!=null&&lists.size()>0){
+				for(Object o:lists){
+					Map m=(Map) o;
+					jihe1.add(m.get("date")+"");
+					jihe2.add(m.get("fvalue")+"");
+					
+				}
+			}
+			z.setA(jihe1);
+			z.setB(jihe2);
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", z);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 总况——商品类-资金-出入金
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月18日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/churujin" })
+	@ResponseBody
+	public String churujin(HttpServletRequest request,HttpServletResponse response){
+		try {
+			List<Object> lists=null;
+			lists=PostgreUtils.getInstance().excuteQuery(sql.churujin(),null);
+			List<Object> alljinlist=PostgreUtils.getInstance().excuteQuery(sql.allchurujin(),null);
+			LittleProjectDto dto=new LittleProjectDto();
+			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
+			List<String> times=new ArrayList<String>();
+			int a=1;
+			if(alljinlist!=null&&alljinlist.size()>0){
+				for(Object s:alljinlist){
+					Map m=(Map)s;
+					LittleProjectEntity re=new LittleProjectEntity();
+					re.setName(m.get("xm")+"");
+					res.add(re);
+				}
+			}
+			if(res!=null&&res.size()>0){
+				for(LittleProjectEntity s:res){
+					List<String> jihe=new ArrayList<String>();
+					if(lists!=null&&lists.size()>0){
+						for(Object o:lists){
+							Map m=(Map)o;
+							if(m.get("xm").equals(s.getName())){
+								jihe.add(m.get("je")+"");
+							}
+						}
+					}
+					s.setLists(jihe);
+				}
+			}
+			if(res!=null&&res.size()>0){
+				for(LittleProjectEntity s:res){
+					List<String> jihe=new ArrayList<String>();
+					if(lists!=null&&lists.size()>0){
+						for(Object o:lists){
+							Map m=(Map)o;
+							if(m.get("xm").equals(s.getName())&&a==1){
+								times.add(m.get("date")+"");
+							}
+						}
+					}
+					a=2;
+				}
+			}
+			dto.setTimes(times.toArray());
+			dto.setEntities(res);
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	
 }

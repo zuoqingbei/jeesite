@@ -1,13 +1,11 @@
 package com.qdch.portal.littleproject.web;
 
 /**
- * 小程序接口数据库语句
+ * 小程序接口(总况模块)数据库语句
  * 
  * @time 2018年4月13日
  * @author gaozhao
- * @param request
- * @param response
- * @return
+ * 
  */
 public class sqlYuJu {
 
@@ -637,6 +635,31 @@ public class sqlYuJu {
 				+ " WHERE HQC1.CPLB = HQC2.CPLB AND TO_DATE(VDAY,'YYYYMMDD') >= CURRENT_DATE - INTERVAL'1 MONTH' - CAST(DATE_PART('DAY',CURRENT_DATE) - 1||' DAY' AS INTERVAL)"
 				+ " AND TO_DATE(VDAY,'YYYYMMDD') <= CURRENT_DATE - CAST(DATE_PART('DAY',CURRENT_DATE)||' DAY' AS INTERVAL)),4),0) JSYZZ"
 				+ " FROM HUB_QY_CPFL HQC1";
+		return sql;
+	}
+	//沉淀资金（按天）
+	public String jinDay(){
+		String sql="";
+		return sql;
+	}
+	//沉淀资金（按周）
+	public String jinWeek(){
+		String sql="";
+		return sql;
+	}
+	//沉淀资金（按月）
+	public String jinMonth(){
+		String sql="";
+		return sql;
+	}
+	//所有出入金
+	public String allchurujin(){
+		String sql="";
+		return sql;
+	}
+	//出入金
+	public String churujin(){
+		String sql="";
 		return sql;
 	}
 }
