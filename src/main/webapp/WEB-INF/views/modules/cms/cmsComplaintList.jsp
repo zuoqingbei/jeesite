@@ -47,8 +47,9 @@
 				<th>举报对象</th>
 				<th>发现地点</th>
 				<th>发现时间</th>
+				<th>状态</th>
 				<th>内容</th>
-				<th>备注</th>
+				<!-- <th>备注</th> -->
 				<shiro:hasPermission name="cms:cmsComplaint:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -62,7 +63,7 @@
 					${cmsComplaint.user.name}
 				</td>
 				<td>
-					${cmsComplaint.user.mobile}
+					${cmsComplaint.remarks}
 				</td>
 				<td>
 					<%-- <c:forEach items="${cmsComplaint.images}" var="img">
@@ -85,11 +86,15 @@
 					<fmt:formatDate value="${cmsComplaint.findDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${cmsComplaint.content}
+					${fns:getDictLabel(cmsComplaint.status, 'act_process', '')}
 				</td>
 				<td>
-					${cmsComplaint.remarks}
+					${cmsComplaint.content}
 				</td>
+			
+				<%-- <td>
+					${cmsComplaint.remarks}
+				</td> --%>
 				<shiro:hasPermission name="cms:cmsComplaint:edit"><td>
     				<a href="${ctx}/cms/cmsComplaint/form?id=${cmsComplaint.id}">修改</a>
 					<a href="${ctx}/cms/cmsComplaint/delete?id=${cmsComplaint.id}" onclick="return confirmx('确认要删除该投诉吗？', this.href)">删除</a>

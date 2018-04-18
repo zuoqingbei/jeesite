@@ -46,7 +46,7 @@ public class UploadUtils {
 	public static final String FILE_FIELDS = "file_fields";
 
 	// 最大文件大小
-	private long maxSize = 1000000;
+	private long maxSize = 1000000000;
 	// 定义允许上传的文件扩展名
 	private Map<String, String> extMap = new HashMap<String, String>();
 	// 文件保存目录相对路径
@@ -186,6 +186,7 @@ public class UploadUtils {
 
 		// 第一步：判断request
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+		isMultipart=true;
 		// 第二步：解析request
 		if (isMultipart) {
 			// Create a factory for disk-based file items
