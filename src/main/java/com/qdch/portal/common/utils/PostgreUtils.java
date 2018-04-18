@@ -34,7 +34,7 @@ public class PostgreUtils {
     
     private static Connection conn = null;
     private static PreparedStatement pst = null;
-    private static ResultSet rst = null;
+    private  ResultSet rst = null;
     private  PostgreUtils() {
     
     	
@@ -137,30 +137,7 @@ public class PostgreUtils {
      * @param params 参数数组，若没有参数则为null   
      * @return 结果集   
      */      
-    private static ResultSet executeQueryRS(String sql, Object[] params) {
-        try {      
-            // 获得连接      
-            conn = postgreUtils.getConnection();
-                  
-            // 调用SQL      
-            pst = conn.prepareStatement(sql);      
-                  
-            // 参数赋值      
-            if (params != null) {      
-                for (int i = 0; i < params.length; i++) {      
-                    pst.setObject(i + 1, params[i]);      
-                }      
-            }      
-                  
-            // 执行      
-            rst = pst.executeQuery();      
-      
-        } catch (SQLException e) {      
-            System.out.println(e.getMessage());      
-        }       
-      
-        return rst;      
-    }      
+
           
     /**   
      * SQL 查询将查询结果：一行一列   
@@ -168,11 +145,11 @@ public class PostgreUtils {
      * @param params 参数数组，若没有参数则为null   
      * @return 结果集   
      */      
-    public Object executeQuerySingle(String sql, Object[] params) {      
+    public Object executeQuerySingle(String sql, Object[] params) {
         Object object = null;      
         try {      
             // 获得连接      
-            conn = this.getConnection();      
+            conn = this.getConnection();
                   
             // 调用SQL      
             pst = conn.prepareStatement(sql);      
@@ -208,124 +185,110 @@ public class PostgreUtils {
      * @return List   
      *                       结果集   
      */      
-    public static List<Object> excuteQuery(String sql, Object[] params) {
+    public  List<Object> excuteQuery(String sql, Object[] params) {
         // 执行SQL获得结果集      
-        ResultSet rs = executeQueryRS(sql, params);      
-              
-        // 创建ResultSetMetaData对象      
-        ResultSetMetaData rsmd = null;      
-              
-        // 结果集列数      
-        int columnCount = 0;      
-        try {      
-            rsmd = rs.getMetaData();      
-                  
-            // 获得结果集列数      
-            columnCount = rsmd.getColumnCount();      
-        } catch (SQLException e1) {      
-            System.out.println(e1.getMessage());      
-        }      
-      
-        // 创建List      
-        List<Object> list = new ArrayList<Object>();      
-      
-        try {      
-            // 将ResultSet的结果保存到List中      
-            while (rs.next()) {      
-                Map<String, Object> map = new HashMap<String, Object>();      
-                for (int i = 1; i <= columnCount; i++) {      
-                    map.put(rsmd.getColumnLabel(i), rs.getObject(i));      
-                }      
-                list.add(map);//每一个map代表一条记录，把所有记录存在list中      
-            }      
-        } catch (SQLException e) {      
-            System.out.println(e.getMessage());      
-        } finally {      
-            // 关闭所有资源      
-            closeAll();      
-        }      
-      
-        return list;      
+        ResultSet rs = executeQueryRS(sql, params);
+
+        // 创建ResultSetMetaData对象
+        ResultSetMetaData rsmd = null;
+
+        // 结果集列数
+        int columnCount = 0;
+        try {
+            rsmd = rs.getMetaData();
+
+            // 获得结果集列数
+            columnCount = rsmd.getColumnCount();
+        } catch (SQLException e1) {
+            System.out.println(e1.getMessage());
+        }
+
+        // 创建List
+        List<Object> list = new ArrayList<Object>();
+
+        try {
+            // 将ResultSet的结果保存到List中
+            while (rs.next()) {
+                Map<String, Object> map = new HashMap<String, Object>();
+                for (int i = 1; i <= columnCount; i++) {
+                    map.put(rsmd.getColumnLabel(i), rs.getObject(i));
+                }
+                list.add(map);//每一个map代表一条记录，把所有记录存在list中
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            // 关闭所有资源
+            closeAll();
+        }
+
+        return list;
     }
-    
-    /**   
-     * 存储过程带有一个输出参数的方法   
-     * @param sql 存储过程语句   
-     * @param params 参数数组   
-     * @param outParamPos 输出参数位置   
-     * @param SqlType 输出参数类型   
-     * @return 输出参数的值   
-     */      
-    public Object excuteQuery(String sql, Object[] params,int outParamPos, int SqlType) {      
-        Object object = null;      
-        conn = this.getConnection();      
-        try {      
-            // 调用存储过程      
-            // prepareCall:创建一个 CallableStatement 对象来调用数据库存储过程。  
-            callableStatement = conn.prepareCall(sql);      
-                  
-            // 给参数赋值      
-            if(params != null) {      
-                for(int i = 0; i < params.length; i++) {      
-                    callableStatement.setObject(i + 1, params[i]);      
-                }      
-            }      
-                  
-            // 注册输出参数      
-            callableStatement.registerOutParameter(outParamPos, SqlType);      
-                  
-            // 执行      
-            callableStatement.execute();      
-                  
-            // 得到输出参数      
-            object = callableStatement.getObject(outParamPos);      
-                  
-        } catch (SQLException e) {      
-            System.out.println(e.getMessage());      
-        } finally {      
-            // 释放资源      
-            closeAll();      
-        }      
-              
-        return object;      
+
+    private  ResultSet executeQueryRS(String sql, Object[] params) {
+        try {
+            // 获得连接
+            conn = PostgreUtils.getConnection();
+
+            // 调用SQL
+            pst = conn.prepareStatement(sql);
+
+            // 参数赋值
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    pst.setObject(i + 1, params[i]);
+                }
+            }
+
+            // 执行
+            rst = pst.executeQuery();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+
+        return rst;
     }
-    
+
+
+
     /**   
      * 关闭所有资源   
      */      
-    private static void closeAll() {
+    private static   void closeAll() {
         // 关闭结果集对象      
-        if (rst != null) {      
-            try {      
-                rst.close();      
-            } catch (SQLException e) {      
-                System.out.println(e.getMessage());      
-            }      
-        }      
-      
+////        if (rst != null) {
+//            try {
+//                rst.close();
+//            } catch (SQLException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
+
         // 关闭PreparedStatement对象      
-        if (pst != null) {      
-            try {      
-                pst.close();      
-            } catch (SQLException e) {      
-                System.out.println(e.getMessage());      
-            }      
-        }      
-              
-        // 关闭CallableStatement 对象      
-        if (callableStatement != null) {      
-            try {      
-                callableStatement.close();      
-            } catch (SQLException e) {      
-                System.out.println(e.getMessage());      
-            }      
-        }      
+        if (pst != null) {
+            try {
+                pst.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        // 关闭CallableStatement 对象
+        if (callableStatement != null) {
+            try {
+                callableStatement.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
       
         // 关闭Connection 对象      
         if (conn != null) {      
             try {      
                 conn.close();      
-            } catch (SQLException e) {      
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());      
             }      
         }         

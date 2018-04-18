@@ -28,9 +28,9 @@ public class JdbcUtils {
     
     private CallableStatement callableStatement = null;//创建CallableStatement对象
     
-    private Connection conn = null;  
-    private PreparedStatement pst = null;  
-    private ResultSet rst = null;  
+    private Connection conn = null;
+    private PreparedStatement pst = null;
+    private ResultSet rst = null;
     private JdbcUtils() {
     	
     	
@@ -83,7 +83,7 @@ public class JdbcUtils {
      * 建立数据库连接   
      * @return 数据库连接   
      */      
-    public Connection getConnection() {      
+    public Connection getConnection() {
         try {      
              // 加载数据库驱动程序      
             try {  
@@ -178,11 +178,11 @@ public class JdbcUtils {
      * @param params 参数数组，若没有参数则为null   
      * @return 结果集   
      */      
-    public Object executeQuerySingle(String sql, Object[] params) {      
+    public Object executeQuerySingle(String sql, Object[] params) {
         Object object = null;      
         try {      
             // 获得连接      
-            conn = this.getConnection();      
+            conn = this.getConnection();
                   
             // 调用SQL      
             pst = conn.prepareStatement(sql);      
@@ -204,7 +204,7 @@ public class JdbcUtils {
         } catch (SQLException e) {      
             System.out.println(e.getMessage());      
         } finally {      
-            closeAll();      
+            closeAll();
         }      
       
         return object;      
@@ -303,7 +303,7 @@ public class JdbcUtils {
     /**   
      * 关闭所有资源   
      */      
-    private void closeAll() {      
+    private void closeAll() {
         // 关闭结果集对象      
         if (rst != null) {      
             try {      

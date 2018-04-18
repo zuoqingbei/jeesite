@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsNewsDao">
+    
+	<sql id="cmsNewsColumns">
+		a.id AS "id",
+		a.link AS "link",
+		a.data_type AS "dataType",
+		a.user_id AS "user.id",
+		a.title AS "title",
+		a.image AS "image",
+		a.keywords AS "keywords",
+		a.tags AS "tags",
+		a.description AS "description",
+		a.weight AS "weight",
+		a.hits AS "hits",
+		a.transmit AS "transmit",
+		a.discess AS "discess",
+		a.praise AS "praise",
+		a.tread AS "tread",
+		a.collection AS "collection",
+		a.report AS "report",
+		a.evaluate AS "evaluate",
+		a.tip AS "tip",
+		a.view AS "view",
+		a.recommend AS "recommend",
+		a.allow_comment AS "allowComment",
+		a.comment_audit AS "commentAudit",
+		a.allow_report AS "allowReport",
+		a.undercarriage AS "undercarriage",
+		a.reason AS "reason",
+		a.category1 AS "category1",
+		a.category2 AS "category2",
+		a.category3 AS "category3",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u4.name AS "user.name",
+		u4.photo AS "user.photo"
+	</sql>
+	
+	<sql id="cmsNewsJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CmsNews">
+		SELECT 
+			<include refid="cmsNewsColumns"/>
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		WHERE a.id = #{id} and a.del_flag='0'
+	</select>
+
+	<select id="getContent" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+
+		,b.content,b.content_html
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		left join (select * from  cms_news_data where del_flag='0') b on a.id=b.news_id
+		<!--<include refid="cmsNewsJoins"/>-->
+		WHERE a.id = #{id} and a.del_flag='0'
+	</select>
+	
+	<select id="findList" resultType="CmsNews">
+		SELECT 
+			<include refid="cmsNewsColumns"/>
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		<where>
+			a.del_flag = '0'
+			<if test="dataType != null and dataType != ''">
+				AND a.data_type = #{dataType}
+			</if>
+			<if test="tags != null and tags != ''">
+				and FIND_IN_SET(#{tags},a.tags)
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND a.keywords = #{keywords}
+			</if>
+			<if test="recommend != null and recommend != ''">
+				AND a.recommend = #{recommend}
+			</if>
+			<if test="allowComment != null and allowComment != ''">
+				AND a.allow_comment = #{allowComment}
+			</if>
+			<if test="commentAudit != null and commentAudit != ''">
+				AND a.comment_audit = #{commentAudit}
+			</if>
+			<if test="allowReport != null and allowReport != ''">
+				AND a.allow_report = #{allowReport}
+			</if>
+			<if test="undercarriage != null and undercarriage != ''">
+				AND a.undercarriage = #{undercarriage}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND date_format(a.create_date,'%Y-%m-%d') = date_format(#{createDate},'%Y-%m-%d') 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsNews">
+		SELECT 
+			<include refid="cmsNewsColumns"/>
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		<where>
+			a.del_flag = '0'
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllListContent" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		,b.content,b.content_html
+		FROM cms_news a LEFT JOIN (SELECT * FROM cms_news_data  where del_flag='0') b on a.id=b.news_id
+		<include refid="cmsNewsJoins"/>
+		<where>
+			a.del_flag = '0'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_news(
+			id,
+			link,
+			data_type,
+			user_id,
+			title,
+			image,
+			keywords,
+			tags,
+			description,
+			weight,
+			hits,
+			transmit,
+			discess,
+			praise,
+			tread,
+			collection,
+			report,
+			evaluate,
+			tip,
+			view,
+			recommend,
+			allow_comment,
+			comment_audit,
+			allow_report,
+			undercarriage,
+			reason,
+			category1,
+			category2,
+			category3,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{link},
+			#{dataType},
+			#{user.id},
+			#{title},
+			#{image},
+			#{keywords},
+			#{tags},
+			#{description},
+			#{weight},
+			#{hits},
+			#{transmit},
+			#{discess},
+			#{praise},
+			#{tread},
+			#{collection},
+			#{report},
+			#{evaluate},
+			#{tip},
+			#{view},
+			#{recommend},
+			#{allowComment},
+			#{commentAudit},
+			#{allowReport},
+			#{undercarriage},
+			#{reason},
+			#{category1},
+			#{category2},
+			#{category3},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_news SET 	
+			link = #{link},
+			data_type = #{dataType},
+			user_id = #{user.id},
+			title = #{title},
+			image = #{image},
+			keywords = #{keywords},
+			tags = #{tags},
+			description = #{description},
+			weight = #{weight},
+			hits = #{hits},
+			transmit = #{transmit},
+			discess = #{discess},
+			praise = #{praise},
+			tread = #{tread},
+			collection = #{collection},
+			report = #{report},
+			evaluate = #{evaluate},
+			tip = #{tip},
+			view = #{view},
+			recommend = #{recommend},
+			allow_comment = #{allowComment},
+			comment_audit = #{commentAudit},
+			allow_report = #{allowReport},
+			undercarriage = #{undercarriage},
+			reason = #{reason},
+			category1 = #{category1},
+			category2 = #{category2},
+			category3 = #{category3},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_news SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<!--强推-->
+
+	<select id="getRecommend" resultType="CmsNews">
+		SELECT
+			a.*, b.content,
+			b.content_html
+		FROM
+			cms_news a
+		LEFT JOIN (select * from cms_news_data where del_flag='0') b ON a.id = b.news_id
+
+
+		WHERE
+			a.del_flag = '0'
+
+		AND a.recommend = '1'
+	</select>
+
+	<!--查询资讯列表和内容-->
+	<select id="findListContent" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		,b.content,b.content_html
+		FROM cms_news a LEFT JOIN (select * from cms_news_data where del_flag ='0') b on a.id=b.news_id
+		<include refid="cmsNewsJoins"/>
+		<where>
+			a.del_flag = '0'
+			<if test="dataType != null and dataType != ''">
+				AND a.data_type = #{dataType}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="tags != null and tags != ''">
+				and FIND_IN_SET(#{tags},a.tags)
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+				<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND a.keywords = #{keywords}
+			</if>
+			<if test="recommend != null and recommend != ''">
+				AND a.recommend = #{recommend}
+			</if>
+			<if test="allowComment != null and allowComment != ''">
+				AND a.allow_comment = #{allowComment}
+			</if>
+			<if test="commentAudit != null and commentAudit != ''">
+				AND a.comment_audit = #{commentAudit}
+			</if>
+			<if test="allowReport != null and allowReport != ''">
+				AND a.allow_report = #{allowReport}
+			</if>
+			<if test="undercarriage != null and undercarriage != ''">
+				AND a.undercarriage = #{undercarriage}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getByLinkId" resultType="CmsNews">
+		select id FROM cms_news a where a.del_flag='0' and a.data_type=#{dataType} and a.link=${link}
+	</select>
+
+
+<!--资讯排行-->
+	<select id="getRank" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+
+		WHERE  a.del_flag='0'
+		<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
+		</if>
+		<if test="keywords != null and keywords != ''">
+			AND a.title LIKE 	concat('%',#{keywords},'%')
+		</if>
+		order by 1
+		<if test="weight != null and weight != ''">
+			,weight desc
+		</if>
+		<if test="hits != null and hits != ''">
+			,hits desc
+		</if>
+		<if test="transmit != null and transmit != ''">
+			,transmit desc
+		</if>
+		<if test="discess != null and discess != ''">
+			,discess desc
+		</if>
+		<if test="praise != null and praise != ''">
+			,praise desc
+		</if>
+		<if test="tread != null and tread != ''">
+			,tread desc
+		</if>
+		<if test="collection != null and collection != ''">
+			,collection desc
+		</if>
+		<if test="report != null and report != ''">
+			,report desc
+		</if>
+		<if test="evaluate != null and evaluate != ''">
+			,evaluate desc
+		</if>
+		<if test="tip != null and tip != ''">
+			,tip desc
+		</if>
+		<if test="view != null and view != ''">
+			,view desc
+		</if>
+		, a.update_date DESC
+
+
+	</select>
+
+
+
+	<!--<select id="getRank" resultType="CmsNews">-->
+		<!--SELECT-->
+		<!--a.*-->
+		<!--FROM cms_news a-->
+
+		<!--WHERE  a.del_flag='0'-->
+		<!--order by 1-->
+		<!--<if test="hits != null and hits != ''">-->
+			<!--,hits desc-->
+		<!--</if>-->
+		<!--<if test="transmit != null and transmit != ''">-->
+			<!--,transmit desc-->
+		<!--</if>-->
+		<!--<if test="discess != null and discess != ''">-->
+			<!--,discess desc-->
+		<!--</if>-->
+		<!--<if test="praise != null and praise != ''">-->
+			<!--,praise desc-->
+		<!--</if>-->
+		<!--<if test="tread != null and tread != ''">-->
+			<!--,tread desc-->
+		<!--</if>-->
+		<!--<if test="collection != null and collection != ''">-->
+			<!--,collection desc-->
+		<!--</if>-->
+		<!--<if test="report != null and report != ''">-->
+			<!--,report desc-->
+		<!--</if>-->
+		<!--<if test="evaluate != null and evaluate != ''">-->
+			<!--,evaluate desc-->
+		<!--</if>-->
+		<!--<if test="tip != null and tip != ''">-->
+			<!--,tip desc-->
+		<!--</if>-->
+		<!--<if test="view != null and view != ''">-->
+			<!--,view desc-->
+		<!--</if>-->
+		<!--, a.update_date DESC-->
+
+
+	<!--</select>-->
+	<!---->
+
+
+	<select id="getSimilarByTags" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		where 1=1 and a.id !=#{id}
+		<if test="tagsvalue != null and tagsvalue != ''">
+			and
+			<foreach collection="tagsvalue" item="e" open="" separator=" or " close="">
+				FIND_IN_SET(#{e},a.tags)
+
+			</foreach>
+		</if>
+
+		order by a.recommend desc,a.update_date desc
+		limit 3
+	</select>
+
+
+	<select id="getDailyNews" resultType="CmsNews">
+		SELECT
+		<include refid="cmsNewsColumns"/>
+		FROM cms_news a
+		<include refid="cmsNewsJoins"/>
+		WHERE a.del_flag='0' and
+			a.id IN (
+				SELECT
+					cms_id
+				FROM
+					cms_daily_list_content
+				WHERE
+					del_flag = '0'
+				AND table_name = 'cms_news'
+				AND daily_id=#{dailyId}
+			)
+	</select>
+</mapper>

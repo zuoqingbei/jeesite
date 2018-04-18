@@ -356,4 +356,6 @@ public class WxAuthController extends BaseController{
 		}
 	}
 	*/
+
+//	public String
 }
