@@ -34,25 +34,15 @@
 
         <div class="banner">
 
-            <!--
-                        <div class="header">
-                            <div class="left"><img src="${ctxStatic}/${portalPage}/thinker/images/lifang.png" alt="icon" width="32"
-                                                   height="32"><h5>1169数据立方体</h5></div>
-                            <div class="right">
-                                <button class="register" type="button">注册</button>
-                                <button type="button" class="login">登录</button>
-                            </div>
-                        </div>
-            -->
             <div class="title">
                 <img src="${ctxStatic}/${portalPage}/thinker/images/cube.png" alt="">
                 <h2>数据立方体</h2>
             </div>
             <form id="searchForm" action="${portalPath}/thinker/search" type="post">
                 <div class="search">
-                    <input type="text" id="keyword" name="keyWord" placeholder="请输入关键词...">
+                    <input type="text" id="keyword" name="keyWord" placeholder="请输入搜索关键词">
                     <button type="button" id="searchBtn" onclick="search()">搜索</button>
-                    <input style="display: none;" type="text" /> 
+                    <input style="display: none;" type="text" />
                 </div>
             </form>
         </div>
@@ -62,6 +52,9 @@
                 <p class="markt"><i class="iconfont icon-remen1"></i><span>热搜</span></p>
                 <div class="lable">
                     <span>收入</span><span>指标</span><span>财务运营</span><span>接口</span><span>代码</span>
+                    <span>财务损益</span><span>交互用户</span><span>财务运营</span>
+                    <span>财务损益</span><span>交互用户</span><span>财务运营</span>
+                    <span>财务损益</span><span>交互用户</span><span>财务运营</span>
                 </div>
             </div>
             <div class="special">
@@ -109,7 +102,7 @@
     $(function () {
         var swiper = new Swiper('.swiper-container', {
             slidesPerView: 4,
-            spaceBetween: 15,
+            spaceBetween: 30,
             slidesPerGroup: 4,
             loop: true,
             loopFillGroupWithBlank: true,

@@ -82,7 +82,7 @@ body > header.bd-navbar li.split{
     top: -.125rem;
 }
 body > header.bd-navbar li>a{
-    /*border-radius: .25rem;*/
+    font-size: .875rem;
 }
 body > header.bd-navbar li>a:hover {
     color: #2bcfd3;
@@ -104,8 +104,9 @@ body > header.bd-navbar li>a:active {
     color: #999;
     cursor: pointer;
 }
-.handle ul > li.active {
-    color: var(--textBlue);
+.handle ul > li.active,
+.handle ul > li:hover {
+    color: #2bcfd3;
 }
 
 .handle ul > li>i{
@@ -119,12 +120,12 @@ body > header.bd-navbar li>a:active {
 }*/
 @media (min-width: 992px){
     .container {
-        max-width: 860px;
+        max-width: 750px;
     }
 }
 @media (min-width: 1367px){
     .container {
-        max-width: 1200px;
+        max-width: 900px;
     }
 }
 
