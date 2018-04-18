@@ -228,16 +228,26 @@
 	function joinHtml(data){
 		var htmls='';
 		$.each(data,function(index,item){
-			if(item.type=="API"){
-				htmls+=" <div class='news_box' onclick='inetent(1,\""+item.id+"\")' >";
-			}else if(item.type=="指标"){
-				htmls+=" <div class='news_box' onclick='inetent(2,\""+item.id+"\")' >";
-			}else if(item.type=="报表"){
-				htmls+=" <div class='news_box' onclick='inetent(3,\""+item.id+"\")' >";
-			}
+			// if(item.type=="API"){
+			// 	htmls+=" <div class='news_box' onclick='inetent(1,\""+item.id+"\")' >";
+			// }else if(item.type=="指标"){
+			// 	htmls+=" <div class='news_box' onclick='inetent(2,\""+item.id+"\")' >";
+			// }else if(item.type=="报表"){
+			// 	htmls+=" <div class='news_box' onclick='inetent(3,\""+item.id+"\")' >";
+			// }
 			htmls+='<div class="box_left fl"><div class="box_left_img" style="background:url('+item.screenUrl+') 50% 50% no-repeat;background-size: contain;"></div></div>';//图片
 			htmls+='<div class="box_right fl"><div class="news_title clearfix"><span class="fl news_mark">'+item.type+'</span>';
-			htmls+='<b class="fl"><a href="">'+item.name+'</a></b>';
+				if(item.type=="API"){
+				//htmls+=" <div class='news_box' onclick='inetent(1,\""+item.id+"\")' >";
+				htmls+='<b class="fl" onclick="inetent(1,\''+item.id+'\')"><a href="">'+item.name+'</a></b>';
+			}else if(item.type=="指标"){
+				//htmls+=" <div class='news_box' onclick='inetent(2,\""+item.id+"\")' >";
+				htmls+='<b class="fl" onclick="inetent(2,\''+item.id+'\')"><a href="">'+item.name+'</a></b>';
+			}else if(item.type=="报表"){
+				//htmls+=" <div class='news_box' onclick='inetent(3,\""+item.id+"\")' >";
+				htmls+='<b class="fl" onclick="inetent(3,\''+item.id+'\')"><a href="">'+item.name+'</a></b>';
+			}
+			//htmls+='<b class="fl"><a href="">'+item.name+'</a></b>';
 			htmls+='<span><span class="news_time fr">'+item.createDate+'</span><i class="iconfont icon-shijian fr"></i></span></div>';
 			if(item.descs!=''&&item.descs.length>80){
 				htmls+='<div class="news_contents">'+item.descs.substr(0,80)+'...</div>';
