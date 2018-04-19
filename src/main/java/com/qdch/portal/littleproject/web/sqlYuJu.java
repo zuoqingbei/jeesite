@@ -639,17 +639,17 @@ public class sqlYuJu {
 	}
 	//沉淀资金（按天）
 	public String jinDay(){
-		String sql="";
+		String sql="select * from INSIGHT_XCX_CDZJ order by date";
 		return sql;
 	}
 	//沉淀资金（按周）
 	public String jinWeek(){
-		String sql="";
+		String sql="select * from INSIGHT_XCX_CDZJ order by date";
 		return sql;
 	}
 	//沉淀资金（按月）
 	public String jinMonth(){
-		String sql="";
+		String sql="select * from INSIGHT_XCX_CDZJ order by date";
 		return sql;
 	}
 	//所有出入金
