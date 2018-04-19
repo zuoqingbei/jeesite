@@ -2,6 +2,7 @@ package com.qdch.portal.littleproject.web;
 
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.littleproject.entity.FenLei;
 import com.qdch.portal.littleproject.entity.KeHuAge;
 import com.qdch.portal.littleproject.entity.KeHuFenLei;
 import com.qdch.portal.littleproject.entity.LittleProjectDto;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -680,19 +682,14 @@ public class SummaryController extends BaseController {
 	public String chendianzijin(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			String type = request.getParameter("type");
+			Object type = request.getParameter("type");
+			Object[] t=new Object[]{type};
 			List<Object> lists = null;
-			if ("day".equals(type)) {
+			if (t!=null&&t.length>0) {
 
-				lists = PostgreUtils.getInstance().excuteQuery(sql.jinDay(),
-						null);
-			} else if ("week".equals(type)) {
-				lists = PostgreUtils.getInstance().excuteQuery(sql.jinWeek(),
-						null);
-			} else if ("month".equals(type)) {
-				lists = PostgreUtils.getInstance().excuteQuery(sql.jinMonth(),
-						null);
-			}
+				lists = PostgreUtils.getInstance().excuteQuery(sql.chendianzijin(),
+						t);
+			} 
 			ZiJin z=new ZiJin();
 			List<String> jihe1=new ArrayList<String>();
 			List<String> jihe2=new ArrayList<String>();
@@ -726,8 +723,14 @@ public class SummaryController extends BaseController {
 	@ResponseBody
 	public String churujin(HttpServletRequest request,HttpServletResponse response){
 		try {
-			List<Object> lists=null;
-			lists=PostgreUtils.getInstance().excuteQuery(sql.churujin(),null);
+			Object type = request.getParameter("type");
+			Object[] t=new Object[]{type};
+			List<Object> lists = null;
+			if (t!=null&&t.length>0) {
+
+				lists = PostgreUtils.getInstance().excuteQuery(sql.churujinDay(),
+						t);
+			} 
 			List<Object> alljinlist=PostgreUtils.getInstance().excuteQuery(sql.allchurujin(),null);
 			LittleProjectDto dto=new LittleProjectDto();
 			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
@@ -748,7 +751,7 @@ public class SummaryController extends BaseController {
 						for(Object o:lists){
 							Map m=(Map)o;
 							if(m.get("xm").equals(s.getName())){
-								jihe.add(m.get("je")+"");
+								jihe.add(m.get("fvalue")+"");
 							}
 						}
 					}
@@ -781,5 +784,43 @@ public class SummaryController extends BaseController {
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
-	
+	/**
+	 * 总况——商品类-行情-各指数行情
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月19日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/zhishuhangqing" })
+	@ResponseBody
+	public String zhishuhangqing(HttpServletRequest request,HttpServletResponse response){
+		try {
+			FenLei dto=new FenLei();
+			DecimalFormat dt=new DecimalFormat("0.00%");
+			List<Object> lists=null;
+			lists=PostgreUtils.getInstance().excuteQuery(sql.zhishuhangqing(),null);
+			List<String> jihe1=new ArrayList<String>();
+			List<String> jihe2=new ArrayList<String>();
+			List<String> jihe3=new ArrayList<String>();
+			if(lists!=null&&lists.size()>0){
+				for(Object o:lists){
+					Map m=(Map)o;
+					jihe1.add(m.get("cpmc")+"");
+					jihe2.add(m.get("zxjg")+"");
+					
+					jihe3.add(dt.format(m.get("bh"))+"");
+				}
+			}
+			dto.setX(jihe1);
+			dto.setY(jihe2);
+			dto.setZ(jihe3);
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
 }

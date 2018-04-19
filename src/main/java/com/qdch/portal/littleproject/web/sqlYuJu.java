@@ -637,29 +637,26 @@ public class sqlYuJu {
 				+ " FROM HUB_QY_CPFL HQC1";
 		return sql;
 	}
-	//沉淀资金（按天）
-	public String jinDay(){
-		String sql="select * from INSIGHT_XCX_CDZJ order by date";
+	//沉淀资金
+	public String chendianzijin(){
+		String sql="select * from INSIGHT_XCX_CDZJ where wd=? order by date";
 		return sql;
 	}
-	//沉淀资金（按周）
-	public String jinWeek(){
-		String sql="select * from INSIGHT_XCX_CDZJ order by date";
-		return sql;
-	}
-	//沉淀资金（按月）
-	public String jinMonth(){
-		String sql="select * from INSIGHT_XCX_CDZJ order by date";
-		return sql;
-	}
+	
 	//所有出入金
 	public String allchurujin(){
-		String sql="";
+		String sql="select distinct(xm) from INSIGHT_XCX_CRJ order by xm";
 		return sql;
 	}
 	//出入金
-	public String churujin(){
-		String sql="";
+	public String churujinDay() {
+		String sql = "select * from INSIGHT_XCX_CRJ where wd=? order by date";
 		return sql;
 	}
+	//指数行情
+	public String zhishuhangqing(){
+		String sql="select * from INSIGHT_XCX_GHQZS  order by cpmc";
+		return sql;
+	}
+	
 }
