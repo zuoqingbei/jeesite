@@ -18,6 +18,7 @@ import com.qdch.portal.littleproject.entity.FenLei;
 import com.qdch.portal.littleproject.entity.KeHuFenLei;
 import com.qdch.portal.littleproject.entity.LittleProjectDto;
 import com.qdch.portal.littleproject.entity.LittleProjectEntity;
+import com.qdch.portal.littleproject.entity.Portrait;
 import com.qdch.portal.littleproject.entity.Risks;
 import com.qdch.portal.littleproject.entity.Single;
 import com.qdch.portal.littleproject.entity.UnknownIndex;
@@ -52,7 +53,7 @@ public class DangerController extends BaseController {
 
 			LittleProjectDto dto = new LittleProjectDto();
 			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
-					sql.shichan(), null);
+					sql.financeMarket(), null);
 
 			// 时间集合
 			List<String> times = new ArrayList<String>();
@@ -146,7 +147,7 @@ public class DangerController extends BaseController {
 			List<Object> lists = PostgreUtils.getInstance().excuteQuery(
 					sql.fengxiantongji(), null);
 			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
-					sql.shichan(), null);
+					sql.financeMarket(), null);
 
 			// 交易市场集合
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
@@ -198,7 +199,7 @@ public class DangerController extends BaseController {
 	/**
 	 * 风险-金融资产类风险监测
 	 *
-	 * @time 2018年4月18日
+	 * @time 2018年4月19日
 	 * @author 高照
 	 * @param request
 	 * @param response
@@ -208,17 +209,30 @@ public class DangerController extends BaseController {
 	@ResponseBody
 	public String riskMonitoring(HttpServletRequest request,HttpServletResponse response){
 		try {
+			String type=request.getParameter("type");
 			UnknownIndex dto = new UnknownIndex();
 			DecimalFormat dt=new DecimalFormat("0.00%");
 			List<Object> lists = null;
-			lists = PostgreUtils.getInstance().excuteQuery(sql.riskMonitoring(),null);
-			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(sql.shichan(), null);
-			List<Object> unknownIndex=PostgreUtils.getInstance().excuteQuery(sql.unknownIndex(), null);
+			List<Object> tradelist=null;
+			List<Object> unknownIndex=null;
+			List<Object> risks=null;
+			//2是金融资产类，1是商品类
+			if("2".equals(type)){
+				lists = PostgreUtils.getInstance().excuteQuery(sql.riskMonitoring(),null);
+				tradelist = PostgreUtils.getInstance().excuteQuery(sql.financeMarket(), null);
+				unknownIndex=PostgreUtils.getInstance().excuteQuery(sql.unknownIndex(), null);
+				risks= PostgreUtils.getInstance().excuteQuery(sql.risks(),null);
+			}else if("1".equals(type)){
+				lists = PostgreUtils.getInstance().excuteQuery(sql.riskMonitoringB(),null);
+				tradelist = PostgreUtils.getInstance().excuteQuery(sql.tradeMraket(), null);
+				unknownIndex=PostgreUtils.getInstance().excuteQuery(sql.unknownIndex(), null);
+				risks= PostgreUtils.getInstance().excuteQuery(sql.risksB(),null);
+			}
+			
 			List<KeHuFenLei> aggregate1=new ArrayList<KeHuFenLei>();
 			List<Risks> aggregate2=new ArrayList<Risks>();
-			//List<Single> aggregate=new ArrayList<Single>();
-			List<Object> risks= PostgreUtils.getInstance().excuteQuery(sql.risks(),null);
-			//List<Object> riskAll= PostgreUtils.getInstance().excuteQuery(sql.riskAll(),null);
+			
+			
 			int n=lists.size();
 			
 			if(tradelist!=null&&tradelist.size()>0){
@@ -238,20 +252,7 @@ public class DangerController extends BaseController {
 					
 				}
 			}
-			/*if(lists!=null&&lists.size()>0){
-				for(Object o:lists){
-					Map m=(Map) o;
-					List<String> aggregate3=new ArrayList<String>();
-					Single s=new Single();
-					aggregate3.add(m.get("fxzb")+"");
-					aggregate3.add(m.get("fxzbz")+"");
-					aggregate3.add(dt.format(m.get("yz"))+"");
-					aggregate3.add(m.get("cee")+"");
-					aggregate3.add(m.get("yjsj")+"");
-					s.setS(aggregate3);
-					aggregate.add(s);
-				}
-			}*/
+			
 			
 		if(risks!=null&&risks.size()>0){
 				for(Object o:risks){
@@ -274,6 +275,122 @@ public class DangerController extends BaseController {
 			dto.setA(aggregate1);
 			dto.setB(aggregate2);
 			//dto.setC(aggregate);
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 风险-金融资产类风险监测-风险事件
+	 *
+	 * @time 2018年4月20日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/jysRisk" })
+	@ResponseBody
+	public String jysRisk(HttpServletRequest request,HttpServletResponse response){
+		try {
+			UnknownIndex dto = new UnknownIndex();
+			DecimalFormat dt=new DecimalFormat("0.00%");
+			String type=request.getParameter("type");
+			Object risk = request.getParameter("risk");
+			Object market=request.getParameter("market");
+			Object[] t=null;
+			if(market==null){
+				 t=new Object[]{risk};
+			}else{
+				 t=new Object[]{risk,market};
+			}
+			
+			List<Object> lists = null;
+			if("2".equals(type)){
+				if (t!=null&&t.length>1) {
+
+					lists = PostgreUtils.getInstance().excuteQuery(sql.riskMonitoring3(),
+							t);
+				}else if(t!=null&&t.length>0){
+					lists = PostgreUtils.getInstance().excuteQuery(sql.riskMonitoring2(),
+							t);
+				}
+			}else if("1".equals(type)){
+				if (t!=null&&t.length>1) {
+
+					lists = PostgreUtils.getInstance().excuteQuery(sql.riskMonitoring3B(),
+							t);
+				}else if(t!=null&&t.length>0){
+					lists = PostgreUtils.getInstance().excuteQuery(sql.riskMonitoring2B(),
+							t);
+				}
+			}
+			
+			List<Single> aggregate=new ArrayList<Single>();
+			if(lists!=null&&lists.size()>0){
+			for(Object o:lists){
+				Map m=(Map) o;
+				List<String> aggregate3=new ArrayList<String>();
+				Single s=new Single();
+				aggregate3.add(m.get("fxzb")+"");
+				aggregate3.add(m.get("fxzbz")+"");
+				aggregate3.add(dt.format(m.get("yz"))+"");
+				aggregate3.add(m.get("cee")+"");
+				aggregate3.add(m.get("yjsj")+"");
+				s.setS(aggregate3);
+				aggregate.add(s);
+			}
+		}
+		dto.setC(aggregate);
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+		
+	}
+	/**
+	 * 画像-风险雷达图
+	 *
+	 * @time 2018年4月20日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/portrait" })
+	@ResponseBody
+	public String portrait(HttpServletRequest request,HttpServletResponse response){
+		try {
+			Portrait dto = new Portrait();
+			Object type=request.getParameter("type");
+			Object[] t=new Object[]{type};
+			List<Object> lists=null;
+			List<Object> bcLists=null;
+			List<Object> shareHolderLists=null;
+			List<Object> enterpriseLists=null;
+			if("1".equals(type)||"2".equals(type)){
+				 lists = PostgreUtils.getInstance().excuteQuery(
+						sql.dazong(), t);
+				 bcLists=PostgreUtils.getInstance().excuteQuery(
+							sql.businesss(), t);
+				 shareHolderLists=PostgreUtils.getInstance().excuteQuery(
+							sql.shareHolder(), t);
+				 lists = PostgreUtils.getInstance().excuteQuery(
+						sql.quanyi(), null);
+				 enterpriseLists=PostgreUtils.getInstance().excuteQuery(
+							sql.enterprise(), t);
+			}
+			
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
