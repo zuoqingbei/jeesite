@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.mapper.JsonMapper;
+import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.thirdplat.entity.AccessToken;
 import com.qdch.portal.thirdplat.entity.WxUserInfo;
 /**
@@ -136,4 +137,25 @@ public class WxpubOAuth {
 		System.out.println(token);
 		return wxUserInfo;
 	}
+
+    /**
+     * 获取用户sessionkey
+     * @param code
+     * @return
+     */
+    public static WxUserInfo getSessionKey(String code) {
+        if(StringUtils.isBlank(code)){
+            return null;
+        }
+        String url = "https://api.weixin.qq.com/sns/jscode2session";
+        Map<String,String> createMap = new HashMap<String,String>();
+        createMap.put("appid",Global.getAppId());
+        createMap.put("secret",Global.getAppSecret());
+        createMap.put("js_code",code);
+        createMap.put("grant_type","authorization_code");
+        String token=HttpClientUtil.sendPostSSLRequest(url, createMap);
+        WxUserInfo wxUserInfo=(WxUserInfo) JsonMapper.fromJsonString(token, WxUserInfo.class);
+        System.out.println(token);
+        return wxUserInfo;
+    }
 }
