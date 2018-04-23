@@ -29,4 +29,8 @@ public class DynamicDataSource  extends AbstractRoutingDataSource {
 		 return getCurrentLookupKey();    
 	}
 
+
+	public static void removeDataSourceKey(){
+		contextHolder.remove();
+	}
 }

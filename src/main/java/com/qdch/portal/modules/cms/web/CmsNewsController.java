@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import com.qdch.portal.common.utils.PostgreUtils;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -45,6 +46,9 @@ import com.qdch.portal.modules.sys.utils.UserUtils;
 //
 //@RequestMapping(value = "${adminPath}/cms/cmsNews")
 public class CmsNewsController extends BaseController {
+	public CmsNewsController(){
+		DynamicDataSource.setDataSource();
+	}
 
 	@Autowired
 	private CmsNewsService cmsNewsService;
@@ -235,6 +239,7 @@ public class CmsNewsController extends BaseController {
 	@ResponseBody
 	public String getRank(CmsNews cmsNews, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
+			DynamicDataSource.setDataSource();
 			String tags = cmsNews.getTags();
 			if(tags !=null  && !tags.equals("")){
 				tags = StringUtils.delFrontAndEndSymbol(tags);
