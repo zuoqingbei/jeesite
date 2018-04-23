@@ -1,34 +1,25 @@
 package com.qdch.portal.littleproject.web;
 
-import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.mapper.JsonMapper;
-import com.qdch.portal.common.security.Cryptos;
 import com.qdch.portal.common.utils.AESUtil;
 import com.qdch.portal.common.utils.PostgreHubUtils;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.common.web.BaseController;
-import com.qdch.portal.modules.account.dao.AccountAttentionDao;
 import com.qdch.portal.modules.sys.dao.UserDao;
 import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.service.SystemService;
 import com.qdch.portal.thirdplat.dao.AccountThirdplatDao;
-import com.qdch.portal.thirdplat.entity.AccessToken;
 import com.qdch.portal.thirdplat.entity.AccountThirdplat;
 import com.qdch.portal.thirdplat.entity.WxUserInfo;
 import com.qdch.portal.thirdplat.service.AccountThirdplatService;
-import com.qdch.portal.thirdplat.utils.HttpClientUtil;
 import com.qdch.portal.thirdplat.utils.WxpubOAuth;
-import com.qdch.portal.thirdplat.web.WxAuthController;
 
 
 
-import org.activiti.engine.impl.util.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sun.misc.Cache;
@@ -50,7 +41,6 @@ import java.util.Map;
 
 
 
-import static org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers.encryptedData;
 
 /**
  * 登录小程序

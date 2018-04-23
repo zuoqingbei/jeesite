@@ -248,7 +248,7 @@
 
 		<property name="initialSize" value="3" />
 
-		<property name="minIdle" value="${jdbc.pool.minIdle}" />
+		<!--<property name="minIdle" value="${jdbc.pool.minIdle}" />-->
 
 		<property name="maxActive" value="${jdbc.pool.maxActive}" />
 
@@ -262,23 +262,23 @@
 
 		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
 
-		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!--<property name="timeBetweenEvictionRunsMillis" value="60000" />-->
 
 
 
-		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<!--&lt;!&ndash; 配置一个连接在池中最小生存的时间，单位是毫秒 &ndash;&gt;-->
 
-		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<!--<property name="minEvictableIdleTimeMillis" value="300000" />-->
 
 
 
-		<property name="validationQuery" value="${jdbc.testSql}" />
+		<!--<property name="validationQuery" value="${jdbc.testSql}" />-->
 
-		<property name="testWhileIdle" value="true" />
+		<!--<property name="testWhileIdle" value="true" />-->
 
-		<property name="testOnBorrow" value="false" />
+		<!--<property name="testOnBorrow" value="false" />-->
 
-		<property name="testOnReturn" value="false" />
+		<!--<property name="testOnReturn" value="false" />-->
 
 
 
