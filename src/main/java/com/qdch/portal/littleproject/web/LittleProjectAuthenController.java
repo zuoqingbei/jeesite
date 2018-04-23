@@ -207,29 +207,48 @@ public class LittleProjectAuthenController  extends BaseController {
         return  this.resultData(request,response,"","","","");
     }
 
+
+    /**
+     * 完善用户基础信息
+     * @param request
+     * @param response
+     * @return
+     */
+
+    @RequestMapping(value = "${portalPath}/littleproject/auth/getUserInfo")
+    @ResponseBody
     public String getUserInfo(HttpServletRequest request,HttpServletResponse response){
-//        String encryptedData = request.getParameter("encryptedData");
-////        String iv = request.getParameter("iv");
-////        String session_key = request.getParameter("sessionkey");
-        String code  = request.getParameter("code");
-
-        String encryptedData = "qHoTD7Z8J7m+Cf3WWK0LMMHor0hNMDhheLWGN1+IS8R8hIIaZWs8CVTizRErjOFrnYMNAaEn13w4K0/RXVjlEyYJKld2onXDYmc9FYCfEokyPqrh0toW2GoLaGLnuRlCAUhL82S7fauny+h7su4M9GYcBMnrvclMLup3DH4p47K/oMt1ARUgx/5rrn5fYWhk11oThGTM6O6HLpbUH4aXfujGZ5FjApgPrqiEKgP5RIUok+CX+PXD2rPtrEbknuTTbtkfUuP+XnRo6m+NPnvhfEz02w9RAiUNOjnuxHIQ7s5Ctx0Z/TOngv63XNXQrecJHY8gLDMGIHYyVdDsOyNaP0vuQdn/pCLbzsfbSOephm1SwFMloBwhJwQbV14RlwI6034dZiW0efBt25jDzLxDWtcHajEsAO98q9FqrgAHk3UxPtUUgeTyIig6iCRKQLRVpqgP2zGyBQjo00skUs3nav8CSP5pI0jB2M2vwbMQtTm3wgmQwNZrivKSyY3tqK7521o6xQ4lt/XZyFIgHmSyBw==";
-        String iv ="VJzbVKIzw7RQ4feM14w/9g==";
-//        String iv = request.getParameter("iv");
-        String session_key = Global.getAppSecret();
-
+        String encryptedData = request.getParameter("encryptedData");
+        String iv = request.getParameter("iv");
+        String session_key = request.getSession().getAttribute("sessionKey"+request.getParameter("openid"))+"";
         try {
             byte[] resultByte = AESUtil.instance.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(session_key), Base64.decodeBase64(iv));
             if(null != resultByte && resultByte.length > 0){
                 String userInfo = new String(resultByte, "UTF-8");
                 System.out.println(userInfo);
+                WxUserInfo wxUserInfo=(WxUserInfo) JsonMapper.fromJsonString(userInfo, WxUserInfo.class);
 //                JSONObject json = JSONObject.fromObject(userInfo); //将字符串{“id”：1}
-
+                AccountThirdplat accountThirdplat  = new AccountThirdplat();
+                accountThirdplat.setPtype("wechat");
+                accountThirdplat.setPlatkey(request.getParameter("openid"));
+                AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
+                if(thirdplat == null){
+                    return this.resultFaliureData(request,response,"","");
+                }else{
+                    thirdplat.setGender(wxUserInfo.getSex());
+                    thirdplat.setCity(wxUserInfo.getCity());
+                    thirdplat.setCountry(wxUserInfo.getCountry());
+                    thirdplat.setProvince(wxUserInfo.getProvince());
+                    thirdplat.setNickName(wxUserInfo.getNickname());
+                    accountThirdplatDao.update(thirdplat);
+                }
             }
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
+            return this.resultFaliureData(request,response,"","");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            return this.resultFaliureData(request,response,"","");
         }
 
 
@@ -243,6 +262,8 @@ public class LittleProjectAuthenController  extends BaseController {
      * @return
      */
 
+    @RequestMapping(value = "${portalPath}/littleproject/auth/getSessionkey")
+    @ResponseBody
     public String getSessionkey(HttpServletRequest request,HttpServletResponse response){
         try {
             String code  = request.getParameter("code");
@@ -250,11 +271,20 @@ public class LittleProjectAuthenController  extends BaseController {
                 return this.resultFaliureData(request,response,"请输入用户的code",null);
             }
             WxUserInfo info = WxpubOAuth.getSessionKey(code);
-            request.getSession().setAttribute("sessionKey"+info.getUnionid(),info.getSessionKey());
-            return this.resultSuccessData(request,response,"",null);
+            if(StringUtils.isBlank(info.getOpenid())){
+                return this.resultFaliureData(request,response,"发生错误",null);
+            }
+            request.getSession().setAttribute("sessionKey"+info.getOpenid(),info.getSessionKey());
+
+            //下面是往第三方平台表里插
+            AccountThirdplat accountThirdplat = new AccountThirdplat();
+            accountThirdplat.setPtype("wechat");
+            accountThirdplat.setPlatkey(info.getOpenid());
+            accountThirdplat.setUnionid(info.getUnionid());
+            return this.resultSuccessData(request,response,"",info.getOpenid());
         } catch (Exception e) {
             e.printStackTrace();
-            return this.resultFaliureData(request,response,"",null);
+            return this.resultFaliureData(request,response,"发生错误",null);
         }
 
 

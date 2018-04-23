@@ -19,6 +19,8 @@ public class AccountThirdplat extends DataEntity<AccountThirdplat> {
 	private User user; // 用户id
 	private String ptype; // 平台类型 QQ wechart weibo
 	private String platkey; // 第三方平台标识码 比如openid unionid
+
+	private String unionid; //unionid
 	private String nickName; // 昵称
 	private String image; // 头像
 	private String gender; // 性别
@@ -161,4 +163,11 @@ public class AccountThirdplat extends DataEntity<AccountThirdplat> {
 		this.country = country;
 	}
 
+	public String getUnionid() {
+		return unionid;
+	}
+
+	public void setUnionid(String unionid) {
+		this.unionid = unionid;
+	}
 }
