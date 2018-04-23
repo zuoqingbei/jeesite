@@ -111,7 +111,7 @@ public class LittleProjectAuthenController  extends BaseController {
         //先去数据库查看是否是企业用户，如果是的话，写入account_thirdplat表和sys_user表
         try {
             if(StringUtils.isBlank(request.getParameter("platkey"))){
-                return this.resultFaliureData(request,response,"请先输入用户的key",null);
+                return this.resultFaliureData(request,response,"请先输入用户的openid",null);
             }
             if(StringUtils.isBlank(request.getParameter("mobile"))){
                 return this.resultFaliureData(request,response,"请先输入手机号码",null);
@@ -122,7 +122,7 @@ public class LittleProjectAuthenController  extends BaseController {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return this.resultFaliureData(request,response,"该用户的key不存在",null);
+                return this.resultFaliureData(request,response,"该用户的openid不存在",null);
             }
             User user  = new User(accountThirdplat.getNickName(),accountThirdplat);
             user.setMobile(request.getParameter("mobile"));
@@ -192,12 +192,7 @@ public class LittleProjectAuthenController  extends BaseController {
 //
 //    }
 
-    public void encryUnionId(HttpServletRequest request,HttpServletResponse response){
-        String encry = request.getParameter("encry");
-        String iv = request.getParameter("iv");
-//        Cryptos.c
 
-    }
 
     @RequestMapping(value = "${portalPath}/littleproject/auth/inserttest")
     @ResponseBody
