@@ -142,10 +142,17 @@ public class sqlDanger {
 	 * 画像(大宗)
 	 */
 	public String dazong() {
-		String sql = "select * from insight_fxsj_fxlb where jysinfo=? ORDER BY fxlb";
+		String sql = "select * from (select fxlb from hub_fxlb where jysfl = '1' group by fxlb"
+				+ " ) fxlb"
+				+ " cross join hub_ref_jysinfo hrj"
+				+ " left join insight_fxsj_fxlb iff"
+				+ " on fxlb.fxlb = iff.fxlb and hrj.jys = iff.jys"
+				+ " where hrj.jysinfo=? order by fxlb.fxlb"
+				+ " select fxlb from hub_fxlb where jysfl = '1' group by fxlb";
 		return sql;
 	}
-	//画像(权益)
+
+	// 画像(权益)
 	public String quanyi() {
 		String sql = "select"
 				+ " jt.jysinfo,"
@@ -183,7 +190,7 @@ public class sqlDanger {
 				+ " left join hub_dd_tqs_jys h1"
 				+ " on h1.jysmc = t.company_name"
 				+ " left join hub_ref_jysinfo h2" + " on h1.jys = h2.jys"
-				+ " where jysinfo = ? and T.type='1'";
+				+ " where jysinfo = ? and T.type='1' order by name";
 
 		return sql;
 	}

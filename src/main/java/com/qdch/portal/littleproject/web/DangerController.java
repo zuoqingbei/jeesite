@@ -372,23 +372,23 @@ public class DangerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/portrait" })
+	@RequestMapping(value = { "${portalPath}/littleproject/portraitRadar" })
 	@ResponseBody
-	public String portrait(HttpServletRequest request,HttpServletResponse response){
+	public String portraitRadar(HttpServletRequest request,HttpServletResponse response){
 		try {
 			Portrait dto = new Portrait();
 			Object type=request.getParameter("type");
 			Object[] t=new Object[]{};
 			List<Object> lists=null;
-			List<Object> bcLists=null;
-			List<Object> shareHolderLists=null;
-			List<Object> enterpriseLists=null;
+			//List<Object> bcLists=null;
+			
+			//List<Object> enterpriseLists=null;
 			LittleProjectEntity re=new LittleProjectEntity();
-			Single s=new Single();
+			//Single s=new Single();
 			
 			List<String> aggregate=new ArrayList<String>();
-			List<String> aggregate2=new ArrayList<String>();
-			List<ZiJin> zijiAggregate=new ArrayList<ZiJin>();
+			//List<String> aggregate2=new ArrayList<String>();
+			
 			
 			if("1".equals(type)||"2".equals(type)){
 				if("1".equals(type)){
@@ -400,10 +400,10 @@ public class DangerController extends BaseController {
 				}
 				 lists = PostgreUtils.getInstance().excuteQuery(
 						sql.quanyi(), t);
-				 bcLists=PostgreUtils.getInstance().excuteQuery(
-							sql.businesss(), t);
-				 shareHolderLists=PostgreUtils.getInstance().excuteQuery(
-							sql.shareHolder(), t);
+				 /*bcLists=PostgreUtils.getInstance().excuteQuery(
+							sql.businesss(), t);*/
+				 //shareHolderLists=PostgreUtils.getInstance().excuteQuery(
+							//sql.shareHolder(), t);
 				 /*enterpriseLists=PostgreUtils.getInstance().excuteQuery(
 							sql.enterprise(), t);*/
 			}else if("3".equals(type)){
@@ -411,10 +411,9 @@ public class DangerController extends BaseController {
 				re.setName("青岛文化产权");
 				 lists = PostgreUtils.getInstance().excuteQuery(
 						sql.dazong(), t);
-				 bcLists=PostgreUtils.getInstance().excuteQuery(
-							sql.businesss(), t);
-				shareHolderLists=PostgreUtils.getInstance().excuteQuery(
-							sql.shareHolder(), t);
+				 /*bcLists=PostgreUtils.getInstance().excuteQuery(
+							sql.businesss(), t);*/
+				
 				/* enterpriseLists=PostgreUtils.getInstance().excuteQuery(
 							sql.enterprise(), t);*/
 			}
@@ -426,7 +425,7 @@ public class DangerController extends BaseController {
 				}
 				re.setLists(aggregate);
 			}
-			//工商信息
+		/*	//工商信息
 			if(bcLists!=null&&bcLists.size()>0){
 				for(Object o:bcLists){
 					Map m=(Map) o;
@@ -447,6 +446,60 @@ public class DangerController extends BaseController {
 					aggregate2.add(m.get("")+"");//经营范围
 				}
 				s.setS(aggregate2);
+			}*/
+			dto.setOtherInfo(re);
+			//dto.setInfo(s);
+			
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.getStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 画像-股东信息
+	 *
+	 * @time 2018年4月20日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/Shareholder" })
+	@ResponseBody
+	public String Shareholder(HttpServletRequest request,HttpServletResponse response){
+		try {
+			
+			Object type=request.getParameter("type");
+			Object[] t=new Object[]{};
+			Portrait dto = new Portrait();
+			List<Object> shareHolderLists=null;
+			List<ZiJin> zijiAggregate=new ArrayList<ZiJin>();
+			if("1".equals(type)||"2".equals(type)){
+			
+					t=new Object[]{"青金中心"};
+				
+				
+				
+				// bcLists=PostgreUtils.getInstance().excuteQuery(
+							//sql.businesss(), t);
+				 shareHolderLists=PostgreUtils.getInstance().excuteQuery(
+							sql.shareHolder(), t);
+				 /*enterpriseLists=PostgreUtils.getInstance().excuteQuery(
+							sql.enterprise(), t);*/
+			}else if("3".equals(type)){
+				t=new Object[]{"青岛文化产权"};
+				
+				/* bcLists=PostgreUtils.getInstance().excuteQuery(
+							sql.businesss(), t);*/
+				shareHolderLists=PostgreUtils.getInstance().excuteQuery(
+						sql.shareHolder(), t);
+				/* enterpriseLists=PostgreUtils.getInstance().excuteQuery(
+							sql.enterprise(), t);*/
 			}
 			//股东信息
 			if(shareHolderLists!=null&&shareHolderLists.size()>0){
@@ -463,10 +516,8 @@ public class DangerController extends BaseController {
 				}
 				
 			}
-			dto.setOtherInfo(re);
-			dto.setInfo(s);
 			dto.setShareholder(zijiAggregate);
-			if (lists == null && lists.size() < 0) {
+			if (shareHolderLists == null && shareHolderLists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
