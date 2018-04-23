@@ -65,3 +65,9 @@ body > .container > .main:last-child {
     margin-right: 1rem;
 }
 
+.techMore {
+    display: block;
+    margin-top: 1rem;
+    text-align: center;
+}
+

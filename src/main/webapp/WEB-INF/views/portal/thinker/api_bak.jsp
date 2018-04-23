@@ -245,18 +245,15 @@
                 <p>请求方式：<span>${entity.requestType}</span></p>
                 <p>请求示例：<span><a href=${entity.demoUrl}>${entity.demoUrl}</a></span></p>
                 <p>接口备注：<span>${entity.remarks}</span></p>
-
                 <div class="blueBtn">API测试工具</div>
 
-                <div class="part-title">请求参数</div>
+                <div class="part-title">请求参数说明</div>
                 <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
                     <tr class="th">
-                        <td>dateDtKpi
-                        </td>
-                        <td>dataType
-                        </td>
-                        <td>fresh
-                        </td>
+                        <td>名称</td>
+                        <td>类型</td>
+                        <td>必填</td>
+                        <td>说明</td>
                     </tr>
                     <c:forEach items="${entity.thinkerApiParamList}" var="item">
                         <tr>
@@ -272,39 +269,12 @@
                         </tr>
                     </c:forEach>
                 </table>
-                <div class="part-title">请求参数类型</div>
+                <div class="part-title">返回参数说明</div>
                 <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
                     <tr class="th">
-                        <td>日期
-                        </td>
-                        <td>接口编号
-                        </td>
-                        <td>刷新标志
-                        </td>
-                    </tr>
-                    <c:forEach items="${entity.thinkerApiParamList}" var="item">
-                        <tr>
-                            <td>${item.name}</td>
-                            <td>${item.dataType}</td>
-                            <c:if test="${item.required==0}">
-                                <td>非必填</td>
-                            </c:if>
-                            <c:if test="${item.required==1}">
-                                <td>必填</td>
-                            </c:if>
-                            <td>${item.remarks}</td>
-                        </tr>
-                    </c:forEach>
-                </table>
-                <div class="part-title">返回参数</div>
-                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
-                    <tr class="th">
-                        <td>reason
-                        </td>
-                        <td>result
-                        </td>
-                        <td>error_code
-                        </td>
+                        <td>名称</td>
+                        <td>类型</td>
+                        <td>说明</td>
                     </tr>
                     <c:forEach items="${entity.thinkerApiSuccessList}" var="item">
                         <tr>
@@ -314,38 +284,22 @@
                         </tr>
                     </c:forEach>
                 </table>
-                <div class="part-title">返回参数类型</div>
-                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
-                    <tr class="th">
-                        <td>返回状态</td>
-                        <td>返回结果</td>
-                        <td>状态标志</td>
-                    </tr>
-                    <c:forEach items="${entity.thinkerApiSuccessList}" var="item">
-                        <tr>
-                            <td>${item.name}</td>
-                            <td>${item.dataType}</td>
-                            <td>${item.remarks}</td>
-                        </tr>
-                    </c:forEach>
-                </table>
-                <!--                <div class="part-title">JSON返回示例：</div>
-                                <pre cl"jsontxt">
+                <div class="part-title">JSON返回示例：</div>
+                <pre class="jsontxt">
 
-                    {
-                        "reason": "成功",
-                        "result": {
-                            "jobid": "2015120913503797592",/*本次查询流水号*/
-                            "realname": "商世界",/*姓名*/
-                            "bankcard": "6259656360701234",/*银行卡卡号*/
-                            "idcard": "310329198103050011",/*身份证号码*/
-                            "mobile": "18912341234",/*预留手机号码*/
-                            "res": "2",/*验证结果，1:匹配 2:不匹配*/
-                            "message": "认证信息不匹配"/*描述*/
-                        },
-                        "error_code": 0
-                    }
-                -->
+	{
+		"reason": "成功",
+		"result": {
+			"jobid": "2015120913503797592",/*本次查询流水号*/
+			"realname": "商世界",/*姓名*/
+			"bankcard": "6259656360701234",/*银行卡卡号*/
+			"idcard": "310329198103050011",/*身份证号码*/
+			"mobile": "18912341234",/*预留手机号码*/
+			"res": "2",/*验证结果，1:匹配 2:不匹配*/
+			"message": "认证信息不匹配"/*描述*/
+		},
+		"error_code": 0
+	}
 						</pre>
             </div>
 
