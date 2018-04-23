@@ -7,7 +7,9 @@ body > .container > .main {
     overflow: hidden;
     background-color: #fff;
 }
-
+body > .container > .main:last-child {
+    margin-bottom: 6rem;
+}
 .breadcrumb {
     margin-bottom: .25rem;
     padding: .875rem 1rem .375rem 0;
