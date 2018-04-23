@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../../../../static/portal/thinker/asserts/iconfont/iconfont.css">
     <link rel="stylesheet" href="../../../../static/portal/thinker/css/comm.css">
     <link rel="stylesheet" href="../../../../static/portal/thinker/css/report.css">
-
 </head>
 <body>
 <header class="navbar navbar-expand flex-column flex-md-row bd-navbar">
@@ -95,7 +94,7 @@
     </section>
     <section class="row main">
         <div class="col-12 list">
-            <p class="techMore"><button class="btn btn-primary m-3">技术详情 &gt;&gt;</button></p>
+            <p class="techMore"><a class="">技术详情 <span>▼</span></a></p>
             <ul style="display: none">
                 <li class="">
                     <h4>分类(大屏/罗盘)</h4>
@@ -186,8 +185,13 @@
         $('.handle li').on('click', function () {
             $(this).toggleClass('active')
         });
-        $(".techMore>.btn").click(function () {
-            $(this).parent().next("ul").toggle();
+        $(".techMore>a").click(function () {
+            if(!$(this).parent().hasClass("open")){
+                $(this).children("span").text("▲").parents("p").addClass("open").next("ul").show();
+            }else{
+                $(this).children("span").text("▼").parents("p").removeClass("open").next("ul").hide();
+            }
+
         })
     })
 
