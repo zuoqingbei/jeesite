@@ -1,13 +1,11 @@
 package com.qdch.portal.littleproject.web;
 
 /**
- * 小程序接口数据库语句
+ * 小程序接口(总况模块)数据库语句
  * 
  * @time 2018年4月13日
  * @author gaozhao
- * @param request
- * @param response
- * @return
+ * 
  */
 public class sqlYuJu {
 
@@ -639,4 +637,26 @@ public class sqlYuJu {
 				+ " FROM HUB_QY_CPFL HQC1";
 		return sql;
 	}
+	//沉淀资金
+	public String chendianzijin(){
+		String sql="select * from INSIGHT_XCX_CDZJ where wd=? order by date";
+		return sql;
+	}
+	
+	//所有出入金
+	public String allchurujin(){
+		String sql="select distinct(xm) from INSIGHT_XCX_CRJ order by xm";
+		return sql;
+	}
+	//出入金
+	public String churujinDay() {
+		String sql = "select * from INSIGHT_XCX_CRJ where wd=? order by date";
+		return sql;
+	}
+	//指数行情
+	public String zhishuhangqing(){
+		String sql="select * from INSIGHT_XCX_GHQZS  order by cpmc";
+		return sql;
+	}
+	
 }

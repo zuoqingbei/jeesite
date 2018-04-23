@@ -88,7 +88,8 @@
 	}
 	
 	function ajaxFileUpload(){
-		$.ajax({
+		
+		/**$.ajax({
     		url:portalPath+"/wx/uploadImage",
     		type:"post",
     		data:{"images":$(".upload-img>img").attr("src")},
@@ -102,7 +103,24 @@
     				console.log("error",data);
     			}
     		}
-    	});
+    	});**/
+		/**$.ajaxFileUpload({
+			url : portalPath+'/wx/uploadImage2',
+			secureuri : false,
+			fileElementId : 'files',
+			async: false,
+			dataType : 'json',
+			success : function(data, status) {
+				console.log(data);
+				if(status == 'success'){
+					var url = data.replace(/<[^>]+>/g,"");
+					
+				}
+
+			}
+
+		});**/
+		
 	}
 
 	/**function ajaxFileUpload(image, image_) {

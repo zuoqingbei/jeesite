@@ -54,6 +54,14 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">处理状态：</label>
+			<div class="controls">
+				<form:select path="status" class="input-xlarge ">
+					<form:options items="${fns:getDictList('act_process')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">举报来源 ：</label>
 			<div class="controls">
 				<form:input path="source" htmlEscape="false" maxlength="64" class="input-xlarge "/>

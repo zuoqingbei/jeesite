@@ -3,6 +3,11 @@
  */
 package com.qdch.portal.modules.cms.web;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,11 +19,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
 import com.qdch.portal.common.persistence.Page;
 import com.qdch.portal.common.utils.DateUtils;
+import com.qdch.portal.common.utils.IdGen;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.common.utils.UploadUtils;
 import com.qdch.portal.common.web.BaseController;
@@ -118,6 +125,7 @@ public class CmsComplaintController extends BaseController {
 		return this.resultSuccessData(request, response, "上传图片成功", cmsComplaint);
 	}
 	
+	
 	/**
 	 * @todo   微信公众号用户举报
 	 * @time   2018年3月29日 下午1:58:30
@@ -125,8 +133,8 @@ public class CmsComplaintController extends BaseController {
 	 * @return_type   void
 	 */
 	@RequestMapping(value = "${portalPath}/wx/saveReport")
-	@ResponseBody
-	public String saveReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
+	public String saveReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,
+			HttpServletRequest request, HttpServletResponse response,@RequestParam("files") MultipartFile file) {
 		String userId=request.getParameter("userId");
 		String title=request.getParameter("title");
 		String description=request.getParameter("description");
@@ -136,17 +144,54 @@ public class CmsComplaintController extends BaseController {
 		String date=request.getParameter("date");
 		String source=request.getParameter("source");
 		String tel=request.getParameter("tel");
+		 if(!file.isEmpty()) {
+	            //上传文件路径
+	            String savePath = "";
+	            savePath =Global.getUserfilesBaseDir() + Global.USERFILES_BASE_URL.substring(1,Global.USERFILES_BASE_URL.length()) ;
+				savePath += "images/wxreport/";
+				File saveDirFile = new File(savePath);
+				if (!saveDirFile.exists()) {
+					saveDirFile.mkdirs();
+				}
+				// .../basePath/dirName/yyyyMMdd/
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+				String ymd = sdf.format(new Date());
+				savePath += ymd + "/";
+				File saveDirFile2 = new File(savePath);
+				if (!saveDirFile2.exists()) {
+					saveDirFile2.mkdirs();
+				}
+	            //上传文件名
+	            String filename = file.getOriginalFilename();
+	            File filepath = new File(savePath,filename);
+	            //判断路径是否存在，如果不存在就创建一个
+	            if (!filepath.getParentFile().exists()) { 
+	                filepath.getParentFile().mkdirs();
+	            }
+	            //将上传文件保存到一个目标文件当中
+	            try {
+					file.transferTo(new File(savePath + File.separator + filename));
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	            savePath= "/"+savePath.substring(Global.getUserfilesBaseDir().length(), savePath.length())+ "" + filename;
+	            cmsComplaint.setImage(savePath);
+	    } 
 		/*if (!beanValidator(model, cmsComplaint)){
 			return form(cmsComplaint, model);
 		}
 		cmsComplaintService.save(cmsComplaint);*/
 		cmsComplaint.setCompanyAddress(address);
 		cmsComplaint.setCompanyName(target);
-		UploadUtils util=new UploadUtils();
+		/*UploadUtils util=new UploadUtils();
 		if(StringUtils.isNotBlank(images)&&images.indexOf("base64,")!=-1){
 			images=util.GenerateImage(images,request);
 			cmsComplaint.setImage(images);
-		}
+		}*/
 		if(StringUtils.isNotBlank(date)){
 			cmsComplaint.setFindDate(DateUtils.parseDate(date));
 		}
@@ -158,8 +203,10 @@ public class CmsComplaintController extends BaseController {
 		cmsComplaint.setStatus("0");
 		cmsComplaint.setRemarks(tel);//存放手机
 		cmsComplaintService.save(cmsComplaint);
-		return this.resultSuccessData(request, response, "举报成功", null);
+		//return this.resultSuccessData(request, response, "举报成功", null);
+		return "redirect:"+portalPath+"/cms/cmsComplaint/list"; 
 	}
+	
 	/**
 	 * @todo   微信公众号举报列表数据
 	 * @time   2018年3月29日 下午1:58:11

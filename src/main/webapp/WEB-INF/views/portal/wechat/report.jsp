@@ -164,18 +164,21 @@
 	</script> -->
 </head>
 <body id="toReport">
-<form class="toReport" enctype="multipart/form-data" action="${portalPath}/wx/saveReport">
-	<input type="hidden" id="userId" value="${userId}" />
-	<input type="hidden" id="cmsId" value="${cmsComplaint.id}" />
+<form  id="mineForm" class="toReport" method="post"  enctype="multipart/form-data" action="${portalPath}/wx/saveReport">
+	<input type="hidden" id="userId" name="userId" value="${userId}" />
+	<input type="hidden" id="cmsId"  name="id" value="${cmsComplaint.id}" />
+	<input type="hidden" id="source" name="source" value="source" />
     <div class="container">
         <div class="form-group titleBox">
             <label class="" for="title">标题：</label>
             <input class="form-control" name="title" id="title" value="${cmsComplaint.title }" aria-describedby="titleHelp" placeholder="">
+			<label id="title-error" style="display:none;" class="error" for="title">请输入标题</label>
         </div>
         <div class="form-group">
             <label class="sr-only" for="description">举报内容：</label>
             <textarea class="form-control" name="description"  value="${cmsComplaint.content }" id="description" placeholder="请填写描述内容，最少输入10个字，最多输入100个字" rows="5"></textarea>
-        </div>
+			<label id="description-error" style="display:none;"  class="error" for="description">请填写描述的内容</label>
+	   </div>
     </div>
 	 <div class="container" id="statusdiv" style="display:none">
         <div class="form-group titleBox">
@@ -185,7 +188,8 @@
     </div>
     <div class="container">
         <div class="form-group imageBox iconBox mineimage">
-            	<div class="upload-btn btn-old" style="display:block;background: url(${ctxStatic}/${portalPage}/wx/img/photo2.jpg) 40% 45% no-repeat;"><input type="file" name="files" id="files"></div>
+            	<div class="upload-btn btn-old" style="display:block;background: url(${ctxStatic}/${portalPage}/wx/img/photo2.jpg) 40% 45% no-repeat;">
+				<input type="file" name="files" id="files"></div>
 				<div class="upload-img " ></div>	
         
         </div>
@@ -201,24 +205,28 @@
         <div class="form-group imageBox">
             <label for="target">举报对象：</label>
             <input class="form-control" name="target" value="${cmsComplaint.companyName }" id="target" placeholder="">
+			<label id="target-error" style="display:none;" class="error" for="target">举报对象不能为空</label>
         </div>
     </div>
     <div class="container">
         <div class="form-group imageBox">
             <label for="address">发现地址：</label>
             <input class="form-control" name="address" value="${cmsComplaint.companyAddress }"  id="address" placeholder="">
+			<label id="target-error" style="display:none;" class="error" for="target">举报对象不能为空</label>
         </div>
     </div>
     <div class="container">
         <div class="form-group dateBox focus-within imageBox">
             <label for="date">发现时间：</label>
             <input class="form-control" name="date" id="date"  type="date" value="${cmsComplaint.findDateStr }" placeholder="">
+			<label id="date-error" style="display:none;" class="error" for="date">发现时间不能为空</label>
         </div>
     </div>
 	 <div class="container">
         <div class="form-group imageBox">
             <label for="target">联系方式：</label>
             <input class="form-control" name="tel" value="${cmsComplaint.remarks }" id="tel" placeholder="">
+			<label id="tel-error" style="display:none;" class="error" for="tel">请输入正确手机号</label>
         </div>
     </div>
     <div class="form-group text-center" id="btn1" style="display:none">
@@ -237,6 +245,8 @@ var portalPath='${portalPath}';
 <script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/zepto.min.js"></script>
 <script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/iscroll-zoom.js"></script>
 <script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/script.js"></script>
+<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="${ctxStatic}/${portalPage}/wx/asserts/js/jquery.form.js"></script>
 <script>
 	
     $(function () {	
@@ -290,36 +300,98 @@ var portalPath='${portalPath}';
         //验证表单
         
         $form.find(":input").keyup(function () {
-            validateForm();
+            //alidateForm();
+			checkFormsValid();
         });
         $form.find("#submitFormBtn").one("click",submitMethods);
 	};
+	function checkFormsValid(){
+		var can=true;
+		if($("#title").val()==''){
+			$("#title-error").css("display","block");
+			can=false;
+		}else{
+			$("#title-error").css("display","none");
+		}
+		if($("#description").val()==''){
+			$("#description-error").css("display","block");
+			can=false;
+		}else{
+			$("#description-error").css("display","none");
+		}
+		if($("#target").val()==''){
+			$("#target-error").css("display","block");
+			can=false;
+		}else{
+			$("#target-error").css("display","none");
+		}
+		if($("#address").val()==''){
+			$("#address-error").css("display","block");
+			can=false;
+		}else{
+			$("#address-error").css("display","none");
+		}
+		if($("#date").val()==''){
+			$("#date-error").css("display","block");
+			can=false;
+		}else{
+			$("#date-error").css("display","none");
+		}
+		if($("#tel").val()==''){
+			$("#tel-error").css("display","block");
+			can=false;
+		}else{
+			var r=isPoneAvailable($("#tel"));
+			if(!r){
+				can=r;
+			    $("#tel-error").css("display","block");
+			}else{
+				$("#tel-error").css("display","none");
+			}
+			
+		}
+		return can;
+		
+	}
+	function isPoneAvailable($poneInput) {  
+          var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;  
+          if (!myreg.test($poneInput.val())) {  
+              return false;  
+          } else {  
+              return true;  
+          }  
+      }  
 	function  submitMethods() {
+		if(checkFormsValid()){
+			$("#submitFormBtn").html("正在提交");
+			$('#mineForm').submit();
+		}else{
+			 $form.find("#submitFormBtn").one("click",submitMethods);
+		}
+		 return;
             validateForm();
             if ($form.valid()) {
 				$("#submitFormBtn").html("正在提交");
-                 $.post("${portalPath}/wx/saveReport", {
-					 id: $("#cmsId").val(),
-                	userId:$("#userId").val(),
-                    title: $("#title").val(),
-                    description: $("#description").val(),
-                    images: $(".upload-img img").attr("src"),
-                    target: $("#target").val(),
-                    address: $("#address").val(),
-                    date: $("#date").val(),
-                    source:"wxpub",
-					tel:$("#tel").val()
-                }, function (data, textStatus) {
-					data=eval('('+data+')');
-                    console.log(data);
-                    if (data.status === "success") {
-                       window.location.href="${portalPath}/cms/cmsComplaint/list?userId="+$("#userId").val();
-                    } else {
-						$form.find("#submitFormBtn").one("click",submitMethods);
-						$("#submitFormBtn").html("提  交");
-                        console.log(data.msg)
-                    }
-                }) 
+				var  s=parseInt($("#"+"files")[0].files[0].size)/(1024*1024);
+				alert(s)
+				$('#mineForm').ajaxSubmit({
+					success : function(data, status) {
+						alert(data);
+						data=eval('('+data+')');
+						
+						if (data.status === "success") {
+						   window.location.href="${portalPath}/cms/cmsComplaint/list?userId="+$("#userId").val();
+						} else {
+							$form.find("#submitFormBtn").one("click",submitMethods);
+							$("#submitFormBtn").html("提  交");
+							console.log(data.msg)
+						}
+					},
+					error:function(e){
+						alert(e)
+					}
+				});
+				
             }else{
 				$("#submitFormBtn").html("提  交");
 				 $form.find("#submitFormBtn").one("click",submitMethods);
