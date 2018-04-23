@@ -148,7 +148,7 @@ public class ThinkerController extends BaseController {
 		}
 		model.addAttribute("id", id);
 		model.addAttribute("entity", entity);
-		return render(request, "thinker/indexDetail");
+		return render(request, "thinker/newIndexDetail");
 	}
 	
 	/**
@@ -178,7 +178,7 @@ public class ThinkerController extends BaseController {
 			entity = new ThinkerReports();
 		}
 		model.addAttribute("entity", entity);
-		return render(request, "thinker/reports");
+		return render(request, "thinker/newReports");
 	}
 	
 	/**
