@@ -240,10 +240,10 @@
 
 
             <div class="docCon">
-                <p>接口地址：<span>${entity.url}</span></p>
+                <p>接口地址：<span><a href=${entity.url}>${entity.url}</a></span></p>
                 <p>返回格式：<span>${entity.dataType}</span></p>
                 <p>请求方式：<span>${entity.requestType}</span></p>
-                <p>请求示例：<span>${entity.demoUrl}</span></p>
+                <p>请求示例：<span><a href=${entity.demoUrl}>${entity.demoUrl}</a></span></p>
                 <p>接口备注：<span>${entity.remarks}</span></p>
                 <div class="blueBtn">API测试工具</div>
 

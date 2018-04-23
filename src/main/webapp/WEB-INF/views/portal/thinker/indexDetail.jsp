@@ -91,11 +91,11 @@
                     <td>屏幕名称</td>
                     <td class="screenName">${entity.screenName }</td>
                 </tr>
-                <tr>
+<%--                 <tr>
                     <td>屏幕URL</td>
                     <td colspan="3" class="screenUrl">${entity.screenUrl }</td>
                 </tr>
-                </tbody>
+  --%>               </tbody>
             </table>
         </header>
         <div class="handle">
