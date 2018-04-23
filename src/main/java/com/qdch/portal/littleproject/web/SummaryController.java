@@ -590,6 +590,7 @@ public class SummaryController extends BaseController {
 	public String nianhualilv(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
+			DecimalFormat dt=new DecimalFormat("0.00%");
 			List<Object> lists=null;
 			lists=PostgreUtils.getInstance().excuteQuery(sql.nianhualilv(),null);
 			List<Object> sy=PostgreUtils.getInstance().excuteQuery(sql.suoyouchanpin(),null);
@@ -603,7 +604,7 @@ public class SummaryController extends BaseController {
 							KeHuFenLei re=new KeHuFenLei();
 							if(m.get("cplb").equals(w.get("cplb"))){
 								re.setGrs(m.get("cplb")+"");
-								re.setJgs(m.get("cpsl")+"");
+								re.setJgs(dt.format(m.get("cpsl")));
 							}
 							if(re.getGrs()!=null&&re.getGrs().length()>0){
 								res.add(re);
@@ -633,6 +634,7 @@ public class SummaryController extends BaseController {
 	@ResponseBody
 	public String chanpintongji(HttpServletRequest request,HttpServletResponse response){
 		try {
+			DecimalFormat dt=new DecimalFormat("0.00%");
 			List<Object> lists=null;
 			lists=PostgreUtils.getInstance().excuteQuery(sql.chanpintongji(),null);
 			List<Object> sy=PostgreUtils.getInstance().excuteQuery(sql.suoyouchanpin(),null);
@@ -648,8 +650,8 @@ public class SummaryController extends BaseController {
 								
 								if(m.get("cplb").equals(w.get("cplb"))){
 									re.setName(m.get("cplb")+"");
-									jihe.add(m.get("pjll")+"");
-									jihe.add(m.get("jsyzz")+"");
+									jihe.add(dt.format(m.get("pjll")));
+									jihe.add(dt.format(m.get("jsyzz")));
 								}
 								
 								
@@ -794,29 +796,33 @@ public class SummaryController extends BaseController {
 	@ResponseBody
 	public String zhishuhangqing(HttpServletRequest request,HttpServletResponse response){
 		try {
-			FenLei dto=new FenLei();
+			
 			DecimalFormat dt=new DecimalFormat("0.00%");
 			List<Object> lists=null;
 			lists=PostgreUtils.getInstance().excuteQuery(sql.zhishuhangqing(),null);
-			List<String> jihe1=new ArrayList<String>();
-			List<String> jihe2=new ArrayList<String>();
-			List<String> jihe3=new ArrayList<String>();
+			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
+			
 			if(lists!=null&&lists.size()>0){
 				for(Object o:lists){
 					Map m=(Map)o;
-					jihe1.add(m.get("cpmc")+"");
-					jihe2.add(m.get("zxjg")+"");
-					
-					jihe3.add(dt.format(m.get("bh"))+"");
+					LittleProjectEntity re=new LittleProjectEntity();
+					List<String> aggregate=new ArrayList<String>();
+					aggregate.add(m.get("cpmc")+"");
+					aggregate.add(m.get("cmdm")+"");
+					aggregate.add(m.get("jys")+"");
+					aggregate.add(m.get("jysmc")+"");
+					aggregate.add(m.get("jysinfo")+"");
+					aggregate.add(m.get("zxjg")+"");
+					aggregate.add(dt.format(m.get("bh")));
+					re.setLists(aggregate);
+					res.add(re);
 				}
+				
 			}
-			dto.setX(jihe1);
-			dto.setY(jihe2);
-			dto.setZ(jihe3);
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
-				return this.resultSuccessData(request, response, "", dto);
+				return this.resultSuccessData(request, response, "", res);
 			}
 		} catch (Exception e) {
 			e.getStackTrace();

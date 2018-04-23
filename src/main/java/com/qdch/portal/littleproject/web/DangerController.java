@@ -22,6 +22,7 @@ import com.qdch.portal.littleproject.entity.Portrait;
 import com.qdch.portal.littleproject.entity.Risks;
 import com.qdch.portal.littleproject.entity.Single;
 import com.qdch.portal.littleproject.entity.UnknownIndex;
+import com.qdch.portal.littleproject.entity.ZiJin;
 
 /**
  * 
@@ -337,6 +338,9 @@ public class DangerController extends BaseController {
 				Map m=(Map) o;
 				List<String> aggregate3=new ArrayList<String>();
 				Single s=new Single();
+				aggregate3.add(m.get("jys")+"");
+				aggregate3.add(m.get("jysmc")+"");
+				aggregate3.add(m.get("jysinfo")+"");
 				aggregate3.add(m.get("fxzb")+"");
 				aggregate3.add(m.get("fxzbz")+"");
 				aggregate3.add(dt.format(m.get("yz"))+"");
@@ -373,24 +377,94 @@ public class DangerController extends BaseController {
 		try {
 			Portrait dto = new Portrait();
 			Object type=request.getParameter("type");
-			Object[] t=new Object[]{type};
+			Object[] t=new Object[]{};
 			List<Object> lists=null;
 			List<Object> bcLists=null;
 			List<Object> shareHolderLists=null;
 			List<Object> enterpriseLists=null;
+			LittleProjectEntity re=new LittleProjectEntity();
+			Single s=new Single();
+			
+			List<String> aggregate=new ArrayList<String>();
+			List<String> aggregate2=new ArrayList<String>();
+			List<ZiJin> zijiAggregate=new ArrayList<ZiJin>();
+			
 			if("1".equals(type)||"2".equals(type)){
+				if("1".equals(type)){
+					t=new Object[]{"青金中心"};
+					re.setName("青金中心");
+				}else{
+					t=new Object[]{"联合信用资产"};
+					re.setName("联合信用资产");
+				}
 				 lists = PostgreUtils.getInstance().excuteQuery(
-						sql.dazong(), t);
+						sql.quanyi(), t);
 				 bcLists=PostgreUtils.getInstance().excuteQuery(
 							sql.businesss(), t);
 				 shareHolderLists=PostgreUtils.getInstance().excuteQuery(
 							sql.shareHolder(), t);
+				 /*enterpriseLists=PostgreUtils.getInstance().excuteQuery(
+							sql.enterprise(), t);*/
+			}else if("3".equals(type)){
+				t=new Object[]{"青岛文化产权"};
+				re.setName("青岛文化产权");
 				 lists = PostgreUtils.getInstance().excuteQuery(
-						sql.quanyi(), null);
-				 enterpriseLists=PostgreUtils.getInstance().excuteQuery(
-							sql.enterprise(), t);
+						sql.dazong(), t);
+				 bcLists=PostgreUtils.getInstance().excuteQuery(
+							sql.businesss(), t);
+				shareHolderLists=PostgreUtils.getInstance().excuteQuery(
+							sql.shareHolder(), t);
+				/* enterpriseLists=PostgreUtils.getInstance().excuteQuery(
+							sql.enterprise(), t);*/
 			}
-			
+			//风险雷达图
+			if(lists!=null&&lists.size()>0){
+				for(Object o:lists){
+					Map m=(Map) o;
+					aggregate.add(m.get("fvalue")+"");
+				}
+				re.setLists(aggregate);
+			}
+			//工商信息
+			if(bcLists!=null&&bcLists.size()>0){
+				for(Object o:bcLists){
+					Map m=(Map) o;
+					aggregate2.add(m.get("")+"");//法定代表人
+					aggregate2.add(m.get("build_date")+"");//建立日期
+					aggregate2.add(m.get("reg_capital")+"");//注册资本
+					aggregate2.add(m.get("reg_code")+"");//工商注册号
+					aggregate2.add(m.get("org_code")+"");//组织机构代码
+					aggregate2.add(m.get("")+"");//统一信用代码
+					aggregate2.add(m.get("")+"");//纳税人识别号
+					aggregate2.add(m.get("en_name")+"");//英文名
+					aggregate2.add(m.get("")+"");//经营状态
+					aggregate2.add(m.get("type")+"");//企业类型
+					aggregate2.add(m.get("")+"");//行业
+					aggregate2.add(m.get("")+"");//营业期限
+					aggregate2.add(m.get("")+"");//核准日期
+					aggregate2.add(m.get("address")+"");//企业地址
+					aggregate2.add(m.get("")+"");//经营范围
+				}
+				s.setS(aggregate2);
+			}
+			//股东信息
+			if(shareHolderLists!=null&&shareHolderLists.size()>0){
+				for(Object o:shareHolderLists){
+					Map m=(Map) o;
+					ZiJin z=new ZiJin();
+					List<String> aggregate3=new ArrayList<String>();
+					aggregate3.add(m.get("name")+"");
+					aggregate3.add(m.get("pay")+"");
+					aggregate3.add(m.get("pay_date")+"");
+					aggregate3.add(m.get("scale")+"%");
+					z.setA(aggregate3);
+					zijiAggregate.add(z);
+				}
+				
+			}
+			dto.setOtherInfo(re);
+			dto.setInfo(s);
+			dto.setShareholder(zijiAggregate);
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
