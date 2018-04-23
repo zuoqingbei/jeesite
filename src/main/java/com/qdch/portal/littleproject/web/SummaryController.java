@@ -1,15 +1,13 @@
 package com.qdch.portal.littleproject.web;
 
+import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
-import com.qdch.portal.littleproject.entity.FenLei;
-import com.qdch.portal.littleproject.entity.KeHuAge;
-import com.qdch.portal.littleproject.entity.KeHuFenLei;
-import com.qdch.portal.littleproject.entity.LittleProjectDto;
-import com.qdch.portal.littleproject.entity.LittleProjectEntity;
-import com.qdch.portal.littleproject.entity.ZiJin;
+import com.qdch.portal.littleproject.dao.DtoModelDao;
+import com.qdch.portal.littleproject.entity.*;
 
 import org.dozer.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +28,8 @@ import java.util.*;
 public class SummaryController extends BaseController {
 
 	sqlYuJu sql = new sqlYuJu();
+
+
 
 	/**
 	 * 交易额
@@ -590,6 +590,7 @@ public class SummaryController extends BaseController {
 	public String nianhualilv(HttpServletRequest request,HttpServletResponse response){
 		
 		try {
+
 			DecimalFormat dt=new DecimalFormat("0.00%");
 			List<Object> lists=null;
 			lists=PostgreUtils.getInstance().excuteQuery(sql.nianhualilv(),null);
@@ -620,7 +621,7 @@ public class SummaryController extends BaseController {
 				return this.resultSuccessData(request, response, "", res);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}

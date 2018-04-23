@@ -73,7 +73,7 @@ public class PostgreUtils {
      * 建立数据库连接   
      * @return 数据库连接   
      */      
-    public static Connection getConnection() {
+    private static Connection getConnection() {
         try {      
              // 加载数据库驱动程序      
             try {  

@@ -16,8 +16,11 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.Validator;
 
+import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,8 @@ import com.qdch.portal.common.utils.HttpRequestDeviceUtils;
  * @version 2013-3-23
  */
 public abstract class BaseController  implements Constant{
+
+
 
 	/**
 	 * 日志对象
@@ -333,8 +338,16 @@ public abstract class BaseController  implements Constant{
 		}
 		return  view;
 	}
-	
-	
-	
+
+
+//	@After( "execution(* xxx.xxx.xxx..*.*ServiceImpl.*(..))")
+//	public void removeDataSoruce(JoinPoint joinPoint) throws Throwable {
+//		MultipleDataSource.removeDataSourceKey();
+//	}
+
+
+
+
+
 }
  

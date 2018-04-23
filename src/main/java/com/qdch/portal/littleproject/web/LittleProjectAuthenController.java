@@ -1,29 +1,46 @@
 package com.qdch.portal.littleproject.web;
 
+import com.qdch.portal.common.mapper.JsonMapper;
+import com.qdch.portal.common.utils.AESUtil;
 import com.qdch.portal.common.utils.PostgreHubUtils;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.utils.StringUtils;
 import com.qdch.portal.common.web.BaseController;
-import com.qdch.portal.modules.account.dao.AccountAttentionDao;
 import com.qdch.portal.modules.sys.dao.UserDao;
 import com.qdch.portal.modules.sys.entity.User;
 import com.qdch.portal.modules.sys.service.SystemService;
 import com.qdch.portal.thirdplat.dao.AccountThirdplatDao;
-import com.qdch.portal.thirdplat.entity.AccessToken;
 import com.qdch.portal.thirdplat.entity.AccountThirdplat;
+import com.qdch.portal.thirdplat.entity.WxUserInfo;
 import com.qdch.portal.thirdplat.service.AccountThirdplatService;
 import com.qdch.portal.thirdplat.utils.WxpubOAuth;
-import com.qdch.portal.thirdplat.web.WxAuthController;
+
+
+
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.misc.Cache;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.security.AlgorithmParameters;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.Security;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+
+
+
 
 /**
  * 登录小程序
@@ -84,7 +101,7 @@ public class LittleProjectAuthenController  extends BaseController {
         //先去数据库查看是否是企业用户，如果是的话，写入account_thirdplat表和sys_user表
         try {
             if(StringUtils.isBlank(request.getParameter("platkey"))){
-                return this.resultFaliureData(request,response,"请先输入用户的key",null);
+                return this.resultFaliureData(request,response,"请先输入用户的openid",null);
             }
             if(StringUtils.isBlank(request.getParameter("mobile"))){
                 return this.resultFaliureData(request,response,"请先输入手机号码",null);
@@ -95,7 +112,7 @@ public class LittleProjectAuthenController  extends BaseController {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return this.resultFaliureData(request,response,"该用户的key不存在",null);
+                return this.resultFaliureData(request,response,"该用户的openid不存在",null);
             }
             User user  = new User(accountThirdplat.getNickName(),accountThirdplat);
             user.setMobile(request.getParameter("mobile"));
@@ -157,5 +174,104 @@ public class LittleProjectAuthenController  extends BaseController {
             e.printStackTrace();
             return this.resultFaliureData(request,response,"",null);
         }
+    }
+
+//    public void sendCode(HttpServletRequest request,HttpServletResponse response){
+//
+//        return this.resultSuccessData(request,response,"",null);
+//
+//    }
+
+
+
+    @RequestMapping(value = "${portalPath}/littleproject/auth/inserttest")
+    @ResponseBody
+    public String  inserttest(HttpServletRequest request,HttpServletResponse response){
+        String sql = "insert into hub_testapp_info(ftel) values ('111')";
+        PostgreUtils.getInstance().excuteQuery(sql,null);
+        return  this.resultData(request,response,"","","","");
+    }
+
+
+    /**
+     * 完善用户基础信息
+     * @param request
+     * @param response
+     * @return
+     */
+
+    @RequestMapping(value = "${portalPath}/littleproject/auth/getUserInfo")
+    @ResponseBody
+    public String getUserInfo(HttpServletRequest request,HttpServletResponse response){
+        String encryptedData = request.getParameter("encryptedData");
+        String iv = request.getParameter("iv");
+        String session_key = request.getSession().getAttribute("sessionKey"+request.getParameter("openid"))+"";
+        try {
+            byte[] resultByte = AESUtil.instance.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(session_key), Base64.decodeBase64(iv));
+            if(null != resultByte && resultByte.length > 0){
+                String userInfo = new String(resultByte, "UTF-8");
+                System.out.println(userInfo);
+                WxUserInfo wxUserInfo=(WxUserInfo) JsonMapper.fromJsonString(userInfo, WxUserInfo.class);
+//                JSONObject json = JSONObject.fromObject(userInfo); //将字符串{“id”：1}
+                AccountThirdplat accountThirdplat  = new AccountThirdplat();
+                accountThirdplat.setPtype("wechat");
+                accountThirdplat.setPlatkey(request.getParameter("openid"));
+                AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
+                if(thirdplat == null){
+                    return this.resultFaliureData(request,response,"","");
+                }else{
+                    thirdplat.setGender(wxUserInfo.getSex());
+                    thirdplat.setCity(wxUserInfo.getCity());
+                    thirdplat.setCountry(wxUserInfo.getCountry());
+                    thirdplat.setProvince(wxUserInfo.getProvince());
+                    thirdplat.setNickName(wxUserInfo.getNickname());
+                    accountThirdplatDao.update(thirdplat);
+                }
+            }
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+            return this.resultFaliureData(request,response,"","");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return this.resultFaliureData(request,response,"","");
+        }
+
+
+        return this.resultSuccessData(request,response,"","");
+    }
+
+    /**
+     * 得到用户的sessionid
+     * @param request
+     * @param response
+     * @return
+     */
+
+    @RequestMapping(value = "${portalPath}/littleproject/auth/getSessionkey")
+    @ResponseBody
+    public String getSessionkey(HttpServletRequest request,HttpServletResponse response){
+        try {
+            String code  = request.getParameter("code");
+            if(StringUtils.isBlank(code)){
+                return this.resultFaliureData(request,response,"请输入用户的code",null);
+            }
+            WxUserInfo info = WxpubOAuth.getSessionKey(code);
+            if(StringUtils.isBlank(info.getOpenid())){
+                return this.resultFaliureData(request,response,"发生错误",null);
+            }
+            request.getSession().setAttribute("sessionKey"+info.getOpenid(),info.getSessionKey());
+
+            //下面是往第三方平台表里插
+            AccountThirdplat accountThirdplat = new AccountThirdplat();
+            accountThirdplat.setPtype("wechat");
+            accountThirdplat.setPlatkey(info.getOpenid());
+            accountThirdplat.setUnionid(info.getUnionid());
+            return this.resultSuccessData(request,response,"",info.getOpenid());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this.resultFaliureData(request,response,"发生错误",null);
+        }
+
+
     }
 }
