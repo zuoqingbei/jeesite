@@ -96,6 +96,7 @@ body > header.bd-navbar li>a:active {
     top: .875rem;
     right: 1rem;
     color: #333;
+    z-index: 1;
 }
 
 .handle ul > li {

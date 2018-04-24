@@ -319,7 +319,7 @@
                     <tr class="th">
                         <td>返回状态</td>
                         <td>返回结果</td>
-                        <td>状态标志</td>
+                        <td>错误标志</td>
                     </tr>
                     <c:forEach items="${entity.thinkerApiSuccessList}" var="item">
                         <tr>
@@ -348,8 +348,6 @@
                 -->
 						</pre>
             </div>
-
-
         </div>
     </div>
 </div>
