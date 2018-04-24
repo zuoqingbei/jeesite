@@ -66,8 +66,12 @@ body > .container > .main:last-child {
 }
 
 .techMore {
-    display: block;
     margin-top: 1rem;
     text-align: center;
 }
-
+.techMore a{
+    display: block;
+}
+.techMore a>span{
+    font-size: .75rem;
+}

@@ -118,8 +118,8 @@
                 </li>
                 <li class="">
                     <h4>指标维度</h4>
-                    <p>"时间维度：物流平台收入（月累）、年累计完成率、月累计收入及同期收入、、收入月趋势、收入完成率及同比月趋势
-                        组织维度：各小微收入占比(月累)"
+                    <p>时间维度：日、月、年；
+                        组织维度：小微
                     </p>
                 </li>
                 <li class="">
@@ -133,20 +133,20 @@
                 </li>
                 <li class="">
                     <h4>使用字段</h4>
-                    <p>"xv_code
-                        data_dt
-                        xv_name
-                        sum_month
-                        month_target
-                        total_month_target
-                        month_complete
-                        sum_year
-                        year_target
-                        year_complete
-                        sum_month_last_year_period_value
-                        sum_year_last_year_period_value
-                        month_basis
-                        year_basis"
+                    <p> xv_code
+                        <br>data_dt
+                        <br>xv_name
+                        <br>sum_month
+                        <br>month_target
+                        <br>total_month_target
+                        <br>month_complete
+                        <br>sum_year
+                        <br>year_target
+                        <br>year_complete
+                        <br>sum_month_last_year_period_value
+                        <br>sum_year_last_year_period_value
+                        <br>month_basis
+                        <br>year_basis
                     </p>
                 </li>
                 <li class="">
@@ -162,7 +162,7 @@
             <p class="techMore"><a class="">技术详情 <span>▼</span></a></p>
             <ul style="display: none">
                 <li class="">
-                    <h4>分类(大屏/罗盘)</h4>
+                    <h4>分类</h4>
                     <p>大屏</p>
                 </li>
                 <li class="">
@@ -183,14 +183,14 @@
                 </li>
                 <li class="">
                     <h4>取数源</h4>
-                    <p>"RPT_XW_SHOURU SYS_DEPARTMENT"</p>
+                    <p>RPT_XW_SHOURU<br>SYS_DEPARTMENT</p>
                 </li>
                 <li class="">
                     <h4>加工涉及表</h4>
-                    <p>"stg_wl.s_fin_rpt_xw_shouru
-                        stg_wl.s_fin_sys_department
-                        dl_wl.l_fin_rpt_xw_shouru
-                        dw_wl.w_wls_kpi_01_d_v"
+                    <p> stg_wl.s_fin_rpt_xw_shouru
+                        <br>stg_wl.s_fin_sys_department
+                        <br>dl_wl.l_fin_rpt_xw_shouru
+                        <br>dw_wl.w_wls_kpi_01_d_v
                     </p>
                 </li>
                 <li class="">
@@ -221,8 +221,8 @@
                     <p>20分钟左右</p>
                 </li>
                 <li class="">
-                    <h4>"取数方式
-                        （增量/全量)"</h4>
+                    <h4>取数方式
+                        （增量/全量)</h4>
                     <p>全量</p>
                 </li>
                 <li class="">
@@ -234,14 +234,13 @@
                     <p>林宗晓</p>
                 </li>
                 <li class="">
-                    <h4>"数据状态
-                        （系统/手工）"</h4>
+                    <h4>数据状态
+                        （系统/手工）</h4>
                     <p>系统</p>
                 </li>
             </ul>
         </div>
     </section>
-
 </div>
 
 <script src="${ctxStatic}/${portalPage}/thinker/asserts/js/jquery-3.3.1.min.js"></script>

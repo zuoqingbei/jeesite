@@ -53,8 +53,9 @@
                     <p>大屏</p>
                 </li>
                 <li class="dimension">
-                    <h4>报表内容</h4>
-                    <p>物流平台收入（月累）、年累计完成率、月累计收入及同期收入、各小微收入占比(月累)、收入月趋势、收入完成率及同比月趋势</p>
+                    <h4>包含指标</h4>
+                    <p><a href="${portalPath}/thinker/indexDetail" target="_blank"> 物流平台收入</a>、年累计完成率、月累计收入及同期收入、各小微收入占比(月累)、收入月趋势、收入完成率及同比月趋势
+                    </p>
                 </li>
                 <li class="departmentName">
                     <h4>使用部门名称</h4>
@@ -70,7 +71,7 @@
                 </li>
                 <li class="reportURL">
                     <h4>报表URL</h4>
-                    <p><a href="http://sso1169sjdptest.haier.net/web/dp_web/page/index.html?token=788076fefa666589a13eaced3e93fb19&pageId=rrswl_home
+                    <p><a target="_blank" href="http://sso1169sjdptest.haier.net/web/dp_web/page/index.html?token=788076fefa666589a13eaced3e93fb19&pageId=rrswl_home
 ">http://sso1169sjdptest.haier.net/web/dp_web/page/index.html?token=788076fefa666589a13eaced3e93fb19&pageId=rrswl_home
                     </a></p>
                 </li>
@@ -95,91 +96,6 @@
             </ul>
         </div>
     </section>
-    <section class="row main">
-        <div class="col-12 list">
-            <p class="techMore"><button class="btn btn-primary m-3">技术详情 &gt;&gt;</button></p>
-            <ul style="display: none">
-                <li class="">
-                    <h4>分类(大屏/罗盘)</h4>
-                    <p>大屏</p>
-                </li>
-                <li class="">
-                    <h4>平台(乐家，物流等)</h4>
-                    <p>物流</p>
-                </li>
-                <li class="">
-                    <h4>指标名称</h4>
-                    <p>物流平台收入</p>
-                </li>
-                <li class="">
-                    <h4>单位</h4>
-                    <p>万元</p>
-                </li>
-                <li class="">
-                    <h4>定义</h4>
-                    <p>物流平台收入</p>
-                </li>
-                <li class="">
-                    <h4>取数源</h4>
-                    <p>"RPT_XW_SHOURU SYS_DEPARTMENT"</p>
-                </li>
-                <li class="">
-                    <h4>加工涉及表</h4>
-                    <p>"stg_wl.s_fin_rpt_xw_shouru
-                        stg_wl.s_fin_sys_department
-                        dl_wl.l_fin_rpt_xw_shouru
-                        dw_wl.w_wls_kpi_01_d_v"
-                    </p>
-                </li>
-                <li class="">
-                    <h4>workflow工作流</h4>
-                    <p>FULL_RPT_XW_SHOURU&SYS_DEPARTMENT
-                    </p>
-                </li>
-                <li class="">
-                    <h4>coordinator调度
-                    </h4>
-                    <p>FULL_RPT_XW_SHOURU&SYS_DEPARTMENT
-                    </p>
-                </li>
-                <li class="">
-                    <h4>取数逻辑</h4>
-                    <p>取自风控</p>
-                </li>
-                <li class="">
-                    <h4>取数时间</h4>
-                    <p>每天10点</p>
-                </li>
-                <li class="">
-                    <h4>取数频次</h4>
-                    <p>一次/天</p>
-                </li>
-                <li class="">
-                    <h4>取数所需时长</h4>
-                    <p>20分钟左右</p>
-                </li>
-                <li class="">
-                    <h4>"取数方式
-                        （增量/全量)"</h4>
-                    <p>全量</p>
-                </li>
-                <li class="">
-                    <h4>业务接口人</h4>
-                    <p>谢雨婷</p>
-                </li>
-                <li class="">
-                    <h4>技术接口人</h4>
-                    <p>林宗晓</p>
-                </li>
-                <li class="">
-                    <h4>"数据状态
-                        （系统/手工）"</h4>
-                    <p>系统</p>
-                </li>
-            </ul>
-        </div>
-    </section>
-</div>
 
 <script src="${ctxStatic}/${portalPage}/thinker/asserts/js/jquery-3.3.1.min.js"></script>
 <script src="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.js"></script>
@@ -188,8 +104,13 @@
         $('.handle li').on('click', function () {
             $(this).toggleClass('active')
         });
-        $(".techMore>.btn").click(function () {
-            $(this).parent().next("ul").toggle();
+        $(".techMore>a").click(function () {
+            if(!$(this).parent().hasClass("open")){
+                $(this).children("span").text("▲").parents("p").addClass("open").next("ul").show();
+            }else{
+                $(this).children("span").text("▼").parents("p").removeClass("open").next("ul").hide();
+            }
+
         })
     })
 
