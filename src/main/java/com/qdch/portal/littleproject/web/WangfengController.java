@@ -36,7 +36,7 @@ public class WangfengController extends BaseController {
 
 //		DynamicDataSource.setDataSource();
 //		String aaa =  DynamicDataSource.getCurrentLookupKey();
-		DynamicDataSource.setSlaveDataSource();
+		DynamicDataSource.setInsightDataSource();
 		List<DtoModel> aa = dtoModelDao.getTest();
 		DynamicDataSource.removeDataSourceKey();
 		return this.resultSuccessData(request,response,"",aa);
