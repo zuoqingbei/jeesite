@@ -1,20 +1,17 @@
 package com.qdch.portal.littleproject.entity;
 
+import java.util.List;
+
 public class Portrait {
 private String name;
-private KeHuFenLei risk;
 private LittleProjectEntity otherInfo;
+private Single info;
+private List<ZiJin> shareholder;
 public String getName() {
 	return name;
 }
 public void setName(String name) {
 	this.name = name;
-}
-public KeHuFenLei getRisk() {
-	return risk;
-}
-public void setRisk(KeHuFenLei risk) {
-	this.risk = risk;
 }
 public LittleProjectEntity getOtherInfo() {
 	return otherInfo;
@@ -22,5 +19,22 @@ public LittleProjectEntity getOtherInfo() {
 public void setOtherInfo(LittleProjectEntity otherInfo) {
 	this.otherInfo = otherInfo;
 }
+
+public Single getInfo() {
+	return info;
+}
+public void setInfo(Single info) {
+	this.info = info;
+}
+
+public List<ZiJin> getShareholder() {
+	return shareholder;
+}
+public void setShareholder(List<ZiJin> shareholder) {
+	this.shareholder = shareholder;
+}
+
+
+
 
 }

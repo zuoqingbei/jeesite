@@ -81,19 +81,19 @@ public class sqlDanger {
 
 	// 风险监测(2是金融资产类)
 	public String riskMonitoring() {
-		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where jysfl='2'";
+		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where jysfl='2' order by fxdl,ixf.jys,fxzb,yjsj";
 		return sql;
 	}
 
 	// 风险监测(有一个参数的时候)
 	public String riskMonitoring2() {
-		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where ixf.fxdl=? and jysfl='2'";
+		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where ixf.fxdl=? and jysfl='2' order by fxdl,ixf.jys,fxzb,yjsj";
 		return sql;
 	}
 
 	// 风险监测(有两个参数的时候)
 	public String riskMonitoring3() {
-		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where ixf.fxdl=? and ixf.jys=? and jysfl='2'";
+		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where ixf.fxdl=? and ixf.jys=? and jysfl='2' order by fxdl,ixf.jys,fxzb,yjsj";
 		return sql;
 	}
 
@@ -114,21 +114,21 @@ public class sqlDanger {
 	 * 
 	 * @return
 	 */
-	// 风险监测(2是金融资产类)
+	// 风险监测(1是商品类)
 	public String riskMonitoringB() {
-		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where jysfl='1'";
+		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where jysfl='1' order by fxdl,ixf.jys,fxzb,yjsj";
 		return sql;
 	}
 
 	// 风险监测(有一个参数的时候)
 	public String riskMonitoring2B() {
-		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where ixf.fxdl=? and jysfl='1'";
+		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where ixf.fxdl=? and jysfl='1' order by fxdl,ixf.jys,fxzb,yjsj";
 		return sql;
 	}
 
 	// 风险监测(有两个参数的时候)
 	public String riskMonitoring3B() {
-		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where ixf.fxdl=? and ixf.jys=? and jysfl='1'";
+		String sql = "select * from INSIGHT_XCX_FXSJS ixf left join  hub_dd_tqs_jys hdtj on ixf.jys = hdtj.jys where ixf.fxdl=? and ixf.jys=? and jysfl='1' order by fxdl,ixf.jys,fxzb,yjsj";
 		return sql;
 	}
 
@@ -139,14 +139,21 @@ public class sqlDanger {
 	}
 
 	/**
-	 * 画像(权益)
+	 * 画像(大宗)
 	 */
-	public String quanyi() {
-		String sql = "select * from insight_fxsj_fxlb";
+	public String dazong() {
+		String sql = "select * from (select fxlb from hub_fxlb where jysfl = '1' group by fxlb"
+				+ " ) fxlb"
+				+ " cross join hub_ref_jysinfo hrj"
+				+ " left join insight_fxsj_fxlb iff"
+				+ " on fxlb.fxlb = iff.fxlb and hrj.jys = iff.jys"
+				+ " where hrj.jysinfo=? order by fxlb.fxlb"
+				+ " select fxlb from hub_fxlb where jysfl = '1' group by fxlb";
 		return sql;
 	}
-	//画像(大宗)
-	public String dazong() {
+
+	// 画像(权益)
+	public String quanyi() {
 		String sql = "select"
 				+ " jt.jysinfo,"
 				+ " jt3.fxlb,"
@@ -157,33 +164,34 @@ public class sqlDanger {
 				+ " on t2.fxlb=t1.fxlb  and t1.jgdm = jt.jys and t1.fxlb = jt3.fxlb"
 				+ " left join public.hub_ref_jysinfo t"
 				+ " on t.jys=t1.jgdm"
-				+ " --where 1=1 ${if(len(name) == 0,\"\",\"and t.jys = '\" + name + \"'\")} "
-				+ " --and jys in ${authority}"
 				+ " where t2.fxlb = jt3.fxlb"
 				+ " group by t.jysinfo,t.jys,t2.fxlb,t1.jysfl,t1.jgdm) fvalue"
 				+ " from hub_ref_jysinfo jt"
 				+ " left join hub_dd_tqs_jys jt2"
 				+ " on jt.jys = jt2.jys"
 				+ " left join (select jysfl,fxlb from public.hub_fxlb group by fxlb,jysfl) jt3"
-				+ " on jt2.jysfl = jt3.jysfl" + " where jt2.jysfl = '2' ";
+				+ " on jt2.jysfl = jt3.jysfl" + " where jt2.jysfl = '2' and jt.jysinfo=? ORDER BY jt3.fxlb";
 		return sql;
 	}
 	//工商信息
 	public String businesss() {
 		String sql = "select * from hub_commerce_enterprise m "
 				+ " where m.name in (select n.company_name from hub_commerce_ref_jys n"
-				+ " where n.jys in ('00')";
+				+ " where n.jysinfo=?)";
 		return sql;
 	}
-	//股东信息
+
+	// 股东信息
 	public String shareHolder() {
-		String sql = "SELECT" + " T.name,T.scale,T.pay" + " FROM"
-				+ " hub_commerce_co_shareholder T" +
+		String sql = "SELECT" + " T.name,T.pay,T.pay_date,T.scale,jysinfo" + " FROM"
+				+ " hub_commerce_co_shareholder T"
+				+ " LEFT JOIN hub_commerce_enterprise n"
+				+ " ON T .company_name = n. NAME"
+				+ " left join hub_dd_tqs_jys h1"
+				+ " on h1.jysmc = t.company_name"
+				+ " left join hub_ref_jysinfo h2" + " on h1.jys = h2.jys"
+				+ " where jysinfo = ? and T.type='1' order by name";
 
-				" LEFT JOIN hub_commerce_enterprise n"
-				+ " ON T .company_name = n. NAME" +
-
-				" WHERE" + " T.company_name = '${公司名}'" + " and T.type='1'";
 		return sql;
 	}
 	//企业关系
