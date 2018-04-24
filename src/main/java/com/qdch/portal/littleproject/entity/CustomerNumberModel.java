@@ -1,21 +1,17 @@
 package com.qdch.portal.littleproject.entity;
 
 import com.qdch.portal.common.persistence.DataEntity;
-
-public class TradeAmountModel extends DataEntity<TradeAmountModel> {
+/**
+ * 总况——客户数
+ * @author gaozhao 20170424
+ *
+ */
+public class CustomerNumberModel extends DataEntity<CustomerNumberModel>{
 private String vday;
 private String jys;
 private String jysmc;
 private String jysinfo;
 private double fvalue;
-private double sum;
-private String vmonth;
-public double getSum() {
-	return sum;
-}
-public void setSum(double sum) {
-	this.sum = sum;
-}
 public String getVday() {
 	return vday;
 }
@@ -46,17 +42,5 @@ public double getFvalue() {
 public void setFvalue(double fvalue) {
 	this.fvalue = fvalue;
 }
-public String getVmonth() {
-	return vmonth;
-}
-public void setVmonth(String vmonth) {
-	this.vmonth = vmonth;
-}
-
-
-
-
-
-
 
 }

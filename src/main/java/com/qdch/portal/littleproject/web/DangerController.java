@@ -9,12 +9,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.littleproject.dao.EvaluateScoreModelDao;
+import com.qdch.portal.littleproject.entity.EvaluateScoreModel;
 import com.qdch.portal.littleproject.entity.FenLei;
 import com.qdch.portal.littleproject.entity.KeHuFenLei;
 import com.qdch.portal.littleproject.entity.LittleProjectDto;
@@ -492,7 +496,7 @@ public class DangerController extends BaseController {
 				 /*enterpriseLists=PostgreUtils.getInstance().excuteQuery(
 							sql.enterprise(), t);*/
 			}else if("3".equals(type)){
-				t=new Object[]{"青岛文化产权"};
+				t=new Object[]{"文化产权"};
 				
 				/* bcLists=PostgreUtils.getInstance().excuteQuery(
 							sql.businesss(), t);*/
@@ -523,8 +527,75 @@ public class DangerController extends BaseController {
 				return this.resultSuccessData(request, response, "", dto);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
+	/**
+	 * 画像-市场评价分数
+	 *
+	 * @time 2018年4月24日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@Autowired
+	public EvaluateScoreModelDao evaluateScoreDao;
+	@RequestMapping(value = { "${portalPath}/littleproject/evaluateScore" })
+	@ResponseBody
+	public String evaluateScore(HttpServletRequest request,HttpServletResponse response){
+		try {
+			
+			DynamicDataSource.setInsightDataSource();
+			String type=request.getParameter("type");
+			String t="";
+			FenLei dto=new FenLei();
+			List<KeHuFenLei> aggregate=new ArrayList<KeHuFenLei>();
+			List<EvaluateScoreModel> lists=null;
+			
+			if("1".equals(type)||"2".equals(type)){
+			
+				if("1".equals(type)){
+					t="青金中心";
+					dto.setName(t);
+					lists= evaluateScoreDao.evaluateScore();
+					
+				}else{
+					t="联合信产";
+					dto.setName(t);
+					lists= evaluateScoreDao.evaluateScore2();
+					
+				}
+			 
+			}else if("3".equals(type)){
+				t="文化产权";
+				dto.setName(t);
+				lists= evaluateScoreDao.evaluateScore3();
+				
+			}
+			double s=0;
+			if(lists!=null&&lists.size()>0){
+				for(EvaluateScoreModel o:lists){
+					s=s+o.getDf();
+					KeHuFenLei k=new KeHuFenLei();
+					k.setGrs(o.getPjfj());
+					k.setJgs(o.getDf()+"");
+					aggregate.add(k);
+				}
+			}
+				dto.setSum(s);
+				dto.setAbility(aggregate);
+			DynamicDataSource.removeDataSourceKey();
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	
 }

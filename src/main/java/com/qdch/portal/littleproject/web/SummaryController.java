@@ -3,8 +3,14 @@ package com.qdch.portal.littleproject.web;
 import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.littleproject.dao.CustomerAgeModelDao;
+import com.qdch.portal.littleproject.dao.CustomerClassifyModelDao;
+import com.qdch.portal.littleproject.dao.CustomerCountModelDao;
+import com.qdch.portal.littleproject.dao.CustomerNumberModelDao;
 import com.qdch.portal.littleproject.dao.DtoModelDao;
 import com.qdch.portal.littleproject.dao.TradeAmountModelDao;
+import com.qdch.portal.littleproject.dao.TradeCountModelDao;
+import com.qdch.portal.littleproject.dao.TradeMarketModelDao;
 import com.qdch.portal.littleproject.entity.*;
 
 import org.dozer.Mapping;
@@ -31,6 +37,9 @@ public class SummaryController extends BaseController {
 	sqlYuJu sql = new sqlYuJu();
 	@Autowired
 	public TradeAmountModelDao tradeAmountModelDao;//交易额
+	
+	@Autowired
+	public TradeMarketModelDao tradeMarketModelDao;//交易市场
 
 
 	/**
@@ -48,60 +57,57 @@ public class SummaryController extends BaseController {
 	public String tradeAmount(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-			
+			DynamicDataSource.setInsightDataSource();
 			String type = request.getParameter("type");
-			List<Object> lists = null;
+			//List<Object> lists = null;
+			List<TradeAmountModel> lists1=null;
 			if ("day".equals(type)) {
 
-
-				lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(),
-						null);
+			lists1=tradeAmountModelDao.tradeDay();//按天查询
+		
 			} else if ("week".equals(type)) {
-				lists = PostgreUtils.getInstance().excuteQuery(sql.tradeWeek(),
-						null);
+				
+				lists1=tradeAmountModelDao.tradeWeek();//按周查询
 			} else if ("month".equals(type)) {
-				lists = PostgreUtils.getInstance().excuteQuery(
-						sql.tradeMonth(), null);
+				
+				lists1=tradeAmountModelDao.tradeMonth();//按月查询
 			}
 
 			LittleProjectDto dto = new LittleProjectDto();
-			/*lists = PostgreUtils.getInstance().excuteQuery(sql.tradeDay(),
-			 null);*/
-			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
-					sql.shichan(), null);
+			//交易市场
+			List<TradeMarketModel> tradelist=tradeMarketModelDao.tradeMarket();
 
 			// 时间集合
 			List<String> times = new ArrayList<String>();
 			// 交易市场集合
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
 			int a = 1;
-
+			
+			//把查询出来的市场加到市场集合中
 			if (tradelist != null && tradelist.size() > 0) {
-				for (Object o : tradelist) {
-					Map m = (Map) o;
+				for (TradeMarketModel o : tradelist) {
 					LittleProjectEntity aa = new LittleProjectEntity();
-					aa.setName(m.get("jysinfo") + "");
+					aa.setName(o.getJysinfo());
 					res.add(aa);
 				}
 			}
 
-			// 获取市场
-
+			
+			//交易市场的交易额一些信息
 			if (res != null && res.size() > 0) {
 				for (LittleProjectEntity s : res) {
 
 					List<String> shiChan = new ArrayList<String>();
-					if (lists != null && lists.size() > 0) {
+					if (lists1 != null && lists1.size() > 0) {
 
-						for (Object o : lists) {
+						for (TradeAmountModel o : lists1) {
 
-							Map m = (Map) o;
-
-							if (m.get("jysinfo").equals(s.getName())) {
-
-								shiChan.add(m.get("fvalue") + "");
-
-
+							if (o.getJysinfo().equals(s.getName())) {
+								if("day".equals(type)){
+									shiChan.add(o.getFvalue() + "");
+								}else if("week".equals(type)||"month".equals(type)){
+									shiChan.add(o.getSum() + "");
+								}
 							}
 						}
 
@@ -114,32 +120,38 @@ public class SummaryController extends BaseController {
 			if (res != null && res.size() > 0) {
 				for (LittleProjectEntity s : res) {
 
-					if (lists != null && lists.size() > 0) {
+					if (lists1 != null && lists1.size() > 0) {
 
-						for (Object o : lists) {
-							Map m = (Map) o;
-
-							if (m.get("jysinfo").equals(s.getName()) && a == 1) {
-								times.add(m.get("vday") + "");
-
+						for (TradeAmountModel o : lists1) {
+							if("day".equals(type)||"week".equals(type)){
+								if (o.getJysinfo().equals(s.getName()) && a == 1) {
+									times.add(o.getVday());
+								}
+							}else if("month".equals(type)){
+								if (o.getJysinfo().equals(s.getName()) && a == 1) {
+									times.add(o.getVmonth());
+								}
 							}
+							
+							
 
 						}
 					}
 					a = 2;
 				}
 			}
-			dto.setTimes(times.toArray());
-
-			dto.setEntities(res);
-			if (lists == null && lists.size() < 0) {
+			
+			dto.setTimes(times.toArray());//把时间加到对象dto中
+			dto.setEntities(res);//把市场的信息加到对象dto中
+			DynamicDataSource.removeDataSourceKey();
+			if (lists1 == null && lists1.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
 			}
 
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 
@@ -154,26 +166,26 @@ public class SummaryController extends BaseController {
 	 * @param response
 	 * @return
 	 */
+	@Autowired
+	public TradeCountModelDao tradeCountModelDao;
 	@RequestMapping(value = { "${portalPath}/littleproject/jiaoYiAmount" })
 	@ResponseBody
 	public String jiaoYiAmount(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
+			DynamicDataSource.setInsightDataSource();
 			LittleProjectDto dto = new LittleProjectDto();
-
-
-			List<Object> jiaoyiList = PostgreUtils.getInstance().excuteQuery(
-					sql.jiaoyi(), null);
-			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
-					sql.shichan(), null);
+			//交易额统计
+			List<TradeCountModel> tradeCountList = tradeCountModelDao.getTradeCountModel();
+			//交易市场
+			List<TradeMarketModel> tradelist=tradeMarketModelDao.tradeMarket();
 
 			// 交易市场集合
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
 			if (tradelist != null && tradelist.size() > 0) {
-				for (Object o : tradelist) {
-					Map m = (Map) o;
+				for (TradeMarketModel o : tradelist) {
 					LittleProjectEntity aa = new LittleProjectEntity();
-					aa.setName(m.get("jysinfo") + "");
+					aa.setName(o.getJysinfo());
 					res.add(aa);
 				}
 			}
@@ -181,18 +193,14 @@ public class SummaryController extends BaseController {
 				for (LittleProjectEntity s : res) {
 
 					List<String> shiChan = new ArrayList<String>();
-					if (jiaoyiList != null && jiaoyiList.size() > 0) {
+					if (tradeCountList != null && tradeCountList.size() > 0) {
 
-						for (Object o : jiaoyiList) {
-
-							Map m = (Map) o;
-
-							if (m.get("jysinfo").equals(s.getName())) {
-
-								shiChan.add(m.get("bz") + "");
-								shiChan.add(m.get("by") + "");
-								shiChan.add(m.get("bn") + "");
-								shiChan.add(m.get("lj") + "");
+						for (TradeCountModel o : tradeCountList) {
+							if (o.getJysinfo().equals(s.getName())) {
+								shiChan.add(o.getBz()+"");
+								shiChan.add(o.getBy()+"");
+								shiChan.add(o.getBn()+"");
+								shiChan.add(o.getLj()+"");
 
 							}
 						}
@@ -203,7 +211,8 @@ public class SummaryController extends BaseController {
 			}
 
 			dto.setEntities(res);
-			if (jiaoyiList == null && jiaoyiList.size() < 0) {
+			DynamicDataSource.removeDataSourceKey();
+			if (tradeCountList == null && tradeCountList.size() < 0) {
 				
 				return this.resultSuccessData(request, response, "", null);
 			} else {
@@ -211,7 +220,7 @@ public class SummaryController extends BaseController {
 			}
 
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -223,41 +232,37 @@ public class SummaryController extends BaseController {
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
+	@Autowired
+	public CustomerNumberModelDao customerNumberModelDao;
 	@RequestMapping(value = { "${portalPath}/littleproject/yongHuShu" })
 	@ResponseBody
 	public String yongHuShu(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
+			DynamicDataSource.setInsightDataSource();
 			String type = request.getParameter("type");
-			List<Object> lists = null;
+			List<CustomerNumberModel> lists = null;
 			if ("day".equals(type)) {
-				lists = PostgreUtils.getInstance().excuteQuery(sql.yongHuDay(),
-						null);
+				lists = customerNumberModelDao.getCustomerNumberModelDao();
 			} else if ("week".equals(type)) {
-				lists = PostgreUtils.getInstance().excuteQuery(
-						sql.yongHuWeek(), null);
+				lists = customerNumberModelDao.getCustomerNumberModelDao2();
 			} else if ("month".equals(type)) {
-				lists = PostgreUtils.getInstance().excuteQuery(
-						sql.yongHuMonth(), null);
+				lists = customerNumberModelDao.getCustomerNumberModelDao3();
 			}
-
+			//要返回的对象
 			LittleProjectDto dto = new LittleProjectDto();
-			// List<Object> lists =
-			// PostgreUtils.getInstance().excuteQuery(sql.yongHuDay(), null);
-			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
-					sql.shichan(), null);
-
+			//交易市场
+			List<TradeMarketModel> tradelist=tradeMarketModelDao.tradeMarket();
 			// 时间集合
 			List<String> times = new ArrayList<String>();
 			// 交易市场集合
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
 			int a = 1;
-
+			//给交易市场集合加入市场对象
 			if (tradelist != null && tradelist.size() > 0) {
-				for (Object o : tradelist) {
-					Map m = (Map) o;
+				for (TradeMarketModel o : tradelist) {
 					LittleProjectEntity aa = new LittleProjectEntity();
-					aa.setName(m.get("jysinfo") + "");
+					aa.setName(o.getJysinfo());
 					res.add(aa);
 				}
 			}
@@ -270,13 +275,11 @@ public class SummaryController extends BaseController {
 					List<String> shiChan = new ArrayList<String>();
 					if (lists != null && lists.size() > 0) {
 
-						for (Object o : lists) {
+						for (CustomerNumberModel o : lists) {
 
-							Map m = (Map) o;
+							if (o.getJysinfo().equals(s.getName())) {
 
-							if (m.get("jysinfo").equals(s.getName())) {
-
-								shiChan.add(m.get("fvalue") + "");
+								shiChan.add(o.getFvalue() + "");
 
 
 							}
@@ -293,11 +296,9 @@ public class SummaryController extends BaseController {
 
 					if (lists != null && lists.size() > 0) {
 
-						for (Object o : lists) {
-							Map m = (Map) o;
-
-							if (m.get("jysinfo").equals(s.getName()) && a == 1) {
-								times.add(m.get("vday") + "");
+						for (CustomerNumberModel o : lists) {
+								if (o.getJysinfo().equals(s.getName()) && a == 1) {
+								times.add(o.getVday());
 
 							}
 
@@ -307,8 +308,8 @@ public class SummaryController extends BaseController {
 				}
 			}
 			dto.setTimes(times.toArray());
-
 			dto.setEntities(res);
+			DynamicDataSource.removeDataSourceKey();
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
@@ -316,7 +317,7 @@ public class SummaryController extends BaseController {
 			}
 
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 
@@ -328,23 +329,24 @@ public class SummaryController extends BaseController {
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
+	@Autowired
+	public CustomerClassifyModelDao customerClassifyModelDao;
 	@RequestMapping(value = { "${portalPath}/littleproject/keHuFenLei" })
 	@ResponseBody
 	public String keHuFenLei(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-
+			DynamicDataSource.setInsightDataSource();
 
 			KeHuFenLei kh = new KeHuFenLei();
-			List<Object> khfl = PostgreUtils.getInstance().excuteQuery(
-					sql.keHuFenLei(), null);
+			List<CustomerClassifyModel> khfl = customerClassifyModelDao.getCustomerClassifyModelDao();
 			if (khfl != null && khfl.size() > 0) {
-				for (Object o : khfl) {
-					Map m = (Map) o;
-					kh.setGrs(m.get("grkhs") + "");
-					kh.setJgs(m.get("jgkhs") + "");
+				for (CustomerClassifyModel o : khfl) {
+					kh.setGrs(o.getGrkhs()+"");
+					kh.setJgs(o.getJgkhs()+"");
 				}
 			}
+			DynamicDataSource.removeDataSourceKey();
 			if (khfl == null && khfl.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
@@ -354,7 +356,7 @@ public class SummaryController extends BaseController {
 
 
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 
@@ -366,24 +368,24 @@ public class SummaryController extends BaseController {
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
+	@Autowired
+	public CustomerCountModelDao customerCountModelDao;
 	@RequestMapping(value = { "${portalPath}/littleproject/keHuTongJi" })
 	@ResponseBody
 	public String keHuTongJi(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
-
+			DynamicDataSource.setInsightDataSource();
 			LittleProjectDto dto = new LittleProjectDto();
-			List<Object> tongji = PostgreUtils.getInstance().excuteQuery(
-					sql.keHuTongJi(), null);
-			List<Object> tradelist = PostgreUtils.getInstance().excuteQuery(
-					sql.shichan(), null);
+			//客户统计
+			List<CustomerCountModel> tongji =customerCountModelDao.getCustomerCountModelDao(); 
+			//交易市场
+			List<TradeMarketModel> tradelist=tradeMarketModelDao.tradeMarket();
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
 			if (tradelist != null && tradelist.size() > 0) {
-				for (Object t : tradelist) {
-					Map m = (Map) t;
+				for (TradeMarketModel t : tradelist) {
 					LittleProjectEntity aa = new LittleProjectEntity();
-					aa.setName(m.get("jysinfo") + "");
-
+					aa.setName(t.getJysinfo());
 					res.add(aa);
 				}
 
@@ -392,12 +394,12 @@ public class SummaryController extends BaseController {
 				for (LittleProjectEntity s : res) {
 					List<String> shichan = new ArrayList<String>();
 					if (tongji != null && tongji.size() > 0) {
-						for (Object o : tongji) {
-							Map m = (Map) o;
-							if (m.get("jysinfo").equals(s.getName())) {
-								shichan.add(m.get("rzrkhs") + "");
-								shichan.add(m.get("tzrkhs") + "");
-								shichan.add(m.get("count") + "");
+						for (CustomerCountModel o : tongji) {
+							if (o.getJysinfo().equals(s.getName())) {
+								shichan.add(o.getRzrkhs());
+								shichan.add(o.getTzrkhs());
+								shichan.add(o.getCount() + "");
+								
 							}
 						}
 					}
@@ -405,6 +407,7 @@ public class SummaryController extends BaseController {
 				}
 			}
 			dto.setEntities(res);
+			DynamicDataSource.removeDataSourceKey();
 			if (tongji == null && tongji.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
@@ -412,7 +415,7 @@ public class SummaryController extends BaseController {
 			}
 
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -423,33 +426,31 @@ public class SummaryController extends BaseController {
 	 * @author gaozhao
 	 * @time 2018年4月16日
 	 */
+	@Autowired
+	public CustomerAgeModelDao customerAgeModelDao;
 	@RequestMapping(value = { "${portalPath}/littleproject/kehuAge" })
 	@ResponseBody
 	public String kehuAge(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
+			DynamicDataSource.setInsightDataSource();
 			KeHuAge res = new KeHuAge();
-
-
-			List<Object> ages = PostgreUtils.getInstance().excuteQuery(
-					sql.keHuAge(), null);
-
+			List<CustomerAgeModel> ages = customerAgeModelDao.getCustomerAgeModelDao();
 			List<String> age = new ArrayList<String>();
 			List<String> sum = new ArrayList<String>();
 			if (ages != null && ages.size() > 0) {
-				for (Object o : ages) {
-					Map m = (Map) o;
+				for (CustomerAgeModel o : ages) {
 
-					res.setName(m.get("jysinfo") + "");
+					res.setName(o.getJysinfo());
 
 				}
 
 			}
 			if (ages != null && ages.size() > 0) {
-				for (Object o : ages) {
-					Map m = (Map) o;
-					age.add(m.get("coalesce") + "");
-					sum.add(m.get("sum") + "");
+				for (CustomerAgeModel o : ages) {
+					
+					age.add(o.getCoalesce());
+					sum.add(o.getSum()+"");
 
 				}
 
@@ -457,13 +458,14 @@ public class SummaryController extends BaseController {
 
 			res.setAge(age);
 			res.setSum(sum);
+			DynamicDataSource.removeDataSourceKey();
 			if (ages == null && ages.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}

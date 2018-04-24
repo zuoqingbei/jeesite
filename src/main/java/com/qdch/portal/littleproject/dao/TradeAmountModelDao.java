@@ -10,7 +10,7 @@ import com.qdch.portal.littleproject.entity.TradeAmountModel;
 
 @MyBatisDao
 public interface TradeAmountModelDao extends CrudDao<TradeAmountModelDao>{
-	 public List<Map<String,Object>> tradeDay();
+	 public List<TradeAmountModel> tradeDay();
 	 public List<TradeAmountModel> tradeWeek();
 	 public List<TradeAmountModel> tradeMonth();
 }
