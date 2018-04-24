@@ -8,7 +8,8 @@ public class DynamicDataSource  extends AbstractRoutingDataSource {
 	 private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();    
      
 	 private static final String DATASOURCE = "dataSource";
-	 private static final String SLAVEDATASOURCE = "slaveDataSource";
+	 private static final String INSIGHTDATASOURCE = "slaveDataSource";
+	private static final String HUBDATASOURCE = "hubDataSource";
 	 
 	 public static String getCurrentLookupKey() {    
 //	    	System.out.println((String) contextHolder.get());   //测试使用
@@ -18,9 +19,13 @@ public class DynamicDataSource  extends AbstractRoutingDataSource {
 	  public static void setDataSource() {
 	    	contextHolder.set(DATASOURCE);    
 		}
-	  public static void setSlaveDataSource() {
-	    	contextHolder.set(SLAVEDATASOURCE);    
+	  public static void setInsightDataSource() {
+	    	contextHolder.set(INSIGHTDATASOURCE);
 		}
+
+	public static void setHubDataSource() {
+		contextHolder.set(HUBDATASOURCE);
+	}
 
 
 
