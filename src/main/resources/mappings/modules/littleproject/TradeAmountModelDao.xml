@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.DtoModelDao">
+	<resultMap id="trade" type="com.qdch.portal.littleproject.entity.TradeAmountModel">
+		<result property="vday" column="vday" />
+
+	</resultMap>
+	<resultMap id="Map" type="java.util.Map">
+		<result property="Object" column="vday" />
+
+	</resultMap>
+	<select id="tradeDay" resultMap="trade" >
+		SELECT T.VDAY AS DATE,SUM(T.FVALUE)/10000 AS FVALUE,'DAY' AS WD
+        FROM  insight_sendimentary_amount T
+        WHERE TO_DATE(T.VDAY,'YYYYMMDD') >= TO_DATE('20180423','YYYYMMDD') - 15
+        AND to_date(T.VDAY,'YYYYMMDD') < TO_DATE('20180423','YYYYMMDD')
+        GROUP BY T.VDAY
+        ORDER BY T.VDAY
+	</select>
+</mapper>

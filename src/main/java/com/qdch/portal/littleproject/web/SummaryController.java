@@ -4,6 +4,7 @@ import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.littleproject.dao.DtoModelDao;
+import com.qdch.portal.littleproject.dao.TradeAmountModelDao;
 import com.qdch.portal.littleproject.entity.*;
 
 import org.dozer.Mapping;
@@ -28,7 +29,8 @@ import java.util.*;
 public class SummaryController extends BaseController {
 
 	sqlYuJu sql = new sqlYuJu();
-
+	@Autowired
+	public TradeAmountModelDao tradeAmountModelDao;//交易额
 
 
 	/**
@@ -40,12 +42,13 @@ public class SummaryController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-
+	
 	@RequestMapping(value = { "${portalPath}/littleproject/tradeAmount" })
 	@ResponseBody
 	public String tradeAmount(HttpServletRequest request,
 			HttpServletResponse response) {
 		try {
+			
 			String type = request.getParameter("type");
 			List<Object> lists = null;
 			if ("day".equals(type)) {
