@@ -265,7 +265,7 @@ header{
     word-break:normal;
     width: 43.5em;
     z-index: 2;
-    height: 25rem;
+    /*height: 25rem;*/
 
 }
 .menus_two>li:hover{

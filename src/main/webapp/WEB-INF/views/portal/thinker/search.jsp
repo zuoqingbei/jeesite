@@ -329,6 +329,8 @@
 		$(obj).toggleClass("active").siblings().removeClass("active");
 		search();
 	}
+	// $(".menus_three ul").find("li:gt(6)").hide();
+	$(".menus_three").find("li:gt(6)").hide();
 </script>
 </html>
 
