@@ -98,11 +98,11 @@
                     	<c:if test="${fn:length(first.children) gt 0}">
 		                    <ul class="menus_two">
 			                    	<c:forEach items="${first.children}" var="second">
-				                           <li ><span onclick="changeCategory('','${second.name}','')" class="fl">${second.name }</span>
+				                           <li ><span onclick="changeCategory('${first.name}','${second.name}','')" class="fl">${second.name }</span>
 				                           <%-- <c:if test="${fn:length(second.children) gt 0}"> --%>
 					                            <ul class="menus_three fl">
 					                            	<c:forEach items="${second.children}" var="third">
-						                                <li onclick="changeCategory('','','${third.name}')">${third.name }</li>
+						                                <li onclick="changeCategory('${first.name}','${second.name}','${third.name}')">${third.name }</li>
 					                            	</c:forEach>
 					                            </ul>
 		                    				<%-- </c:if> --%>
