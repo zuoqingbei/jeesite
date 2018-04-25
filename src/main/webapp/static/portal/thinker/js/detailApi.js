@@ -9,7 +9,9 @@ var DetailApi = {
 	tabChanges:function(){
 		$("ul li").click(function(){
 			$(this).addClass("liActive").siblings().removeClass("liActive");
-			
+			let index = $(this).index();
+            $(this).parents(".tabBox").children("div").eq(index).show().siblings("div").hide()
+/*
 			if($(this).attr("flag") == 1){
 				$(".docCon").css("display","block");
 				$(".defaultCodeCon").css("display","none");
@@ -31,6 +33,7 @@ var DetailApi = {
 				$(".callUsCon").css("display","block");
 				$(".demoCodeCon").css("display","none");
 			}
+*/
 		})
 	},
 	iconBlue:function(){

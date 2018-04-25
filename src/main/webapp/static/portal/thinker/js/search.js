@@ -19,9 +19,9 @@ var Search = {
 			$(".label0").css("display","block");
 			var txt = $(this).text();
 			$(".txt").text(txt);
-			
+
+			console.log("--------------",$(".label1").css("display"))
 			if($(".label1").css("display") == "block"){
-				aler(1)
 				$(".label1").css("display","none");
 			}
 			if($(".label2").css("display") == "block"){
@@ -51,10 +51,10 @@ var Search = {
 					$(".txt").text(txt);
 				}
 			}
+            if($(".label2").css("display") == "block"){
+                $(".label2").css("display","none");
+            }
 		});
-		if($(".label2").css("display") == "block"){
-			$(".label2").css("display","none");
-		}
 		//点击三级菜单
 		
 		$(".menus_three li").click(function(){

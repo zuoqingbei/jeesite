@@ -123,122 +123,6 @@
                 <li flag="4">联系我们</li>
             </ul>
 
-            <div class="defaultCodeCon">
-
-
-                <div class="part-title ts">服务级错误码参照</div>
-                <!-- (err_code) -->
-                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
-                    <tr class="th">
-                        <td>错误码</td>
-                        <td>说明</td>
-                    </tr>
-                    <c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
-                        <tr>
-                            <c:if test="${item.types==2}">
-                                <td>${item.errorCode}</td>
-                            </c:if>
-                            <c:if test="${item.types==2}">
-                                <td>${item.descs}</td>
-                            </c:if>
-                        </tr>
-                    </c:forEach>
-                </table>
-                <div class="part-title">系统级错误码参照</div>
-                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
-                    <tr class="th">
-                        <td>错误码</td>
-                        <td>说明</td>
-                        <td>旧版本</td>
-                    </tr>
-                    <c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
-                        <tr>
-                            <c:if test="${item.types==0}">
-                                <td>${item.errorCode}</td>
-                            </c:if>
-                            <c:if test="${item.types==0}">
-                                <td>${item.descs}</td>
-                            </c:if>
-                            <c:if test="${item.types==0}">
-                                <td>${item.descs}</td>
-                            </c:if>
-                        </tr>
-                    </c:forEach>
-                </table>
-                <div class="part-title">错误码格式说明</div>
-                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
-                    <tr class="th">
-                        <td>错误码</td>
-                        <td>说明</td>
-                        <td>旧版本</td>
-                    </tr>
-                    <c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
-                        <tr>
-                            <c:if test="${item.types==1}">
-                                <td>${item.errorCode}</td>
-                            </c:if>
-                            <c:if test="${item.types==1}">
-                                <td>${item.descs}</td>
-                            </c:if>
-                            <c:if test="${item.types==1}">
-                                <td>${item.descs}</td>
-                            </c:if>
-                        </tr>
-                    </c:forEach>
-                </table>
-            </div>
-
-            <div class="callUsCon">
-                <div class="part-title ts">联系我们</div>
-                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
-                    <tr class="th">
-                        <td>姓名</td>
-                        <td>邮箱</td>
-                        <td>联系电话</td>
-                    </tr>
-                    <tr>
-                        <td>张三</td>
-                        <td>1169@haier.com</td>
-                        <td>1334455667788</td>
-                    </tr>
-                </table>
-
-            </div>
-
-
-            <div class="demoCodeCon">
-
-
-                <div class="part-title ts">完整教学代码示例</div>
-                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
-                    <tr class="th">
-                        <td>语言</td>
-                        <td>标题</td>
-                        <td>提供者</td>
-                        <td>时间</td>
-                    </tr>
-                    <tr>
-                        <td>JAVA</td>
-                        <td>Dubbo示例代码</td>
-                        <td>1169</td>
-                        <td>2018年4月15日</td>
-                    </tr>
-                </table>
-                <div class="part-title">常见问题</div>
-                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
-                    <tr class="th">
-                        <td>内容</td>
-                        <td>详细</td>
-                    </tr>
-                    <tr>
-                        <td>注册中心</td>
-                        <td>注册中心的配置问题</td>
-                    </tr>
-                </table>
-
-            </div>
-
-
             <div class="docCon">
                 <p>接口地址：<span><a href=${entity.url}>${entity.url}</a></span></p>
                 <p>返回格式：<span>${entity.dataType}</span></p>
@@ -346,8 +230,124 @@
                         "error_code": 0
                     }
                 -->
-						</pre>
+                </pre>
             </div>
+            <div class="defaultCodeCon">
+
+
+                <div class="part-title ts">服务级错误码参照</div>
+                <!-- (err_code) -->
+                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
+                    <tr class="th">
+                        <td>错误码</td>
+                        <td>说明</td>
+                    </tr>
+                    <c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
+                        <tr>
+                            <c:if test="${item.types==2}">
+                                <td>${item.errorCode}</td>
+                            </c:if>
+                            <c:if test="${item.types==2}">
+                                <td>${item.descs}</td>
+                            </c:if>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <div class="part-title">系统级错误码参照</div>
+                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
+                    <tr class="th">
+                        <td>错误码</td>
+                        <td>说明</td>
+                        <td>旧版本</td>
+                    </tr>
+                    <c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
+                        <tr>
+                            <c:if test="${item.types==0}">
+                                <td>${item.errorCode}</td>
+                            </c:if>
+                            <c:if test="${item.types==0}">
+                                <td>${item.descs}</td>
+                            </c:if>
+                            <c:if test="${item.types==0}">
+                                <td>${item.descs}</td>
+                            </c:if>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <div class="part-title">错误码格式说明</div>
+                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
+                    <tr class="th">
+                        <td>错误码</td>
+                        <td>说明</td>
+                        <td>旧版本</td>
+                    </tr>
+                    <c:forEach items="${entity.thinkerApiErrorcodeList}" var="item">
+                        <tr>
+                            <c:if test="${item.types==1}">
+                                <td>${item.errorCode}</td>
+                            </c:if>
+                            <c:if test="${item.types==1}">
+                                <td>${item.descs}</td>
+                            </c:if>
+                            <c:if test="${item.types==1}">
+                                <td>${item.descs}</td>
+                            </c:if>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
+            <div class="demoCodeCon">
+
+
+                <div class="part-title ts">完整教学代码示例</div>
+                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
+                    <tr class="th">
+                        <td>语言</td>
+                        <td>标题</td>
+                        <td>提供者</td>
+                        <td>时间</td>
+                    </tr>
+                    <tr>
+                        <td>JAVA</td>
+                        <td>Dubbo示例代码</td>
+                        <td>1169</td>
+                        <td>2018年4月15日</td>
+                    </tr>
+                </table>
+                <div class="part-title">常见问题</div>
+                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
+                    <tr class="th">
+                        <td>内容</td>
+                        <td>详细</td>
+                    </tr>
+                    <tr>
+                        <td>注册中心</td>
+                        <td>注册中心的配置问题</td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="callUsCon">
+                <div class="part-title ts">联系我们</div>
+                <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
+                    <tr class="th">
+                        <td>姓名</td>
+                        <td>邮箱</td>
+                        <td>联系电话</td>
+                    </tr>
+                    <tr>
+                        <td>张三</td>
+                        <td>1169@haier.com</td>
+                        <td>1334455667788</td>
+                    </tr>
+                </table>
+
+            </div>
+
+
+
+
         </div>
     </div>
 </div>
