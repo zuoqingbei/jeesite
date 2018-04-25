@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.EntryAndExitCapitalModelDao">
+	<resultMap id="dtoResult"
+		type="com.qdch.portal.littleproject.entity.EntryAndExitCapitalModel">
+		<result property="date" column="date" />
+		<result property="fvalue" column="fvalue" />
+		<result property="xm" column="xm" />
+		<result property="wd" column="wd" />
+
+	</resultMap>
+	<select id="getEntryAndExitCapitalModelDaoAll" resultMap="dtoResult">
+		select
+		distinct(xm) from INSIGHT_XCX_CRJ order by xm
+	</select>
+	<select id="getEntryAndExitCapitalModelDaoDay" resultMap="dtoResult">
+
+		select * from
+		(SELECT T.VDAY AS DATE,SUM(T.FVALUE)/10000 AS FVALUE,'入金' AS XM,'DAY' AS WD
+		FROM INSIGHT_IN_OUT_AMOUNT T
+		WHERE TO_DATE(T.VDAY,'YYYYMMDD') >= TO_DATE('20180423','YYYYMMDD') - 15
+		AND to_date(T.VDAY,'YYYYMMDD') &lt; TO_DATE('20180423','YYYYMMDD')
+		GROUP BY T.VDAY
+
+		UNION ALL
+		SELECT T.VDAY AS DATE,SUM(T.FVALUE1)/10000 AS FVALUE,'出金' AS XM,'DAY' AS WD
+		FROM INSIGHT_IN_OUT_AMOUNT T
+		WHERE TO_DATE(T.VDAY,'YYYYMMDD') >= TO_DATE('20180423','YYYYMMDD') - 15
+		AND to_date(T.VDAY,'YYYYMMDD') &lt; TO_DATE('20180423','YYYYMMDD')
+		GROUP BY T.VDAY
+
+		UNION ALL
+		SELECT T.VDAY AS DATE,SUM(T.FVALUE2)/10000 AS FVALUE,'净出入金' AS XM,'DAY' AS
+		WD
+		FROM INSIGHT_IN_OUT_AMOUNT T
+		WHERE TO_DATE(T.VDAY,'YYYYMMDD') >= TO_DATE('20180423','YYYYMMDD') - 15
+		AND to_date(T.VDAY,'YYYYMMDD') &lt; TO_DATE('20180423','YYYYMMDD')
+		GROUP BY T.VDAY) t ORDER BY t.date,t.xm
+
+
+
+	</select>
+	<select id="getEntryAndExitCapitalModelDaoWeek" resultMap="dtoResult">
+
+		SELECT SUBSTRING(T.vday,1,4)||TO_CHAR(TO_DATE(T.vday,'YYYYMMDD'),'WW')
+		AS DATE,
+		SUM(T.FVALUE)/10000 AS FVALUE,'入金' AS XM,
+		'WEEK' AS WD
+		FROM
+		INSIGHT_IN_OUT_AMOUNT T
+		WHERE TO_DATE(T.VDAY,'YYYYMMDD') >=
+		TO_DATE('20180423','YYYYMMDD') -
+		INTERVAL '12 week'
+		AND
+		TO_DATE(T.VDAY,'YYYYMMDD') &lt; TO_DATE('20180423','YYYYMMDD')
+		group by
+		SUBSTRING(T.vday,1,4)||TO_CHAR(TO_DATE(T.vday,'YYYYMMDD'),'WW')
+		UNION
+		ALL
+		SELECT
+		SUBSTRING(T.vday,1,4)||TO_CHAR(TO_DATE(T.vday,'YYYYMMDD'),'WW') AS
+		DATE,
+		SUM(T.FVALUE1)/10000 AS FVALUE,'出金' AS XM,
+		'WEEK' AS WD
+		FROM
+		INSIGHT_IN_OUT_AMOUNT T
+		WHERE TO_DATE(T.VDAY,'YYYYMMDD') >=
+		TO_DATE('20180423','YYYYMMDD') -
+		INTERVAL '12 week'
+		AND
+		TO_DATE(T.VDAY,'YYYYMMDD') &lt; TO_DATE('20180423','YYYYMMDD')
+		group by
+		SUBSTRING(T.vday,1,4)||TO_CHAR(TO_DATE(T.vday,'YYYYMMDD'),'WW')
+		UNION
+		ALL
+		SELECT
+		SUBSTRING(T.vday,1,4)||TO_CHAR(TO_DATE(T.vday,'YYYYMMDD'),'WW') AS
+		DATE,
+		SUM(T.FVALUE2)/10000 AS FVALUE,'净出入金' AS XM,
+		'WEEK' AS WD
+		FROM
+		INSIGHT_IN_OUT_AMOUNT T
+		WHERE TO_DATE(T.VDAY,'YYYYMMDD') >=
+		TO_DATE('20180423','YYYYMMDD') -
+		INTERVAL '12 week'
+		AND
+		TO_DATE(T.VDAY,'YYYYMMDD') &lt; TO_DATE('20180423','YYYYMMDD')
+		group by
+		SUBSTRING(T.vday,1,4)||TO_CHAR(TO_DATE(T.vday,'YYYYMMDD'),'WW')
+		ORDER
+		BY date
+
+	</select>
+	<select id="getEntryAndExitCapitalModelDaoMonth" resultMap="dtoResult">
+		SELECT SUBSTRING(T.VDAY,1,6) AS DATE,SUM(T.FVALUE)/10000 AS
+		FVALUE,'入金' AS XM,'MONTH' AS WD
+		FROM INSIGHT_IN_OUT_AMOUNT T
+		WHERE
+		SUBSTRING(T.VDAY,1,6) >= TO_CHAR(TO_DATE('20180423','YYYYMMDD') -
+		INTERVAL'12 MONTH','YYYYMM')
+		AND SUBSTRING(T.VDAY,1,6) &lt;=
+		TO_CHAR(TO_DATE('20180423','YYYYMMDD'),'YYYYMM')
+		GROUP BY
+		SUBSTRING(T.VDAY,1,6)
+		ORDER BY SUBSTRING(T.VDAY,1,6)
+	</select>
+</mapper>
