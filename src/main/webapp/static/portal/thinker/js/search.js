@@ -99,9 +99,9 @@ var Search = {
 				alert("搜索的内容不能为空");
 			}
 		})
-		$("#keyword").keyDown(function(){
-			alert("搜索的内容不能为空");
-		})
+		// $("#keyword").keydown(function(){
+		// 	alert("搜索的内容不能为空");
+		// })
 	}
 }
 
