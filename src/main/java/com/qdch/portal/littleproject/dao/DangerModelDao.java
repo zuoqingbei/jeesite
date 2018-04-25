@@ -10,10 +10,18 @@ public interface DangerModelDao {
 
     public List<Map<String,Object>> getWeiranDay();//已停用
     
-    public List<Map<String,Object>> getFinanceMarket();//已停用
+    public List<Map<String,Object>> getFinanceMarket();
     
     public List<Map<String,Object>> getFengxiantongji();
     
     public List<Map<String,Object>> getWeiRanTrend();
+    
+    public List<Map<String,Object>> getMarketRiskIndex();
+    
+    public List<Map<String,Object>> getMarketRiskQtyAndRatio(String type);
+    
+    public List<Map<String,Object>> getMarketRiskEventList(Map<String,Object> map);
+    
+    public List<Map<String,Object>> getMarketByType(String type);
 
 }
