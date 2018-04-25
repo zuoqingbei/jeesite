@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.QuotationModelDao">
+	<resultMap id="dtoResult"
+		type="com.qdch.portal.littleproject.entity.QuotationModel">
+		<result property="cpmc" column="cpmc" />
+		<result property="zxjg" column="zxjg" />
+		<result property="bh" column="bh" />
+
+	</resultMap>
+	<select id="getQuotationModelDao" resultMap="dtoResult">
+		WITH NOW_DAY AS
+		(SELECT T.VDAY,T.JYS,T.JYSMC,T.JYSINFO,T.CPBM,T.CPMC,T.FVALUE
+		FROM INSIGHT_SETTLEMENT_PRICE T
+		WHERE T.JYSFL=1
+		AND T.VDAY=TO_CHAR(NOW()- INTERVAL'1 day','YYYYMMDD')),
+		BEF_DAY AS 
+		(SELECT MAX(ISP.VDAY) AS VDAY,ISP.JYS,ISP.CPBM
+		FROM INSIGHT_SETTLEMENT_PRICE ISP,NOW_DAY ND
+		WHERE ISP.VDAY != TO_CHAR(NOW()- INTERVAL'1 day','YYYYMMDD')
+		AND ISP.JYS=ND.JYS
+		AND ISP.CPBM=ND.CPBM
+		GROUP BY ISP.JYS,ISP.CPBM),
+		BEF_DAY_INFO AS (
+		SELECT ISP.VDAY, ISP.JYS,ISP.JYSMC,ISP.JYSINFO,ISP.CPBM,ISP.CPMC,ISP.FVALUE
+		FROM INSIGHT_SETTLEMENT_PRICE ISP,BEF_DAY BD
+		WHERE ISP.VDAY=BD.VDAY
+		AND ISP.JYS=BD.JYS
+		AND ISP.CPBM=BD.CPBM)
+		SELECT ND.CPMC,ND.CPBM AS CPDM,ND.JYS,ND.JYSMC,ND.JYSINFO,ND.FVALUE AS ZXJG,
+		DECODE(BDI.FVALUE,0,0,ROUND((ND.FVALUE-BDI.FVALUE)/BDI.FVALUE *100,2))
+		AS BH
+		FROM NOW_DAY ND,BEF_DAY_INFO BDI
+		WHERE ND.JYS=BDI.JYS
+		AND ND.CPBM=BDI.CPBM ORDER BY cpmc
+	</select>
+</mapper>

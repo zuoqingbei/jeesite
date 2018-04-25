@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.TradeAmountModelDao">
+	<resultMap id="trade"
+		type="com.qdch.portal.littleproject.entity.TradeAmountModel">
+		<result property="vday" column="vday" />
+		<result property="jys" column="jys" />
+		<result property="jysmc" column="jysmc" />
+		<result property="jysinfo" column="jysinfo" />
+		<result property="fvalue" column="fvalue" />
+		<result property="sum" column="sum" />
+		<result property="vmonth" column="vmonth" />
+	</resultMap>
+	<select id="tradeDay" resultMap="trade">
+		SELECT vday,'总量'
+		jys,'总量'
+		jysmc,'总量' jysinfo,sum(FVALUE) fvalue from
+		(SELECT
+		hdp."PERIOD_DATE"
+		vday,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue)
+		成交金额
+		FROM insight_transaction_amount IFA
+		where IFA.JYS =
+		HDTJ.jys and
+		to_date(vday,'yyyymmdd') = hdp."PERIOD_DATE"
+		),0) FVALUE
+		FROM
+		HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period hdp
+		where HDTJ.jys in ('0015') and
+		hdp."PERIOD_DATE" >= now() - interval'15 d'
+		AND hdp."PERIOD_DATE" &lt;
+		NOW()
+		GROUP BY
+		hdp."PERIOD_DATE",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo
+		UNION
+		ALL
+		SELECT
+		hdp."PERIOD_DATE" vday,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue/10000) 成交金额
+		FROM insight_finance_amount
+		IFA
+		where IFA.JYS
+		= HDTJ.jys and to_date(vday,'yyyymmdd') =
+		hdp."PERIOD_DATE"
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN
+		HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period hdp
+		where jysfl = '2' and hdp."PERIOD_DATE" >= now() - interval'15 d' AND
+		hdp."PERIOD_DATE" &lt; NOW()
+		GROUP BY
+		hdp."PERIOD_DATE",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo) ls
+		group by vday
+		union all
+		SELECT
+		hdp."PERIOD_DATE" vday,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue) 成交金额
+		FROM insight_transaction_amount
+		IFA
+		where IFA.JYS =
+		HDTJ.jys and to_date(vday,'yyyymmdd') =
+		hdp."PERIOD_DATE"
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN
+		HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period hdp
+		where HDTJ.jys in ('0015') and hdp."PERIOD_DATE" >= now() -
+		interval'15 d'
+		AND hdp."PERIOD_DATE" &lt; NOW()
+		GROUP BY
+		hdp."PERIOD_DATE",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo
+		UNION ALL
+		SELECT
+		hdp."PERIOD_DATE" vday,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue/10000) 成交金额
+		FROM insight_finance_amount
+		IFA
+		where IFA.JYS
+		= HDTJ.jys and to_date(vday,'yyyymmdd') =
+		hdp."PERIOD_DATE"
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN
+		HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period hdp
+		where jysfl = '2' and hdp."PERIOD_DATE" >= now() - interval'15 d' AND
+		hdp."PERIOD_DATE" &lt; NOW()
+		GROUP BY
+		hdp."PERIOD_DATE",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo order by vday
+	</select>
+	<select id="tradeWeek" resultMap="trade">
+		select vday,'总量' jys,'总量'
+		jysmc,'总量' jysinfo,sum(FVALUE) from
+		(SELECT
+		CASE WHEN extract(week from
+		CURRENT_DATE) > hdp."WEEK_IN_YEAR" THEN
+		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) -
+		hdp."WEEK_IN_YEAR")*7||' DAY' AS INTERVAL)
+		ELSE
+		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) - 0)*7||' DAY' AS
+		INTERVAL)
+		- CAST(extract(week from TO_DATE(EXTRACT(YEAR FROM
+		CURRENT_DATE) -
+		1||'1231','YYYYMMDD')) - hdp."WEEK_IN_YEAR"||' DAY' AS
+		INTERVAL)
+		END vday,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue) 成交金额
+		FROM insight_transaction_amount IFA
+		where IFA.JYS =
+		HDTJ.jys and hdp."WEEK_IN_YEAR" = extract(week from
+		to_date(ifa.vday,'yyyymmdd'))
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT
+		JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period
+		hdp
+		where HDTJ.jys IN ('0015') and hdp."PERIOD_DATE" >= CURRENT_DATE -
+		cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')) ||' days' as
+		interval) - interval'75 day'
+		AND hdp."PERIOD_DATE" &lt; CURRENT_DATE
+		GROUP BY
+		hdp."WEEK_IN_YEAR",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo
+		UNION ALL
+		SELECT
+		CASE WHEN extract(week from CURRENT_DATE) > hdp."WEEK_IN_YEAR"
+		THEN
+		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) -
+		hdp."WEEK_IN_YEAR")*7||' DAY' AS INTERVAL)
+		ELSE
+		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) - 0)*7||' DAY' AS
+		INTERVAL)
+		- CAST(extract(week from TO_DATE(EXTRACT(YEAR FROM
+		CURRENT_DATE) -
+		1||'1231','YYYYMMDD')) - hdp."WEEK_IN_YEAR"||' DAY' AS
+		INTERVAL)
+		END vday,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue/10000) 成交金额
+		FROM insight_finance_amount IFA
+		where IFA.JYS
+		= HDTJ.jys and hdp."WEEK_IN_YEAR" = extract(week from
+		to_date(ifa.vday,'yyyymmdd'))
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT
+		JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period
+		hdp
+		where jysfl = '2' and hdp."PERIOD_DATE" >= CURRENT_DATE -
+		cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')) ||' days' as
+		interval) - interval'75 day'
+		AND hdp."PERIOD_DATE" &lt; CURRENT_DATE
+		GROUP BY
+		hdp."WEEK_IN_YEAR",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo) ls
+		group by
+		vday
+		union ALL
+		SELECT
+		CASE WHEN extract(week from CURRENT_DATE) >
+		hdp."WEEK_IN_YEAR" THEN
+		CURRENT_DATE-CAST((extract(week from
+		CURRENT_DATE) -
+		hdp."WEEK_IN_YEAR")*7||' DAY' AS INTERVAL)
+		ELSE
+		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) - 0)*7||' DAY' AS
+		INTERVAL)
+		- CAST(extract(week from TO_DATE(EXTRACT(YEAR FROM
+		CURRENT_DATE) -
+		1||'1231','YYYYMMDD')) - hdp."WEEK_IN_YEAR"||' DAY' AS
+		INTERVAL)
+		END vday,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue) 成交金额
+		FROM insight_transaction_amount IFA
+		where IFA.JYS =
+		HDTJ.jys and hdp."WEEK_IN_YEAR" = extract(week from
+		to_date(ifa.vday,'yyyymmdd'))
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT
+		JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period
+		hdp
+		where HDTJ.jys IN ('0015') and hdp."PERIOD_DATE" >= CURRENT_DATE -
+		cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')) ||' days' as
+		interval) - interval'75 day'
+		AND hdp."PERIOD_DATE" &lt; CURRENT_DATE
+		GROUP BY
+		hdp."WEEK_IN_YEAR",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo
+		UNION ALL
+		SELECT
+		CASE WHEN extract(week from CURRENT_DATE) > hdp."WEEK_IN_YEAR"
+		THEN
+		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) -
+		hdp."WEEK_IN_YEAR")*7||' DAY' AS INTERVAL)
+		ELSE
+		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) - 0)*7||' DAY' AS
+		INTERVAL)
+		- CAST(extract(week from TO_DATE(EXTRACT(YEAR FROM
+		CURRENT_DATE) -
+		1||'1231','YYYYMMDD')) - hdp."WEEK_IN_YEAR"||' DAY' AS
+		INTERVAL)
+		END vday,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue/10000) 成交金额
+		FROM insight_finance_amount IFA
+		where IFA.JYS
+		= HDTJ.jys and hdp."WEEK_IN_YEAR" = extract(week from
+		to_date(ifa.vday,'yyyymmdd'))
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT
+		JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period
+		hdp
+		where jysfl = '2' and hdp."PERIOD_DATE" >= CURRENT_DATE -
+		cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')) ||' days' as
+		interval) - interval'75 day'
+		AND hdp."PERIOD_DATE" &lt; CURRENT_DATE
+		GROUP BY
+		hdp."WEEK_IN_YEAR",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo order by
+		vday,jys
+	</select>
+	<select id="tradeMonth" resultMap="trade">
+		select VMONTH,'总量' jys,'总量' jysmc,'总量' jysinfo,sum(fvalue) from
+		(SELECT
+		hdp."PERIOD_YEAR_MONTH" VMONTH,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue) 成交金额
+		FROM insight_transaction_amount IFA
+		where IFA.JYS =
+		HDTJ.jys and SUBSTR(VDAY,1,6) = hdp."PERIOD_YEAR_MONTH"
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period hdp
+		where HDTJ.jys in ('0015') and hdp."PERIOD_DATE" >=
+		TO_DATE(TO_NUMBER(TO_CHAR(now() - interval'1
+		Y','YYYYMM'),'999999')+1||'01','YYYYMMDD')
+		AND hdp."PERIOD_DATE" &lt; NOW()
+		GROUP BY
+		hdp."PERIOD_YEAR_MONTH",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo
+		UNION ALL
+		SELECT
+		hdp."PERIOD_YEAR_MONTH" VMONTH,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue)/10000 成交金额
+		FROM insight_finance_amount IFA
+		where IFA.JYS
+		= HDTJ.jys and SUBSTR(VDAY,1,6) = hdp."PERIOD_YEAR_MONTH"
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period hdp
+		where jysFL = '2' and hdp."PERIOD_DATE" >= TO_DATE(TO_NUMBER(TO_CHAR(now()
+		- interval'1 Y','YYYYMM'),'999999')+1||'01','YYYYMMDD')
+		AND hdp."PERIOD_DATE" &lt; NOW()
+		GROUP BY
+		hdp."PERIOD_YEAR_MONTH",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo) ls
+		group by vmonth
+		union ALL
+		SELECT
+		hdp."PERIOD_YEAR_MONTH" VMONTH,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue) 成交金额
+		FROM insight_transaction_amount IFA
+		where IFA.JYS =
+		HDTJ.jys and SUBSTR(VDAY,1,6) = hdp."PERIOD_YEAR_MONTH"
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period hdp
+		where HDTJ.jys in ('0015') and hdp."PERIOD_DATE" >=
+		TO_DATE(TO_NUMBER(TO_CHAR(now() - interval'1
+		Y','YYYYMM'),'999999')+1||'01','YYYYMMDD')
+		AND hdp."PERIOD_DATE" &lt; NOW()
+		GROUP BY
+		hdp."PERIOD_YEAR_MONTH",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo
+		UNION ALL
+		SELECT
+		hdp."PERIOD_YEAR_MONTH" VMONTH,
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo,
+		coalesce((SELECT
+		sum(IFA.fvalue)/10000 成交金额
+		FROM insight_finance_amount IFA
+		where IFA.JYS
+		= HDTJ.jys and SUBSTR(VDAY,1,6) = hdp."PERIOD_YEAR_MONTH"
+		),0) FVALUE
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		CROSS JOIN hub_d_period hdp
+		where jysFL = '2' and hdp."PERIOD_DATE" >= TO_DATE(TO_NUMBER(TO_CHAR(now()
+		- interval'1 Y','YYYYMM'),'999999')+1||'01','YYYYMMDD')
+		AND hdp."PERIOD_DATE" &lt; NOW()
+		GROUP BY
+		hdp."PERIOD_YEAR_MONTH",
+		HDTJ.jys,
+		HDTJ.jysmc,
+		HRJ.jysinfo ORDER BY
+		vmonth,jys
+	</select>
+</mapper>

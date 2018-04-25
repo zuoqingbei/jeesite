@@ -9,16 +9,25 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
+import com.qdch.portal.littleproject.dao.BusinessInfoModelDao;
+import com.qdch.portal.littleproject.dao.EvaluateScoreModelDao;
+import com.qdch.portal.littleproject.dao.MarketDynamicModelDao;
+import com.qdch.portal.littleproject.entity.BusinessInfoModel;
+import com.qdch.portal.littleproject.entity.EvaluateScoreModel;
 import com.qdch.portal.littleproject.entity.FenLei;
 import com.qdch.portal.littleproject.entity.KeHuFenLei;
 import com.qdch.portal.littleproject.entity.LittleProjectDto;
 import com.qdch.portal.littleproject.entity.LittleProjectEntity;
+import com.qdch.portal.littleproject.entity.MarketDynamic;
+import com.qdch.portal.littleproject.entity.MarketDynamicModel;
 import com.qdch.portal.littleproject.entity.Portrait;
 import com.qdch.portal.littleproject.entity.Risks;
 import com.qdch.portal.littleproject.entity.Single;
@@ -379,17 +388,9 @@ public class DangerController extends BaseController {
 			Portrait dto = new Portrait();
 			Object type=request.getParameter("type");
 			Object[] t=new Object[]{};
-			List<Object> lists=null;
-			//List<Object> bcLists=null;
-			
-			//List<Object> enterpriseLists=null;
+			List<Object> lists=null;	
 			LittleProjectEntity re=new LittleProjectEntity();
-			//Single s=new Single();
-			
 			List<String> aggregate=new ArrayList<String>();
-			//List<String> aggregate2=new ArrayList<String>();
-			
-			
 			if("1".equals(type)||"2".equals(type)){
 				if("1".equals(type)){
 					t=new Object[]{"青金中心"};
@@ -400,22 +401,12 @@ public class DangerController extends BaseController {
 				}
 				 lists = PostgreUtils.getInstance().excuteQuery(
 						sql.quanyi(), t);
-				 /*bcLists=PostgreUtils.getInstance().excuteQuery(
-							sql.businesss(), t);*/
-				 //shareHolderLists=PostgreUtils.getInstance().excuteQuery(
-							//sql.shareHolder(), t);
-				 /*enterpriseLists=PostgreUtils.getInstance().excuteQuery(
-							sql.enterprise(), t);*/
 			}else if("3".equals(type)){
 				t=new Object[]{"青岛文化产权"};
 				re.setName("青岛文化产权");
 				 lists = PostgreUtils.getInstance().excuteQuery(
 						sql.dazong(), t);
-				 /*bcLists=PostgreUtils.getInstance().excuteQuery(
-							sql.businesss(), t);*/
 				
-				/* enterpriseLists=PostgreUtils.getInstance().excuteQuery(
-							sql.enterprise(), t);*/
 			}
 			//风险雷达图
 			if(lists!=null&&lists.size()>0){
@@ -459,6 +450,7 @@ public class DangerController extends BaseController {
 			e.getStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
+
 	}
 	/**
 	 * 画像-股东信息
@@ -492,7 +484,7 @@ public class DangerController extends BaseController {
 				 /*enterpriseLists=PostgreUtils.getInstance().excuteQuery(
 							sql.enterprise(), t);*/
 			}else if("3".equals(type)){
-				t=new Object[]{"青岛文化产权"};
+				t=new Object[]{"文化产权"};
 				
 				/* bcLists=PostgreUtils.getInstance().excuteQuery(
 							sql.businesss(), t);*/
@@ -523,8 +515,196 @@ public class DangerController extends BaseController {
 				return this.resultSuccessData(request, response, "", dto);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			e.printStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+
+	/**
+	 * 画像-市场评价分数
+	 *
+	 * @time 2018年4月24日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@Autowired
+	public EvaluateScoreModelDao evaluateScoreDao;
+	@RequestMapping(value = { "${portalPath}/littleproject/evaluateScore" })
+	@ResponseBody
+	public String evaluateScore(HttpServletRequest request,HttpServletResponse response){
+		try {
+			
+			DynamicDataSource.setInsightDataSource();
+			String type=request.getParameter("type");
+			String t="";
+			FenLei dto=new FenLei();
+			List<KeHuFenLei> aggregate=new ArrayList<KeHuFenLei>();
+			List<EvaluateScoreModel> lists=null;
+			
+			if("1".equals(type)||"2".equals(type)){
+			
+				if("1".equals(type)){
+					t="青金中心";
+					dto.setName(t);
+					lists= evaluateScoreDao.evaluateScore();
+					
+				}else{
+					t="联合信产";
+					dto.setName(t);
+					lists= evaluateScoreDao.evaluateScore2();
+					
+				}
+			 
+			}else if("3".equals(type)){
+				t="文化产权";
+				dto.setName(t);
+				lists= evaluateScoreDao.evaluateScore3();
+				
+			}
+			double s=0;
+			if(lists!=null&&lists.size()>0){
+				for(EvaluateScoreModel o:lists){
+					s=s+o.getDf();
+					KeHuFenLei k=new KeHuFenLei();
+					k.setGrs(o.getPjfj());
+					k.setJgs(o.getDf()+"");
+					aggregate.add(k);
+				}
+			}
+				dto.setSum(s);
+				dto.setAbility(aggregate);
+			DynamicDataSource.removeDataSourceKey();
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 画像-市场动态
+	 *
+	 * @time 2018年4月25日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@Autowired
+	public MarketDynamicModelDao marketDynamicModelDao;
+	@RequestMapping(value = { "${portalPath}/littleproject/marketDynamic" })
+	@ResponseBody
+	public String marketDynamic(HttpServletRequest request,HttpServletResponse response){
+		try {
+			DynamicDataSource.setInsightDataSource();
+			String page=request.getParameter("type");//前台传入第一页以1开始
+			List<MarketDynamicModel> lists=marketDynamicModelDao.getMarketDynamicModelDao((Integer.parseInt(page)-1)*4);
+			List<MarketDynamic> marketList=new ArrayList<MarketDynamic>();
+			if(lists!=null&&lists.size()>0){
+				for(MarketDynamicModel m:lists){
+					MarketDynamic mc=new MarketDynamic();
+					mc.setTitle(m.getTitle());
+					mc.setData_source(m.getData_source());
+					mc.setPublish_date(m.getPublish_date());
+					marketList.add(mc);
+				}
+			}
+			DynamicDataSource.removeDataSourceKey();
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", marketList);
+			}
+		} catch (Exception e) {
+			
+				e.printStackTrace();
+				return this.resultFaliureData(request, response, "", null);
+			
+		}
+	}
+	/**
+	 * 画像-工商信息
+	 *
+	 * @time 2018年4月25日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@Autowired
+	public BusinessInfoModelDao businessInfoModelDao;
+	@RequestMapping(value = { "${portalPath}/littleproject/businessInfo" })
+	@ResponseBody
+	public String businessInfo(HttpServletRequest request,HttpServletResponse response){
+		try {
+			DynamicDataSource.setInsightDataSource();
+			String type="";
+			type=request.getParameter("type");
+			String t="";
+			Portrait dto = new Portrait();
+			Single s=new Single();
+			List<String> aggregate=new ArrayList<String>();
+			List<BusinessInfoModel> lists=null;
+			
+			List<String> aggregate2=new ArrayList<String>();
+			if("1".equals(type)||"2".equals(type)){
+			
+				if("1".equals(type)){
+					t="青金中心";
+					dto.setName(t);
+					lists= businessInfoModelDao.getBusinessInfoModelDao();
+					
+				}else{
+					t="联合信产";
+					dto.setName(t);
+					lists= businessInfoModelDao.getBusinessInfoModelDao2();
+					
+				}
+			 
+			}else if("3".equals(type)){
+				t="文化产权";
+				dto.setName(t);
+				lists= businessInfoModelDao.getBusinessInfoModelDao3();
+				
+			}
+			if(lists!=null&&lists.size()>0){
+				for(BusinessInfoModel o:lists){
+					
+					aggregate2.add(o.getLegal_person());//法定代表人
+					aggregate2.add(o.getCreate_date());//建立日期
+					aggregate2.add(o.getRegister_money()+"");//注册资本
+					aggregate2.add(o.getRegister_code());//工商注册号
+					aggregate2.add(o.getOrganizition_code());//组织机构代码
+					aggregate2.add(o.getCredit_code());//统一信用代码
+					aggregate2.add(o.getTaxpayer_num());//纳税人识别号
+					aggregate2.add(o.getEnglish_name());//英文名
+					aggregate2.add(o.getBusiness_status());//经营状态
+					aggregate2.add(o.getCompany_type());//企业类型
+					aggregate2.add(o.getIndustry());//行业
+					aggregate2.add(o.getBusiness_limit());//营业期限
+					aggregate2.add(o.getPublish_date());//核准日期
+					aggregate2.add(o.getRegister_address());//企业地址
+					aggregate2.add(o.getBusiness_scope());//经营范围
+					
+				}
+				s.setS(aggregate2);
+			}	
+				dto.setInfo(s);
+			DynamicDataSource.removeDataSourceKey();
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
 }
+

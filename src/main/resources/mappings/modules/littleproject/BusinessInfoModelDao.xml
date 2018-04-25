@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.BusinessInfoModelDao">
+	<resultMap id="dtoResult"
+		type="com.qdch.portal.littleproject.entity.BusinessInfoModel">
+		<result property="legal_person" column="legal_person" />
+		<result property="create_date" column="create_date" />
+		<result property="register_money" column="register_money" />
+		<result property="register_code" column="register_code" />
+		<result property="organizition_code" column="organizition_code" />
+		<result property="credit_code" column="credit_code" />
+		<result property="taxpayer_num" column="taxpayer_num" />
+		<result property="english_name" column="english_name" />
+		<result property="company_type" column="company_type" />
+		<result property="industry" column="industry" />
+		<result property="business_limit" column="business_limit" />
+		<result property="publish_date" column="publish_date" />
+		<result property="register_address" column="register_address" />
+		<result property="business_scope" column="business_scope" />
+
+	</resultMap>
+	<select id="getBusinessInfoModelDao" resultMap="dtoResult">
+		SELECT
+		LEGAL_PERSON,CREATE_DATE,REGISTER_MONEY,REGISTER_CODE,ORGANIZATION_CODE,CREDIT_CODE,b.TAXPAYER_NUM,ENGLISH_NAME,BUSINESS_STATUS,
+		COMPANY_TYPE,INDUSTRY,BUSINESS_LIMIT,PUBLISH_DATE,REGISTER_ADDRESS,BUSINESS_SCOPE
+		FROM
+		hub_commerce_company_info A
+		LEFT JOIN hub_commerce_co_tax b ON A .company_name = b.company_name
+		WHERE
+		A .company_name IN (
+		select company_name from hub_commerce_ref_jys n
+		where jys='0014'
+		)
+	</select>
+	<select id="getBusinessInfoModelDao2" resultMap="dtoResult">
+		SELECT
+		LEGAL_PERSON,CREATE_DATE,REGISTER_MONEY,REGISTER_CODE,ORGANIZATION_CODE,CREDIT_CODE,b.TAXPAYER_NUM,ENGLISH_NAME,BUSINESS_STATUS,
+		COMPANY_TYPE,INDUSTRY,BUSINESS_LIMIT,PUBLISH_DATE,REGISTER_ADDRESS,BUSINESS_SCOPE
+		FROM
+		hub_commerce_company_info A
+		LEFT JOIN hub_commerce_co_tax b ON A .company_name = b.company_name
+		WHERE
+		A .company_name IN (
+		select company_name from hub_commerce_ref_jys n
+		where jys='0012'
+		)
+	</select>
+	<select id="getBusinessInfoModelDao3" resultMap="dtoResult">
+		SELECT
+		LEGAL_PERSON,CREATE_DATE,REGISTER_MONEY,REGISTER_CODE,ORGANIZATION_CODE,CREDIT_CODE,b.TAXPAYER_NUM,ENGLISH_NAME,BUSINESS_STATUS,
+		COMPANY_TYPE,INDUSTRY,BUSINESS_LIMIT,PUBLISH_DATE,REGISTER_ADDRESS,BUSINESS_SCOPE
+		FROM
+		hub_commerce_company_info A
+		LEFT JOIN hub_commerce_co_tax b ON A .company_name = b.company_name
+		WHERE
+		A .company_name IN (
+		select company_name from hub_commerce_ref_jys n
+		where jys='0015'
+		)
+	</select>
+</mapper>

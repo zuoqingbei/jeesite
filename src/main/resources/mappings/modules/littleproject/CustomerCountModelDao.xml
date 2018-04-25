@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.CustomerCountModelDao">
+	<resultMap id="getCustomerCountModelDao"
+		type="com.qdch.portal.littleproject.entity.CustomerCountModel">
+		<result property="jys" column="jys" />
+		<result property="jysmc" column="jysmc" />
+		<result property="jysinfo" column="jysinfo" />
+		<result property="rzrkhs" column="rzrkhs" />
+		<result property="tzrkhs" column="tzrkhs" />
+		<result property="count" column="count" />
+
+	</resultMap>
+	<select id="getCustomerCountModelDao" resultMap="getCustomerCountModelDao">
+		SELECT
+		HDTJ.JYS,
+		HDTJ.JYSMC,
+		HRJ.JYSINFO,
+		(SELECT COUNT(DISTINCT(HTYC.KHH)) FROM HUB_TQS_YQ_CPHY_gf HTYC WHERE HTYC.JYS
+		= HDTJ.JYS) RZRKHS,
+		(SELECT COUNT(DISTINCT(LDTYR.CID)) FROM LAKE_DD_TQS_YQ_RGHY LDTYR WHERE
+		LDTYR.JYS = HDTJ.JYS) TZRKHS,
+		COUNT(HTK.KHH) FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN HUB_REF_JYSINFO HRJ ON HDTJ.JYS = HRJ.JYS
+		LEFT JOIN HUB_TQS_KHXX HTK ON HTK.JYS = HDTJ.JYS
+		WHERE HDTJ.JYSFL = '2'
+		GROUP BY HDTJ.JYS,HDTJ.JYSMC,HRJ.JYSINFO ORDER BY jys
+	</select>
+</mapper>

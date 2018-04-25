@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.InterestRateModelDao">
+	<resultMap id="dtoResult"
+		type="com.qdch.portal.littleproject.entity.InterestRateModel">
+		<result property="cplb" column="cplb" />
+		<result property="cpsl" column="cpsl" />
+
+	</resultMap>
+	<select id="getInterestRateModelDao" resultMap="dtoResult">
+		SELECT HQC1.CPLB,
+		COALESCE(ROUND(AVG(IYR.FVALUE),4),0) CPSL
+		FROM HUB_QY_CPFL HQC1 LEFT JOIN HUB_QY_CPLB HQC2
+		ON HQC1.CPLB = HQC2.CPLB
+		LEFT JOIN INSIGHT_YIELD_RATE IYR
+		ON HQC2.CPDM = IYR.CPBM GROUP BY HQC1.CPLB
+		ORDER BY HQC1.CPLB
+	</select>
+</mapper>

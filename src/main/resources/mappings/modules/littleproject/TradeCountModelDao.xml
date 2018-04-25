@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.TradeCountModelDao">
+	<resultMap id="getTradeCountModel"
+		type="com.qdch.portal.littleproject.entity.TradeCountModel">
+		<result property="jys" column="jys" />
+		<result property="jysmc" column="jysmc" />
+		<result property="jysinfo" column="jysinfo" />
+		<result property="bz" column="bz" />
+		<result property="by" column="by" />
+		<result property="bn" column="bn" />
+		<result property="lj" column="lj" />
+
+	</resultMap>
+	<select id="getTradeCountModel" resultMap="getTradeCountModel">
+		select
+		ita.jys,
+		hdtj.jysmc,
+		hrj.jysinfo,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >= CURRENT_DATE -
+		cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')-1) ||' days' as
+		interval)
+		then fvalue/10000 else 0 end),2) bz,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >=
+		to_date(to_char(current_date,'yyyymm')||'01','yyyymmdd')
+		then fvalue/10000 else 0 end),2) by,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >=
+		to_date(to_char(current_date,'yyyy')||'0101','yyyymmdd')
+		then fvalue/10000 else 0 end),2) bn,
+		ROUND(sum(fvalue/10000),2) lj
+		from insight_transaction_amount ita
+		left join hub_dd_tqs_jys hdtj
+		on ita.jys = hdtj.jys
+		left join hub_ref_jysinfo hrj
+		on ita.jys = hrj.jys
+		left join hub_tqs_khxx htk
+		on ita.cid = htk.cid
+		where ita.jys = '0015'
+		group by ita.jys,hdtj.jysmc,hrj.jysinfo
+		union all
+		select
+		hdtj.jys,
+		hdtj.jysmc,
+		hrj.jysinfo,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >= CURRENT_DATE -
+		cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')-1) ||' days' as
+		interval)
+		then fvalue/10000 else 0 end)) bz,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >=
+		to_date(to_char(current_date,'yyyymm')||'01','yyyymmdd')
+		then fvalue/10000 else 0 end)) by,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >=
+		to_date(to_char(current_date,'yyyy')||'0101','yyyymmdd')
+		then fvalue/10000 else 0 end)) bn,
+		ROUND(sum(COALESCE(fvalue,0)/10000)) lj
+		from hub_dd_tqs_jys hdtj
+		left join hub_ref_jysinfo hrj
+		on hdtj.jys = hrj.jys
+		LEFT JOIN insight_finance_amount ita
+		ON ita.jys = hdtj.jys
+		left join hub_tqs_khxx htk
+		on ita.cid = htk.cid
+		where hdtj.jysfl = '2'
+		group by hdtj.jys,hdtj.jysmc,hrj.jysinfo
+		UNION ALL
+		SELECT '总计' JYS,'总计' JYSMC,'总计'
+		JYSINFO,ROUND(sum(BZ)),ROUND(sum(BY)),ROUND(sum(BN)),ROUND(sum(LJ))
+		FROM
+		(select
+		ita.jys,
+		hdtj.jysmc,
+		hrj.jysinfo,
+		sum(case when to_date(ita.vday,'yyyymmdd') >= CURRENT_DATE -
+		cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')-1) ||' days' as
+		interval)
+		then fvalue/10000 else 0 end) bz,
+		sum(case when to_date(ita.vday,'yyyymmdd') >=
+		to_date(to_char(current_date,'yyyymm')||'01','yyyymmdd')
+		then fvalue/10000 else 0 end) by,
+		sum(case when to_date(ita.vday,'yyyymmdd') >=
+		to_date(to_char(current_date,'yyyy')||'0101','yyyymmdd')
+		then fvalue/10000 else 0 end) bn,
+		sum(fvalue/10000) lj
+		from insight_transaction_amount ita
+		left join hub_dd_tqs_jys hdtj
+		on ita.jys = hdtj.jys
+		left join hub_ref_jysinfo hrj
+		on ita.jys = hrj.jys
+		left join hub_tqs_khxx htk
+		on ita.cid = htk.cid
+		where ita.jys = '0015'
+		group by ita.jys,hdtj.jysmc,hrj.jysinfo
+		union all
+		select
+		hdtj.jys,
+		hdtj.jysmc,
+		hrj.jysinfo,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >= CURRENT_DATE -
+		cast((TO_NUMBER(to_char(CURRENT_DATE,'D'),'99')-1) ||' days' as
+		interval)
+		then fvalue/10000 else 0 end),2) bz,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >=
+		to_date(to_char(current_date,'yyyymm')||'01','yyyymmdd')
+		then fvalue/10000 else 0 end),2) by,
+		ROUND(sum(case when to_date(ita.vday,'yyyymmdd') >=
+		to_date(to_char(current_date,'yyyy')||'0101','yyyymmdd')
+		then fvalue/10000 else 0 end),2) bn,
+		ROUND(sum(fvalue/10000),2) lj
+		from hub_dd_tqs_jys hdtj
+		left join hub_ref_jysinfo hrj on hdtj.jys = hrj.jys
+		LEFT JOIN insight_finance_amount ita
+		ON ita.jys = hdtj.jys left join hub_tqs_khxx htk
+		on ita.cid = htk.cid where hdtj.jysfl = '2'
+		group by hdtj.jys,hdtj.jysmc,hrj.jysinfo) LS order by jys
+
+	</select>
+</mapper>
