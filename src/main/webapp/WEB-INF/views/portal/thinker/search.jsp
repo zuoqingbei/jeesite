@@ -76,9 +76,9 @@
             <!--头部导航-->
             <div class="serch_content_header">
                 <!-- <span>当前位置：</span><span class="blue">搜索条件</span> -->
-                <span class="label label0"><span class="txt"></span><span class="close_label">×</span></span>
-                 <span class="label label1"><span class="txt1"></span><span class="close_label">×</span></span>
-                 <span class="label label2"><span class="txt2"></span><span class="close_label">×</span></span>
+                <span class="label label0"><span class="txt"></span><span class="close_label" onclick="closeLable(1)">×</span></span>
+                 <span class="label label1"><span class="txt1"></span><span class="close_label" onclick="closeLable(2)">×</span></span>
+                 <span class="label label2"><span class="txt2"></span><span class="close_label" onclick="closeLable(3)">×</span></span>
             </div>
             <!--内容部分-->
             <div class="search_content_box clearfix">
@@ -98,11 +98,11 @@
                     	<c:if test="${fn:length(first.children) gt 0}">
 		                    <ul class="menus_two">
 			                    	<c:forEach items="${first.children}" var="second">
-				                           <li ><span onclick="changeCategory('','${second.name}','')" class="fl">${second.name }</span>
+				                           <li ><span onclick="changeCategory('${first.name}','${second.name}','')" class="fl">${second.name }</span>
 				                           <%-- <c:if test="${fn:length(second.children) gt 0}"> --%>
 					                            <ul class="menus_three fl">
 					                            	<c:forEach items="${second.children}" var="third">
-						                                <li onclick="changeCategory('','','${third.name}')">${third.name }</li>
+						                                <li onclick="changeCategory('${first.name}','${second.name}','${third.name}')">${third.name }</li>
 					                            	</c:forEach>
 					                            </ul>
 		                    				<%-- </c:if> --%>
@@ -211,6 +211,37 @@
 			$("#page").initPage(data.count,data.pageNo,changeData);	
 		});
 	};
+	function closeLable(index){
+			var c1 = $('.txt').text();
+			var c2 = $('.txt1').text();
+			var c3 = $('.txt2').text();
+			if(index==1){
+				console.log(c1);
+				$('.txt').empty();
+				c1='';
+				//c1='';
+				//c2='';
+			}else if(index==2){
+				$('.txt1').empty();
+				c2='';
+				//c1='';
+				//c2='';
+			}else{
+				//c1='';
+				//c3='';
+				c3='';
+				$('.txt2').empty();
+				console.log($('.txt2').text());
+			}
+			$('.menus_two_box').css('display','none');
+			$.post("${portalPath}/view/viewThinker/list",{"category1":c1,"category2":c2,"category3":c3,
+			"tags":tags,"pageNo":pageNo,"pageSize":pageSize,"name":keyword},function(data){
+				console.log(data);
+				joinHtml(data.list);
+				$(".search_result_number").html(data.count);
+				$("#page").initPage(data.count,data.pageNo,changeData);	
+			});
+	}
 	//搜索
 	function search(){
 		pageNo=1;
