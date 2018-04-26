@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.TradeRtioModelDao">
+	<resultMap id="dtoResult"
+		type="com.qdch.portal.littleproject.entity.TradeRtioModel">
+		<result property="cpdlbm" column="cpdlbm" />
+		<result property="cpdlmc" column="cpdlmc" />
+		<result property="cpdlinfo" column="cpdlinfo" />
+		<result property="cpdm" column="cpdm" />
+		<result property="cpmc" column="cpmc" />
+		<result property="cpje" column="cpje" />
+		<result property="sum" column="sum" />
+	</resultMap>
+	<select id="getTradeRtioModelDao" resultMap="dtoResult">
+		WITH CP_JE AS
+		(SELECT T.JYS,T.CPDM,SUM(T.CJJE) AS CPJE
+		FROM HUB_TQS_IMP_CJLS_LS T
+		WHERE T.YWRQ = TO_CHAR(NOW()- INTERVAL'1 DAY','YYYYMMDD')
+		GROUP BY T.JYS,T.CPDM)
+		SELECT LZ.WAREKINDID AS CPDLBM,LZT.WAREKINDALIAS AS CPDLMC,
+		LZT.MEMO AS CPDLINFO,SUM(T.CPJE)
+		FROM CP_JE T
+		LEFT JOIN (SELECT * FROM INSIGHT_SETTLEMENT_PRICE WHERE
+		VDAY=TO_CHAR(NOW()- INTERVAL'1 DAY','YYYYMMDD'))ISP
+		ON ISP.JYS=T.JYS
+		AND ISP.CPBM=T.CPDM
+		LEFT JOIN LAKE_ZD_TB_REG_WARE LZ
+		ON T.CPDM=LZ.WAREID
+		AND ISP.CPMC=LZ.WARENAME
+		LEFT JOIN LAKE_ZD_TB_REG_WAREKIND LZT
+		ON LZT.WAREKINDID=LZ.WAREKINDID
+		GROUP BY LZ.WAREKINDID,LZT.WAREKINDALIAS,LZT.MEMO ORDER BY cpdlbm,sum 
+	</select>
+	<select id="getTradeRtioModelDao2" resultMap="dtoResult">
+
+		WITH CP_JE AS
+		(SELECT T.JYS,T.CPDM,SUM(T.CJJE) AS CPJE
+		FROM HUB_TQS_IMP_CJLS_LS T
+		WHERE T.YWRQ = TO_CHAR(NOW()- INTERVAL'1 DAY','YYYYMMDD')
+		GROUP BY
+		T.JYS,T.CPDM)
+		SELECT LZ.WAREKINDID AS CPDLBM,LZT.WAREKINDALIAS AS
+		CPDLMC,
+		LZT.MEMO AS CPDLINFO,ISP.CPMC AS CPMC,T.CPDM,T.CPJE
+		FROM CP_JE T
+		LEFT JOIN (SELECT * FROM INSIGHT_SETTLEMENT_PRICE WHERE
+		VDAY=TO_CHAR(NOW()- INTERVAL'1 DAY','YYYYMMDD'))ISP
+		ON ISP.JYS=T.JYS
+		AND ISP.CPBM=T.CPDM
+		LEFT JOIN LAKE_ZD_TB_REG_WARE LZ
+		ON T.CPDM=LZ.WAREID
+		AND ISP.CPMC=LZ.WARENAME
+		LEFT JOIN LAKE_ZD_TB_REG_WAREKIND LZT
+		ON
+		LZT.WAREKINDID=LZ.WAREKINDID where LZT.MEMO=#{cpdlinfo} ORDER BY
+		T.CPJE
+	</select>
+</mapper>
