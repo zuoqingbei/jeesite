@@ -55,7 +55,7 @@ public class DangerController extends BaseController {
 	 * @author gaozhao
 	 * @time 2018年4月18日
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/weiranqushi" })
+	/*@RequestMapping(value = { "${portalPath}/littleproject/weiranqushi2" })
 	@ResponseBody
 	public String weiranqushi(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -141,7 +141,7 @@ public class DangerController extends BaseController {
 			e.getStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
-	}
+	}*/
 
 	/**
 	 * 风险-未然指数-风险统计
@@ -152,7 +152,7 @@ public class DangerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/fengxiantongji" })
+	/*@RequestMapping(value = { "${portalPath}/littleproject/fengxiantongji2" })
 	@ResponseBody
 	public String fengxiantongji(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -210,7 +210,7 @@ public class DangerController extends BaseController {
 			e.getStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
-	}
+	}*/
 	/**
 	 * 风险-金融资产类风险监测
 	 *
@@ -220,7 +220,7 @@ public class DangerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/riskMonitoring" })
+	/*@RequestMapping(value = { "${portalPath}/littleproject/riskMonitoring2" })
 	@ResponseBody
 	public String riskMonitoring(HttpServletRequest request,HttpServletResponse response){
 		try {
@@ -299,7 +299,7 @@ public class DangerController extends BaseController {
 			e.getStackTrace();
 			return this.resultFaliureData(request, response, "", null);
 		}
-	}
+	}*/
 	/**
 	 * 风险-金融资产类风险监测-风险事件
 	 *
@@ -309,7 +309,7 @@ public class DangerController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/jysRisk" })
+	/*@RequestMapping(value = { "${portalPath}/littleproject/jysRisk2" })
 	@ResponseBody
 	public String jysRisk(HttpServletRequest request,HttpServletResponse response){
 		try {
@@ -375,7 +375,7 @@ public class DangerController extends BaseController {
 			return this.resultFaliureData(request, response, "", null);
 		}
 		
-	}
+	}*/
 	/**
 	 * 画像-风险雷达图
 	 *

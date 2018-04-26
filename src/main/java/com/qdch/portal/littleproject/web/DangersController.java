@@ -1,6 +1,7 @@
 package com.qdch.portal.littleproject.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,7 +33,7 @@ import com.qdch.portal.littleproject.service.DangerService;
  * @time 2018年4月24日
  */
 @Controller
-public class WangswController extends BaseController {
+public class DangersController extends BaseController {
 
 	@Autowired
 	public DangerService dangerService;
@@ -43,7 +44,7 @@ public class WangswController extends BaseController {
 	 * @author wangsw
 	 * @time 2018年4月24日
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/wangsw1" })
+	@RequestMapping(value = { "${portalPath}/littleproject/weiranqushi" })
 	@ResponseBody
 	public String weiranqushi(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -72,6 +73,10 @@ public class WangswController extends BaseController {
 			String tradeName = "";
 			String exValue = "";
 			List<String> exVList = null;
+			String totalTradeV = "总量交易额趋势";
+			Map<String,Object> totalMap = new HashMap<String, Object>();
+			totalMap.put("jysinfo", totalTradeV);
+			tradeLists.add(totalMap);
 			for (Map<String, Object> trade : tradeLists) {
 				tradeName = trade.get("jysinfo") == null ? "" : trade.get(
 						"jysinfo").toString();
@@ -119,7 +124,7 @@ public class WangswController extends BaseController {
 				return this.resultSuccessData(request, response, "", dto);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			logger.warn("风险——未然指数-未然指数趋势",e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -133,7 +138,7 @@ public class WangswController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/wangsw2" })
+	@RequestMapping(value = { "${portalPath}/littleproject/fengxiantongji" })
 	@ResponseBody
 	public String fengxiantongji(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -153,6 +158,9 @@ public class WangswController extends BaseController {
 					aa.setName(o.get("jysinfo") + "");
 					res.add(aa);
 				}
+				aa = new LittleProjectEntity();
+				aa.setName("总量");
+				res.add(aa);
 			}
 			if (res != null && res.size() > 0) {
 				List<String> shiChan = null;
@@ -182,7 +190,7 @@ public class WangswController extends BaseController {
 				return this.resultSuccessData(request, response, "", dto);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			logger.warn("风险-未然指数-风险统计",e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -196,7 +204,7 @@ public class WangswController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/wangsw3" })
+	@RequestMapping(value = { "${portalPath}/littleproject/riskMonitoring" })
 	@ResponseBody
 	public String riskMonitoring(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -246,7 +254,7 @@ public class WangswController extends BaseController {
 				return this.resultFaliureData(request, response, "", null);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			logger.warn("风险-金融资产类&商品类风险监测",e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -260,7 +268,7 @@ public class WangswController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/wangsw4" })
+	@RequestMapping(value = { "${portalPath}/littleproject/jysRisk" })
 	@ResponseBody
 	public String jysRisk(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -294,7 +302,7 @@ public class WangswController extends BaseController {
 			dto.setC(aggregate);
 			return this.resultSuccessData(request, response, "", dto);
 		} catch (Exception e) {
-			e.getStackTrace();
+			logger.warn(" 风险-金融资产类风险监测-风险事件列表",e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 
