@@ -124,13 +124,13 @@
         });
         $('#keyword').bind('keyup', function (event) {
             if (event.keyCode == "13") {
-            	if($("#keyword").val() == ""){
+/*             	if($("#keyword").val() == ""){
 					alert("搜索的内容不能为空");
 					return;
 				}else{
 					$('#searchBtn').click();
 				}
-                
+ */                $('#searchBtn').click();
             }
         });
 
@@ -138,11 +138,11 @@
 
     function search() {
     	
-    	if($("#keyword").val() == ""){
+/*     	if($("#keyword").val() == ""){
 			alert("搜索的内容不能为空");
 			return false;
 		}
-    	
+ */    	
         $("#searchForm").submit();
         //var content = $('.search input').val();
         //alert(m);

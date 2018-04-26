@@ -171,10 +171,10 @@
         });
 		$('#keyword').bind('keyup', function(event) {
 					if (event.keyCode == "13") {
-						if($("#keyword").val() == ""){
+						/* if($("#keyword").val() == ""){
 							alert("搜索的内容不能为空");
 							return;
-						}
+						} */
 						$('#searchBtn').click();
 						
 					}
@@ -330,7 +330,9 @@
 		search();
 	}
 	// $(".menus_three ul").find("li:gt(6)").hide();
-	$(".menus_three").find("li:gt(6)").hide();
+	$(".menus_three").find("li:gt(3)").hide();
+	//$(".menus_box").children("li")
+	$(".menus_two").children().gt(3).hide();
 </script>
 </html>
 

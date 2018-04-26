@@ -95,9 +95,9 @@ var Search = {
 	},
 	inputIsNull:function(){
 		$("#searchBtn").click(function(){
-			if($("#keyword").val() == ""){
+			/*if($("#keyword").val() == ""){
 				alert("搜索的内容不能为空");
-			}
+			}*/
 		})
 		// $("#keyword").keydown(function(){
 		// 	alert("搜索的内容不能为空");
