@@ -52,6 +52,13 @@ public class ThinkerApiController extends BaseController {
 		model.addAttribute("page", page);
 		return "thinker/api/thinkerApiList";
 	}
+	
+	@RequestMapping(value = {"${adminPath}/ets/list"})
+	public String ets(ThinkerApi thinkerApi, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<ThinkerApi> page = thinkerApiService.findPage(new Page<ThinkerApi>(request, response), thinkerApi); 
+		model.addAttribute("page", page);
+		return "thinker/ets/ets";
+	}
 
 	@RequiresPermissions("api:thinkerApi:view")
 	@RequestMapping(value = "${adminPath}/api/thinkerApi/form")
