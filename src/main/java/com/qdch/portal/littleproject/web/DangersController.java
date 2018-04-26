@@ -1,6 +1,7 @@
 package com.qdch.portal.littleproject.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -72,6 +73,10 @@ public class DangersController extends BaseController {
 			String tradeName = "";
 			String exValue = "";
 			List<String> exVList = null;
+			String totalTradeV = "总量交易额趋势";
+			Map<String,Object> totalMap = new HashMap<String, Object>();
+			totalMap.put("jysinfo", totalTradeV);
+			tradeLists.add(totalMap);
 			for (Map<String, Object> trade : tradeLists) {
 				tradeName = trade.get("jysinfo") == null ? "" : trade.get(
 						"jysinfo").toString();
@@ -153,6 +158,9 @@ public class DangersController extends BaseController {
 					aa.setName(o.get("jysinfo") + "");
 					res.add(aa);
 				}
+				aa = new LittleProjectEntity();
+				aa.setName("总量");
+				res.add(aa);
 			}
 			if (res != null && res.size() > 0) {
 				List<String> shiChan = null;
