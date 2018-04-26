@@ -43,7 +43,7 @@ public class WangswController extends BaseController {
 	 * @author wangsw
 	 * @time 2018年4月24日
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/wangsw1" })
+	@RequestMapping(value = { "${portalPath}/littleproject/weiranqushi" })
 	@ResponseBody
 	public String weiranqushi(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -119,7 +119,7 @@ public class WangswController extends BaseController {
 				return this.resultSuccessData(request, response, "", dto);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			logger.warn("风险——未然指数-未然指数趋势",e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -133,7 +133,7 @@ public class WangswController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/wangsw2" })
+	@RequestMapping(value = { "${portalPath}/littleproject/fengxiantongji" })
 	@ResponseBody
 	public String fengxiantongji(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -182,7 +182,7 @@ public class WangswController extends BaseController {
 				return this.resultSuccessData(request, response, "", dto);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			logger.warn("风险-未然指数-风险统计",e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -196,7 +196,7 @@ public class WangswController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/wangsw3" })
+	@RequestMapping(value = { "${portalPath}/littleproject/riskMonitoring" })
 	@ResponseBody
 	public String riskMonitoring(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -246,7 +246,7 @@ public class WangswController extends BaseController {
 				return this.resultFaliureData(request, response, "", null);
 			}
 		} catch (Exception e) {
-			e.getStackTrace();
+			logger.warn("风险-金融资产类&商品类风险监测",e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -260,7 +260,7 @@ public class WangswController extends BaseController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = { "${portalPath}/littleproject/wangsw4" })
+	@RequestMapping(value = { "${portalPath}/littleproject/jysRisk" })
 	@ResponseBody
 	public String jysRisk(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -294,7 +294,7 @@ public class WangswController extends BaseController {
 			dto.setC(aggregate);
 			return this.resultSuccessData(request, response, "", dto);
 		} catch (Exception e) {
-			e.getStackTrace();
+			logger.warn(" 风险-金融资产类风险监测-风险事件列表",e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 
