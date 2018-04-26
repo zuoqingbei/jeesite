@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.DangerModelDao">
+	<select id="getWeiranDay" resultType="java.util.LinkedHashMap">
+		select * from
+		INSIGHT_XCX_WRZSQX order by date
+	</select>
+	<select id="getFinanceMarket" resultType="java.util.LinkedHashMap">
+		select
+		hdtj.jys,hdtj.jysmc,hrj.jysinfo from hub_dd_tqs_jys hdtj left join
+		hub_ref_jysinfo hrj
+		on hdtj.jys = hrj.jys
+		where hdtj.jysfl = '2' order
+		by jys
+	</select>
+
+	<select id="getWeiRanTrend" resultType="java.util.LinkedHashMap">
+		select t.* from (SELECT T.FXSJ AS
+		DATE,ROUND(AVG(T.WRZS),2) AS FVALUE,T.JYS
+		FROM INSIGHT_FXSJ_FXZBZ T
+		WHERE TO_DATE(T.FXSJ,'YYYYMMDD') &gt;= NOW() - INTERVAL'15 DAY'
+		AND TO_DATE(T.FXSJ,'YYYYMMDD') &lt; NOW()
+		GROUP BY T.JYS,T.FXSJ
+		UNION ALL
+		SELECT T.FXSJ AS DATE,ROUND(AVG(T.WRZS),2) AS FVALUE,'总量风险值趋势' AS JYS
+		FROM INSIGHT_FXSJ_FXZBZ T
+		WHERE TO_DATE(T.FXSJ,'YYYYMMDD') &gt;= NOW() - INTERVAL'15 DAY'
+		AND TO_DATE(T.FXSJ,'YYYYMMDD') &lt; NOW()
+		GROUP BY T.FXSJ) t order by t.date
+	</select>
+
+	<select id="getFengxiantongji" resultType="java.util.LinkedHashMap">
+		SELECT
+		HRJ.JYSINFO,
+		(SELECT COUNT(1) FROM HUB_FXSJ HF WHERE TO_DATE(HF.BJSJ,'YYYYMMDD')
+		&lt;=
+		CURRENT_DATE
+		AND TO_DATE(HF.BJSJ,'YYYYMMDD') &gt; CURRENT_DATE -
+		CAST(TO_CHAR(CURRENT_DATE,'D')||' DAY' AS INTERVAL)
+		AND HF.JGDM =
+		HDTJ.JYS AND HF.CLZT IN ('已上报','已查阅','已确认')) BZFXZ,
+		(SELECT COUNT(1)
+		FROM HUB_FXSJ HF WHERE TO_DATE(HF.BJSJ,'YYYYMMDD') &lt;=
+		CURRENT_DATE
+		AND
+		TO_DATE(HF.BJSJ,'YYYYMMDD') &gt;=
+		TO_DATE(TO_CHAR(CURRENT_DATE,'YYYYMM')||'01','YYYYMMDD')
+		AND HF.JGDM =
+		HDTJ.JYS AND HF.CLZT IN ('已上报','已查阅','已确认')) BYFXZ,
+		(SELECT COUNT(1)
+		FROM HUB_FXSJ HF WHERE TO_DATE(HF.BJSJ,'YYYYMMDD') &lt;=
+		CURRENT_DATE
+		AND
+		TO_DATE(HF.BJSJ,'YYYYMMDD') &gt;=
+		TO_DATE(TO_CHAR(CURRENT_DATE,'YYYY')||'0101','YYYYMMDD')
+		AND HF.JGDM =
+		HDTJ.JYS AND HF.CLZT IN ('已上报','已查阅','已确认')) BNFXZ,
+		(SELECT COUNT(1)
+		FROM HUB_FXSJ HF WHERE TO_DATE(HF.BJSJ,'YYYYMMDD') &lt;=
+		CURRENT_DATE
+		AND
+		HF.JGDM = HDTJ.JYS AND HF.CLZT IN ('已上报','已查阅','已确认')) LJFXZ
+		FROM
+		HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		WHERE HDTJ.JYS IN ('0014','0012','0015')
+		UNION ALL SELECT
+		'总量' JYSINFO,
+		SUM((SELECT COUNT(1) FROM HUB_FXSJ HF WHERE
+		TO_DATE(HF.BJSJ,'YYYYMMDD') &lt;=
+		CURRENT_DATE
+		AND
+		TO_DATE(HF.BJSJ,'YYYYMMDD') &gt; CURRENT_DATE -
+		CAST(TO_CHAR(CURRENT_DATE,'D')||' DAY' AS INTERVAL)
+		AND HF.JGDM =
+		HDTJ.JYS AND HF.CLZT IN ('已上报','已查阅','已确认'))) BZFXZ,
+		SUM((SELECT
+		COUNT(1) FROM HUB_FXSJ HF WHERE
+		TO_DATE(HF.BJSJ,'YYYYMMDD') &lt;=
+		CURRENT_DATE
+		AND TO_DATE(HF.BJSJ,'YYYYMMDD') &gt;=
+		TO_DATE(TO_CHAR(CURRENT_DATE,'YYYYMM')||'01','YYYYMMDD')
+		AND HF.JGDM =
+		HDTJ.JYS AND HF.CLZT IN ('已上报','已查阅','已确认'))) BYFXZ,
+		SUM((SELECT
+		COUNT(1) FROM HUB_FXSJ HF WHERE
+		TO_DATE(HF.BJSJ,'YYYYMMDD') &lt;=
+		CURRENT_DATE
+		AND TO_DATE(HF.BJSJ,'YYYYMMDD') &gt;=
+		TO_DATE(TO_CHAR(CURRENT_DATE,'YYYY')||'0101','YYYYMMDD')
+		AND HF.JGDM =
+		HDTJ.JYS AND HF.CLZT IN ('已上报','已查阅','已确认'))) BNFXZ,
+		SUM((SELECT
+		COUNT(1) FROM HUB_FXSJ HF WHERE
+		TO_DATE(HF.BJSJ,'YYYYMMDD') &lt;=
+		CURRENT_DATE
+		AND HF.JGDM = HDTJ.JYS AND HF.CLZT IN
+		('已上报','已查阅','已确认'))) LJFXZ
+		FROM HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN
+		HUB_REF_JYSINFO HRJ ON HDTJ.JYS = HRJ.JYS
+		WHERE HDTJ.JYS IN
+		('0014','0012','0015');
+	</select>
+
+</mapper>

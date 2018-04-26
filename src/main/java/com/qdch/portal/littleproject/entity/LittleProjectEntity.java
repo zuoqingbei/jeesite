@@ -25,6 +25,4 @@ public class LittleProjectEntity {
         this.lists = lists;
     }
 
-	
-    
 }
