@@ -230,8 +230,8 @@ table .th {
     border-radius: 4px;
     margin-bottom: 2em;
     padding: 2em 0;
-    width: 70%;
-    margin-left: 1.8em;
+	width: 71%;
+	margin-left: 1.8em;
     overflow: hidden;
 }
 
@@ -266,7 +266,9 @@ table {
     border:none!important;
     border-top: 1px solid #dee2e6!important;
 }
-
+.textRed{
+	color: #f00;
+}
 
 @media (min-width: 992px){
 	.con {
