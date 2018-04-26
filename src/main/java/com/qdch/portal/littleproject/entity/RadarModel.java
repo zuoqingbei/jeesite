@@ -3,9 +3,11 @@ package com.qdch.portal.littleproject.entity;
 import com.qdch.portal.common.persistence.DataEntity;
 
 public class RadarModel extends DataEntity<RadarModel>{
+private String jys;
 private String jysinfo;
+private String fxsj;
 private String fxlb;
-private double fvalue;
+private double wrzs;
 public String getJysinfo() {
 	return jysinfo;
 }
@@ -18,11 +20,24 @@ public String getFxlb() {
 public void setFxlb(String fxlb) {
 	this.fxlb = fxlb;
 }
-public double getFvalue() {
-	return fvalue;
+public String getJys() {
+	return jys;
 }
-public void setFvalue(double fvalue) {
-	this.fvalue = fvalue;
+public void setJys(String jys) {
+	this.jys = jys;
 }
+public String getFxsj() {
+	return fxsj;
+}
+public void setFxsj(String fxsj) {
+	this.fxsj = fxsj;
+}
+public double getWrzs() {
+	return wrzs;
+}
+public void setWrzs(double wrzs) {
+	this.wrzs = wrzs;
+}
+
 
 }

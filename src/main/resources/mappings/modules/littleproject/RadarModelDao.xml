@@ -3,73 +3,25 @@
 <mapper namespace="com.qdch.portal.littleproject.dao.RadarModelDao">
 	<resultMap id="dtoResult"
 		type="com.qdch.portal.littleproject.entity.RadarModel">
+		<result property="jys" column="jys" />
 		<result property="jysinfo" column="jysinfo" />
+		<result property="fxsj" column="fxsj" />
 		<result property="fxlb" column="fxlb" />
-		<result property="fvalue" column="fvalue" />
+		<result property="wrzs" column="wrzs" />
 
 	</resultMap>
 	<select id="getRadarModelDao" resultMap="dtoResult">
-		select
-		jt.jysinfo,
-		jt3.fxlb,
-		(SELECT
-		count(jys)
-		from (select fxlb from public.hub_fxlb where
-		jysfl = 2 group by fxlb) t2
-		left join public."hub_fxsj" t1
-		on
-		t2.fxlb=t1.fxlb and t1.jgdm = jt.jys and t1.fxlb = jt3.fxlb
-		left join
-		public.hub_ref_jysinfo t
-		on t.jys=t1.jgdm
-		where t2.fxlb = jt3.fxlb
-		and
-		t.jysinfo=jt.jysinfo and t2.fxlb=jt3.fxlb) fvalue
-		from hub_ref_jysinfo
-		jt
-		left join hub_dd_tqs_jys jt2
-		on jt.jys = jt2.jys
-		left join (select
-		jysfl,fxlb from public.hub_fxlb group by fxlb,jysfl) jt3
-		on jt2.jysfl =
-		jt3.jysfl
-		where jt2.jysfl = '2' and jt.jysinfo='青金中心' ORDER BY jt3.fxlb
+		SELECT H.JYS,--交易所编码
+		T.JYS AS JYSINFO, --交易所简称
+		T.FXSJ,--风险时间
+		T.FXLB,--风险类别
+		ROUND(AVG(T.WRZS),2) AS WRZS --未然指数
+		FROM INSIGHT_FXSJ_FXZBZ T
+		LEFT JOIN HUB_REF_JYSINFO H
+		ON H.JYSINFO=T.JYS
+		WHERE T.FXSJ = TO_CHAR(NOW()-INTERVAL'1 DAY','YYYYMMDD')
+		AND h.jys=#{jys}
+		GROUP BY H.JYS,T.JYS,T.FXSJ,T.FXLB ORDER BY T.fxlb
 	</select>
-	<select id="getRadarModelDao2" resultMap="dtoResult">
-		select
-		jt.jysinfo,
-		jt3.fxlb,
-		(SELECT
-		count(jys)
-		from (select fxlb from public.hub_fxlb where
-		jysfl = 2 group by fxlb) t2
-		left join public."hub_fxsj" t1
-		on
-		t2.fxlb=t1.fxlb and t1.jgdm = jt.jys and t1.fxlb = jt3.fxlb
-		left join
-		public.hub_ref_jysinfo t
-		on t.jys=t1.jgdm
-		where t2.fxlb = jt3.fxlb
-		and
-		t.jysinfo=jt.jysinfo and t2.fxlb=jt3.fxlb) fvalue
-		from hub_ref_jysinfo
-		jt
-		left join hub_dd_tqs_jys jt2
-		on jt.jys = jt2.jys
-		left join (select
-		jysfl,fxlb from public.hub_fxlb group by fxlb,jysfl) jt3
-		on jt2.jysfl =
-		jt3.jysfl
-		where jt2.jysfl = '2' and jt.jysinfo='联合信用资产' ORDER BY jt3.fxlb
-	</select>
-	<select id="getRadarModelDao3" resultMap="dtoResult">
-		select * from (select
-		fxlb from hub_fxlb where jysfl = '1' group by fxlb
-		) fxlb
-		cross join hub_ref_jysinfo hrj
-		left join insight_fxsj_fxlb iff
-		on fxlb.fxlb = iff.fxlb and hrj.jys = iff.jys
-		where hrj.jysinfo='青岛文化产权' order by fxlb.fxlb
 
-	</select>
 </mapper>
