@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.SummaryProductModelDao">
+	<select id="getProductClassRatio" resultType="java.util.LinkedHashMap">
+		SELECT T.WAREKINDID
+		AS CPDLBM,
+		L.WAREKINDALIAS AS CPDLMC,
+		L.MEMO AS CPDLINFO,
+		COUNT(1) AS CPSL
+		FROM LAKE_ZD_TB_REG_WARE T
+		LEFT JOIN LAKE_ZD_TB_REG_WAREKIND L
+		ON T.WAREKINDID=L.WAREKINDID
+		GROUP BY T.WAREKINDID,L.WAREKINDALIAS,L.MEMO
+	</select>
+</mapper>

@@ -32,7 +32,7 @@ import com.qdch.portal.littleproject.service.DangerService;
  * @time 2018年4月24日
  */
 @Controller
-public class WangswController extends BaseController {
+public class DangersController extends BaseController {
 
 	@Autowired
 	public DangerService dangerService;
