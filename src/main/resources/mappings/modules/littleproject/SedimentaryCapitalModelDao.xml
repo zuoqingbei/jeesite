@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.SedimentaryCapitalModelDao">
+	<resultMap id="dtoResult"
+		type="com.qdch.portal.littleproject.entity.SedimentaryCapitalModel">
+		<result property="date" column="date" />
+		<result property="week_date" column="week_date" />
+		<result property="fvalue" column="fvalue" />
+		<result property="wd" column="wd" />
+
+	</resultMap>
+	<select id="getSedimentaryCapitalModelDaoDay" resultMap="dtoResult">
+		SELECT
+		T.VDAY AS DATE,SUM(T.FVALUE)/10000 AS FVALUE,'DAY' AS WD
+		FROM insight_sendimentary_amount T
+		WHERE TO_DATE(T.VDAY,'YYYYMMDD') >= TO_DATE('20180423','YYYYMMDD') - 15
+		AND to_date(T.VDAY,'YYYYMMDD') &lt; TO_DATE('20180423','YYYYMMDD')
+		GROUP BY T.VDAY
+		ORDER BY T.VDAY
+	</select>
+	<select id="getSedimentaryCapitalModelDaoWeek" resultMap="dtoResult">
+		SELECT
+		SUBSTRING(T.vday,1,4)||TO_CHAR(TO_DATE(T.vday,'YYYYMMDD'),'WW') AS
+		WEEK_DATE,
+		SUM(T.FVALUE)/10000 AS FVALUE,
+		'WEEK' AS WD
+		FROM insight_sendimentary_amount T
+		WHERE TO_DATE(T.VDAY,'YYYYMMDD') >= TO_DATE('20180423','YYYYMMDD') -
+		INTERVAL '12 week'
+		AND TO_DATE(T.VDAY,'YYYYMMDD') &lt; TO_DATE('20180423','YYYYMMDD')
+		group by SUBSTRING(T.vday,1,4)||TO_CHAR(TO_DATE(T.vday,'YYYYMMDD'),'WW')
+		ORDER BY week_date
+
+	</select>
+	<select id="getSedimentaryCapitalModelDaoMonth" resultMap="dtoResult">
+		SELECT SUBSTRING(T.VDAY,1,6) AS DATE,SUM(T.FVALUE)/10000 AS
+		FVALUE,'MONTH' AS WD
+		FROM insight_sendimentary_amount T
+		WHERE SUBSTRING(T.VDAY,1,6) >= TO_CHAR(TO_DATE('20180423','YYYYMMDD') -
+		INTERVAL'12 MONTH','YYYYMM')
+		AND SUBSTRING(T.VDAY,1,6) &lt;=
+		TO_CHAR(TO_DATE('20180423','YYYYMMDD'),'YYYYMM')
+		GROUP BY SUBSTRING(T.VDAY,1,6)
+		ORDER BY SUBSTRING(T.VDAY,1,6)
+	</select>
+</mapper>

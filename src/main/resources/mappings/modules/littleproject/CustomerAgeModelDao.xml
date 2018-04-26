@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.CustomerAgeModelDao">
+	<resultMap id="dtoResult"
+		type="com.qdch.portal.littleproject.entity.CustomerAgeModel">
+		<result property="jys" column="jys" />
+		<result property="jysinfo" column="jysinfo" />
+		<result property="jysmc" column="jysmc" />
+		<result property="sum" column="sum" />
+		<result property="coalesce" column="coalesce" />
+
+	</resultMap>
+	<select id="getCustomerAgeModelDao" resultMap="dtoResult">
+		SELECT
+		HDTJ.JYS,
+		HRJ.JYSINFO,
+		HDTJ.JYSMC,
+		SUM(CASE WHEN IUQ.VDAY = TO_CHAR(CURRENT_DATE -INTERVAL'1 DAY','YYYYMMDD')
+		AND
+		(IUQ.AGERANGE = LS.AGERANGE OR (LS.AGERANGE IS NULL AND IUQ.AGERANGE
+		IS NULL)) THEN FVALUE ELSE 0 END),
+		COALESCE(LS.AGERANGE,'未知')
+		FROM (SELECT '小于18岁' AGERANGE
+		UNION ALL SELECT '18-30岁' AGERANGE
+		UNION ALL SELECT '31-50岁' AGERANGE
+		UNION ALL SELECT '51-65岁' AGERANGE
+		UNION ALL SELECT '大于65岁' AGERANGE
+		UNION ALL SELECT NULL AGERANGE) LS
+		CROSS JOIN HUB_DD_TQS_JYS HDTJ
+		LEFT JOIN HUB_REF_JYSINFO HRJ
+		ON HDTJ.JYS = HRJ.JYS
+		LEFT JOIN INSIGHT_USER_QTY IUQ
+		ON (IUQ.AGERANGE = LS.AGERANGE OR (LS.AGERANGE IS NULL AND IUQ.AGERANGE
+		IS NULL))
+		AND IUQ.JYS = HDTJ.JYS
+		WHERE HDTJ.JYS = '0015'
+		GROUP BY HDTJ.JYS,HRJ.JYSINFO,HDTJ.JYSMC,LS.AGERANGE ORDER BY COALESCE
+	</select>
+</mapper>

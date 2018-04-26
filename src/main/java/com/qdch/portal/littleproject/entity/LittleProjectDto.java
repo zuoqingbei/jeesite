@@ -7,6 +7,8 @@ public class LittleProjectDto {
     private Object[] times;
     private Map<String,Object[]> timesMap ;
     private List<LittleProjectEntity> entities;
+    private List<KeHuFenLei> indexs;
+    
     public Object[] getTimes() {
         return times;
     }
@@ -30,4 +32,13 @@ public class LittleProjectDto {
     public void setEntities(List<LittleProjectEntity> entities) {
         this.entities = entities;
     }
+
+	public List<KeHuFenLei> getIndexs() {
+		return indexs;
+	}
+
+	public void setIndexs(List<KeHuFenLei> indexs) {
+		this.indexs = indexs;
+	}
+
 }
