@@ -71,22 +71,22 @@
 
             </div>
             <div class="info">${entity.descs}</div>
-<!--
-            <div class="interact">
-						<span>
-							<i class="iconfont icon-shoucang"></i>
-							<span>收藏</span>
-						</span>
-                <span>
-							<i class="iconfont icon-dianzan"></i>
-							<span>点赞</span>
-						</span>
-                <span>
-							<i class="iconfont icon-fenxiang"></i>
-							<span>分享</span>
-						</span>
-            </div>
--->
+            <!--
+                        <div class="interact">
+                                    <span>
+                                        <i class="iconfont icon-shoucang"></i>
+                                        <span>收藏</span>
+                                    </span>
+                            <span>
+                                        <i class="iconfont icon-dianzan"></i>
+                                        <span>点赞</span>
+                                    </span>
+                            <span>
+                                        <i class="iconfont icon-fenxiang"></i>
+                                        <span>分享</span>
+                                    </span>
+                        </div>
+            -->
             <div class="zb_box">
                 <li>
                     <span>数据ID：</span>
@@ -135,14 +135,18 @@
                 <div class="part-title">请求参数</div>
                 <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
                     <tr class="th">
-                        <td>dateDtKpi
-                        </td>
-                        <td>dataType
-                        </td>
-                        <td>fresh
-                        </td>
+                        <th>名称</th>
+                        <th>必填</th>
+                        <th>类型</th>
+                        <th>说明</th>
+                        <!--
+                                                <th>dataType
+                                                </th>
+                                                <th>fresh
+                                                </th>
+                        -->
                     </tr>
-                    <c:forEach items="${entity.thinkerApiParamList}" var="item">
+                    <!--<c:forEach items="${entity.thinkerApiParamList}" var="item">
                         <tr>
                             <td>${item.name}</td>
                             <td>${item.dataType}</td>
@@ -154,8 +158,29 @@
                             </c:if>
                             <td>${item.remarks}</td>
                         </tr>
-                    </c:forEach>
+                    </c:forEach>-->
+
+                    <tr>
+                        <td>dateDtKpi</td>
+                        <td>Y</td>
+                        <td>string</td>
+                        <td>时间参数（例：20180412）</td>
+                    </tr>
+                    <tr>
+                        <td>dataType</td>
+                        <td>Y</td>
+                        <td>string</td>
+                        <td>数据组名称</td>
+                    </tr>
+                    <tr>
+                        <td>fresh</td>
+                        <td>N</td>
+                        <td>string</td>
+                        <td>刷新状态（1刷新缓存值并返回，2不刷新取缓存值）</td>
+                    </tr>
+
                 </table>
+<!--
                 <div class="part-title">请求参数类型</div>
                 <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
                     <tr class="th">
@@ -180,30 +205,34 @@
                         </tr>
                     </c:forEach>
                 </table>
+-->
                 <div class="part-title">返回参数</div>
                 <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
                     <tr class="th">
-                        <td>reason
-                        </td>
-                        <td>result
-                        </td>
-                        <td>error_code
-                        </td>
+                        <th>名称</th>
+                        <!--<th>必填</th>-->
+                        <th>类型</th>
+                        <th>说明</th>
                     </tr>
-                    <c:forEach items="${entity.thinkerApiSuccessList}" var="item">
-                        <tr>
-                            <td>${item.name}</td>
-                            <td>${item.dataType}</td>
-                            <td>${item.remarks}</td>
-                        </tr>
-                    </c:forEach>
+                    <tr><td colspan="3">见JSON返回示例</td></tr>
+
+                    <!--
+                                        <c:forEach items="${entity.thinkerApiSuccessList}" var="item">
+                                            <tr>
+                                                <td>${item.name}</td>
+                                                <td>${item.dataType}</td>
+                                                <td>${item.remarks}</td>
+                                            </tr>
+                                        </c:forEach>
+                    -->
                 </table>
+<!--
                 <div class="part-title">返回参数类型</div>
                 <table border="0" cellspacing="0" cellpadding="0" rules="rows" class="table table-bordered table-hover">
                     <tr class="th">
-                        <td>返回状态</td>
-                        <td>返回结果</td>
-                        <td>错误标志</td>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>说明</th>
                     </tr>
                     <c:forEach items="${entity.thinkerApiSuccessList}" var="item">
                         <tr>
@@ -213,23 +242,27 @@
                         </tr>
                     </c:forEach>
                 </table>
-                <!--                <div class="part-title">JSON返回示例：</div>
-                                <pre cl"jsontxt">
+-->
+                <div class="part-title">JSON返回示例：</div>
+                <pre class="jsontxt">
+    {
+        "code":200,/*返回码状态正常*/
+        "data":[
+            {
+                "data_dt":"20180425",<span class="textRed">/*日期*/</span>
+                "float_flag":"增加",<span class="textRed">/*指标状态标识*/</span>
+                "sum_month_wcl":"0.775176",<span class="textRed">/*月累计完成率*/</span>
+                "income_month_target":"833333631.250000",<span class="textRed">/*月收入目标*/</span>
+                "income_sum_month":"645980983.360000",<span class="textRed">/*收入月累计*/</span>
+                "float_view":"上涨",<span class="textRed">/*指标涨跌字段*/</span>
+                "last_month_reduce_income":"0.122777",<span class="textRed">/*指标涨跌幅度%*/</span>
+                "reduce_income":"70638864.850001",<span class="textRed">/*涨幅值*/</span>
+                "total_month_target":"1000000357"<span class="textRed">/*月总目标*/</span>
+            }
+        ],
+        "desc":"success"
+    }
 
-                    {
-                        "reason": "成功",
-                        "result": {
-                            "jobid": "2015120913503797592",/*本次查询流水号*/
-                            "realname": "商世界",/*姓名*/
-                            "bankcard": "6259656360701234",/*银行卡卡号*/
-                            "idcard": "310329198103050011",/*身份证号码*/
-                            "mobile": "18912341234",/*预留手机号码*/
-                            "res": "2",/*验证结果，1:匹配 2:不匹配*/
-                            "message": "认证信息不匹配"/*描述*/
-                        },
-                        "error_code": 0
-                    }
-                -->
                 </pre>
             </div>
             <div class="defaultCodeCon">
@@ -344,8 +377,6 @@
                 </table>
 
             </div>
-
-
 
 
         </div>
