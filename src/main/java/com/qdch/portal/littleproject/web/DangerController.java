@@ -3,6 +3,7 @@ package com.qdch.portal.littleproject.web;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,15 @@ import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
 import com.qdch.portal.common.utils.PostgreUtils;
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.littleproject.dao.BusinessInfoModelDao;
+import com.qdch.portal.littleproject.dao.BusinessRelationModelDao;
 import com.qdch.portal.littleproject.dao.EvaluateScoreModelDao;
 import com.qdch.portal.littleproject.dao.MarketDynamicModelDao;
 import com.qdch.portal.littleproject.dao.RadarModelDao;
 import com.qdch.portal.littleproject.dao.ShareHolderModelDao;
+import com.qdch.portal.littleproject.dao.TradeRtioModelDao;
 import com.qdch.portal.littleproject.entity.BusinessInfoModel;
+import com.qdch.portal.littleproject.entity.BusinessRelationModel;
+import com.qdch.portal.littleproject.entity.CompanyRelation;
 import com.qdch.portal.littleproject.entity.EvaluateScoreModel;
 import com.qdch.portal.littleproject.entity.FenLei;
 import com.qdch.portal.littleproject.entity.KeHuFenLei;
@@ -35,6 +40,7 @@ import com.qdch.portal.littleproject.entity.RadarModel;
 import com.qdch.portal.littleproject.entity.Risks;
 import com.qdch.portal.littleproject.entity.ShareHolderModel;
 import com.qdch.portal.littleproject.entity.Single;
+import com.qdch.portal.littleproject.entity.TradeRtioModel;
 import com.qdch.portal.littleproject.entity.UnknownIndex;
 import com.qdch.portal.littleproject.entity.ZiJin;
 
@@ -681,6 +687,54 @@ public class DangerController extends BaseController {
 				s.setS(aggregate2);
 			}	
 				dto.setInfo(s);
+			DynamicDataSource.removeDataSourceKey();
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				return this.resultSuccessData(request, response, "", dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 画像-企业关系
+	 *
+	 * @time 2018年4月27日
+	 * @author 高照
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@Autowired
+	public BusinessRelationModelDao businessRelationModelDao;
+	@RequestMapping(value = { "${portalPath}/littleproject/BusinessRelation" })
+	@ResponseBody
+	public String BusinessRelation(HttpServletRequest request,HttpServletResponse response){
+		try {
+			DynamicDataSource.setInsightDataSource();
+			String type="";
+			type=request.getParameter("type");
+			List<BusinessRelationModel> lists=null;
+			lists=businessRelationModelDao.getBusinessRelationModelDao(type);
+			CompanyRelation dto=new CompanyRelation();
+			if(lists!=null&&lists.size()>0){
+				for(BusinessRelationModel b:lists){
+					dto.setCompanyName(b.getCompany_name());
+					dto.setLegalPerson(b.getLegal_person());
+					String x=b.getSenior_managers();
+					String x0=x.substring(2,x.length()-2);
+					String y=b.getShareholders();
+					String y0=y.substring(2,y.length()-2);
+					String[] x1=x0.split("\",\"");
+					String[] y1=y0.split("\",\"");
+					List<String> aggeratex=Arrays.asList(x1);
+					List<String> aggeratey=Arrays.asList(y1);
+					dto.setManagers(aggeratex);
+					dto.setShareholders(aggeratey);
+				}
+			}
 			DynamicDataSource.removeDataSourceKey();
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
