@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class DangerService {
 	@Autowired
-	public DangerModelDao dangerModelDao;
+	private DangerModelDao dangerModelDao;
 
 	public List<Map<String,Object>> getWeiranDay(){
 		return  dangerModelDao.getWeiranDay();

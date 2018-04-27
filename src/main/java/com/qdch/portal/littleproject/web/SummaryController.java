@@ -18,6 +18,7 @@ import com.qdch.portal.littleproject.dao.SedimentaryCapitalModelDao;
 import com.qdch.portal.littleproject.dao.TradeAmountModelDao;
 import com.qdch.portal.littleproject.dao.TradeCountModelDao;
 import com.qdch.portal.littleproject.dao.TradeMarketModelDao;
+import com.qdch.portal.littleproject.dao.TradeRtioModelDao;
 import com.qdch.portal.littleproject.entity.*;
 
 import org.dozer.Mapping;
@@ -785,7 +786,10 @@ public class SummaryController extends BaseController {
 						for(EntryAndExitCapitalModel o:lists){
 							
 							if(o.getXm().equals(s.getName())){
-								jihe.add(o.getFvalue()+"");
+								
+									jihe.add(o.getFvalue()+"");
+									
+								
 							}
 						}
 					}
@@ -854,6 +858,62 @@ public class SummaryController extends BaseController {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 总况——商品类-产品-产品交易额占比
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月26日
+	 */
+	@Autowired
+	public TradeRtioModelDao tradeRtioModelDao;
+	@RequestMapping(value = { "${portalPath}/littleproject/productRtio" })
+	@ResponseBody
+	public String productRtio(HttpServletRequest request,HttpServletResponse response){
+		try {
+			DynamicDataSource.setInsightDataSource();
+			String type=request.getParameter("type");
+			List<TradeRtioModel> lists=null;
+			if(type!=null&&type.length()>0){
+				lists=tradeRtioModelDao.getTradeRtioModelDao2(type);
+			}else{
+				
+				lists=tradeRtioModelDao.getTradeRtioModelDao();
+			}
+			DynamicDataSource.removeDataSourceKey();
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				logger.info(lists+"");
+				return this.resultSuccessData(request, response, "", lists);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+	/**
+	 * 总况——商品类-产品-产品价格趋势
+	 * 
+	 * @author gaozhao
+	 * @time 2018年4月26日
+	 */
+	public String productPriceTrend(HttpServletRequest request,HttpServletResponse response){
+		try {
+			DynamicDataSource.setInsightDataSource();
+			String type=request.getParameter("type");
+			List lists=null;
+			DynamicDataSource.removeDataSourceKey();
+			if (lists == null && lists.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			} else {
+				logger.info(lists+"");
+				return this.resultSuccessData(request, response, "", lists);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

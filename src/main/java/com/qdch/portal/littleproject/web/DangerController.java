@@ -402,35 +402,35 @@ public class DangerController extends BaseController {
 				if("1".equals(type)){
 					
 					dto.setName("青金中心");
-					lists= radarModelDao.getRadarModelDao();
+					lists= radarModelDao.getRadarModelDao("0014");
 					
 				}else{
 					
 					dto.setName("联合信产");
-					lists=  radarModelDao.getRadarModelDao2();
+					lists=  radarModelDao.getRadarModelDao("0012");
 					
 				}
 			 
 			}else if("3".equals(type)){
 				
 				dto.setName("文化产权");
-				lists=  radarModelDao.getRadarModelDao3();
+				lists=  radarModelDao.getRadarModelDao("0015");
 				
 			}
-			//风险雷达图
+			/*//风险雷达图
 			if(lists!=null&&lists.size()>0){
 				for(RadarModel o:lists){
-					aggregate.add(o.getFvalue()+"");
+					aggregate.add(o.getWrzs()+"");
 				}
 				re.setLists(aggregate);
 			}
 		
-			dto.setOtherInfo(re);
+			dto.setOtherInfo(re);*/
 			DynamicDataSource.removeDataSourceKey();
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
-				return this.resultSuccessData(request, response, "", dto);
+				return this.resultSuccessData(request, response, "", lists);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -527,6 +527,7 @@ public class DangerController extends BaseController {
 			FenLei dto=new FenLei();
 			List<KeHuFenLei> aggregate=new ArrayList<KeHuFenLei>();
 			List<EvaluateScoreModel> lists=null;
+			
 			
 			if("1".equals(type)||"2".equals(type)){
 			
