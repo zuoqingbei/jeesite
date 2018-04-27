@@ -142,6 +142,15 @@ public class Global {
 	public static String getAppSecret() {
 		return getConfig("wechat.pub.appsecret");
 	}
+
+	public static String getLittleProjectAppId() {
+		return getConfig("wechat.littleproject.appid");
+	}
+	public static String getLittleProjectAppSecret() {
+		return getConfig("wechat.littleproject.appsecret");
+	}
+
+
 	/**
 	 * 是否是演示模式，演示模式下不能修改用户、角色、密码、菜单、授权
 	 */
