@@ -149,8 +149,8 @@ public class WxpubOAuth {
         }
         String url = "https://api.weixin.qq.com/sns/jscode2session";
         Map<String,String> createMap = new HashMap<String,String>();
-        createMap.put("appid",Global.getAppId());
-        createMap.put("secret",Global.getAppSecret());
+        createMap.put("appid",Global.getLittleProjectAppId());
+        createMap.put("secret",Global.getLittleProjectAppSecret());
         createMap.put("js_code",code);
         createMap.put("grant_type","authorization_code");
         String token=HttpClientUtil.sendPostSSLRequest(url, createMap);

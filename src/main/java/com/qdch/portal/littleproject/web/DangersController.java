@@ -57,7 +57,7 @@ public class DangersController extends BaseController {
 					.getMarketRiskIndex();
 			DynamicDataSource.removeDataSourceKey();
 			if (lists == null || lists.size() < 0) {
-				return this.resultFaliureData(request, response, "", null);
+				return this.resultSuccessData(request, response, "", null);
 			}
 
 			LittleProjectDto dto = new LittleProjectDto();
@@ -74,7 +74,7 @@ public class DangersController extends BaseController {
 			String exValue = "";
 			List<String> exVList = null;
 			String totalTradeV = "总量交易额趋势";
-			Map<String,Object> totalMap = new HashMap<String, Object>();
+			Map<String, Object> totalMap = new HashMap<String, Object>();
 			totalMap.put("jysinfo", totalTradeV);
 			tradeLists.add(totalMap);
 			for (Map<String, Object> trade : tradeLists) {
@@ -118,13 +118,9 @@ public class DangersController extends BaseController {
 			dto.setTimes(times.toArray());
 			dto.setEntities(res);
 			dto.setIndexs(riskList);
-			if (lists == null || lists.size() < 0) {
-				return this.resultFaliureData(request, response, "", null);
-			} else {
-				return this.resultSuccessData(request, response, "", dto);
-			}
+			return this.resultSuccessData(request, response, "", dto);
 		} catch (Exception e) {
-			logger.warn("风险——未然指数-未然指数趋势",e);
+			logger.warn("风险——未然指数-未然指数趋势", e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -185,12 +181,12 @@ public class DangersController extends BaseController {
 			}
 			dto.setEntities(res);
 			if (lists == null || lists.size() < 0) {
-				return this.resultFaliureData(request, response, "", null);
+				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
 			}
 		} catch (Exception e) {
-			logger.warn("风险-未然指数-风险统计",e);
+			logger.warn("风险-未然指数-风险统计", e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -216,10 +212,12 @@ public class DangersController extends BaseController {
 				DynamicDataSource.setInsightDataSource();
 				List<Map<String, Object>> riskList = dangerService
 						.getMarketRiskQtyAndRatio(type);
-				List<Map<String, Object>> marketList = dangerService.getMarketByType(type);
+				List<Map<String, Object>> marketList = dangerService
+						.getMarketByType(type);
 				DynamicDataSource.removeDataSourceKey();
-				if (riskList == null || riskList.size() < 1 || marketList == null || marketList.size() < 1) {
-					return this.resultFaliureData(request, response, "", null);
+				if (riskList == null || riskList.size() < 1
+						|| marketList == null || marketList.size() < 1) {
+					return this.resultSuccessData(request, response, "", null);
 				}
 				String riskQty = "";
 				String riskRatio = "";
@@ -237,7 +235,7 @@ public class DangersController extends BaseController {
 					risk.setCreditRisks(Integer.parseInt(riskQty));
 					risks.add(risk);
 				}
-				List<KeHuFenLei>  markets = new ArrayList<KeHuFenLei>();
+				List<KeHuFenLei> markets = new ArrayList<KeHuFenLei>();
 				KeHuFenLei market = null;
 				for (Map<String, Object> map : marketList) {
 					market = new KeHuFenLei();
@@ -251,10 +249,10 @@ public class DangersController extends BaseController {
 			if (dto != null) {
 				return this.resultSuccessData(request, response, "", dto);
 			} else {
-				return this.resultFaliureData(request, response, "", null);
+				return this.resultSuccessData(request, response, "", null);
 			}
 		} catch (Exception e) {
-			logger.warn("风险-金融资产类&商品类风险监测",e);
+			logger.warn("风险-金融资产类&商品类风险监测", e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
@@ -282,7 +280,7 @@ public class DangersController extends BaseController {
 					.getMarketRiskEventList(type, risk, market);
 			DynamicDataSource.removeDataSourceKey();
 			if (eventList == null || eventList.size() < 1) {
-				return this.resultFaliureData(request, response, "", null);
+				return this.resultSuccessData(request, response, "", null);
 			}
 			dto = new UnknownIndex();
 			List<Single> aggregate = new ArrayList<Single>();
@@ -302,7 +300,7 @@ public class DangersController extends BaseController {
 			dto.setC(aggregate);
 			return this.resultSuccessData(request, response, "", dto);
 		} catch (Exception e) {
-			logger.warn(" 风险-金融资产类风险监测-风险事件列表",e);
+			logger.warn(" 风险-金融资产类风险监测-风险事件列表", e);
 			return this.resultFaliureData(request, response, "", null);
 		}
 

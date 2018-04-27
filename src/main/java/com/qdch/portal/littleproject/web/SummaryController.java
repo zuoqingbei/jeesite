@@ -66,6 +66,7 @@ public class SummaryController extends BaseController {
 		try {
 			DynamicDataSource.setInsightDataSource();
 			String type = request.getParameter("type");
+
 			//List<Object> lists = null;
 			List<TradeAmountModel> lists1=null;
 			if ("day".equals(type)) {

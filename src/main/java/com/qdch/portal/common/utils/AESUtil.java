@@ -1,5 +1,6 @@
 package com.qdch.portal.common.utils;
 
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.IOException;
