@@ -156,7 +156,7 @@ public class LittleProjectAuthenController  extends BaseController {
     public String enterLittleProject(AccountThirdplat accountThirdplat,HttpServletRequest request, HttpServletResponse response){
         try {
             if(StringUtils.isBlank(accountThirdplat.getPlatkey())){
-                return this.resultFaliureData(request,response,"请先输入key",null);
+                return this.resultFaliureData(request,response,"请先输入openid",null);
             }
             AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
             if(thirdplat == null){
@@ -266,6 +266,7 @@ public class LittleProjectAuthenController  extends BaseController {
             accountThirdplat.setPtype("wechat");
             accountThirdplat.setPlatkey(info.getOpenid());
             accountThirdplat.setUnionid(info.getUnionid());
+            accountThirdplatService.save(accountThirdplat);
             return this.resultSuccessData(request,response,"",info.getOpenid());
         } catch (Exception e) {
             e.printStackTrace();
