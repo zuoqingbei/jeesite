@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>数据立方体</title>
+    <title>数据超市</title>
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/bootstrap-4.0.0.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/css/swiper-4.2.2.min.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/thinker/asserts/iconfont/iconfont.css">
@@ -48,7 +48,7 @@
 <header class="navbar navbar-expand flex-column flex-md-row bd-navbar">
     <a class="navbar-brand mr-0 mr-md-2" href="/portal/thinker/home">
         <div class="logoBg"></div>
-        <h1 class="icon-pre">数据立方体</h1>
+        <h1 class="icon-pre">数据超市</h1>
     </a>
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
         <li class="nav-item">
@@ -97,14 +97,21 @@
         <div class="col-12 list">
             <ul>
                 <li class="">
-                    <h4>指标编号</h4>
-                    <p>1169-wldp-01
-                    </p>
+                    <h4>平台(乐家，物流等)</h4>
+                    <p>物流</p>
                 </li>
                 <li class="">
                     <h4>指标名称</h4>
-                    <p>物流平台收入
-
+                    <p>物流平台收入</p>
+                </li>
+                <li class="">
+                    <h4>定义</h4>
+                    <p>物流总体收入</p>
+                </li>
+            
+                <li class="">
+                    <h4>指标编号</h4>
+                    <p>wl_0010001_0000_b1
                     </p>
                 </li>
                 <li class="">
@@ -114,7 +121,7 @@
                 </li>
                 <li class="">
                     <h4>指标描述</h4>
-                    <p>物流平台收入</p>
+                    <p>开发1169物流大屏需要的指标</p>
                 </li>
                 <li class="">
                     <h4>指标维度</h4>
@@ -122,14 +129,37 @@
                         组织维度：小微
                     </p>
                 </li>
-                <li class="">
-                    <h4>计量单位</h4>
-                    <p>亿元</p>
+              	 <li class="">
+                    <h4>分类</h4>
+                    <p>大屏</p>
                 </li>
+                
+                <li class="">
+                    <h4>实际单位</h4>
+                    <p>元</p>
+                </li>
+                
+                <li class="">
+                    <h4>计算方式</h4>
+                    <p>来自风控系统，合计各日日顺物流下的各小微收入
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <section class="row main">
+        <div class="col-12 list">
+            <p class="techMore"><a class="">技术详情 <span>▼</span></a></p>
+            <ul style="display: none">
                 <li class="">
                     <h4>显示表</h4>
-                    <p>1169-wldp-01
-                    </p>
+                    <p class="displayTable">
+                    	<!--<a target="_blank" href="javascript:void(0)" >dw_wl.w_wls_kpi_01_d_v</a>-->
+                    	<a href="javascript:void(0)" >dw_wl.w_wls_kpi_01_d_v</a></p>
+	                    <div class="yingXiangFenXi" style="display: none">
+	                    	<img style="width:100%;" src="/static/images/yingXiangFenXi.png" alt="">
+	                    </div>
+
                 </li>
                 <li class="">
                     <h4>使用字段</h4>
@@ -150,38 +180,6 @@
                     </p>
                 </li>
                 <li class="">
-                    <h4>计算方式</h4>
-                    <p>来自风控系统，合计各日日顺物流下的各小微收入
-                    </p>
-                </li>
-            </ul>
-        </div>
-    </section>
-    <section class="row main">
-        <div class="col-12 list">
-            <p class="techMore"><a class="">技术详情 <span>▼</span></a></p>
-            <ul style="display: none">
-                <li class="">
-                    <h4>分类</h4>
-                    <p>大屏</p>
-                </li>
-                <li class="">
-                    <h4>平台(乐家，物流等)</h4>
-                    <p>物流</p>
-                </li>
-                <li class="">
-                    <h4>指标名称</h4>
-                    <p>物流平台收入</p>
-                </li>
-                <li class="">
-                    <h4>单位</h4>
-                    <p>万元</p>
-                </li>
-                <li class="">
-                    <h4>定义</h4>
-                    <p>物流平台收入</p>
-                </li>
-                <li class="">
                     <h4>取数源</h4>
                     <p>RPT_XW_SHOURU<br>SYS_DEPARTMENT</p>
                 </li>
@@ -190,7 +188,7 @@
                     <p> stg_wl.s_fin_rpt_xw_shouru
                         <br>stg_wl.s_fin_sys_department
                         <br>dl_wl.l_fin_rpt_xw_shouru
-                        <br>dw_wl.w_wls_kpi_01_d_v
+                        
                     </p>
                 </li>
                 <li class="">
@@ -257,6 +255,10 @@
                 $(this).children("span").text("▼").parents("p").removeClass("open").next("ul").hide();
             }
 
+        })
+        $(".displayTable>a").click(function(){
+            console.log($(this).next()[0])
+        	$(this).parent().next().toggle();
         })
     })
 

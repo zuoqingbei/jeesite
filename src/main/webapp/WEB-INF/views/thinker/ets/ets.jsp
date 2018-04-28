@@ -33,6 +33,9 @@
         <li class="nav-item">
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">系统配置检测</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="yingXiang-tab" data-toggle="tab" href="#yingXiang" role="tab" aria-controls="yingXiang" aria-selected="false">影响分析</a>
+        </li>
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -64,6 +67,9 @@
         </div>
         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
             <img src="/static/images/xiTongPeiZhi.png" alt="">
+        </div>
+        <div class="tab-pane fade" id="yingXiang" role="tabpanel" aria-labelledby="yingXiang-tab">
+            <img src="/static/images/yingXiangFenXi.png" alt="">
         </div>
     </div>
 </div>
