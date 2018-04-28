@@ -155,7 +155,7 @@
                     <h4>显示表</h4>
                     <p class="displayTable">
                     	<!--<a target="_blank" href="javascript:void(0)" >dw_wl.w_wls_kpi_01_d_v</a>-->
-                    	<a href="javascript:void(0)" >dw_wl.w_wls_kpi_01_d_v</a></p>
+                    	<a href="${portalPath}/thinker/yingXiangFenXi" target="_blank">dw_wl.w_wls_kpi_01_d_v</a></p>
 	                    <div class="yingXiangFenXi" style="display: none">
 	                    	<img style="width:100%;" src="/static/images/yingXiangFenXi.png" alt="">
 	                    </div>

@@ -150,6 +150,10 @@ public class ThinkerController extends BaseController {
 		model.addAttribute("entity", entity);
 		return render(request, "thinker/newIndexDetail");
 	}
+	@RequestMapping(value = {"${portalPath}/thinker/yingXiangFenXi"})
+	public String yingXiangFenXi(Model model,HttpServletRequest request, HttpServletResponse response){
+		return render(request, "thinker/yingXiangFenXi");
+	}
 	
 	/**
 	 * 报表详细页面
