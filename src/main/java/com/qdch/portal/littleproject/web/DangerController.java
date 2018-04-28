@@ -401,8 +401,6 @@ public class DangerController extends BaseController {
 			Portrait dto = new Portrait();
 			String type=request.getParameter("type");
 			List<RadarModel> lists=null;	
-			LittleProjectEntity re=new LittleProjectEntity();
-			List<String> aggregate=new ArrayList<String>();
 				if("1".equals(type)||"2".equals(type)){
 				
 				if("1".equals(type)){
@@ -423,17 +421,9 @@ public class DangerController extends BaseController {
 				lists=  radarModelDao.getRadarModelDao("0015");
 				
 			}
-			/*//风险雷达图
-			if(lists!=null&&lists.size()>0){
-				for(RadarModel o:lists){
-					aggregate.add(o.getWrzs()+"");
-				}
-				re.setLists(aggregate);
-			}
 		
-			dto.setOtherInfo(re);*/
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", lists);
@@ -469,19 +459,19 @@ public class DangerController extends BaseController {
 				if("1".equals(type)){
 					
 					dto.setName("青金中心");
-					shareHolderLists= shareHolderModelDao.getShareHolderModelDao();
+					shareHolderLists= shareHolderModelDao.getShareHolderModelDao("0014");
 					
 				}else{
 					
 					dto.setName("联合信产");
-					shareHolderLists= shareHolderModelDao.getShareHolderModelDao2();
+					shareHolderLists= shareHolderModelDao.getShareHolderModelDao("0012");
 					
 				}
 			 
 			}else if("3".equals(type)){
 				
 				dto.setName("文化产权");
-				shareHolderLists= shareHolderModelDao.getShareHolderModelDao3();
+				shareHolderLists= shareHolderModelDao.getShareHolderModelDao("0015");
 				
 			}
 			//股东信息
@@ -540,19 +530,19 @@ public class DangerController extends BaseController {
 				if("1".equals(type)){
 					t="青金中心";
 					dto.setName(t);
-					lists= evaluateScoreDao.evaluateScore();
+					lists= evaluateScoreDao.evaluateScore(t);
 					
 				}else{
 					t="联合信产";
 					dto.setName(t);
-					lists= evaluateScoreDao.evaluateScore2();
+					lists= evaluateScoreDao.evaluateScore(t);
 					
 				}
 			 
 			}else if("3".equals(type)){
 				t="文化产权";
 				dto.setName(t);
-				lists= evaluateScoreDao.evaluateScore3();
+				lists= evaluateScoreDao.evaluateScore(t);
 				
 			}
 			double s=0;
