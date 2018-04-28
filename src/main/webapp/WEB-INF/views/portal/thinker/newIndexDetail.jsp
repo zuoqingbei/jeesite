@@ -257,8 +257,8 @@
 
         })
         $(".displayTable>a").click(function(){
-            console.log($(this).next()[0])
-        	$(this).parent().next().toggle();
+           /*  console.log($(this).next()[0])
+        	$(this).parent().next().toggle(); */
         })
     })
 
