@@ -889,7 +889,7 @@ public class SummaryController extends BaseController {
 			if (lists == null && lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
-				logger.info(lists+"");
+				
 				return this.resultSuccessData(request, response, "", lists);
 			}
 		} catch (Exception e) {
@@ -897,27 +897,5 @@ public class SummaryController extends BaseController {
 			return this.resultFaliureData(request, response, "", null);
 		}
 	}
-	/**
-	 * 总况——商品类-产品-产品价格趋势
-	 * 
-	 * @author gaozhao
-	 * @time 2018年4月26日
-	 */
-	public String productPriceTrend(HttpServletRequest request,HttpServletResponse response){
-		try {
-			DynamicDataSource.setInsightDataSource();
-			String type=request.getParameter("type");
-			List lists=null;
-			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
-				return this.resultSuccessData(request, response, "", null);
-			} else {
-				logger.info(lists+"");
-				return this.resultSuccessData(request, response, "", lists);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return this.resultFaliureData(request, response, "", null);
-		}
-	}
+	
 }
