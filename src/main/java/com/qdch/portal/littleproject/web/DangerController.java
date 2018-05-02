@@ -558,7 +558,7 @@ public class DangerController extends BaseController {
 				dto.setSum(s);
 				dto.setAbility(aggregate);
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null || lists.isEmpty()) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
