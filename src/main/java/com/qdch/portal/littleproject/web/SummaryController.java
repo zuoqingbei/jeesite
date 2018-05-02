@@ -42,7 +42,7 @@ import java.util.*;
 @Controller
 public class SummaryController extends BaseController {
 
-	sqlYuJu sql = new sqlYuJu();
+	//sqlYuJu sql = new sqlYuJu();
 	
 
 
@@ -734,7 +734,7 @@ public class SummaryController extends BaseController {
 			z.setA(jihe1);
 			z.setB(jihe2);
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null ) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", z);
@@ -772,14 +772,14 @@ public class SummaryController extends BaseController {
 			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
 			List<String> times=new ArrayList<String>();
 			int a=1;
-			if(alljinlist!=null&&alljinlist.size()>0){
+			if(alljinlist!=null){
 				for(EntryAndExitCapitalModel s:alljinlist){
 					LittleProjectEntity re=new LittleProjectEntity();
 					re.setName(s.getXm());
 					res.add(re);
 				}
 			}
-			if(res!=null&&res.size()>0){
+			if(res!=null){
 				for(LittleProjectEntity s:res){
 					List<String> jihe=new ArrayList<String>();
 					if(lists!=null&&lists.size()>0){

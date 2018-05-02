@@ -3,19 +3,24 @@
 <mapper namespace="com.qdch.portal.littleproject.dao.BusinessRelationModelDao">
 	<resultMap id="dtoResult"
 		type="com.qdch.portal.littleproject.entity.BusinessRelationModel">
-		<result property="company_name" column="company_name" />
-		<result property="legal_person" column="legal_person" />
+		<result property="company_name" column="name" />
+		<result property="legal_person" column="corporate" />
 		<result property="senior_managers" column="senior_managers" />
 		<result property="shareholders" column="shareholders" />
 
 	</resultMap>
 	<select id="getBusinessRelationModelDao" resultMap="dtoResult">
 		SELECT
-		T.company_name,--公司名称
-		T.LEGAL_PERSON,--法人代表
-		T.SENIOR_MANAGERS,--高管名称（主要人员）
-		T.SHAREHOLDERS --投资公司和投资人
-		FROM hub_commerce_company_info T
-		WHERE T.company_name = #{companyName};
+		h.jys,--交易所编码
+		T.NAME,--公司名称
+		T.corporate,--法人
+		T1.SENIOR_MANAGERS,--高管名称（主要人员）
+		T1.SHAREHOLDERS --投资公司和投资人
+		FROM hub_commerce_enterprise T
+		LEFT JOIN hub_commerce_company_info T1
+		ON T.NAME=T1.company_name
+		left join hub_commerce_ref_jys h
+		on h.enterprise_id=t.id
+		WHERE H.JYS =#{jys} ;
 	</select>
 </mapper>
