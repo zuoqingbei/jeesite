@@ -30,6 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.Security;
@@ -251,11 +252,11 @@ public class LittleProjectAuthenController  extends BaseController {
         if(thirdplat == null){
             return this.resultFaliureData(request,response,"","");
         }else{
-            thirdplat.setGender(request.getParameter("gender"));
-            thirdplat.setCity(request.getParameter("city"));
-            thirdplat.setCountry(request.getParameter("country"));
-            thirdplat.setProvince(request.getParameter("province"));
-            thirdplat.setNickName(request.getParameter("nickname"));
+            thirdplat.setGender(decode(request.getParameter("gender")));
+            thirdplat.setCity(decode(request.getParameter("city")));
+            thirdplat.setCountry(decode(request.getParameter("country")));
+            thirdplat.setProvince(decode(request.getParameter("province")));
+            thirdplat.setNickName(decode(request.getParameter("nickname")));
             accountThirdplatDao.update(thirdplat);
         }
     }catch (Exception e){
@@ -307,5 +308,17 @@ public class LittleProjectAuthenController  extends BaseController {
         }
 
 
+    }
+
+    private String  decode (String str){
+        try {
+            if(StringUtils.isNotBlank(str)){
+                str = URLEncoder.encode(str, "UTF-8");
+            }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 }

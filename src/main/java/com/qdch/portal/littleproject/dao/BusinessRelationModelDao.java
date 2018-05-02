@@ -11,3 +11,4 @@ import com.qdch.portal.littleproject.entity.BusinessRelationModel;
 public interface BusinessRelationModelDao extends CrudDao<BusinessRelationModelDao>{
 public List<BusinessRelationModel> getBusinessRelationModelDao(@Param("jys")String jys);
 }
+
