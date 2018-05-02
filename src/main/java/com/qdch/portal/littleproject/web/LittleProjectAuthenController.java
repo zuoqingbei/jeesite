@@ -108,13 +108,18 @@ public class LittleProjectAuthenController  extends BaseController {
             }
 
             try {
+                accountThirdplat.setPtype("wechat");
                 accountThirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
 
             } catch (Exception e) {
                 e.printStackTrace();
                 return this.resultFaliureData(request,response,"该用户的openid不存在",null);
             }
-            User user  = new User(accountThirdplat.getNickName(),accountThirdplat);
+            String nickname = accountThirdplat.getNickName();
+            if(StringUtils.isBlank(nickname)){
+                nickname="user";
+            }
+            User user  = new User(nickname,accountThirdplat);
             user.setMobile(request.getParameter("mobile"));
             systemService.saveUser(user);
             List<Object> tellist = PostgreHubUtils.getInstance().excuteQuery("select ftel from hub_testapp_info",null);
@@ -156,17 +161,18 @@ public class LittleProjectAuthenController  extends BaseController {
     public String enterLittleProject(AccountThirdplat accountThirdplat,HttpServletRequest request, HttpServletResponse response){
         try {
             if(StringUtils.isBlank(accountThirdplat.getPlatkey())){
-                return this.resultFaliureData(request,response,"请先输入key",null);
+                return this.resultFaliureData(request,response,"请先输入openid",null);
             }
+            accountThirdplat.setPtype("wechat");
             AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
             if(thirdplat == null){
-                accountThirdplatService.save(accountThirdplat); //在第三方平台表保存基本信息
+                //accountThirdplatService.save(accountThirdplat); //在第三方平台表保存基本信息
             }else{
                 if(StringUtils.isNotBlank(thirdplat.getUserId())){ //认证通过会写入userid字段，若有，表示已经认证通过
                     return this.resultData(request,response,"already","用户已通过验证","",null);
                 }
-                accountThirdplat.setId(thirdplat.getId());
-                accountThirdplatDao.update(accountThirdplat);
+                //accountThirdplat.setId(thirdplat.getId());
+                //accountThirdplatDao.update(accountThirdplat);
             }
 
             return this.resultSuccessData(request,response,"",null);
@@ -203,38 +209,60 @@ public class LittleProjectAuthenController  extends BaseController {
     @RequestMapping(value = "${portalPath}/littleproject/auth/getUserInfo")
     @ResponseBody
     public String getUserInfo(HttpServletRequest request,HttpServletResponse response){
-        String encryptedData = request.getParameter("encryptedData");
-        String iv = request.getParameter("iv");
-        String session_key = request.getSession().getAttribute("sessionKey"+request.getParameter("openid"))+"";
-        try {
-            byte[] resultByte = AESUtil.instance.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(session_key), Base64.decodeBase64(iv));
-            if(null != resultByte && resultByte.length > 0){
-                String userInfo = new String(resultByte, "UTF-8");
-                System.out.println(userInfo);
-                WxUserInfo wxUserInfo=(WxUserInfo) JsonMapper.fromJsonString(userInfo, WxUserInfo.class);
-//                JSONObject json = JSONObject.fromObject(userInfo); //将字符串{“id”：1}
-                AccountThirdplat accountThirdplat  = new AccountThirdplat();
-                accountThirdplat.setPtype("wechat");
-                accountThirdplat.setPlatkey(request.getParameter("openid"));
-                AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
-                if(thirdplat == null){
-                    return this.resultFaliureData(request,response,"","");
-                }else{
-                    thirdplat.setGender(wxUserInfo.getSex());
-                    thirdplat.setCity(wxUserInfo.getCity());
-                    thirdplat.setCountry(wxUserInfo.getCountry());
-                    thirdplat.setProvince(wxUserInfo.getProvince());
-                    thirdplat.setNickName(wxUserInfo.getNickname());
-                    accountThirdplatDao.update(thirdplat);
-                }
-            }
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
+//        //String encryptedData = request.getParameter("encryptedData");
+//       // String iv = request.getParameter("iv");
+//       // String session_key = request.getSession().getAttribute("sessionKey"+request.getParameter("openid"))+"";
+//        try {
+//            //byte[] resultByte = AESUtil.instance.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(session_key), Base64.decodeBase64(iv));
+//            if(null != resultByte && resultByte.length > 0){
+//                String userInfo = new String(resultByte, "UTF-8");
+//                System.out.println(userInfo);
+//                WxUserInfo wxUserInfo=(WxUserInfo) JsonMapper.fromJsonString(userInfo, WxUserInfo.class);
+////                JSONObject json = JSONObject.fromObject(userInfo); //将字符串{“id”：1}
+//                AccountThirdplat accountThirdplat  = new AccountThirdplat();
+//                accountThirdplat.setPtype("wechat");
+//                accountThirdplat.setPlatkey(request.getParameter("openid"));
+//                AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
+//                if(thirdplat == null){
+//                    return this.resultFaliureData(request,response,"","");
+//                }else{
+//                    thirdplat.setGender(wxUserInfo.getSex());
+//                    thirdplat.setCity(wxUserInfo.getCity());
+//                    thirdplat.setCountry(wxUserInfo.getCountry());
+//                    thirdplat.setProvince(wxUserInfo.getProvince());
+//                    thirdplat.setNickName(wxUserInfo.getNickname());
+//                    logger.info("info",wxUserInfo.getNickname());
+//                    accountThirdplatDao.update(thirdplat);
+//                }
+//            }
+//        } catch (InvalidAlgorithmParameterException e) {
+//            e.printStackTrace();
+//            return this.resultFaliureData(request,response,"","");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//            return this.resultFaliureData(request,response,"","");
+//        }
+
+    try {
+        AccountThirdplat accountThirdplat  = new AccountThirdplat();
+        accountThirdplat.setPtype("wechat");
+        accountThirdplat.setPlatkey(request.getParameter("openid"));
+        AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
+        if(thirdplat == null){
             return this.resultFaliureData(request,response,"","");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return this.resultFaliureData(request,response,"","");
+        }else{
+            thirdplat.setGender(request.getParameter("gender"));
+            thirdplat.setCity(request.getParameter("city"));
+            thirdplat.setCountry(request.getParameter("country"));
+            thirdplat.setProvince(request.getParameter("province"));
+            thirdplat.setNickName(request.getParameter("nickname"));
+            accountThirdplatDao.update(thirdplat);
         }
+    }catch (Exception e){
+        e.printStackTrace();
+        return this.resultFaliureData(request,response,"发生错误","");
+    }
+
 
 
         return this.resultSuccessData(request,response,"","");
@@ -266,6 +294,12 @@ public class LittleProjectAuthenController  extends BaseController {
             accountThirdplat.setPtype("wechat");
             accountThirdplat.setPlatkey(info.getOpenid());
             accountThirdplat.setUnionid(info.getUnionid());
+
+            AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
+            if(thirdplat == null ){
+                accountThirdplatService.save(accountThirdplat);
+            }
+
             return this.resultSuccessData(request,response,"",info.getOpenid());
         } catch (Exception e) {
             e.printStackTrace();

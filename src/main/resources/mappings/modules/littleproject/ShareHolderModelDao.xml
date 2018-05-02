@@ -19,28 +19,7 @@
 		left join hub_dd_tqs_jys h1
 		on h1.jysmc = t.company_name
 		left join hub_ref_jysinfo h2 on h1.jys = h2.jys
-		where jysinfo ='青金中心' and T.type='1' order by name
+		where h1.jys =#{jys} and T.type='1' order by name
 	</select>
-	<select id="getShareHolderModelDao2" resultMap="dtoResult">
-		SELECT
-		T.name,T.pay,T.pay_date,T.scale,jysinfo FROM
-		hub_commerce_co_shareholder T
-		LEFT JOIN hub_commerce_enterprise n
-		ON T .company_name = n. NAME
-		left join hub_dd_tqs_jys h1
-		on h1.jysmc = t.company_name
-		left join hub_ref_jysinfo h2 on h1.jys = h2.jys
-		where jysinfo ='联合信用资产' and T.type='1' order by name
-	</select>
-	<select id="getShareHolderModelDao3" resultMap="dtoResult">
-		SELECT
-		T.name,T.pay,T.pay_date,T.scale,jysinfo FROM
-		hub_commerce_co_shareholder T
-		LEFT JOIN hub_commerce_enterprise n
-		ON T .company_name = n. NAME
-		left join hub_dd_tqs_jys h1
-		on h1.jysmc = t.company_name
-		left join hub_ref_jysinfo h2 on h1.jys = h2.jys
-		where jysinfo ='青岛文化产权' and T.type='1' order by name
-	</select>
+	
 </mapper>

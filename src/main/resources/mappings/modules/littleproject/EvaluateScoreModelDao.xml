@@ -9,13 +9,7 @@
 
 	</resultMap>
 	<select id="evaluateScore" resultMap="evaluateScore" >
-		select * from INSIGHT_XCX_SCPJ where jys='青金中心' order by pjfj
-	</select>
-	<select id="evaluateScore2" resultMap="evaluateScore" >
-		select * from INSIGHT_XCX_SCPJ where jys='联合信产' order by pjfj
-	</select>
-	<select id="evaluateScore3" resultMap="evaluateScore" >
-		select * from INSIGHT_XCX_SCPJ where jys='文化产权' order by pjfj
+		select * from INSIGHT_XCX_SCPJ where jys=#{jys} order by pjfj
 	</select>
 	
 </mapper>
