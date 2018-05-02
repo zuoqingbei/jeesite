@@ -85,7 +85,9 @@ public class SummaryController extends BaseController {
 			//交易市场
 			List<TradeMarketModel> tradelist=tradeMarketModelDao.tradeMarket();
 			TradeMarketModel all=new TradeMarketModel();
+			TradeMarketModel all2=new TradeMarketModel();
 			tradelist.add(all);
+			tradelist.add(all2);
 			// 时间集合
 			List<String> times = new ArrayList<String>();
 			// 交易市场集合
@@ -101,6 +103,9 @@ public class SummaryController extends BaseController {
 					}else{
 						aa.setName(o.getJysinfo());
 					}
+					/*if(o.equals(all2)){
+						aa.setName("总量2");
+					}*/
 					
 					res.add(aa);
 				}
@@ -129,6 +134,18 @@ public class SummaryController extends BaseController {
 					s.setLists(shiChan);
 				}
 			}
+			/*//删除空list
+			Iterator<LittleProjectEntity> it=res.iterator();
+			while(it.hasNext()){
+				LittleProjectEntity s=it.next();
+				
+						if(s.getLists().get(0).equals("n")){
+							it.remove();
+						}
+							
+			
+				
+			}*/
 
 			// 获取时间
 			if (res != null && res.size() > 0) {
@@ -155,10 +172,11 @@ public class SummaryController extends BaseController {
 				}
 			}
 			
+			
 			dto.setTimes(times.toArray());//把时间加到对象dto中
 			dto.setEntities(res);//把市场的信息加到对象dto中
 			DynamicDataSource.removeDataSourceKey();
-			if (lists1 == null && lists1.size() < 0) {
+			if (lists1 == null) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
@@ -404,42 +422,32 @@ public class SummaryController extends BaseController {
 			LittleProjectDto dto = new LittleProjectDto();
 			//客户统计
 			List<CustomerCountModel> tongji =customerCountModelDao.getCustomerCountModelDao(); 
-			//交易市场
-			List<TradeMarketModel> tradelist=tradeMarketModelDao.tradeMarket();
 			TradeMarketModel all=new TradeMarketModel();
-			tradelist.add(all);
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
-			if (tradelist != null && tradelist.size() > 0) {
-				for (TradeMarketModel o : tradelist) {
-					LittleProjectEntity aa = new LittleProjectEntity();
-					if(o.equals(all)){
-						aa.setName("总量");
-					}else{
-						aa.setName(o.getJysinfo());
-					}
-					res.add(aa);
-				}
-
-			}
-			if (res != null && res.size() > 0) {
-				for (LittleProjectEntity s : res) {
-					List<String> shichan = new ArrayList<String>();
+			
+		
+				
+					
 					if (tongji != null && tongji.size() > 0) {
 						for (CustomerCountModel o : tongji) {
-							if (o.getJysinfo().equals(s.getName())) {
-								shichan.add(o.getRzrkhs());
-								shichan.add(o.getTzrkhs());
-								shichan.add(o.getCount() + "");
-								
+							List<String> shichan = new ArrayList<String>();
+							LittleProjectEntity s=new LittleProjectEntity();
+								shichan.add(o.getGrrzrkhs()+"/"+o.getJgrzrkhs());
+								shichan.add(o.getGrtzrkhs()+"/"+o.getJgrtzrkhs());
+								shichan.add(o.getGrkhs()+"/"+o.getJgkhs());
+								s.setName(o.getJysinfo());
+								s.setLists(shichan);
+								res.add(s);
 							}
-						}
+						
 					}
-					s.setLists(shichan);
-				}
-			}
+					
+				
+				
+			
 			dto.setEntities(res);
 			DynamicDataSource.removeDataSourceKey();
-			if (tongji == null && tongji.size() < 0) {
+			if (tongji == null) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);

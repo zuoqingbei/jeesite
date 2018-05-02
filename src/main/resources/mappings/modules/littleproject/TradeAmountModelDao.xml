@@ -16,7 +16,7 @@
 		jys,'总量'
 		jysmc,'总量' jysinfo,sum(FVALUE) fvalue from
 		(SELECT
-		hdp."PERIOD_DATE"
+		to_char(hdp."PERIOD_DATE",'yyyymmdd')
 		vday,
 		HDTJ.jys,
 		HDTJ.jysmc,
@@ -46,7 +46,7 @@
 		UNION
 		ALL
 		SELECT
-		hdp."PERIOD_DATE" vday,
+		to_char(hdp."PERIOD_DATE",'yyyymmdd') vday,
 		HDTJ.jys,
 		HDTJ.jysmc,
 		HRJ.jysinfo,
@@ -73,7 +73,7 @@
 		group by vday
 		union all
 		SELECT
-		hdp."PERIOD_DATE" vday,
+		to_char(hdp."PERIOD_DATE",'yyyymmdd') vday,
 		HDTJ.jys,
 		HDTJ.jysmc,
 		HRJ.jysinfo,
@@ -100,7 +100,7 @@
 		HRJ.jysinfo
 		UNION ALL
 		SELECT
-		hdp."PERIOD_DATE" vday,
+		to_char(hdp."PERIOD_DATE",'yyyymmdd') vday,
 		HDTJ.jys,
 		HDTJ.jysmc,
 		HRJ.jysinfo,
@@ -129,7 +129,7 @@
 		select vday,'总量' jys,'总量'
 		jysmc,'总量' jysinfo,sum(FVALUE) from
 		(SELECT
-		CASE WHEN extract(week from
+		to_char(CASE WHEN extract(week from
 		CURRENT_DATE) > hdp."WEEK_IN_YEAR" THEN
 		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) -
 		hdp."WEEK_IN_YEAR")*7||' DAY' AS INTERVAL)
@@ -140,7 +140,7 @@
 		CURRENT_DATE) -
 		1||'1231','YYYYMMDD')) - hdp."WEEK_IN_YEAR"||' DAY' AS
 		INTERVAL)
-		END vday,
+		END,'yyyymmdd') vday,
 		HDTJ.jys,
 		HDTJ.jysmc,
 		HRJ.jysinfo,
@@ -168,7 +168,7 @@
 		HRJ.jysinfo
 		UNION ALL
 		SELECT
-		CASE WHEN extract(week from CURRENT_DATE) > hdp."WEEK_IN_YEAR"
+		to_char(CASE WHEN extract(week from CURRENT_DATE) > hdp."WEEK_IN_YEAR"
 		THEN
 		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) -
 		hdp."WEEK_IN_YEAR")*7||' DAY' AS INTERVAL)
@@ -179,7 +179,7 @@
 		CURRENT_DATE) -
 		1||'1231','YYYYMMDD')) - hdp."WEEK_IN_YEAR"||' DAY' AS
 		INTERVAL)
-		END vday,
+		END,'yyyymmdd') vday,
 		HDTJ.jys,
 		HDTJ.jysmc,
 		HRJ.jysinfo,
@@ -209,7 +209,7 @@
 		vday
 		union ALL
 		SELECT
-		CASE WHEN extract(week from CURRENT_DATE) >
+		to_char(CASE WHEN extract(week from CURRENT_DATE) >
 		hdp."WEEK_IN_YEAR" THEN
 		CURRENT_DATE-CAST((extract(week from
 		CURRENT_DATE) -
@@ -221,7 +221,7 @@
 		CURRENT_DATE) -
 		1||'1231','YYYYMMDD')) - hdp."WEEK_IN_YEAR"||' DAY' AS
 		INTERVAL)
-		END vday,
+		END,'yyyymmdd') vday,
 		HDTJ.jys,
 		HDTJ.jysmc,
 		HRJ.jysinfo,
@@ -249,7 +249,7 @@
 		HRJ.jysinfo
 		UNION ALL
 		SELECT
-		CASE WHEN extract(week from CURRENT_DATE) > hdp."WEEK_IN_YEAR"
+		to_char(CASE WHEN extract(week from CURRENT_DATE) > hdp."WEEK_IN_YEAR"
 		THEN
 		CURRENT_DATE-CAST((extract(week from CURRENT_DATE) -
 		hdp."WEEK_IN_YEAR")*7||' DAY' AS INTERVAL)
@@ -260,7 +260,7 @@
 		CURRENT_DATE) -
 		1||'1231','YYYYMMDD')) - hdp."WEEK_IN_YEAR"||' DAY' AS
 		INTERVAL)
-		END vday,
+		END,'yyyymmdd') vday,
 		HDTJ.jys,
 		HDTJ.jysmc,
 		HRJ.jysinfo,
