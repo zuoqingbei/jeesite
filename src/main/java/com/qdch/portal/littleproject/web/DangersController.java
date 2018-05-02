@@ -39,6 +39,50 @@ public class DangersController extends BaseController {
 	public DangerService dangerService;
 
 	/**
+	 * 风险——未然指数-未然指数值
+	 * 
+	 * @author wangsw
+	 * @time 2018年5月2日
+	 */
+	@RequestMapping(value = { "${portalPath}/littleproject/weiranindex" })
+	@ResponseBody
+	public String weiranIndexs(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			DynamicDataSource.setInsightDataSource();
+			List<Map<String, Object>> riskIndexs = dangerService
+					.getMarketRiskIndex();
+			DynamicDataSource.removeDataSourceKey();
+			if (riskIndexs == null || riskIndexs.size() < 0) {
+				return this.resultSuccessData(request, response, "", null);
+			}
+
+			LittleProjectDto dto = new LittleProjectDto();
+			List<KeHuFenLei> riskList = new ArrayList<KeHuFenLei>();
+
+			String tradeName = "";
+			String exValue = "";
+			KeHuFenLei ke = null;
+			for (Map<String, Object> map : riskIndexs) {
+				ke = new KeHuFenLei();
+				tradeName = map.get("jysinfo") == null ? "" : map
+						.get("jysinfo").toString();
+				exValue = map.get("wrzs") == null ? "" : map.get("wrzs")
+						.toString();
+				ke.setGrs(tradeName);
+				ke.setJgs(exValue);
+				riskList.add(ke);
+			}
+			// 数据传输对象收集
+			dto.setIndexs(riskList);
+			return this.resultSuccessData(request, response, "", dto);
+		} catch (Exception e) {
+			logger.warn("风险——未然指数-未然指数值", e);
+			return this.resultFaliureData(request, response, "", null);
+		}
+	}
+
+	/**
 	 * 风险——未然指数-未然指数趋势
 	 * 
 	 * @author wangsw
@@ -53,8 +97,6 @@ public class DangersController extends BaseController {
 			List<Map<String, Object>> lists = dangerService.getWeiRanTrend();
 			List<Map<String, Object>> tradeLists = dangerService
 					.getFinanceMarket();
-			List<Map<String, Object>> riskIndexs = dangerService
-					.getMarketRiskIndex();
 			DynamicDataSource.removeDataSourceKey();
 			if (lists == null || lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
@@ -65,7 +107,6 @@ public class DangersController extends BaseController {
 			HashSet<String> times = new LinkedHashSet<String>();
 			// 交易市场集合
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
-			List<KeHuFenLei> riskList = new ArrayList<KeHuFenLei>();
 
 			String date = "";
 			String jys = "";
@@ -88,6 +129,9 @@ public class DangersController extends BaseController {
 							&& StringUtils.isNotEmpty(tradeName)) {
 						exValue = map.get("fvalue") == null ? "" : map.get(
 								"fvalue").toString();
+						if(StringUtils.isEmpty(exValue)){
+							continue;
+						}
 						date = map.get("date") == null ? "" : map.get("date")
 								.toString();
 						exVList.add(exValue);
@@ -103,21 +147,9 @@ public class DangersController extends BaseController {
 					res.add(aa);
 				}
 			}
-			KeHuFenLei ke = null;
-			for (Map<String, Object> map : riskIndexs) {
-				ke = new KeHuFenLei();
-				tradeName = map.get("jysinfo") == null ? "" : map
-						.get("jysinfo").toString();
-				exValue = map.get("wrzs") == null ? "" : map.get("wrzs")
-						.toString();
-				ke.setGrs(tradeName);
-				ke.setJgs(exValue);
-				riskList.add(ke);
-			}
 			// 数据传输对象收集
 			dto.setTimes(times.toArray());
 			dto.setEntities(res);
-			dto.setIndexs(riskList);
 			return this.resultSuccessData(request, response, "", dto);
 		} catch (Exception e) {
 			logger.warn("风险——未然指数-未然指数趋势", e);
