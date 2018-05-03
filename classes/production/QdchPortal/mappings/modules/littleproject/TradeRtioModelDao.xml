@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.TradeRtioModelDao">
+	<resultMap id="dtoResult"
+		type="com.qdch.portal.littleproject.entity.TradeRtioModel">
+		<result property="cpdlbm" column="cpdlbm" />
+		<result property="cpdlmc" column="cpdlmc" />
+		<result property="cpdlinfo" column="cpdlinfo" />
+		<result property="cpdm" column="cpdm" />
+		<result property="cpmc" column="cpmc" />
+		<result property="cpje" column="cpje" />
+		<result property="sum" column="sum" />
+	</resultMap>
+	<select id="getTradeRtioModelDao" resultMap="dtoResult">
+		WITH ZX_DATE AS
+		(SELECT MAX(YWRQ) AS YWRQ FROM HUB_TQS_IMP_CJLS_LS),
+		CP_JE AS (SELECT
+		T.JYS,T1.JYSBM,T.CPDM,SUM(T.CJJE) AS CPJE
+		FROM HUB_TQS_IMP_CJLS_LS T
+		LEFT JOIN LAKE_DD_TQS_JYS T1
+		ON T.JYS=T1.JYS
+		WHERE T.YWRQ = (SELECT YWRQ
+		FROM ZX_DATE)
+		GROUP BY T.JYS,T1.JYSBM,T.CPDM)
+		SELECT LZ.WAREKINDID AS
+		CPDLBM,LZT.MEMO AS CPDLMC,
+		LZT.WAREKINDALIAS AS CPDLINFO,SUM(T.CPJE)
+		FROM CP_JE T
+		LEFT JOIN LAKE_ZD_TB_REG_WARE LZ
+		ON T.CPDM = LZ.WAREID
+		AND
+		T.JYSBM=LZ.SYSID
+		LEFT JOIN LAKE_ZD_TB_REG_WAREKIND LZT
+		ON
+		LZT.WAREKINDID=LZ.WAREKINDID
+		AND LZT.SYSID=LZ.SYSID
+		GROUP BY
+		LZ.WAREKINDID,LZT.WAREKINDALIAS,LZT.MEMO ORDER BY cpdlbm
+	</select>
+	<select id="getTradeRtioModelDao2" resultMap="dtoResult">
+			WITH ZX_DATE AS (SELECT MAX(YWRQ) AS YWRQ FROM HUB_TQS_IMP_CJLS_LS),
+		CP_JE AS (SELECT T.JYS,T1.JYSBM,T.CPDM,SUM(T.CJJE) AS CPJE
+		FROM HUB_TQS_IMP_CJLS_LS T
+		LEFT JOIN LAKE_DD_TQS_JYS T1
+		ON T.JYS=T1.JYS
+		WHERE T.YWRQ = (SELECT YWRQ FROM ZX_DATE)
+		GROUP BY T.JYS,T1.JYSBM,T.CPDM)
+		SELECT LZ.WAREKINDID AS CPDLBM,LZT.MEMO AS CPDLMC,
+		LZT.WAREKINDALIAS AS CPDLINFO,LZ.WARENAME AS CPMC,T.CPDM,T.CPJE
+		FROM CP_JE T
+		LEFT JOIN LAKE_ZD_TB_REG_WARE LZ
+		ON T.CPDM = LZ.WAREID
+		AND T.JYSBM=LZ.SYSID
+		LEFT JOIN LAKE_ZD_TB_REG_WAREKIND LZT
+		ON LZT.WAREKINDID=LZ.WAREKINDID
+		AND LZT.SYSID=LZ.SYSID
+		where LZT.MEMO=#{cpdlinfo} ORDER BY LZ.WAREKINDID
+
+	</select>
+</mapper>

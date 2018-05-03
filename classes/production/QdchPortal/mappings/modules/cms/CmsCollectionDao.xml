@@ -1,0 +1,126 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsCollectionDao">
+    
+	<sql id="cmsCollectionColumns">
+		a.id AS "id",
+		a.source_id AS "sourceId",
+		a.source_table AS "sourceTable",
+		a.user_id AS "user.id",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		u4.name AS "user.name"
+	</sql>
+	
+	<sql id="cmsCollectionJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CmsCollection">
+		SELECT 
+			<include refid="cmsCollectionColumns"/>
+		FROM cms_collection a
+		<include refid="cmsCollectionJoins"/>
+		WHERE a.id = #{id} and a.del_flag='0'
+	</select>
+	
+	<select id="findList" resultType="CmsCollection">
+		SELECT 
+			<include refid="cmsCollectionColumns"/>
+		FROM cms_collection a
+		<include refid="cmsCollectionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsCollection">
+		SELECT 
+			<include refid="cmsCollectionColumns"/>
+		FROM cms_collection a
+		<include refid="cmsCollectionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_collection(
+			id,
+			source_id,
+			source_table,
+			user_id,
+			create_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{sourceId},
+			#{sourceTable},
+			#{user.id},
+			#{createDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_collection SET 	
+			source_id = #{sourceId},
+			source_table = #{sourceTable},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_collection SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="getCollectionCount" resultType="CmsCollection">
+		SELECT
+		count(*) count
+		FROM
+		cms_collection a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+
+	</select>
+
+	<select id="getDynamicSelf" resultType="CmsCollection">
+		SELECT
+		count(*) count
+		FROM
+		cms_collection a
+		WHERE
+		a.source_table = #{sourceTable}
+		AND a.source_id = #{sourceId}
+		AND a.del_flag = '0'
+
+		and a.user_id=#{userId}
+	</select>
+
+	<select id="getBySource" resultType="CmsCollection">
+		select
+		<include refid="cmsCollectionColumns"/>
+		FROM cms_collection a
+		<include refid="cmsCollectionJoins"/>
+		where a.del_flag='0' and a.source_id=#{sourceId} and a.source_table=#{sourceTable} and a.user_id=#{user.id}
+	</select>
+	
+</mapper>

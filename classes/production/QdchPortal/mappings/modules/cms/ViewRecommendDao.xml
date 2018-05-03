@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.ViewRecommendDao">
+    
+	<sql id="viewRecommendColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.name AS "name",
+		a.photo AS "photo",
+		a.title AS "title",
+		a.image AS "image",
+		a.tags AS "tags",
+		a.description AS "description",
+		a.weight AS "weight",
+		a.hits AS "hits",
+		a.transmit AS "transmit",
+		a.discess AS "discess",
+		a.praise AS "praise",
+		a.tread AS "tread",
+		a.collection AS "collection",
+		a.report AS "report",
+		a.evaluate AS "evaluate",
+		a.answer AS "answer",
+		a.tip AS "tip",
+		a.create_date AS "createDate",
+		a.category AS "category",
+		u2.name AS "user.name",
+		u2.photo AS "user.photo"
+	</sql>
+	
+	<sql id="viewRecommendJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="ViewRecommend">
+		SELECT 
+			<include refid="viewRecommendColumns"/>
+		FROM view_recommend a
+		<include refid="viewRecommendJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ViewRecommend">
+		SELECT 
+			<include refid="viewRecommendColumns"/>
+		FROM view_recommend a
+		<include refid="viewRecommendJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ViewRecommend">
+		SELECT 
+			<include refid="viewRecommendColumns"/>
+		FROM view_recommend a
+		<include refid="viewRecommendJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO view_recommend(
+			id,
+			user_id,
+			name,
+			photo,
+			title,
+			image,
+			tags,
+			description,
+			weight,
+			hits,
+			transmit,
+			discess,
+			praise,
+			tread,
+			collection,
+			report,
+			evaluate,
+			answer,
+			tip,
+			create_date,
+			category
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{name},
+			#{photo},
+			#{title},
+			#{image},
+			#{tags},
+			#{description},
+			#{weight},
+			#{hits},
+			#{transmit},
+			#{discess},
+			#{praise},
+			#{tread},
+			#{collection},
+			#{report},
+			#{evaluate},
+			#{answer},
+			#{tip},
+			#{createDate},
+			#{category}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE view_recommend SET 	
+			user_id = #{user.id},
+			name = #{name},
+			photo = #{photo},
+			title = #{title},
+			image = #{image},
+			tags = #{tags},
+			description = #{description},
+			weight = #{weight},
+			hits = #{hits},
+			transmit = #{transmit},
+			discess = #{discess},
+			praise = #{praise},
+			tread = #{tread},
+			collection = #{collection},
+			report = #{report},
+			evaluate = #{evaluate},
+			answer = #{answer},
+			tip = #{tip},
+			category = #{category}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM view_recommend
+		WHERE id = #{id}
+	</update>
+
+	<select id="getRecommend" resultType="ViewRecommend">
+		SELECT
+		<include refid="viewRecommendColumns"/>
+		FROM view_recommend a
+		<if test="tags != null and tags != ''">
+			and FIND_IN_SET(#{tags},a.tags)
+		</if>
+		<include refid="viewRecommendJoins"/>
+		ORDER by weight desc,a.create_date desc
+	</select>
+	
+</mapper>
