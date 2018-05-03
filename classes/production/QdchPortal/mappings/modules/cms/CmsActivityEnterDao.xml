@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.modules.cms.dao.CmsActivityEnterDao">
+    
+	<sql id="cmsActivityEnterColumns">
+		a.id AS "id",
+		a.activity_id AS "activityId",
+		a.user_id AS "user.id",
+		a.create_date AS "createDate",
+		a.sign AS "sign",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="cmsActivityEnterJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CmsActivityEnter">
+		SELECT 
+			<include refid="cmsActivityEnterColumns"/>
+		FROM cms_activity_enter a
+		<include refid="cmsActivityEnterJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CmsActivityEnter">
+		SELECT 
+			<include refid="cmsActivityEnterColumns"/>
+		FROM cms_activity_enter a
+		<include refid="cmsActivityEnterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{id},'%')</if>
+			</if>
+			<if test="activityId != null and activityId != ''">
+				AND a.activity_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{activityId}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{activityId}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{activityId},'%')</if>
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{user.id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.id},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CmsActivityEnter">
+		SELECT 
+			<include refid="cmsActivityEnterColumns"/>
+		FROM cms_activity_enter a
+		<include refid="cmsActivityEnterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cms_activity_enter(
+			id,
+			activity_id,
+			user_id,
+			create_date,
+			sign,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{activityId},
+			#{user.id},
+			#{createDate},
+			#{sign},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cms_activity_enter SET 	
+			activity_id = #{activityId},
+			user_id = #{user.id},
+			sign = #{sign},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cms_activity_enter SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

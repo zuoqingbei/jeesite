@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.dao.DtoModelDao">
+	<resultMap id="dtoResult" type="com.qdch.portal.littleproject.entity.DtoModel">
+		<result property="name" column="nameaa" />
+
+	</resultMap>
+	<select id="getTest" resultMap="dtoResult">
+		SELECT cplb nameaa FROM HUB_QY_CPFL order by cplb
+	</select>
+</mapper>

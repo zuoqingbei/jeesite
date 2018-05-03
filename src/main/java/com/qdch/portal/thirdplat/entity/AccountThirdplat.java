@@ -28,6 +28,15 @@ public class AccountThirdplat extends DataEntity<AccountThirdplat> {
 	private String city; // 城市
 	private String mobile; // 手机号
 	private String country; // 国家
+	private String sessionkey;
+
+	public String getSessionkey() {
+		return sessionkey;
+	}
+
+	public void setSessionkey(String sessionkey) {
+		this.sessionkey = sessionkey;
+	}
 
 	public AccountThirdplat() {
 		super();

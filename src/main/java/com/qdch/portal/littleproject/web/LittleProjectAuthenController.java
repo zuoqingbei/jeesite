@@ -210,11 +210,12 @@ public class LittleProjectAuthenController  extends BaseController {
     @RequestMapping(value = "${portalPath}/littleproject/auth/getUserInfo")
     @ResponseBody
     public String getUserInfo(HttpServletRequest request,HttpServletResponse response){
-//        //String encryptedData = request.getParameter("encryptedData");
-//       // String iv = request.getParameter("iv");
-//       // String session_key = request.getSession().getAttribute("sessionKey"+request.getParameter("openid"))+"";
+//        String encryptedData = request.getParameter("encryptedData");
+//        String iv = request.getParameter("iv");
+//
+//        String session_key = request.getSession().getAttribute("sessionKey"+request.getParameter("platkey"))+"";
 //        try {
-//            //byte[] resultByte = AESUtil.instance.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(session_key), Base64.decodeBase64(iv));
+//            byte[] resultByte = AESUtil.instance.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(session_key), Base64.decodeBase64(iv));
 //            if(null != resultByte && resultByte.length > 0){
 //                String userInfo = new String(resultByte, "UTF-8");
 //                System.out.println(userInfo);
@@ -265,7 +266,6 @@ public class LittleProjectAuthenController  extends BaseController {
     }
 
 
-
         return this.resultSuccessData(request,response,"","");
     }
 
@@ -295,6 +295,7 @@ public class LittleProjectAuthenController  extends BaseController {
             accountThirdplat.setPtype("wechat");
             accountThirdplat.setPlatkey(info.getOpenid());
             accountThirdplat.setUnionid(info.getUnionid());
+            accountThirdplat.setSessionkey(info.getSessionKey());
 
             AccountThirdplat thirdplat = accountThirdplatService.getByPlatKey(accountThirdplat);
             if(thirdplat == null ){
