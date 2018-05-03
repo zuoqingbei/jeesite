@@ -1,5 +1,7 @@
 package com.qdch.portal.littleproject.web;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -307,6 +309,12 @@ public class DangersController extends BaseController {
 			String type = request.getParameter("type");
 			String risk = request.getParameter("risk");
 			String market = request.getParameter("market");
+			if(StringUtils.isNotBlank(risk)){
+				risk = URLDecoder.decode(risk,"UTF-8");
+			}
+			if(StringUtils.isNotBlank(market)){
+				market = URLDecoder.decode(market,"UTF-8");
+			}
 			DynamicDataSource.setInsightDataSource();
 			List<Map<String, Object>> eventList = dangerService
 					.getMarketRiskEventList(type, risk, market);
