@@ -17,6 +17,7 @@ import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.littleproject.entity.SummaryProductDto;
 import com.qdch.portal.littleproject.service.SummaryProductService;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,6 +100,9 @@ public class SummaryProductController extends BaseController {
 			for (Map<String, Object> map : classList) {
 				className = formatterString(map.get("cpdlinfo"));
 				productName = formatterString(map.get("cpmc"));
+				if(StringUtils.isEmpty(className) || StringUtils.isEmpty(productName)){
+					continue;
+				}
 				if (!product.containsKey(className)) {
 					tempList = new ArrayList<String>();
 					product.put(className, tempList);
