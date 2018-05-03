@@ -30,6 +30,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
@@ -314,7 +316,8 @@ public class LittleProjectAuthenController  extends BaseController {
     private String  decode (String str){
         try {
             if(StringUtils.isNotBlank(str)){
-                str = URLEncoder.encode(str, "UTF-8");
+                //str = URLEncoder.encode(str, "UTF-8");
+                str = URLDecoder.decode(str, "UTF-8");
             }
 
         } catch (UnsupportedEncodingException e) {
