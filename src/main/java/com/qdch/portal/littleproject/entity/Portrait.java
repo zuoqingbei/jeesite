@@ -7,6 +7,7 @@ private String name;
 private LittleProjectEntity otherInfo;
 private Single info;
 private List<ZiJin> shareholder;
+private List<KeHuFenLei> radar;
 public String getName() {
 	return name;
 }
@@ -32,6 +33,12 @@ public List<ZiJin> getShareholder() {
 }
 public void setShareholder(List<ZiJin> shareholder) {
 	this.shareholder = shareholder;
+}
+public List<KeHuFenLei> getRadar() {
+	return radar;
+}
+public void setRadar(List<KeHuFenLei> radar) {
+	this.radar = radar;
 }
 
 

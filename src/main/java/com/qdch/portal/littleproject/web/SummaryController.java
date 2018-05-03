@@ -1,13 +1,13 @@
 package com.qdch.portal.littleproject.web;
 
 import com.qdch.portal.common.jdbc.datasource.DynamicDataSource;
-import com.qdch.portal.common.utils.PostgreUtils;
+
 import com.qdch.portal.common.web.BaseController;
 import com.qdch.portal.littleproject.dao.CustomerAgeModelDao;
 import com.qdch.portal.littleproject.dao.CustomerClassifyModelDao;
 import com.qdch.portal.littleproject.dao.CustomerCountModelDao;
 import com.qdch.portal.littleproject.dao.CustomerNumberModelDao;
-import com.qdch.portal.littleproject.dao.DtoModelDao;
+
 import com.qdch.portal.littleproject.dao.EntryAndExitCapitalModelDao;
 import com.qdch.portal.littleproject.dao.InterestRateModelDao;
 import com.qdch.portal.littleproject.dao.ProductCountModelDao;
@@ -21,7 +21,7 @@ import com.qdch.portal.littleproject.dao.TradeMarketModelDao;
 import com.qdch.portal.littleproject.dao.TradeRtioModelDao;
 import com.qdch.portal.littleproject.entity.*;
 
-import org.dozer.Mapping;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,9 +85,8 @@ public class SummaryController extends BaseController {
 			//交易市场
 			List<TradeMarketModel> tradelist=tradeMarketModelDao.tradeMarket();
 			TradeMarketModel all=new TradeMarketModel();
-			TradeMarketModel all2=new TradeMarketModel();
 			tradelist.add(all);
-			tradelist.add(all2);
+			
 			// 时间集合
 			List<String> times = new ArrayList<String>();
 			// 交易市场集合
@@ -103,10 +102,6 @@ public class SummaryController extends BaseController {
 					}else{
 						aa.setName(o.getJysinfo());
 					}
-					/*if(o.equals(all2)){
-						aa.setName("总量2");
-					}*/
-					
 					res.add(aa);
 				}
 			}
@@ -134,18 +129,17 @@ public class SummaryController extends BaseController {
 					s.setLists(shiChan);
 				}
 			}
-			/*//删除空list
+			//删除空list
 			Iterator<LittleProjectEntity> it=res.iterator();
 			while(it.hasNext()){
 				LittleProjectEntity s=it.next();
 				
-						if(s.getLists().get(0).equals("n")){
+						if(s.getLists()==null||s.getLists().isEmpty()||s.getLists().size()==0){
 							it.remove();
 						}
 							
-			
-				
-			}*/
+
+			}
 
 			// 获取时间
 			if (res != null && res.size() > 0) {
@@ -176,7 +170,7 @@ public class SummaryController extends BaseController {
 			dto.setTimes(times.toArray());//把时间加到对象dto中
 			dto.setEntities(res);//把市场的信息加到对象dto中
 			DynamicDataSource.removeDataSourceKey();
-			if (lists1 == null) {
+			if (lists1 == null||lists1.isEmpty()) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
@@ -246,10 +240,22 @@ public class SummaryController extends BaseController {
 					s.setLists(shiChan);
 				}
 			}
+			//删除空list
+			Iterator<LittleProjectEntity> it=res.iterator();
+			while(it.hasNext()){
+				LittleProjectEntity s=it.next();
+				
+						if(s.getLists()==null||s.getLists().isEmpty()||s.getLists().size()==0){
+							it.remove();
+						}
+							
+
+			}
+
 
 			dto.setEntities(res);
 			DynamicDataSource.removeDataSourceKey();
-			if (tradeCountList == null && tradeCountList.size() < 0) {
+			if (tradeCountList == null || tradeCountList.size() < 0) {
 				
 				return this.resultSuccessData(request, response, "", null);
 			} else {
@@ -332,6 +338,16 @@ public class SummaryController extends BaseController {
 					s.setLists(shiChan);
 				}
 			}
+			//删除空list
+			Iterator<LittleProjectEntity> it=res.iterator();
+			while(it.hasNext()){
+				LittleProjectEntity s=it.next();
+				
+						if(s.getLists()==null||s.getLists().isEmpty()||s.getLists().size()==0){
+							it.remove();
+						}
+
+			}
 
 			// 获取时间
 			if (res != null && res.size() > 0) {
@@ -353,7 +369,7 @@ public class SummaryController extends BaseController {
 			dto.setTimes(times.toArray());
 			dto.setEntities(res);
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null || lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
@@ -390,7 +406,7 @@ public class SummaryController extends BaseController {
 				}
 			}
 			DynamicDataSource.removeDataSourceKey();
-			if (khfl == null && khfl.size() < 0) {
+			if (khfl == null || khfl.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", kh);
@@ -422,7 +438,7 @@ public class SummaryController extends BaseController {
 			LittleProjectDto dto = new LittleProjectDto();
 			//客户统计
 			List<CustomerCountModel> tongji =customerCountModelDao.getCustomerCountModelDao(); 
-			TradeMarketModel all=new TradeMarketModel();
+		
 			List<LittleProjectEntity> res = new ArrayList<LittleProjectEntity>();
 			
 		
@@ -498,7 +514,7 @@ public class SummaryController extends BaseController {
 			res.setAge(age);
 			res.setSum(sum);
 			DynamicDataSource.removeDataSourceKey();
-			if (ages == null && ages.size() < 0) {
+			if (ages == null || ages.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
@@ -539,7 +555,7 @@ public class SummaryController extends BaseController {
 						}
 					}
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null || lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
@@ -591,6 +607,15 @@ public class SummaryController extends BaseController {
 					s.setLists(jihe);
 				}
 			}
+			//删除空list
+			Iterator<LittleProjectEntity> it=res.iterator();
+			while(it.hasNext()){
+				LittleProjectEntity s=it.next();
+				
+						if(s.getLists()==null||s.getLists().isEmpty()||s.getLists().size()==0){
+							it.remove();
+						}
+		}
 			if(res!=null&&res.size()>0){
 				for(LittleProjectEntity s:res){
 					if(lists!=null&&lists.size()>0){
@@ -606,7 +631,7 @@ public class SummaryController extends BaseController {
 			dto.setTimes(times.toArray());
 			dto.setEntities(res);
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null || lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
@@ -646,7 +671,7 @@ public class SummaryController extends BaseController {
 				}
 			}
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null || lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
@@ -688,7 +713,7 @@ public class SummaryController extends BaseController {
 				}
 			}
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null || lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
@@ -742,7 +767,7 @@ public class SummaryController extends BaseController {
 			z.setA(jihe1);
 			z.setB(jihe2);
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null ) {
+			if (lists == null||lists.isEmpty() ) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", z);
@@ -804,9 +829,20 @@ public class SummaryController extends BaseController {
 					s.setLists(jihe);
 				}
 			}
+			//删除空list
+			Iterator<LittleProjectEntity> it=res.iterator();
+			while(it.hasNext()){
+				LittleProjectEntity s=it.next();
+				
+						if(s.getLists()==null||s.getLists().isEmpty()||s.getLists().size()==0){
+							it.remove();
+						}
+							
+
+			}
 			if(res!=null&&res.size()>0){
 				for(LittleProjectEntity s:res){
-					List<String> jihe=new ArrayList<String>();
+					
 					if(lists!=null&&lists.size()>0){
 						for(EntryAndExitCapitalModel o:lists){
 				
@@ -821,7 +857,7 @@ public class SummaryController extends BaseController {
 			dto.setTimes(times.toArray());
 			dto.setEntities(res);
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null ||lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", dto);
@@ -844,7 +880,7 @@ public class SummaryController extends BaseController {
 	public String zhishuhangqing(HttpServletRequest request,HttpServletResponse response){
 		try {
 			DynamicDataSource.setInsightDataSource();
-			DecimalFormat dt=new DecimalFormat("0.00%");
+			
 			List<QuotationModel> lists=null;
 			lists=quotationModelDao.getQuotationModelDao();
 			List<LittleProjectEntity> res=new ArrayList<LittleProjectEntity>();
@@ -862,7 +898,7 @@ public class SummaryController extends BaseController {
 				
 			}
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null || lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				return this.resultSuccessData(request, response, "", res);
@@ -894,7 +930,7 @@ public class SummaryController extends BaseController {
 				lists=tradeRtioModelDao.getTradeRtioModelDao();
 			}
 			DynamicDataSource.removeDataSourceKey();
-			if (lists == null && lists.size() < 0) {
+			if (lists == null || lists.size() < 0) {
 				return this.resultSuccessData(request, response, "", null);
 			} else {
 				
