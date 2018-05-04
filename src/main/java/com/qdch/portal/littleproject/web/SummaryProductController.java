@@ -151,7 +151,7 @@ public class SummaryProductController extends BaseController {
 		try {
 			DynamicDataSource.setInsightDataSource();
 			String productClassNo = request.getParameter("productClass");
-			String productCode = request.getParameter("productName");
+			String productCode = request.getParameter("productCode");
 			List<Map<String, Object>> product = summaryProductService
 					.getProductDetail(productClassNo, productCode);
 			List<Map<String, Object>> priceTrends = summaryProductService
