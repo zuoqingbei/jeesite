@@ -152,7 +152,7 @@ public class WxAuthController extends BaseController{
 			}else{
 				//进入填报页面
 				model.addAttribute("userId", accountThirdplat.getUser().getId());
-				return "redirect:" + portalPath+"/wx/report";
+				return "redirect:" + portalPath+"/wx/report?userId="+accountThirdplat.getUser().getId();
 			}
 		}else{
 			//code验证失败
@@ -321,7 +321,7 @@ public class WxAuthController extends BaseController{
 			}else{
 				//进入列表页面
 				model.addAttribute("userId", accountThirdplat.getUser().getId());
-				return "redirect:" + portalPath+"/cms/cmsComplaint/list";
+				return "redirect:" + portalPath+"/cms/cmsComplaint/list?userId="+accountThirdplat.getUser().getId();
 			}
 		}else{
 			//code验证失败

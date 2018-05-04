@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.qdch.portal.common.config.Global;
@@ -135,6 +137,7 @@ public class CmsComplaintController extends BaseController {
 	@RequestMapping(value = "${portalPath}/wx/saveReport")
 	public String saveReport(CmsComplaint cmsComplaint, Model model, RedirectAttributes redirectAttributes,
 			HttpServletRequest request, HttpServletResponse response,@RequestParam("files") MultipartFile file) {
+		String filenew = request.getParameter("filenew");
 		String userId=request.getParameter("userId");
 		String title=request.getParameter("title");
 		String description=request.getParameter("description");
@@ -144,7 +147,10 @@ public class CmsComplaintController extends BaseController {
 		String date=request.getParameter("date");
 		String source=request.getParameter("source");
 		String tel=request.getParameter("tel");
-		 if(!file.isEmpty()) {
+		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+		//获取所有的文件
+		Map map = multipartRequest.getFileMap();
+		if(!file.isEmpty()) {
 	            //上传文件路径
 	            String savePath = "";
 	            savePath =Global.getUserfilesBaseDir() + Global.USERFILES_BASE_URL.substring(1,Global.USERFILES_BASE_URL.length()) ;
@@ -165,7 +171,7 @@ public class CmsComplaintController extends BaseController {
 	            String filename = file.getOriginalFilename();
 	            File filepath = new File(savePath,filename);
 	            //判断路径是否存在，如果不存在就创建一个
-	            if (!filepath.getParentFile().exists()) { 
+	            if (!filepath.getParentFile().exists()) {
 	                filepath.getParentFile().mkdirs();
 	            }
 	            //将上传文件保存到一个目标文件当中
@@ -180,7 +186,7 @@ public class CmsComplaintController extends BaseController {
 				}
 	            savePath= "/"+savePath.substring(Global.getUserfilesBaseDir().length(), savePath.length())+ "" + filename;
 	            cmsComplaint.setImage(savePath);
-	    } 
+	    }
 		/*if (!beanValidator(model, cmsComplaint)){
 			return form(cmsComplaint, model);
 		}
@@ -204,7 +210,7 @@ public class CmsComplaintController extends BaseController {
 		cmsComplaint.setRemarks(tel);//存放手机
 		cmsComplaintService.save(cmsComplaint);
 		//return this.resultSuccessData(request, response, "举报成功", null);
-		return "redirect:"+portalPath+"/cms/cmsComplaint/list"; 
+		return "redirect:"+portalPath+"/cms/cmsComplaint/list?userId="+userId;
 	}
 	
 	/**
@@ -229,6 +235,8 @@ public class CmsComplaintController extends BaseController {
 	@RequestMapping(value = {"${portalPath}/cms/cmsComplaint/list"})
 	public String cmsComplaintList(CmsComplaint cmsComplaint, HttpServletRequest request, HttpServletResponse response, Model model) {
 		request.setAttribute("userId", request.getParameter("userId"));
+		Page<CmsComplaint> page = cmsComplaintService.findPage(new Page<CmsComplaint>(request, response), cmsComplaint);
+		model.addAttribute("page", page);
 		return "portal/wechat/reportList";
 	}
 	/**

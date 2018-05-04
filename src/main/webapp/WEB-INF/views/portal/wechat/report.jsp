@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8"  name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Pragma" content="no-cache" />
     <title>举报</title>
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/wx/asserts/css/bootstrap.min-4.0.0.css">
     <link rel="stylesheet" href="${ctxStatic}/${portalPage}/wx/asserts/css/animate.css">
@@ -168,6 +169,7 @@
 	<input type="hidden" id="userId" name="userId" value="${userId}" />
 	<input type="hidden" id="cmsId"  name="id" value="${cmsComplaint.id}" />
 	<input type="hidden" id="source" name="source" value="source" />
+    <input type="hidden" id="filenew" name="filenew"  />
     <div class="container">
         <div class="form-group titleBox">
             <label class="" for="title">标题：</label>
@@ -189,8 +191,8 @@
     <div class="container">
         <div class="form-group imageBox iconBox mineimage">
             	<div class="upload-btn btn-old" style="display:block;background: url(${ctxStatic}/${portalPage}/wx/img/photo2.jpg) 40% 45% no-repeat;">
-				<input type="file" name="files" id="files"></div>
-				<div class="upload-img " ></div>	
+				<input type="file" name="files"    multiple="multiple" id="files"></div>
+				<div class="upload-img " ></div>
         
         </div>
     </div>
@@ -364,6 +366,18 @@ var portalPath='${portalPath}';
 	function  submitMethods() {
 		if(checkFormsValid()){
 			$("#submitFormBtn").html("正在提交");
+			file = $("#"+"files").val();
+			console.log(file)
+            var filearr  = file.split(";");
+			console.log(filearr)
+
+            $('#filenew').val(filearr)
+
+           /* var formData = new FormData()
+            for (var i = 0; i < file.length; i++) {
+                formData.append('file', file[i])
+            }
+            console.log(formData.get('file'))*/
 			$('#mineForm').submit();
 		}else{
 			 $form.find("#submitFormBtn").one("click",submitMethods);
@@ -373,13 +387,16 @@ var portalPath='${portalPath}';
             if ($form.valid()) {
 				$("#submitFormBtn").html("正在提交");
 				var  s=parseInt($("#"+"files")[0].files[0].size)/(1024*1024);
-				alert(s)
+				//alert(s)
 				$('#mineForm').ajaxSubmit({
 					success : function(data, status) {
-						alert(data);
+                        console.log('userId',$("#userId").val());
+						//alert(data);
 						data=eval('('+data+')');
 						
 						if (data.status === "success") {
+
+						    //alert($("#userId").val())
 						   window.location.href="${portalPath}/cms/cmsComplaint/list?userId="+$("#userId").val();
 						} else {
 							$form.find("#submitFormBtn").one("click",submitMethods);
@@ -527,6 +544,19 @@ var portalPath='${portalPath}';
                 }
             })
         };
+
+	$('#files').on('change',function () {
+        // console.log(this.files)
+        var files = this.files;
+        $('#filenew').val(files)
+        console.log(files)
+        for(var i =0;i<this.files.length;i++){
+
+           // console.log(files[i].name)
+        }
+    })
+
+
 </script>
 </body>
 </html>
