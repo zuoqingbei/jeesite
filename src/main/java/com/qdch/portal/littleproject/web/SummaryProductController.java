@@ -2,13 +2,10 @@ package com.qdch.portal.littleproject.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -93,27 +90,41 @@ public class SummaryProductController extends BaseController {
 				return this.resultSuccessData(request, response, "", null);
 			}
 			List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
-			Map<String, List<String>> product = new HashMap<String, List<String>>();
+			Map<String, List<Map<String,Object>>> product = new LinkedHashMap<String, List<Map<String,Object>>>();
 			String className = "";
 			String productName = "";
-			List<String> tempList = null;
+			String classCode = "";
+			String productCode = "";
+			List<Map<String,Object>> tempList = null;
+			Map<String,Object> proMap = null;
 			for (Map<String, Object> map : classList) {
 				className = formatterString(map.get("cpdlinfo"));
+				classCode = formatterString(map.get("cplb"));
+				productCode =  formatterString(map.get("cpdm"));
 				productName = formatterString(map.get("cpmc"));
-				if(StringUtils.isEmpty(className) || StringUtils.isEmpty(productName)){
+				if(StringUtils.isEmpty(className) || StringUtils.isEmpty(productName) || StringUtils.isEmpty(classCode) || StringUtils.isEmpty(productCode)){
 					continue;
 				}
+				className = classCode+"|"+className;
 				if (!product.containsKey(className)) {
-					tempList = new ArrayList<String>();
+					tempList = new ArrayList<Map<String,Object>>();
 					product.put(className, tempList);
 				}
-				product.get(className).add(productName);
+				proMap = new LinkedHashMap<String, Object>();
+				proMap.put("productCode", productCode);
+				proMap.put("productName", productName);
+				product.get(className).add(proMap);
 			}
 			Map<String, Object> classMap = null;
-			for (Entry<String, List<String>> en : product.entrySet()) {
+			String[] classSplit = null;
+			for (Entry<String, List<Map<String, Object>>> en : product.entrySet()) {
 				classMap = new LinkedHashMap<String, Object>();
-				classMap.put("className", en.getKey());
-				classMap.put("productNames", en.getValue());
+				classSplit = en.getKey().split("\\|");
+				classCode = classSplit[0];
+				className = classSplit[1];
+				classMap.put("classCode", classCode);
+				classMap.put("className", className);
+				classMap.put("productLists", en.getValue());
 				dataList.add(classMap);
 			}
 
@@ -139,12 +150,12 @@ public class SummaryProductController extends BaseController {
 			HttpServletResponse response) {
 		try {
 			DynamicDataSource.setInsightDataSource();
-			String productClassName = request.getParameter("productClass");
-			String productName = request.getParameter("productName");
+			String productClassNo = request.getParameter("productClass");
+			String productCode = request.getParameter("productName");
 			List<Map<String, Object>> product = summaryProductService
-					.getProductDetail(productClassName, productName);
+					.getProductDetail(productClassNo, productCode);
 			List<Map<String, Object>> priceTrends = summaryProductService
-					.getProductPriceTrend(productClassName, productName);
+					.getProductPriceTrend(productClassNo, productCode);
 			DynamicDataSource.removeDataSourceKey();
 			if (product == null || product.size() < 1) {
 				return this.resultSuccessData(request, response, "", null);
@@ -187,6 +198,5 @@ public class SummaryProductController extends BaseController {
 	private String formatterString(Object obj) {
 		return obj == null ? "" : obj.toString();
 	}
-	
 
 }

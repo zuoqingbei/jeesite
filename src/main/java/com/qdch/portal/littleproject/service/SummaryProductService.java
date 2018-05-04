@@ -30,17 +30,17 @@ public class SummaryProductService extends BaseService{
 		return  summaryProductModelDao.getProductClassAndName();
 	}
 	
-	public List<Map<String,Object>> getProductDetail(String productClassName,String productName){
+	public List<Map<String,Object>> getProductDetail(String productClassNo,String productCode){
 		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("productClassName", productClassName);
-		param.put("productName", productName);
+		param.put("productClassNo", productClassNo);
+		param.put("productCode", productCode);
 		return  summaryProductModelDao.getProductDetail(param);
 	}
 	
-	public List<Map<String,Object>> getProductPriceTrend(String productClassName,String productName){
+	public List<Map<String,Object>> getProductPriceTrend(String productClassNo,String productCode){
 		Map<String,Object> param = new HashMap<String,Object>();
-		param.put("productClassName", productClassName);
-		param.put("productName", productName);
+		param.put("productClassNo", productClassNo);
+		param.put("productCode", productCode);
 		return  summaryProductModelDao.getProductPriceTrend(param);
 	}
 	
