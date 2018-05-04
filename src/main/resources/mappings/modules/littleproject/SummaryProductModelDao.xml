@@ -44,8 +44,8 @@
 		T2.WAREKINDID=T1.WAREKINDID
 		AND T2.SYSID=T1.SYSID
 		WHERE
-		T2.WAREKINDALIAS=#{productClassName}
-		AND T.CPMC=#{productName}
+		T2.WAREKINDID=#{productClassNo}
+		AND T.CPDM=#{productCode}
 	</select>
 
 	<select id="getProductClassAndName" resultType="java.util.LinkedHashMap">
@@ -53,7 +53,7 @@
 		T1.WAREKINDID AS CPLB,
 		T2.WAREKINDALIAS AS CPDLINFO,
 		T.CPMC,
-		T.CPBM
+		T.CPDM
 		FROM
 		HUB_TQS_CPXX T
 		LEFT JOIN LAKE_ZD_TB_REG_WARE T1
@@ -96,9 +96,9 @@
 		AND T.VDAY &lt; (SELECT MAX(VDAY) FROM
 		INSIGHT_SETTLEMENT_PRICE)
 		AND
-		T2.WAREKINDALIAS=#{productClassName}
+		T2.WAREKINDID = #{productClassNo}
 		AND
-		T.CPMC=#{productName}
+		T.CPBM=#{productCode}
 		ORDER BY
 		T.VDAY
 	</select>

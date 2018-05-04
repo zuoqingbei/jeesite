@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qdch.portal.littleproject.user.dao.HubTestappInfoDao">
+    
+	<sql id="hubTestappInfoColumns">
+		a.fname AS "fname",
+		a.ftel AS "ftel",
+		a.status AS "status",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="hubTestappInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="HubTestappInfo">
+		SELECT 
+			<include refid="hubTestappInfoColumns"/>
+		FROM hub_testapp_info a
+		<include refid="hubTestappInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="HubTestappInfo">
+		SELECT 
+			<include refid="hubTestappInfoColumns"/>
+		FROM hub_testapp_info a
+		<include refid="hubTestappInfoJoins"/>
+		<where>
+			
+			<if test="fname != null and fname != ''">
+				AND a.fname = #{fname}
+			</if>
+			<if test="ftel != null and ftel != ''">
+				AND a.ftel = #{ftel}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="HubTestappInfo">
+		SELECT 
+			<include refid="hubTestappInfoColumns"/>
+		FROM hub_testapp_info a
+		<include refid="hubTestappInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO hub_testapp_info(
+			fname,
+			ftel,
+			status,
+			create_date,
+			update_date
+		) VALUES (
+			#{fname},
+			#{ftel},
+			#{status},
+			#{createTime},
+			#{updateTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE hub_testapp_info SET 	
+			fname = #{fname},
+			ftel = #{ftel},
+			status = #{status},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM hub_testapp_info
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="insertCustom">
+		INSERT INTO hub_testapp_info(
+			fname,
+			ftel,
+			status,
+			create_date,
+			update_date
+		) VALUES (
+			#{fname},
+			#{ftel},
+			#{status},
+			#{createTime},
+			#{updateTime}
+		)
+	</insert>
+	<delete id="deleteByPhone" parameterType="String">
+		DELETE FROM hub_testapp_info
+		WHERE  ftel = #{phoneNo}
+	</delete>
+	
+	<select id="getDetail" parameterType="String" resultType="HubTestappInfo">
+		SELECT 
+			<include refid="hubTestappInfoColumns"/>
+		FROM hub_testapp_info a
+		WHERE ftel = #{phoneNo}
+	</select>
+</mapper>

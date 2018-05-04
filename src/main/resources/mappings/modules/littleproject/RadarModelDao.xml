@@ -11,6 +11,12 @@
 
 	</resultMap>
 	<select id="getRadarModelDao" resultMap="dtoResult">
+		WITH MAX_DATE AS(SELECT
+		MAX(FXSJ) AS FXSJ
+		FROM INSIGHT_FXSJ_FXZBZ T
+		LEFT JOIN HUB_REF_JYSINFO H
+		ON H.JYSINFO=T.JYS
+		WHERE H.JYS in ('0012','0014','0015'))
 		SELECT H.JYS,--交易所编码
 		T.JYS AS JYSINFO, --交易所简称
 		T.FXSJ,--风险时间
@@ -19,9 +25,10 @@
 		FROM INSIGHT_FXSJ_FXZBZ T
 		LEFT JOIN HUB_REF_JYSINFO H
 		ON H.JYSINFO=T.JYS
-		WHERE T.FXSJ = (SELECT MAX(FXSJ) FROM INSIGHT_FXSJ_FXZBZ)
-		AND H.JYS=#{jys}
-		GROUP BY H.JYS,T.JYS,T.FXSJ,T.FXLB order by fxlb
+		WHERE T.FXSJ = (SELECT FXSJ FROM MAX_DATE)
+		AND H.JYS =#{jys}
+		GROUP BY H.JYS,T.JYS,T.FXSJ,T.FXLB
+		order by fxlb;
 	</select>
 
 </mapper>
