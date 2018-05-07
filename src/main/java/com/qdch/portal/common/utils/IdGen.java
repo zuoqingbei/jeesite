@@ -7,11 +7,11 @@ import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.UUID;
 
-import org.activiti.engine.impl.cfg.IdGenerator;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.util.IdGenerator;
 
 /**
  * 封装各种生成唯一性ID算法的工具类.
@@ -47,13 +47,6 @@ public class IdGen implements IdGenerator, SessionIdGenerator {
 		return Encodes.encodeBase62(randomBytes);
 	}
 	
-	/**
-	 * Activiti ID 生成
-	 */
-	@Override
-	public String getNextId() {
-		return IdGen.uuid();
-	}
 
 	@Override
 	public Serializable generateId(Session session) {
@@ -63,10 +56,15 @@ public class IdGen implements IdGenerator, SessionIdGenerator {
 	public static void main(String[] args) {
 		System.out.println(IdGen.uuid());
 		System.out.println(IdGen.uuid().length());
-		System.out.println(new IdGen().getNextId());
 		for (int i=0; i<1000; i++){
 			System.out.println(IdGen.randomLong() + "  " + IdGen.randomBase62(5));
 		}
+	}
+
+	@Override
+	public UUID generateId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

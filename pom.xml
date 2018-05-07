@@ -258,19 +258,7 @@
 			<version>2.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- <dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.2</version>
-			<scope>provided</scope>
-		</dependency> -->
-		<!-- WEB end -->
+		
 
 		<!-- CACHE begin -->
 		<dependency>
@@ -324,53 +312,7 @@
 		</dependency>
 		<!-- SECURITY end -->
 		
-		<!-- Activiti -->
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-engine</artifactId>
-			<version>${activiti.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-spring</artifactId>
-			<version>${activiti.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-explorer</artifactId>
-			<version>${activiti.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>vaadin</artifactId>
-					<groupId>com.vaadin</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>dcharts-widget</artifactId>
-					<groupId>org.vaadin.addons</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>activiti-simple-workflow</artifactId>
-					<groupId>org.activiti</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-modeler</artifactId>
-            <version>${activiti.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.activiti</groupId>
-			<artifactId>activiti-diagram-rest</artifactId>
-			<version>${activiti.version}</version>
-		</dependency>
 		
-		<!-- 支持activiti缓存 -->
-		<!-- <dependency>
-			<groupId>org.infinispan</groupId>
-			<artifactId>infinispan-core</artifactId>
-			<version>5.1.7.Final</version>
-		</dependency> -->
 		
 		<!-- LOGGING begin -->
 		<dependency>
@@ -459,13 +401,6 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		
-		<!-- fastjson json
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
-		</dependency> -->
-		
 		<!-- xstream xml -->
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
@@ -487,17 +422,7 @@
 			<version>${freemarker.version}</version>
 		</dependency>
 		
-		<!-- email -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.7</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation</artifactId>
-			<version>1.1.1</version>
-		</dependency>
+		
 		
 		<!-- poi office -->
 		<dependency>
@@ -523,26 +448,9 @@
 			<version>2.6.2</version>
 		</dependency>
 		
-		<!-- 条形码、二维码生成  -->
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>core</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.zxing</groupId>
-			<artifactId>javase</artifactId>
-			<version>2.2</version>
-		</dependency>
+	
 		
-		<!-- 中文分词 -->
-		<dependency>
-			<groupId>org.wltea</groupId>
-			<artifactId>analyzer</artifactId>
-			<version>2012_u6</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/analyzer-2012_u6.jar</systemPath>
-		</dependency>
+		
 		<!-- GENERAL UTILS end -->
 		
 		<!-- CKFinder begin -->
@@ -585,11 +493,6 @@
 		
 		<!-- TEST begin -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
@@ -605,31 +508,6 @@
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/UserAgentUtils-1.13.jar</systemPath>
 		</dependency>
 		
-		<!-- 自定义jar依赖包
-		<dependency>
-			<groupId>com.qdch.portal</groupId>
-			<artifactId>test-core</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/test-core-1.0.jar</systemPath>
-		</dependency> -->
-		
-		<!-- 使用 Jetty JSP引擎 
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-jsp</artifactId>
-			<version>${jetty.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.eclipse.jetty.orbit</groupId>
-					<artifactId>javax.servlet</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.eclipse.jetty.orbit</groupId>
-					<artifactId>org.apache.taglibs.standard.glassfish</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency> -->
 		<!--配置postgre驱动  -->
 		<dependency>
 		    <groupId>postgresql</groupId>
@@ -660,20 +538,7 @@
 			<version>1.46</version>
 		</dependency>
 
-		<!--&lt;!&ndash; https://mvnrepository.com/artifact/net.sf.json-lib/json-lib &ndash;&gt;-->
-		<!--<dependency>-->
-			<!--<groupId>net.sf.json-lib</groupId>-->
-			<!--<artifactId>json-lib</artifactId>-->
-			<!--<version>2.4</version>-->
-		<!--</dependency>-->
-
-		<!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
-		<!-- <dependency>
-			<groupId>net.sf.json-lib</groupId>
-			<artifactId>json-lib</artifactId>
-			<version>2.4</version>
-		</dependency> -->
-
+	
 
 
 
@@ -694,46 +559,7 @@
 				</configuration>
 			</plugin>
 			
-			<!-- JSP 预编译插件  jspweb.xml
-			<plugin>
-				<groupId>org.jasig.mojo.jspc</groupId>
-				<artifactId>jspc-maven-plugin</artifactId>
-				<version>2.0.0</version>
-				<configuration>
-					<injectString>&lt;!- - [INSERT FRAGMENT HERE] - -&gt;</injectString>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.jasig.mojo.jspc</groupId>
-						<artifactId>jspc-compiler-tomcat6</artifactId>
-						<version>2.0.0</version>
-					</dependency>
-				</dependencies>
-			</plugin>-->
 			
-			<!-- Jetty JSP 预编译插件  web.xml
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty-jspc-maven-plugin</artifactId>
-				<version>${jetty.version}</version>
-				<configuration>
-					<insertionMarker>&lt;!- - [INSERT FRAGMENT HERE] - -&gt;</insertionMarker>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>jspc</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
 			
 			<!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
 			<plugin>
@@ -743,65 +569,11 @@
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
-				<!-- <executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-						<configuration>
-							<classesDirectory>${project.outputDirectory}</classesDirectory>
-							<finalName>jeesite</finalName>
-							<outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/lib</outputDirectory>
-							<includes>
-					        	<include>com/thinkgem/jeesite/**</include>
-					       	</includes>
-						</configuration>
-					</execution>
-				</executions> -->
+			
 			</plugin>
 
 			
-			<!-- 混淆代码
-			<plugin>
-				<groupId>com.github.wvengen</groupId>
-				<artifactId>proguard-maven-plugin</artifactId>
-				<version>2.0.11</version>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>proguard</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-			        <obfuscate>true</obfuscate>
-			    	<options>
-                        <option>-injars ${project.build.directory}/${project.artifactId}/WEB-INF/lib/jeesite.jar</option>
-                    </options>
-                    <outjar>${project.artifactId}/WEB-INF/lib/jeesite_out.jar</outjar>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-			        <proguardInclude>${basedir}/proguard.cfg</proguardInclude>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<libs>
-						<lib>${java.home}/lib/rt.jar</lib>
-						<lib>${java.home}/lib/jsse.jar</lib>
-			            <lib>${java.home}/lib/jce.jar</lib>
-					</libs>
-			        <addMavenDescriptor>false</addMavenDescriptor>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>net.sf.proguard</groupId>
-						<artifactId>proguard-base</artifactId>
-						<version>4.9</version>
-						<scope>runtime</scope>
-					</dependency>
-				</dependencies>
-			</plugin> -->
+			
 
 			<!-- war 打包插件, 设定war包名称不带版本号 -->
 			<plugin>
@@ -947,93 +719,13 @@
 		</plugins>
 	</build>
 	
-	<profiles>
-		<!-- 初始化数据库 -->			
-		<profile>
-			<id>init-db</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.dbunit</groupId>
-					<artifactId>dbunit</artifactId>
-					<version>2.4.8</version>
-				</dependency>
-			  	<dependency>
-				    <groupId>org.apache.poi</groupId>
-				    <artifactId>poi</artifactId>
-				    <version>3.2-FINAL</version>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.7</version>
-						<configuration>
-							<target>
-								
-								<!-- mysql -->
-								<property name="dbunit.datatype" value="org.dbunit.ext.mysql.MySqlDataTypeFactory" />
-								
-								<!-- mssql
-								<property name="dbunit.datatype" value="org.dbunit.ext.mssql.MsSqlDataTypeFactory" /> -->
-								
-								<!-- oracle
-								<property name="dbunit.datatype" value="org.dbunit.ext.oracle.Oracle10DataTypeFactory" /> -->
-								
-								<property file="src/main/resources/portal.properties" />
-								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" 
-									onerror="continue" encoding="${project.build.sourceEncoding}">
-									<classpath refid="maven.test.classpath" />
-									<transaction src="db/sys/jeesite_${jdbc.type}.sql"/>
-									<transaction src="db/cms/jeesite_${jdbc.type}.sql"/>
-									<transaction src="db/oa/jeesite_${jdbc.type}.sql"/>
-									<transaction src="db/gen/jeesite_${jdbc.type}.sql"/>
-									<transaction src="db/gen/example_${jdbc.type}.sql"/>
-									<transaction src="db/test/jeesite_${jdbc.type}.sql"/>
-									<transaction src="db/act/drop/activiti.${jdbc.type}.drop.engine.sql"/>
-									<transaction src="db/act/drop/activiti.${jdbc.type}.drop.history.sql"/>
-									<transaction src="db/act/drop/activiti.${jdbc.type}.drop.identity.sql"/>
-									<transaction src="db/act/create/activiti.${jdbc.type}.create.engine.sql"/>
-									<transaction src="db/act/create/activiti.${jdbc.type}.create.history.sql"/>
-									<transaction src="db/act/create/activiti.${jdbc.type}.create.identity.sql"/>
-								</sql>
-								
-								<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="maven.test.classpath" />
-								
-								<!-- mysql、mssql -->
-								<dbunit driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}"
-									 password="${jdbc.password}">
-
-
-								
-								<!-- oracle
-								<dbunit driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}"
-									password="${jdbc.password}" schema="${jdbc.username}" > -->
-									
-									<dbconfig>
-										<property name="datatypeFactory" value="${dbunit.datatype}" />
-									</dbconfig>
-									<classpath refid="maven.test.classpath" />
-									<operation type="INSERT" src="db/sys/jeesite_data.xls" format="xls" transaction="true"/>
-									<operation type="INSERT" src="db/cms/jeesite_data.xls" format="xls" transaction="true"/>
-									
-								</dbunit>
-								
-							</target>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 	
 	<!-- 开发者信息 -->
 	<developers>  
 		<developer>
-			<id>thinkgem</id>
-			<name>WangZhen</name>
-			<email>thinkgem at 163.com</email>
+			<id>青岛海联</id>
+			<name>zuoqb</name>
+			<email>qingbei.zuo@hlsofttech.com</email>
 			<roles><role>Project lead</role></roles>
 			<timezone>+8</timezone>
 		</developer>
