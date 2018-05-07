@@ -689,6 +689,7 @@
 				<version>2.7</version>
 			</plugin>
 			
+			
 			<!-- install插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
