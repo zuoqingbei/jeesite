@@ -38,22 +38,27 @@
                             style="line-height: 24px; font-size: 14px;">大中恒橡胶</span>”</strong></span></div>
                     <div style="color: rgb(51, 51, 51); line-height: 24px; font-size: 12px;">
                         <p style='text-indent: 2em'>
-                          青岛大中恒橡胶有限公司坐落在美丽的海滨城市青岛，青岛是中国的重要经济中心和沿海开放城市，青岛又被称为“中国名牌之都”，是重要的港口城市，以独特的魅力吸引着各地的精英们在这里投资发展。相信我们青岛大中恒橡胶有限公司在这特有的环境和浓厚的名牌产业文化气息下，通过我们全体员工的努力和团结，坚持“信誉为重、质量第一”的宗旨，必定会走向辉煌，走出中国走向世界，成为橡胶行业中一颗璀璨的明星。                        <p>
-                            　　在专注牧场建设的基础上，修刚畜牧积极投身于和深入延伸于中国奶业产业链上下游，争取成为中国奶业做大做强的中坚和典范力量。修刚畜牧参股黑龙江省供销合作社，成立黑龙江惠丰农牧科技有限公司和黑龙江省惠丰金源电子商务有限公司，未来修刚畜牧将形成牧场建设、牧场咨询服务、农牧咨询服务三驾马车为主营业务的集团型公司。</p>
+                          青岛大中恒橡胶有限公司坐落在美丽的海滨城市青岛，青岛是中国的重要经济中心和沿海开放城市，青岛又被称为“中国名牌之都”，是重要的港口城市，以独特的魅力吸引着各地的精英们在这里投资发展。相信我们青岛大中恒橡胶有限公司在这特有的环境和浓厚的名牌产业文化气息下，通过我们全体员工的努力和团结，坚持“信誉为重、质量第一”的宗旨，必定会走向辉煌，走出中国走向世界，成为橡胶行业中一颗璀璨的明星。</p>
                         <p>
                             <span style="line-height: 24px; font-weight: 700;"></span>
                         </p>
-                        <div style="line-height: 24px; padding-top: 10px; font-size: 12px; white-space: normal;"><span
+                     <div style="line-height: 24px; padding-top: 10px; font-size: 12px; white-space: normal;"><span
                                 style="font-size: 14px;"><span style="font-weight: 700;">公司主要经营项目</span></span></div>
                         <div style="line-height: 24px; font-size: 12px; white-space: normal;"><p>　
-                            在畜牧行业中，多年来，公司自主研发的橡胶牛床垫产品遍布全国各地，并出口北美、南美、欧洲、中东等国家，在国内通过与众多知名畜牧企业合作，取得长期的信任和好评。相信未来的大中恒橡胶，在发展的道路上，能赢得广大新老客户更多的赞誉和支持。
-                            <p><strong><span
-                                    style="font-size: 14px;">联系电话：13708957511</span></strong></p>
+                                                                           在畜牧行业中，多年来，公司自主研发的橡胶牛床垫产品遍布全国各地，并出口北美、南美、欧洲、中东等国家，在国内通过与众多知名畜牧企业合作，取得长期的信任和好评。相信未来的大中恒橡胶，在发展的道路上，能赢得广大新老客户更多的赞誉和支持。              
+                        </div>
+                         
+                        <div style="line-height: 24px; font-size: 12px; white-space: normal;"><p>　
+                             青岛大中恒橡胶有限公司将继续坚持“以人为本、诚信至上、科技兴司、务实创新”的精神，奉行“一丝不苟做好每一种产品，实实在在服务于每一位客户”的经营理念，通过我们所有员工的不懈努力，为广大新老客户提供更完美的产品和服务。我们愿与各界同仁竭诚合作，携手共创辉煌。真诚期待与您有更进一步的合作。     
                         </div>
                     </div>
+                    <p></p>
+                    <p>                       
+                            <strong><span
+                                    style="font-size: 14px;">联系电话：13708957511</span></strong></p>
                     <p><strong>15101013101 代经理</strong></p>
                     <div class="met_clear"></div>
-                    <h4 class="tem_index_about_more"><a href="pages/about_us.htm"
+                    <h4 class="tem_index_about_more"><a href="${portalPath }/company/about"
                                                         title="了解更多" target='_self'>了解更多</a></h4>
                 </div>
             </div>

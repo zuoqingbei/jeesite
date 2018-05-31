@@ -46,7 +46,7 @@
 
         <h1>
             <a href="${portalPath}/company/home"  title="大中恒橡胶">
-                <img src="${ctxStatic}/${portalPage}/dzh/images/index/logo.jpg" alt="大中恒橡胶" style="margin:10px 0px 0px 0px;width: 220px;height: 110px" title="大中恒橡胶"/>
+                <img src="${ctxStatic}/${portalPage}/dzh/images/index/logo.jpg" alt="大中恒橡胶" style="margin:10px 0px 0px 0px;width: 200px;height: 180px" title="大中恒橡胶"/>
             </a>
         </h1>
 
@@ -93,9 +93,17 @@
     </div>
 </header>
 </body>
+<script src="${ctxStatic}/${portalPage}/dzh/asserts/swiper-3.4.2.min.js" type="text/javascript"></script>
+
 <script>
 var index='${index}';
 $("a").removeClass("navdown");
 $("ul>li").eq(index).find("a").addClass("navdown");
+var swiper = new Swiper('.swiper-container', {
+    pagination: '.swiper-pagination',
+    autoplay : 3000,
+    paginationClickable: true,
+    loop:true
+});
 </script>
 </html>
